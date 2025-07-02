@@ -1,0 +1,32 @@
+# .github/workflows/deploy-cv.yml
+name: Deploy CV Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest   # or pin a specific version :contentReference[oaicite:0]{index=0}
+
+      - name: Install dependencies
+        run: bun install        # uses bun.lockb by default :contentReference[oaicite:1]{index=1}
+
+      - name: Build site
+        run: bun run build      # runs your "build" script, e.g. `vite build` :contentReference[oaicite:2]{index=2}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist   # Vite’s default output directory :contentReference[oaicite:3]{index=3}
