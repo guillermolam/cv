@@ -10,6 +10,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    # Todos los comandos de 'run' usarán este working directory
+    defaults:
+      run:
+        working-directory: ./guillermo-lam-cv
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
