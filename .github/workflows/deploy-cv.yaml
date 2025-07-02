@@ -1,4 +1,3 @@
-# .github/workflows/deploy-cv.yml
 name: Deploy CV Site
 
 on:
@@ -22,16 +21,16 @@ jobs:
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest   # or pin a specific version :contentReference[oaicite:0]{index=0}
+          bun-version: latest
 
       - name: Install dependencies
-        run: bun install        # uses bun.lockb by default :contentReference[oaicite:1]{index=1}
+        run: bun install
 
       - name: Build site
-        run: bun run build      # runs your "build" script, e.g. `vite build` :contentReference[oaicite:2]{index=2}
+        run: bun run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist   # Vite’s default output directory :contentReference[oaicite:3]{index=3}
+          publish_dir: ./guillermo-lam-cv/dist
