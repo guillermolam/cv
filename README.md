@@ -73,7 +73,7 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 * **Observability & Performance:** guarded SLOs with k6 load tests; instrumented Datadog APM & Prometheus/Grafana dashboards; delivered a **SIEM PoC with Wazuh + Elasticsearch** for real‑time threat detection & compliance reporting; raised automated alerts & SLO‑based paging.
 * **SRE & Ops:** maintained run‑books & Day‑2 playbooks; executed DR/BC & backup drills; configured **site‑to‑site VPNs (IPSec over BGP)** across **AWS & Azure** landing zones; performed network forensics with **nmap**, **dig**, **nc**, **dnsutils**; undertook *Linux SysAdmin* (servers, DBs, filesystem & network) via Bash & Python and *Windows SysAdmin* (BAT & PowerShell) for cluster upkeep.
 
-\*\*### 🏦 BBVA — *Senior DevSecOps Engineer*
+### 🏦 BBVA — *Senior DevSecOps Engineer*
 
 **Mar 2023 – Mar 2024 • Madrid, ES**
 
