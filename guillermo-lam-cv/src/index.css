@@ -1,0 +1,298 @@
+/* 1. CSS RESET & BASE FONT */
+@import "modern-css-reset";
+
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+  font-size: 18px;
+  color: #202d3a;
+  background: #f4f7fb;
+  margin: 0;
+  padding: 0;
+  line-height: 1.67;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 2. CARD LAYOUT */
+article {
+  max-width: 920px;
+  margin: 2.5rem auto 2rem auto;
+  padding: 3rem 2.3rem 2.5rem 2.3rem;
+  background: #fff;
+  border-radius: 1.5em;
+  box-shadow: 0 6px 32px #1834500d, 0 1.5px 4px #0001;
+  transition: box-shadow 0.15s;
+}
+
+@media (max-width: 900px) {
+  article {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 650px) {
+  article {
+    padding: 0.7rem 0.2rem;
+  }
+
+  .download-nav {
+    flex-direction: column;
+    gap: 0.6em;
+  }
+}
+
+/* 3. TITLE & CONTACT BLOCK */
+h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #153058;
+  margin: 0 0 0.2rem 0;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: #335;
+  margin-bottom: 0.75em;
+  font-weight: 600;
+}
+
+.contact {
+  font-size: 1.03rem;
+  color: #5b7291;
+  margin-bottom: 0.6em;
+}
+
+.contact a,
+.contact span {
+  margin-right: 1.1em;
+  color: #1864ab;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact a:hover {
+  color: #e34a2b;
+}
+
+section {
+  margin-bottom: 2.1em;
+}
+
+/* 4. SECTION HEADERS WITH ICONS */
+h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #183450;
+  display: flex;
+  align-items: center;
+  margin-top: 2.7rem;
+  margin-bottom: 1.1rem;
+  gap: 0.7em;
+}
+
+h2[data-icon]:before {
+  content: attr(data-icon) " ";
+  font-size: 1.25em;
+}
+
+h3 {
+  color: #17409e;
+  font-size: 1.15rem;
+  margin: 1.7em 0 0.3em 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+h3[data-icon]:before {
+  content: attr(data-icon) " ";
+  font-size: 1em;
+}
+
+.job-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 0.1em;
+  font-size: 0.99em;
+  color: #4d6f97;
+}
+
+.job-title {
+  font-weight: 600;
+  color: #183450;
+  font-size: 1.09em;
+}
+
+/* 5. JOBS LIST GROUPING */
+.jobs-list {
+  margin-top: 1.3em;
+  margin-bottom: 2.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8em;
+}
+
+.job {
+  border-left: 5px solid #eef3fb;
+  padding-left: 1.5em;
+  background: linear-gradient(90deg, #f7fafd 88%, #fff0 100%);
+  border-radius: 0.6em;
+  box-shadow: 0 2px 8px #2241780c;
+  transition: box-shadow 0.15s;
+}
+
+.job:hover {
+  box-shadow: 0 8px 32px #14376318;
+}
+
+/* 6. CERTS, SKILLS, LANGS, VOLUNTEERING */
+ul,
+ol {
+  margin-left: 1.6em;
+  margin-bottom: 1em;
+}
+
+li {
+  margin-bottom: 0.38em;
+}
+
+.badge {
+  display: inline-block;
+  background: #e3ecf8;
+  color: #17409e;
+  border-radius: 0.5em;
+  font-size: 0.97em;
+  padding: 0.18em 0.6em;
+  font-weight: 600;
+  margin-right: 0.4em;
+  margin-bottom: 0.1em;
+  letter-spacing: 0.01em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4em 0 2.3em 0;
+}
+
+th,
+td {
+  border: 1px solid #e3eaf1;
+  padding: .65em 1.15em;
+  text-align: left;
+}
+
+th {
+  background: #e9f1fc;
+  color: #17409e;
+}
+
+/* 7. BUTTONS */
+.download-nav {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1.7rem;
+  margin-top: 0.7rem;
+}
+
+.btn {
+  background: #1259a5;
+  color: #fff;
+  padding: .54em 1.29em;
+  border: none;
+  border-radius: .52em;
+  font-size: 1em;
+  font-weight: 600;
+  box-shadow: 0 2px 10px #17409e09;
+  transition: background .18s, color .18s;
+  text-decoration: none;
+  margin-right: 0.5em;
+  margin-bottom: 0.25em;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #0c2851;
+  color: #fff;
+}
+
+/* 8. MARKDOWN STYLES */
+p {
+  margin-top: 0.1em;
+  margin-bottom: 1.3em;
+  line-height: 1.7;
+}
+
+strong {
+  font-weight: 700;
+  color: #153058;
+}
+
+em {
+  color: #345a8c;
+}
+
+blockquote {
+  border-left: 4px solid #1259a5;
+  background: #f5f7fa;
+  margin: 1.5em 0;
+  padding: 1.05em 1.5em;
+  color: #1a4065;
+  font-style: italic;
+  border-radius: 0.5em;
+}
+
+code,
+pre {
+  background: #f5f7fa;
+  color: #16395a;
+  border-radius: .4em;
+  font-size: 1em;
+  padding: .18em .38em;
+}
+
+pre {
+  padding: 1em;
+  overflow-x: auto;
+}
+
+/* 9. PRINT/PDF STYLES */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  article {
+    box-shadow: none;
+    background: #fff;
+    padding: 0;
+  }
+
+  .download-nav,
+  nav,
+  .btn {
+    display: none !important;
+  }
+
+  a {
+    color: #1956b3 !important;
+  }
+}
+
+/* 10. MISC */
+hr {
+  border: 0;
+  height: 1px;
+  background: #e3eaf1;
+  margin: 2em 0 2em 0;
+}

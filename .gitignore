@@ -1,0 +1,53 @@
+# Trunk
+.trunk/*
+!.trunk/trunk.yaml
+
+# Node & Bun dependencies
+node_modules/
+bun.lock
+.pnpm-debug.log
+bunfig.toml
+
+# Vite build output
+dist/
+.vite/
+.cache/
+.temp/
+
+# Local environment
+.env
+.env.*.local
+
+# MacOS and Windows
+.DS_Store
+Thumbs.db
+
+# VSCode, JetBrains, and IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+log.txt
+
+# Coverage and test outputs
+coverage/
+*.lcov
+
+# Misc
+*.log
+*.tgz
+
+# Build artifacts
+*.zip
+*.docx
+*.pdf
+*.html
+
+# Optional: exclude local user config (customize as needed)
+*.local
