@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/f88dd657-eb61-4d70-ade7-c226eaee836c)
 
-**Senior DevSecOps | Cloud & Platform Engineer**
+### Senior DevSecOps | Cloud & Platform Engineer
 📍 Zurich, CH | 📞 +41 77 286 47 14 · +34 620 23 59 50
 ✉️ [guillermolam.m@gmail.com](mailto:guillermolam.m@gmail.com) | 🔗 [LinkedIn](https://linkedin.com/in/guillermo-lam-28901047) | 💻 [GitHub](https://github.com/guillermolam)
 
