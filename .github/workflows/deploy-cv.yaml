@@ -2,35 +2,53 @@ name: Deploy CV Site
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]          # run on every push to main
+  workflow_dispatch:            # allow manual run
+
+permissions:                    # required by deploy-pages
+  pages: write
+  id-token: write
+  contents: read
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
-    # Todos los comandos de 'run' usarán este working directory
-    defaults:
+    defaults:                   # every run-step below uses this dir
       run:
         working-directory: ./guillermo-lam-cv
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # 1. Check out code
+      - uses: actions/checkout@v4
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
+      # 2. Install Bun
+      - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
+      # 3. Install deps
       - name: Install dependencies
         run: bun install
 
+      # 4. Build (tsc + vite build)
       - name: Build site
-        run: bun run build
+        run: bun run build            # runs "tsc -b && vite build"
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # 5. Upload the built site as artifact for Pages
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./guillermo-lam-cv/dist
+          path: ./guillermo-lam-cv/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
