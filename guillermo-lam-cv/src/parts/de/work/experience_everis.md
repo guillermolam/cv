@@ -1,2 +1,3 @@
-### 🚇 Everis — *Advanced Analyst/Programmer*
+### 🚇 Everis — _Advanced Analyst/Programmer_
+
 (details omitted)

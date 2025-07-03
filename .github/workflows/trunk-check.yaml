@@ -5,8 +5,8 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  checks: write      # Allow Trunk to post annotations
-  contents: read     # Allow checkout
+  checks: write # Allow Trunk to post annotations
+  contents: read # Allow checkout
 
 jobs:
   trunk_check:

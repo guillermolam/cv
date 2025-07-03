@@ -1,2 +1,3 @@
-### 🌐 VASS US — *Solutions Architect*
+### 🌐 VASS US — _Solutions Architect_
+
 (details omitted)

@@ -1,4 +1,4 @@
-### ✈️ Skyguide (via Antaes Consulting) — *Senior DevOps Engineer*
+### ✈️ Skyguide (via Antaes Consulting) — _Senior DevOps Engineer_
 
 **Jan 2025 – Present • Zurich, CH**
 
@@ -7,4 +7,4 @@
 - Applied **SAFe**, Lean Six Sigma & agile to remove waste and boost quality.
 - **Optimised delivery** workflows for timely, high‑quality releases in safety‑critical environments.
 - Early‑stage PoCs with **Docker 🐳**, SonarQube, Artifactory, Linux RPM and Chocolatey pkgs.
-- **🔧 Additionally:** carried out *Linux SysAdmin* tasks — server & DB administration, filesystem & network management/troubleshooting, scheduled maintenance, **DR/BC** drills — automated with **Bash & Python** scripting.
+- **🔧 Additionally:** carried out _Linux SysAdmin_ tasks — server & DB administration, filesystem & network management/troubleshooting, scheduled maintenance, **DR/BC** drills — automated with **Bash & Python** scripting.

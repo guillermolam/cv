@@ -1,2 +1,3 @@
-### 🇪🇺 European Commission — *DevSecOps Engineer (DIGIT B2)*
+### 🇪🇺 European Commission — _DevSecOps Engineer (DIGIT B2)_
+
 (details omitted)

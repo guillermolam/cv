@@ -1,6 +1,7 @@
 # Trunk
-.trunk/*
+.trunk/tools/*
 !.trunk/trunk.yaml
+!.trunk/configs/*
 
 # Node & Bun dependencies
 node_modules/

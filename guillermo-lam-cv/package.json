@@ -4,7 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "format": "prettier --write .",
+    "clean": "rm -rf dist",
+    "lint": ".trunk/trunk check",
+    "format": ".trunk/trunk format",
+    "test": "bunx vitest run --coverage",
+    "test:watch": "bunx vitest watch",
+    "test:coverage": "bunx vitest run --coverage",
+    "test:coverage:html": "bunx vitest run --coverage --reporter=html",
+    "test:coverage:json": "bunx vitest run --coverage --reporter=json",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
@@ -21,7 +28,7 @@
     "markdown-it": "^14.1.0",
     "typescript": "~5.8.3",
     "vite": "^7.0.0",
-    " ": "^0.21.5",
+    "vite-plugin-md": "^0.21.5",
     "vite-plugin-solid": "^2.11.7"
   },
   "module": "src/index.tsx"

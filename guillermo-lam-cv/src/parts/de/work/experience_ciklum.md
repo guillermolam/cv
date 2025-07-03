@@ -1,4 +1,4 @@
-### 🎯 Ciklum — *Senior DevOps Engineer*
+### 🎯 Ciklum — _Senior DevOps Engineer_
 
 **Apr 2024 – Nov 2024 • Málaga, ES**
 
@@ -6,4 +6,4 @@
 - **Cloud & Platform Engineering (AWS ☁️ / Azure 🔷):** engineered workloads on **EKS**, **ECS Fargate**, **Lambda** (Python & Rust) and supporting services (**ECR**, **S3**, **SQS/SNS**, **Step Functions**, **RDS/Aurora**, **DynamoDB**, **ElastiCache**, **CloudWatch**, **CodeBuild/CodePipeline**); mirrored patterns on **Azure Functions**, **ACR**, **AKS** & **Azure DevOps** for parity.
 - **CI/CD & GitOps:** codified pipelines with **GitHub Actions**, **Jenkins Shared Library**, **Terraform**, **Terramate**, **Terracost**, **Helm**, **Kustomize**, and **Argo CD/Rollouts**; integrated **container‑image scanning** (Trivy, Clair, ECR/ACR) and **GitHub Advanced Security** (code & secret scanning); signed SBOMs with **Cosign**.
 - **Observability & Performance:** guarded SLOs with k6 load tests; instrumented Datadog APM & Prometheus/Grafana dashboards; delivered a **SIEM PoC with Wazuh + Elasticsearch** for threat detection & compliance reporting; raised automated alerts & SLO‑based paging.
-- **SRE & Ops:** maintained run‑books & Day‑2 playbooks; executed DR/BC & backup drills; configured **site‑to‑site VPNs (IPSec over BGP)** across **AWS & Azure** landing zones; performed network forensics with **nmap**, **dig**, **nc**, **dnsutils**; undertook *Linux SysAdmin* (servers, DBs, filesystem & network) via Bash & Python and *Windows SysAdmin* (BAT & PowerShell) for cluster upkeep.
+- **SRE & Ops:** maintained run‑books & Day‑2 playbooks; executed DR/BC & backup drills; configured **site‑to‑site VPNs (IPSec over BGP)** across **AWS & Azure** landing zones; performed network forensics with **nmap**, **dig**, **nc**, **dnsutils**; undertook _Linux SysAdmin_ (servers, DBs, filesystem & network) via Bash & Python and _Windows SysAdmin_ (BAT & PowerShell) for cluster upkeep.

@@ -65,7 +65,10 @@ export default function App() {
         <DownloadButtons locale={locale()} />
       </div>
       <article innerHTML={rendered()}>
-        <p>If you see this, content is loading. If the page remains blank, there might be an issue with markdown rendering.</p>
+        <p>
+          If you see this, content is loading. If the page remains blank, there
+          might be an issue with markdown rendering.
+        </p>
       </article>
     </>
   );

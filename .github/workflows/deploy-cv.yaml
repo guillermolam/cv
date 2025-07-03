@@ -2,10 +2,10 @@ name: Deploy CV Site
 
 on:
   push:
-    branches: [ main ]          # run on every push to main
-  workflow_dispatch:            # allow manual run
+    branches: [main] # run on every push to main
+  workflow_dispatch: # allow manual run
 
-permissions:                    # required by deploy-pages
+permissions: # required by deploy-pages
   pages: write
   id-token: write
   contents: read
@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:                   # every run-step below uses this dir
+    defaults: # every run-step below uses this dir
       run:
         working-directory: ./guillermo-lam-cv
 
@@ -33,7 +33,7 @@ jobs:
 
       # 4. Build (tsc + vite build)
       - name: Build site
-        run: bun run build            # runs "tsc -b && vite build"
+        run: bun run build # runs "tsc -b && vite build"
 
       # 5. Upload the built site as artifact for Pages
       - name: Upload Pages artifact
