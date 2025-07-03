@@ -4,19 +4,25 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "format": "prettier --write .",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "html-to-docx": "^1.8.0",
+    "jspdf": "^3.0.1",
     "modern-css-reset": "^1.4.0",
     "solid-js": "^1.9.7"
   },
   "devDependencies": {
+    "@types/bun": "latest",
+    "@types/html-to-docx": "^1.8.0",
     "markdown-it": "^14.1.0",
     "typescript": "~5.8.3",
     "vite": "^7.0.0",
     "vite-plugin-md": "^0.21.5",
     "vite-plugin-solid": "^2.11.7"
-  }
+  },
+  "module": "src/index.tsx"
 }
