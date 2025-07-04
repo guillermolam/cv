@@ -1,11 +1,11 @@
-### 🏦 BBVA — _Senior DevSecOps Engineer_
+### 🏦 BBVA - _Senior DevSecops Engineer_
 
-**Mar 2023 – Mar 2024 • Madrid, ES**
+** März 2023 - März 2024 • Madrid, es **
 
-- Automated core banking workflows **and world‑wide cluster provisioning & configuration** with **Ansible** (playbooks, roles), **Kubernetes ☸️**, Istio, and custom tooling.
-- Delivered full‑stack NOVA platform (Angular 18+ & Spring Boot 3+) following 12‑factor & clean‑architecture.
-- Operated an Internal Developer Platform (**IDP**) with **Argo CD GitOps** and **GitLab Pipelines**.
-- Integrated **SonarQube** (_SAST_) & **OWASP ZAP** (_DAST_) for comprehensive security scanning, aligning with CIS & OWASP T10.
-- Managed infra via Terraform & Azure Bicep, ensuring drift‑free environments.
-- Institutionalised **SRE** practices: authored production **run‑books**, Day‑2 playbooks and on‑call rotations; automated **backups & DR** drills via **Jenkins** Pipelines (Shared Library) integrated with Ansible.
-- **🔧 Additionally:** carried out _Linux SysAdmin_ tasks — server & DB administration, filesystem & network management/troubleshooting, scheduled maintenance, **DR/BC** drills — automated with **Bash & Python** scripting.
+- Automatisierte Kernbanken -Workflows ** und weltweite Cluster -Bereitstellung und -konfiguration ** mit ** Ansible ** (Playbooks, Rollen), ** Kubernetes ☸️ **, Istio und benutzerdefinierte Werkzeuge.
+- Liefern Sie die Nova -Plattform mit voller Stapel (Angular18+ & Springboot 3+) nach 12 -Faktor- und Reinigungsarchitektur.
+- betrieben eine interne Entwicklerplattform (** IDP **) mit ** argocd gitops ** und ** gitlabpipelines **.
+- Integrated ** Sonarqube ** (_SAST_) & ** OWASP ZAP ** (_dast_) für ein umfassendes Sicherheitsscannen, die sich an CIS & OWASPT10 ausrichten.
+- Infrara über Terraform und Azure Bizeps verwaltet, um driftfreie Umgebungen zu gewährleisten.
+. Automatisiert ** Backups & DR ** ÜBERUNGEN über ** Jenkins ** Pipelines (SharedLibrary) in Integration integriert.
+- ** 🔧 Zusätzlich: ** durchgeführt _linux sysadmin_ Aufgaben - Server- und DB -Administration, Dateisystem und Netzwerkverwaltung/Fehlerbehebung, geplante Wartung, ** DR/BC ** Drills - automatisiert mit ** Bash & Python ** Scripting.

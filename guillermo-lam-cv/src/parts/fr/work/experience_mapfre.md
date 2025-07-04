@@ -1,3 +1,3 @@
-### 🛡️ MAPFRE — _Application Architect_
+### 🛡️ Mapfre - _Application Architect_
 
-(details omitted)
+(détails omis)

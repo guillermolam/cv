@@ -1,3 +1,3 @@
-### 🌐 VASS US — _Solutions Architect_
+### 🌐 Vass US - _ Arquitecto de soluciones _
 
-(details omitted)
+(Detalles omitidos)
