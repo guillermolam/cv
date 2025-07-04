@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist",
-    "lint": ".trunk/trunk check",
-    "format": ".trunk/trunk format",
+    "lint": "trunk check --all",
+    "format": "trunk format --all",
+    "start": "bun run dev",
     "test": "bun x vitest run --coverage",
     "test:watch": "bun x vitest watch",
     "test:coverage": "bun x vitest run --coverage",
@@ -27,7 +28,7 @@
     "@types/html-to-docx": "^1.8.0",
     "markdown-it": "^14.1.0",
     "typescript": "~5.8.3",
-    "vite": "^7.0.0",
+    "vite": "^7.0.2",
     "vite-plugin-md": "^0.21.5",
     "vite-plugin-solid": "^2.11.7"
   },
