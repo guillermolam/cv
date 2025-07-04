@@ -43,8 +43,8 @@ export default function DownloadButtons({ locale }: { locale: Locale }) {
     alert("Markdown download is not implemented yet.");
   };
 
-  return (
-    <nav class="my-6 space-x-3">
+    return (
+      <nav class="download-nav">
       <button class="btn" onClick={downloadDOCX} disabled>
         DOCX (Disabled)
       </button>
