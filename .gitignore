@@ -49,6 +49,7 @@ coverage/
 *.docx
 *.pdf
 *.html
+!/guillermo-lam-cv/index.html
 
 # Optional: exclude local user config (customize as needed)
 *.local
