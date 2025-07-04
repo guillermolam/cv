@@ -4,6 +4,7 @@ import "./App.css";
 import MarkdownIt from "markdown-it";
 import LangSwitcher from "./components/LangSwitcher";
 import DownloadButtons from "./components/DownloadButtons";
+import { getLocaleParts } from "./markdown";
 
 // --- Types and helpers ---
 type Locale = "en" | "es" | "fr" | "de";
@@ -59,6 +60,7 @@ function getLocaleParts(locale: Locale) {
     .filter(Boolean)
     .join("\n\n---\n\n");
 }
+
 
 export default function App() {
   const [locale, setLocale] = createSignal<Locale>(detectLocale());
