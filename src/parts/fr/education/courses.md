@@ -1,1 +1,1 @@
-trunk check 
+trunk check

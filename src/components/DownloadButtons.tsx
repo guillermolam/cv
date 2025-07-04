@@ -13,7 +13,7 @@ export default function DownloadButtons({ locale }: { locale: Locale }) {
     const doc = new jsPDF();
     const content = getRenderedContent();
     doc.html(content, {
-      callback: function (doc) {
+      callback: (doc) => {
         doc.save(`Guillermo_Lam_CV_${locale}.pdf`);
       },
       x: 10,
@@ -45,16 +45,16 @@ export default function DownloadButtons({ locale }: { locale: Locale }) {
 
   return (
     <nav class="download-nav">
-      <button class="btn" onClick={downloadDOCX} disabled>
+      <button class="btn" type="button" onClick={downloadDOCX} disabled>
         DOCX (Disabled)
       </button>
-      <button class="btn" onClick={downloadMD}>
+      <button class="btn" type="button" onClick={downloadMD}>
         MD
       </button>
-      <button class="btn" onClick={downloadPDF}>
+      <button class="btn" type="button" onClick={downloadPDF}>
         PDF
       </button>
-      <button class="btn" onClick={downloadHTML}>
+      <button class="btn" type="button" onClick={downloadHTML}>
         HTML
       </button>
     </nav>

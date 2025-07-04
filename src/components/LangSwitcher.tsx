@@ -24,7 +24,7 @@ export default function LangSwitcher(props: {
         style="font-size:1rem;padding:0.25em 0.7em;border-radius:0.5em;"
       >
         {Object.entries(langNames).map(([code, name]) => (
-          <option value={code} selected={props.locale === code}>
+          <option key={code} value={code} selected={props.locale === code}>
             {name}
           </option>
         ))}

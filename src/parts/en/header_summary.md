@@ -4,7 +4,8 @@
 
 ## Senior DevSecOps | Cloud & Platform Engineer | SRE Reliability Engineer | MLOps \*\*
 
-📍 Zurich, CH | 📞 +41 77 286 47 14 · +34 620 23 59 50 ✉️
+📍 Zurich, CH | 📞🇨🇭 [+41 77 286 47 14](tel:0041772864714) · 📞🇪🇸
+[+34 620 23 59 50](tel:0034620235950) ✉️ |
 [guillermolam.m@gmail.com](mailto:guillermolam.m@gmail.com) | 🔗
 [LinkedIn](https://linkedin.com/in/guillermo-lam-28901047) | 💻
 [GitHub](https://github.com/guillermolam)

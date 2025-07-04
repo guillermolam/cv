@@ -1,15 +1,17 @@
 ## 🛠️ Schlüsselfähigkeiten
 
-- ** Programmierung: ** Java (Springboot3+), **. Netaspire **, C#10, TypeScript, Go1.22, Rost, Scala
-  3
-- ** Scripting & Automatisierung: ** Bash 🐚, PowerShell ⚡, Python 🐍, Groovy
-- ** Container & Plattformen: ** Docker 🐳, Kubernetes ☸️, OpenShift, Rancher, Helm, Argo CD
-- ** Cloud & IAC: ** Aws☁️, Azure🔷, GCP🌤️, Terraform, Pulumi, Bizeps, Ansible
-- ** Sicherheit: ** Sast/Dast (Sonarqube, Semgrep, Snyk), Sbom 📦 (Cyclonedx, SPDX), Sigstore 🔏 .
-  erzwungene IAC -Qualität & Kostenkontrolle über ** tflint **, ** tfsec **, ** checkov **, **
-  trunk.io **; Eingebettete Sast -Tore (** snyk **, ** semgrep **) und integriert ** Container
-  -Image Scanning ** (trivy, clair, ecr/acr); aktiviert ** githubadvancedSecurity ** (Code &
-  geheimes Scannen) und signierte SBOMs mit ** cosign **.
-- ** Beobachtbarkeit: ** Prometheus📈, Grafana📊, Elk🔍, Opentelemetrie 🛰️
+- **Programmierung:** Java (Spring Boot 3+), **.NET Aspire**, C# 10, TypeScript, Go 1.22, Rust,
+  Scala 3
+- **Scripting und Automatisierung:** Bash 🐚, PowerShell ⚡, Python 🐍, Groovy
+- **Container und Plattformen:** Docker 🐳, Kubernetes ☸️, OpenShift, Rancher, Helm, Argo CD
+- **Cloud und IaC:** AWS ☁️, Azure 🔷, GCP 🌤️, Terraform, Pulumi, Bicep, Ansible
+- **Sicherheit:** SAST/DAST (SonarQube, Semgrep, Snyk), SBOM 📦 (CycloneDX, SPDX), Sigstore 🔏
+- **CI/CD und GitOps:** kodifizierte Pipelines mit **GitHub Actions**, **Jenkins Shared Library**,
+  **Terraform**, **Terramate**, **Terracost**, **Helm**, **Kustomize** und **Argo CD/Rollouts**;
+  erzwungene IaC-Qualität und Kostenkontrollen über **tflint**, **tfsec**, **checkov**,
+  **Trunk.io**; eingebettete SAST-Gates (**Snyk**, **Semgrep**) und integriertes
+  Container-Image-Scanning (**Trivy**, **Clair**, **ECR/ACR**); aktiviert **GitHub Advanced
+  Security** (Code- und Secret-Scanning) und signierte SBOMs mit **Cosign**.
+- **Beobachtbarkeit:** Prometheus 📈, Grafana 📊, ELK 🔍, OpenTelemetry 🛰️
 
 ---
