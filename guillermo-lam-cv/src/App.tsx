@@ -17,7 +17,9 @@ function detectLocale(): Locale {
 }
 
 // --- Eager import of ALL markdown files in all locales & sections ---
-const mdModules = import.meta.glob("./parts/*/*/*.md", {
+// Includes root-level files like `languages.md` or `skills.md` as well
+// as nested sections under `education/`, `work/`, etc.
+const mdModules = import.meta.glob("./parts/*/**/*.md", {
   eager: true,
   query: "?raw",
   import: "default",
@@ -37,16 +39,22 @@ function getLocaleParts(locale: Locale) {
     mdModules[`./parts/${locale}/education/education.md`] || "",
     mdModules[`./parts/${locale}/education/certifications.md`] || "",
   ].join("\n\n");
-  // 3. Volunteering
-  const volunteering =
-    mdModules[`./parts/${locale}/volunteering/volunteering.md`] || "";
-  // 4. Work: all work/experience_*.md files, sorted for stability
+  // 3. Languages
+  const languages = mdModules[`./parts/${locale}/languages.md`] || "";
+  // 4. Skills
+  const skills = mdModules[`./parts/${locale}/skills.md`] || "";
+  // 5. Work: all work/experience_*.md files, sorted for stability
   const workKeys = Object.keys(mdModules)
     .filter((k) => k.startsWith(`./parts/${locale}/work/`) && k.endsWith(".md"))
     .sort();
   const work = workKeys.map((k) => mdModules[k]).join("\n\n");
+  // 6. Volunteering
+  const volunteering =
+    mdModules[`./parts/${locale}/volunteering/volunteering.md`] || "";
+  // 7. Other interests
+  const other = mdModules[`./parts/${locale}/other_interests.md`] || "";
   // --- Stitch together ---
-  return [header, education, volunteering, work]
+  return [header, education, languages, skills, work, volunteering, other]
     .filter(Boolean)
     .join("\n\n---\n\n");
 }
