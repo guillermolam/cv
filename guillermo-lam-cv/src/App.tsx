@@ -1,5 +1,6 @@
 // src/App.tsx
 import { createSignal } from "solid-js";
+import "./App.css";
 import MarkdownIt from "markdown-it";
 import LangSwitcher from "./components/LangSwitcher";
 import DownloadButtons from "./components/DownloadButtons";
