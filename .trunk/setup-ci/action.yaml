@@ -1,0 +1,20 @@
+name: Trunk Code Quality setup
+description: Set up dependencies for Trunk Code Quality with Bun
+runs:
+  using: composite
+  steps:
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies for linters
+      shell: bash
+      run: |
+        # Install dependencies so ESLint can find plugins
+        bun install
+
+        # Ensure ESLint can find Solid.js plugins
+        if [ ! -d "node_modules" ]; then
+          echo "Warning: node_modules not found, ESLint may not work correctly"
+        fi

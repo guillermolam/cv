@@ -1,0 +1,35 @@
+# Automatically upgrades trunk and creates PRs
+name: Trunk Upgrade
+on:
+  schedule:
+    # Run weekly on Monday at 8 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  trunk_upgrade:
+    name: Upgrade Trunk
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # For bun to create PRs
+      pull-requests: write # For bun to create PRs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Trunk Upgrade
+        uses: trunk-io/trunk-action/upgrade@v1
+        with:
+          base: main
+          # Focus on frontend-relevant upgrades
+          arguments: --filter=eslint,prettier,markdownlint,svgo,markdown-link-check

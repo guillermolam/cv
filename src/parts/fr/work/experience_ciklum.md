@@ -1,0 +1,27 @@
+### 🎯 Ciklum - _Senior DevOps Engineer_
+
+** avril 2024 - nov 2024 • Málaga, es **
+
+- ** TechStack & Event-Drivenarchitecture: ** Build a High-performance ** Sportsbook ** on **
+  asp.netcore8🔥 ** avec ** Orleans ** acteurs virtuels et un maillage axé sur les événements (**
+  Apache Kafka **, ** Apache pulsar **, ** Rabbitmq **) - Clusters Administra registre); API
+  publiques multi-locataires exposées via **. netaspire8 ** & ** angular18 + ** sécurisé par ** oidc
+  / saml 2.0 **.
+- **Cloud & Platform Engineering (AWS ☁️ / Azure 🔷):** engineered workloads on **EKS**,
+  **ECS Fargate**, **Lambda** (Python & Rust) and supporting services (**ECR**, **S3**, **SQS/SNS**,
+  **Step Functions**, **RDS/Aurora**, ** DynamoDB **, ** Elasticache **, ** CloudWatch **, **
+  CodeBuild / CodePipeline **); Modèles en miroir sur ** azurefunctions **, ** acr **, ** aks ** &
+  ** azuresevops ** pour la parité.
+- ** CI / CD & GITOPS: ** Pipelines codifiés avec ** GitHubactions **, ** Jenkins Bibliothèque
+  partagée **, ** Terraform **, ** Terramate **, ** Terracost **, ** Helm **, ** Kustomalize **, et
+  ** argocd / déploiement **; Integrated ** Container-Image Scanning ** (Trivy, Clair, ECR / ACr) et
+  ** GitHub Advanced Security ** (code et scan secrète); Signé SBOMS avec ** Cosign **.
+- ** Observabilité et performance: ** SLOS gardés avec des tests de charge K6; Datadog instrumentés
+  APM & PROMETHEUS / GRAFANA Tableaux de bord; livré un ** siem POC avec wazuh + elasticsearch **
+  pour la détection des menaces et les rapports de conformité; Alertes automatisées surélevées et
+  pagination basée sur les slogs.
+- ** SRE & OPS: ** Run-books et PlayBooks Day-2; Exercices DR / BC et de sauvegarde exécutés;
+  Configuré ** VPNS de site à site (IPSec sur BGP) ** A sur les zones d'atterrissage ** AWS & Azure
+  **; Forcensical de réseau réalisé avec ** nmap **, ** Dig **, ** nc **, ** dnsutils **; Entretien
+  _linux sysadmin_ (serveurs, dbs, système de fichiers et réseau) via Bash & Python et _Windows
+  Sysadmin_ (Bat & PowerShell) pour l'entretien du cluster.

@@ -1,55 +1,26 @@
-# Trunk
-.trunk/tools/*
-!.trunk/trunk.yaml
-!.trunk/configs/*
-
-# Node & Bun dependencies
-node_modules/
-bun.lock
-.pnpm-debug.log
-bunfig.toml
-
-# Vite build output
-dist/
-.vite/
-.cache/
-.temp/
-
-# Local environment
-.env
-.env.*.local
-
-# MacOS and Windows
-.DS_Store
-Thumbs.db
-
-# VSCode, JetBrains, and IDEs
-.vscode/
-.idea/
-*.sublime-workspace
-*.sublime-project
-
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 lerna-debug.log*
-log.txt
 
-# Coverage and test outputs
-coverage/
-*.lcov
-
-# Misc
-*.log
-*.tgz
-
-# Build artifacts
-*.zip
-*.docx
-*.pdf
-*.html
-!/guillermo-lam-cv/index.html
-
-# Optional: exclude local user config (customize as needed)
+node_modules
+dist
+dist-ssr
 *.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.early.coverage

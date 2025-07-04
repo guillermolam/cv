@@ -1,0 +1,32 @@
+# Populates cache for faster trunk execution
+name: Trunk Cache
+on:
+  push:
+    branches: [main]
+    paths:
+      - .trunk/trunk.yaml
+      - package.json
+      - bun.lockb
+
+permissions: read-all
+
+jobs:
+  cache_trunk:
+    name: Cache Trunk
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Trunk Cache Population
+        uses: trunk-io/trunk-action@v1.2.4
+        with:
+          check-mode: populate_cache_only

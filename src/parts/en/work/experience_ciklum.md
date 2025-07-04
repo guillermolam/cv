@@ -1,0 +1,28 @@
+### 🎯 Ciklum — _Senior DevOps Engineer_
+
+**Apr 2024 – Nov 2024 • Málaga, ES**
+
+- **Tech Stack & Event‑Driven Architecture:** built a high‑performance **sportsbook** on
+  **ASP.NET Core 8 🔥** with **Orleans** virtual actors and an event‑driven mesh (**Apache Kafka**,
+  **Apache Pulsar**, **RabbitMQ**) — administered & tuned clusters (ACLs, topic retention, schema
+  registry); exposed multi‑tenant public APIs via **.NET Aspire 8** & **Angular 18+** secured by
+  **OIDC/SAML 2.0**.
+- **Cloud & Platform Engineering (AWS ☁️ / Azure 🔷):** engineered workloads on **EKS**,
+  **ECS Fargate**, **Lambda** (Python & Rust) and supporting services (**ECR**, **S3**, **SQS/SNS**,
+  **Step Functions**, **RDS/Aurora**, **DynamoDB**, **ElastiCache**, **CloudWatch**,
+  **CodeBuild/CodePipeline**); mirrored patterns on **Azure Functions**, **ACR**, **AKS** &
+  **Azure DevOps** for parity.
+- **CI/CD & GitOps:** codified pipelines with **GitHub Actions**, **Jenkins Shared Library**,
+  **Terraform**, **Terramate**, **Terracost**, **Helm**, **Kustomize**, and **Argo CD/Rollouts**;
+  integrated **container‑image scanning** (Trivy, Clair, ECR/ACR) and **GitHub Advanced Security**
+  (code & secret scanning); signed SBOMs with **Cosign**.
+- **Observability & Performance:** guarded SLOs with k6 load tests; instrumented Datadog APM &
+  Prometheus/Grafana dashboards; delivered a **SIEM PoC with Wazuh + Elasticsearch** for threat
+  detection & compliance reporting; raised automated alerts & SLO‑based paging.
+- **SRE & Ops:** maintained run‑books & Day‑2 playbooks; executed DR/BC & backup drills; configured
+  **site‑to‑site VPNs (IPSec over BGP)** across **AWS & Azure** landing zones; performed network
+  forensics with **nmap**, **dig**, **nc**, **dnsutils**; undertook _Linux SysAdmin_ (servers, DBs,
+  filesystem & network) via Bash & Python and _Windows SysAdmin_ (BAT & PowerShell) for cluster
+  upkeep.
+
+---

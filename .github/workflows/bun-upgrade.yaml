@@ -1,0 +1,94 @@
+name: Audit and Update Bun Dependencies
+on:
+  schedule:
+    # Run weekly on Monday at 8 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  audit-and-update:
+    name: Audit and Update Bun Dependencies
+    permissions:
+      contents: write # For creating PRs with updates
+      pull-requests: write # For commenting on PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Bun and jq
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Run Initial Bun Audit and Annotate
+        id: initial_audit
+        run: |
+          set -e
+          audit_output=$(bun audit)
+          echo "$audit_output" > audit_before.txt
+
+          echo "$audit_output" | awk '
+            BEGIN { RS="\n\n"; FS="\n" }
+            NF {
+              gsub(/  +/, "", $1)
+              split($1, parts, "  ")
+              name=parts[1]
+              version=parts[2]
+
+              for (i=2; i<=NF; ++i) {
+                if ($i ~ /(critical|moderate|high|low)/) {
+                  print "::error title="name" severity="gensub(/.*: /, "", "g", $i)"::" $i "\n"
+                }
+              }
+            }
+          '
+
+      - name: Check and Update Outdated Dependencies
+        id: update_check
+        run: |
+          set -e
+          echo "Checking for outdated dependencies..."
+          OUTDATED=$(bun outdated --json)
+
+          if echo "$OUTDATED" | jq 'length > 0' | grep -q true; then
+            echo "Outdated dependencies found. Updating..."
+            bun update --latest --yes
+            echo "updated=true" >> $GITHUB_OUTPUT
+          else
+            echo "All dependencies are up-to-date."
+            echo "updated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Bun Audit Again and Check for Resolution
+        if: steps.update_check.outputs.updated == 'true'
+        id: final_audit
+        run: |
+          set -e
+          audit_output=$(bun audit)
+          echo "$audit_output" > audit_after.txt
+
+          echo "::group::Resolved Vulnerabilities"
+          comm -23 <(sort audit_before.txt) <(sort audit_after.txt)
+          echo "::endgroup::"
+
+          echo "::group::Remaining Vulnerabilities"
+          comm -13 <(sort audit_before.txt) <(sort audit_after.txt)
+          echo "::endgroup::"
+
+      - name: Create Pull Request with Updated Dependencies
+        if: steps.update_check.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore(deps): update Bun dependencies and fix vulnerabilities'
+          title: 'Update dependencies via Bun audit & outdated'
+          body: |
+            This PR includes:
+            - Updates via `bun update --latest --yes`
+            - Fixes for vulnerabilities found via `bun audit`
+
+            Refer to the annotations for details on critical or moderate issues.
+          branch: bun/dependency-updates

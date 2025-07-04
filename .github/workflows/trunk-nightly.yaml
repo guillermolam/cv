@@ -1,0 +1,39 @@
+name: Trunk Nightly Quality Check
+on:
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  trunk_comprehensive:
+    name: Comprehensive Quality Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Trunk Check All Files
+        uses: trunk-io/trunk-action@v1.2.4
+        with:
+          check-mode: all
+
+      - name: Security Scan Only
+        uses: trunk-io/trunk-action@v1.2.4
+        with:
+          arguments: --filter=gitleaks,osv-scanner,checkov --all
+
+      - name: Markdown Link Check
+        uses: trunk-io/trunk-action@v1.2.4
+        with:
+          arguments: --filter=markdown-link-check --all

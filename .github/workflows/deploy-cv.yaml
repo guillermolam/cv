@@ -14,9 +14,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults: # every run-step below uses this dir
-      run:
-        working-directory: ./guillermo-lam-cv
+    ##defaults: # every run-step below uses this dir
+    ##run:
+    ##working-directory: ./
 
     steps:
       # 1. Check out code
