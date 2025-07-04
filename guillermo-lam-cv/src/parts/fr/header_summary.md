@@ -1,13 +1,13 @@
 # Guillermo Lam Martín
 
-**Senior DevSecOps | Cloud & Platform Engineer**\
-📍 Zurich, CH | 📞 +41 77 286 47 14 · +34 620 23 59 50\
-✉️ guillermolam.m@gmail.com | 🔗 [LinkedIn](https://linkedin.com/in/guillermolam-28901047) | 💻 [GitHub](https://github.com/guillermolam)
+** Devsecops seniors | Cloud & Platform Engineer ** \
+📍 Zurich, Ch | 📞 +41772864714 · +34620235950 \
+✉️ guillermolam.m@gmail.com | 🔗 [LinkedIn] (https://linkedin.com/in/guillermolam-28901047) | 💻 [github] (https://github.com/guillermolam)
 
 ---
 
-## 📝 Summary
+## 📝 Résumé
 
-Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDLC. Deep roots in full‑stack development (Java, **.NET**/C#, modern front‑end) and scripting (Bash, PowerShell, Python, Groovy, Go, Rust‑curious). Designs **cloud‑native, secure & scalable** platforms (Hexagonal, Clean, DDD, Serverless) and champions DevSecOps in regulated, complex environments. Currently pursuing **CKA · CKS · AZ‑500**. Lifelong learner driven by Kaizen, curiosity 🤓 and collaboration 🤝.
+Architecte de DevSecops de Hands avec ** 15 + ans ** à travers le SDLC complet. Racines profondes dans le développement complet (java, **. Net ** / c #, frontal moderne) et script (bash, powershell, python, groovy, go, rust-corious). Conceptions ** plates-formes Cloud-Native, sécurisées et évolutives ** (Hexagonal, Clean, DDD, sans serveur) et Champions DevSecops dans des environnements régulés et complexes. Poursuivant actuellement ** CKA · CKS · AZ - 500 **. Apprenant à vie piloté par Kaizen, Curiosity 🤓 et Collaboration 🤝.
 
 ---

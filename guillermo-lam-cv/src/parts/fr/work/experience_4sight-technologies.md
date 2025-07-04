@@ -1,3 +1,3 @@
-### 🛠️ 4Sight Technologies — _Senior Software Engineer_
+### 🛠️ 4SightTechnologies - _Senior Software Engineer_
 
-(details omitted)
+(détails omis)

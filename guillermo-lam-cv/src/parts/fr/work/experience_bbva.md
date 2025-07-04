@@ -1,11 +1,11 @@
-### 🏦 BBVA — _Senior DevSecOps Engineer_
+### 🏦 bbva - _Senior DevSecops Engineer_
 
-**Mar 2023 – Mar 2024 • Madrid, ES**
+** mars 2023 - mars 2024 • Madrid, es **
 
-- Automated core banking workflows **and world‑wide cluster provisioning & configuration** with **Ansible** (playbooks, roles), **Kubernetes ☸️**, Istio, and custom tooling.
-- Delivered full‑stack NOVA platform (Angular 18+ & Spring Boot 3+) following 12‑factor & clean‑architecture.
-- Operated an Internal Developer Platform (**IDP**) with **Argo CD GitOps** and **GitLab Pipelines**.
-- Integrated **SonarQube** (_SAST_) & **OWASP ZAP** (_DAST_) for comprehensive security scanning, aligning with CIS & OWASP T10.
-- Managed infra via Terraform & Azure Bicep, ensuring drift‑free environments.
-- Institutionalised **SRE** practices: authored production **run‑books**, Day‑2 playbooks and on‑call rotations; automated **backups & DR** drills via **Jenkins** Pipelines (Shared Library) integrated with Ansible.
-- **🔧 Additionally:** carried out _Linux SysAdmin_ tasks — server & DB administration, filesystem & network management/troubleshooting, scheduled maintenance, **DR/BC** drills — automated with **Bash & Python** scripting.
+- Fills de travail bancaires de base automatisés ** et provisionnement et configuration de cluster à l'échelle mondiale ** avec ** anible ** (playbooks, rôles), ** Kubernetes ☸️ **, Istio et outils personnalisés.
+- Fixé la plate-forme NOVA complète (Angular18 + & Springboot 3+) après 12 facteurs et architecture propre.
+- Fonctionne une plate-forme de développeur interne (** idp **) avec ** argocd gitops ** et ** gitLabpipelines **.
+- Integrated ** SonarQube ** (_Sast_) & ** owasp zap ** (_dast_) pour une numérisation complète de sécurité, s'alignant avec cis & owaspt10.
+- Infra géré via Terraform et Azure Bicep, garantissant des environnements sans dérive.
+- Institutionnalized ** sre ** Practices: Autored Production ** Run-books **, Day-2 Playbooks et Rotations on-Call; Automated ** Backups & Dr ** Forets via ** Jenkins ** Pipelines (SharedLibrary) intégrés à Ansible.
+- ** 🔧 De plus: ** Tâches _linux Sysadmin_ Tâches - Administration du serveur et DB, Système de fichiers et gestion du réseau / dépannage, maintenance planifiée, ** DR / BC ** Forets - Automated avec ** bash & python ** scripting.

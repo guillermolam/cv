@@ -1,13 +1,13 @@
 ## 🏆 Certifications
 
-- 📜 Certificate of Proficiency in English (CPE)
-- 📜 Business English Certificate (BEC)
-- 📜 DELF A4 (B1+)
-- 🛡️ ISC2 Candidate _(in progress)_
-- ☁️ Azure Administrator **AZ‑104** _(in progress)_
-- 🔐 Azure Security Engineer **AZ‑500** _(in progress)_
-- ☸️ Certified Kubernetes Administrator **CKA** _(in progress)_
-- 🏗️ AWS Solutions Architect – Associate _(in progress)_
-- 🚀 AWS DevOps Engineer – Professional _(in progress)_
+- 📜 Certificat de compétence en anglais (CPE)
+- 📜 Certificat d'anglais commercial (BEC)
+- 📜 Delf A4 (B1 +)
+- 🛡️ isc2candidate _ (en cours) _
+- ☁️ Administrateur Azure ** AZ - 104 ** _ (en cours) _
+- 🔐 Ingénieur de sécurité Azure ** AZ - 500 ** _ (en cours) _
+- ☸️ Administrateur certifié Kubernetes ** CKA ** _ (en cours) _
+- 🏗️ AWS Solutions Architectes - Associé _ (en cours) _
+- 🚀 AWS DevOps Ingénieur - Professionnel _ (en cours) _
 
 ---

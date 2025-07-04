@@ -1,3 +1,3 @@
-### 🚆 Bull — _Senior Analyst Programmer_
+### 🚆 Bull - _ programmeur analyste principal _
 
-(details omitted)
+(détails omis)
