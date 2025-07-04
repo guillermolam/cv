@@ -1,5 +1,7 @@
 import type { Locale } from "../i18n";
 import { jsPDF } from "jspdf";
+import HTMLtoDOCX from "html-to-docx";
+import { getLocaleParts } from "../markdown";
 
 export default function DownloadButtons({ locale }: { locale: Locale }) {
   // Function to get the rendered HTML content from the article element
@@ -21,9 +23,16 @@ export default function DownloadButtons({ locale }: { locale: Locale }) {
     });
   };
 
-  // Function to download as DOCX - Temporarily disabled due to library error
+  // Function to download as DOCX using html-to-docx
   const downloadDOCX = async () => {
-    alert("DOCX download is temporarily disabled due to a technical issue.");
+    const html = getRenderedContent();
+    const blob = await HTMLtoDOCX(html);
+    const url = window.URL.createObjectURL(blob as Blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Guillermo_Lam_CV_${locale}.docx`;
+    link.click();
+    window.URL.revokeObjectURL(url);
   };
 
   // Function to download as HTML
@@ -38,15 +47,22 @@ export default function DownloadButtons({ locale }: { locale: Locale }) {
     window.URL.revokeObjectURL(url);
   };
 
-  // Placeholder for Markdown download (could be implemented if raw markdown is accessible)
+  // Function to download as Markdown
   const downloadMD = () => {
-    alert("Markdown download is not implemented yet.");
+    const md = getLocaleParts(locale);
+    const blob = new Blob([md], { type: "text/markdown" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Guillermo_Lam_CV_${locale}.md`;
+    link.click();
+    window.URL.revokeObjectURL(url);
   };
 
   return (
-    <nav class="my-6 space-x-3">
-      <button class="btn" onClick={downloadDOCX} disabled>
-        DOCX (Disabled)
+    <nav class="download-nav">
+      <button class="btn" onClick={downloadDOCX}>
+        DOCX
       </button>
       <button class="btn" onClick={downloadMD}>
         MD
