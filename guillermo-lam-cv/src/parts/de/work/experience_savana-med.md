@@ -1,3 +1,3 @@
-### 🏥 Savana Med — _Architecture, Cloud Infrastructure & Security Lead_
+### 🏥 Savana Med - _architektur, Cloud -Infrastruktur und Sicherheit Lead_
 
-(details omitted)
+(Details weggelassen)

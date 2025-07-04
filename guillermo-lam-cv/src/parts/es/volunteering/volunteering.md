@@ -1,7 +1,7 @@
-## 🤝 Volunteering & Leadership
+## 🤝 Voluntario y liderazgo
 
-**Asociación Aheri** — Volunteer (Bukoba, Tanzania)Aug 2023 – Sep 2023
+** Asociacia Aheri ** - Voluntario (Bukoba, Tanzania) Ago 2023 - Sep 2023
 
-- Helped build an orphanage, collaborating in cross‑cultural teams to improve living conditions.
+- Ayudó a construir un orfanato, colaborando en equipos interculturales para mejorar las condiciones de vida.
 
 ---

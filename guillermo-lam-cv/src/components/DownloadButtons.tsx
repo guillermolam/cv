@@ -59,6 +59,7 @@ export default function DownloadButtons({ locale }: { locale: Locale }) {
     window.URL.revokeObjectURL(url);
   };
 
+
   return (
     <nav class="download-nav">
       <button class="btn" onClick={downloadDOCX}>

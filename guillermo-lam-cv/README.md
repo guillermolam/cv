@@ -1,7 +1,7 @@
 ## Usage
 
 ```bash
-$ npm install # or pnpm install or yarn install
+$ bun install
 ```
 
 ### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
@@ -10,18 +10,51 @@ $ npm install # or pnpm install or yarn install
 
 In the project directory, you can run:
 
-### `npm run dev`
+### `bun run dev`
 
-Runs the app in the development mode.<br>
+Runs the app in development mode.<br>
 Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
-### `npm run build`
+### `bun run build`
 
 Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
+It uses TypeScript and Vite for an optimized build.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### `bun run preview`
+
+Previews the built app.
+
+### `bun run test`
+
+Runs tests using Vitest.
+
+### `bun run test:watch`
+
+Runs tests in watch mode.
+
+### `bun run test:coverage`
+
+Runs tests with coverage reporting.
+
+### `bun run test:coverage:html`
+
+Runs tests with HTML coverage report.
+
+### `bun run test:coverage:json`
+
+Runs tests with JSON coverage report.
+
+### `bun run lint`
+
+Lints the codebase using Trunk.
+
+### `bun run format`
+
+Formats the codebase using Trunk.
+
+### `bun run clean`
+
+Removes the `dist` folder.
 
 ## Deployment
 
