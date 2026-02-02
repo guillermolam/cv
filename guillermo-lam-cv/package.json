@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "html-to-docx": "^1.8.0",
-    "jspdf": "^3.0.1",
+    "jspdf": "^4.1.0",
     "modern-css-reset": "^1.4.0",
     "solid-js": "^1.9.7"
   },
