@@ -1,0 +1,17 @@
+---
+import PageLayout from './PageLayout.astro';
+import type { Lang } from '../lib/i18n';
+
+type Props = {
+  title: string;
+  description?: string;
+  lang?: Lang;
+  useLangPrefix?: boolean;
+};
+
+const { title, description, lang, useLangPrefix } = Astro.props;
+---
+
+<PageLayout title={title} description={description} lang={lang} useLangPrefix={useLangPrefix}>
+  <slot />
+</PageLayout>

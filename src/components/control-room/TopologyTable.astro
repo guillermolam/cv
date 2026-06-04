@@ -1,0 +1,62 @@
+---
+import type { Station } from '../../lib/control-room/stations';
+
+type Props = {
+  stations: Station[];
+};
+
+const { stations } = Astro.props;
+---
+
+<section class="topology" aria-labelledby="topology-title">
+  <div class="topology-header">
+    <h2 id="topology-title">Topology table</h2>
+    <p class="topology-subtitle">
+      A proof index that maps systems to signals and evidence links.
+    </p>
+  </div>
+
+  <div class="topology-table-wrap">
+    <table class="topology-table">
+      <thead>
+        <tr>
+          <th scope="col">Station / system</th>
+          <th scope="col">Signal</th>
+          <th scope="col">Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {stations.map((s) => (
+          <tr id={`topology-${s.id}`}>
+            <th scope="row">
+              <a href={s.anchor}>{s.label}</a>
+            </th>
+            <td>{s.signal}</td>
+            <td class="topology-evidence">
+              {s.evidenceLinks.map((l) => (
+                <a href={l.href}>{l.label}</a>
+              ))}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="topology-cards" aria-label="Topology cards">
+    {stations.map((s) => (
+      <article class="topology-card" id={`topology-card-${s.id}`}>
+        <h3 class="topology-card-title">
+          <a href={s.anchor}>{s.label}</a>
+        </h3>
+        <p class="topology-card-signal">{s.signal}</p>
+        <div class="topology-card-links">
+          {s.evidenceLinks.map((l) => (
+            <a href={l.href}>{l.label}</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+

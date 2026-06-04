@@ -1,0 +1,48 @@
+---
+type Props = {
+  enabled?: boolean;
+  selectedStationId?: string;
+  reducedMotion?: boolean | 'auto';
+};
+
+const { enabled = false, selectedStationId, reducedMotion = 'auto' } = Astro.props;
+---
+
+<div
+  class="hero3d"
+  data-hero3d
+  data-hero3d-state={enabled ? 'enabled' : 'disabled'}
+  data-hero3d-selected-station={selectedStationId}
+  data-hero3d-reduced-motion={reducedMotion === 'auto' ? 'auto' : reducedMotion ? '1' : '0'}
+>
+  <div class="hero3d-canvas" data-hero3d-mount aria-hidden="true"></div>
+  <div class="hero3d-content">
+    <slot />
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.currentScript?.previousElementSibling
+    if (!(root instanceof HTMLElement)) return
+
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('no3d') === '1') {
+      root.dataset.hero3dState = 'disabled'
+    }
+
+    if (root.dataset.hero3dReducedMotion !== 'auto') return
+
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const apply = () => {
+      root.dataset.hero3dReducedMotion = media.matches ? '1' : '0'
+      if (media.matches) {
+        root.dataset.hero3dState = 'disabled'
+      }
+    }
+    apply()
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', apply)
+    }
+  })()
+</script>

@@ -1,0 +1,72 @@
+{
+  "skill_name": "astro-portfolio-implementation",
+  "format": "output-evals-v1",
+  "evals": [
+    {
+      "id": "o1-page-route",
+      "prompt": "Add a new /portfolio/ai-security page in Astro and include it in the portfolio navigation.",
+      "expected_output": "Implements the new route using existing layout patterns, updates navigation links safely, and reports affected files and validation results.",
+      "assertions": [
+        "Creates or updates files under src/pages/portfolio/ and uses existing layouts/components",
+        "Does not change IA/content model without escalation",
+        "Lists commands run (check/build) and reports results",
+        "Includes an accessibility and SEO impact note"
+      ]
+    },
+    {
+      "id": "o2-component",
+      "prompt": "Create an Astro component for a consistent CTA button that matches existing patterns and update two pages to use it.",
+      "expected_output": "Introduces a reusable Astro component, updates usage sites, and validates that styling and semantics remain consistent.",
+      "assertions": [
+        "Adds a component in src/components/ with clear props and semantic HTML",
+        "Updates at least two pages/components to use it",
+        "Avoids unnecessary client JS",
+        "Reports affected files and risks"
+      ]
+    },
+    {
+      "id": "o3-island",
+      "prompt": "Add a minimal interactive 'copy email' button on the contact page without adding a framework integration.",
+      "expected_output": "Adds minimal progressive enhancement that works without JS (email still visible/copyable), and keeps hydration small and justified.",
+      "assertions": [
+        "Does not add React/Vue/Svelte dependencies",
+        "Keeps essential contact info visible without JS",
+        "Documents hydration strategy and fallback",
+        "Runs validation and reports results"
+      ]
+    },
+    {
+      "id": "o4-seo",
+      "prompt": "Standardize page titles and meta descriptions across the site using a shared layout or helper.",
+      "expected_output": "Implements consistent metadata wiring without breaking routes, and verifies built output still includes titles.",
+      "assertions": [
+        "Uses a shared pattern (layout/helper) rather than copy/paste",
+        "Avoids breaking existing pages",
+        "Mentions how SEO was verified (e.g., built index.html title signal)",
+        "Reports validation gates"
+      ]
+    },
+    {
+      "id": "o5-accessibility",
+      "prompt": "Fix heading hierarchy on the home page and ensure the Recruiter Briefing Rail is navigable by keyboard.",
+      "expected_output": "Corrects heading levels/landmarks and ensures interactive elements are keyboard accessible with visible focus.",
+      "assertions": [
+        "Updates semantic structure without changing narrative copy",
+        "Mentions keyboard navigation and focus checks explicitly",
+        "Does not move essential content into JS-only areas",
+        "Reports accessibility impact and follow-ups"
+      ]
+    },
+    {
+      "id": "o6-performance-static",
+      "prompt": "Reduce unnecessary client-side JS while keeping the experience rich; confirm no SSR adapter is introduced and run static output validation.",
+      "expected_output": "Removes unnecessary hydration, confirms build output is static, runs scripts, and reports any SSR signals or adapter risks.",
+      "assertions": [
+        "Reduces or avoids islands when not needed",
+        "Runs scripts/validate-astro-project.mjs and scripts/check-static-output.mjs",
+        "Reports performance impact and any risks",
+        "Lists affected files and commands run"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'CV';
+const description =
+  'Senior DevSecOps and platform engineering experience: cloud, Kubernetes, GitOps, and security automation.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="card pad">
+    <h1>CV</h1>
+    <p>
+      Senior DevSecOps · Cloud & Platform Engineer. I design secure, scalable
+      delivery systems and help teams adopt practices that reduce risk without
+      slowing down.
+    </p>
+  </section>
+
+  <section class="grid cols-2" style="margin-top: 1rem">
+    <article class="card pad">
+      <h2>Core strengths</h2>
+      <ul>
+        <li>Secure CI/CD (SAST/DAST/SCA), policy gates, and artifact signing</li>
+        <li>Kubernetes platforms (EKS/AKS/OpenShift), Helm, and GitOps</li>
+        <li>Infrastructure as Code (Terraform, Pulumi, Bicep) and automation</li>
+        <li>Observability foundations (Prometheus, Grafana, ELK, OpenTelemetry)</li>
+      </ul>
+    </article>
+
+    <article class="card pad">
+      <h2>Recent roles</h2>
+      <ul>
+        <li>Senior DevOps Engineer — Skyguide (Zurich)</li>
+        <li>Senior DevOps Engineer — Ciklum (Málaga)</li>
+        <li>Senior DevSecOps Engineer — BBVA (Madrid)</li>
+        <li>DevSecOps Engineer — European Commission (Brussels)</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="grid cols-2" style="margin-top: 1rem">
+    <article class="card pad">
+      <h2>Education</h2>
+      <p>
+        Universidad Autónoma de Madrid — Computer Science (Ingeniería Superior
+        en Informática).
+      </p>
+    </article>
+
+    <article class="card pad">
+      <h2>Languages</h2>
+      <ul>
+        <li>Spanish — Native</li>
+        <li>English — C2</li>
+        <li>French — B1/B2</li>
+        <li>German — A1</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="card pad" style="margin-top: 1rem">
+    <h2>Certifications (in progress)</h2>
+    <ul>
+      <li>CKA · CKS · AZ-500</li>
+      <li>AWS Solutions Architect Associate · AWS DevOps Professional</li>
+    </ul>
+    <p>
+      Full original CV content is archived in the repository at
+      docs/archive/original-readme.md.
+    </p>
+  </section>
+</BaseLayout>

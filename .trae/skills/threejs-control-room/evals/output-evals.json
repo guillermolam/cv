@@ -1,0 +1,72 @@
+{
+  "skill_name": "threejs-control-room",
+  "format": "output-evals-v1",
+  "evals": [
+    {
+      "id": "o1-scene-creation",
+      "prompt": "Create a lightweight control-room topology scene with nodes/edges and an intentional focus transition that supports station selection; keep HTML content primary and provide fallback.",
+      "expected_output": "Implements a Three.js scene architecture with progressive enhancement and a safe fallback, with clear ownership boundaries and cleanup.",
+      "assertions": [
+        "Keeps essential content outside canvas and mentions the boundary explicitly",
+        "Defines a clear scene lifecycle including cleanup/disposal",
+        "Lists affected files and references loaded",
+        "Includes validation results and risks"
+      ]
+    },
+    {
+      "id": "o2-optimization",
+      "prompt": "Optimize the hero scene for mobile performance: reduce draw calls, cap DPR, and avoid overheating.",
+      "expected_output": "Applies concrete optimization steps, adds degradation behavior, validates budgets, and reports performance impact.",
+      "assertions": [
+        "Mentions and applies performance budgets (draw calls/DPR/asset discipline)",
+        "Runs or references scripts/validate-scene-budget.mjs and reports output",
+        "Adds or confirms a fallback/degrade path for low-end devices",
+        "Reports performance impact and tradeoffs"
+      ]
+    },
+    {
+      "id": "o3-reduced-motion",
+      "prompt": "Implement prefers-reduced-motion handling so the scene becomes mostly static when enabled.",
+      "expected_output": "Gates animation behind reduced-motion detection and ensures no continuous motion under reduced motion, with documentation of what changes.",
+      "assertions": [
+        "Explicitly detects prefers-reduced-motion and gates animation",
+        "Describes what motion is reduced/disabled",
+        "Does not hide essential information in 3D",
+        "Reports reduced-motion validation results"
+      ]
+    },
+    {
+      "id": "o4-accessibility",
+      "prompt": "Ensure the 3D hero does not break accessibility: fallback content, keyboard-safe overlays, no focus trap.",
+      "expected_output": "Preserves semantic HTML as primary experience, ensures overlays are keyboard accessible, and documents accessibility checks.",
+      "assertions": [
+        "Keeps fallback content and states WebGL can fail safely",
+        "Mentions keyboard navigation and focus behavior",
+        "Avoids canvas-only content for meaning",
+        "Reports accessibility impact and follow-ups"
+      ]
+    },
+    {
+      "id": "o5-astro-integration",
+      "prompt": "Integrate the Three.js scene into Astro as a lazy-loaded progressive enhancement island with proper cleanup on navigation.",
+      "expected_output": "Implements Astro integration boundaries and lifecycle coordination, including cleanup on unmount and visibility changes.",
+      "assertions": [
+        "Mentions Astro integration rules and hydration boundaries",
+        "Implements cleanup on unmount and cancels RAF",
+        "Avoids hydrating essential content",
+        "Reports affected files, commands run, and validation results"
+      ]
+    },
+    {
+      "id": "o6-shaders",
+      "prompt": "Add a restrained shader-based background grid; keep it maintainable and avoid heavy fragment work.",
+      "expected_output": "Introduces shader/material changes with optimization and maintainability considerations and documents verified APIs when uncertain.",
+      "assertions": [
+        "Avoids unnecessary complexity and documents shader organization",
+        "Mentions fragment workload and DPR considerations",
+        "Applies docs freshness rule if using unfamiliar APIs",
+        "Reports performance impact and risks"
+      ]
+    }
+  ]
+}

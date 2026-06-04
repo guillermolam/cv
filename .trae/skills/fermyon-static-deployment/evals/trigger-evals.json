@@ -1,0 +1,109 @@
+{
+  "skill_name": "fermyon-static-deployment",
+  "purpose": "Trigger evals for fermyon-static-deployment (Spin/Fermyon static hosting deploy + validation + troubleshooting).",
+  "should_trigger": [
+    {
+      "id": "t1",
+      "prompt": "Deploy this Astro site to Fermyon Cloud using Spin and tell me the production URL. Include smoke tests and a rollback plan.",
+      "tags": ["deploy", "fermyon", "spin", "smoke-test", "rollback"]
+    },
+    {
+      "id": "t2",
+      "prompt": "Can you review my spin.toml and check if it's correctly set up to serve the Astro dist folder as a static site?",
+      "tags": ["spin.toml", "manifest-review", "static-hosting"]
+    },
+    {
+      "id": "t3",
+      "prompt": "The Spin deploy succeeded but the site is blank and CSS is 404ing. Troubleshoot the Fermyon deployment and tell me what to fix.",
+      "tags": ["deployment-troubleshooting", "assets", "404"]
+    },
+    {
+      "id": "t4",
+      "prompt": "I need a release readiness checklist for a Fermyon deploy: build validation, manifest validation, routing validation, and security checks.",
+      "tags": ["release-readiness", "validation", "security"]
+    },
+    {
+      "id": "t5",
+      "prompt": "Spin static hosting question: will deep links work on refresh, or do we need SPA fallback? Validate and document the expected behavior for this deployment.",
+      "tags": ["routing", "spa", "static-hosting"]
+    },
+    {
+      "id": "t6",
+      "prompt": "We want to deploy a preview environment on Fermyon for this PR and run smoke tests against the preview URL.",
+      "tags": ["preview", "release-validation", "smoke-test"]
+    },
+    {
+      "id": "t7",
+      "prompt": "Our Fermyon deployment keeps serving old content after redeploy. Diagnose caching and propose a safe remediation plan.",
+      "tags": ["caching", "stale-content", "troubleshooting"]
+    },
+    {
+      "id": "t8",
+      "prompt": "Can you validate the static build output (dist) for common hosting issues before we deploy via Spin?",
+      "tags": ["build-validation", "static-hosting"]
+    },
+    {
+      "id": "t9",
+      "prompt": "Please plan a rollback strategy for a Spin-based Fermyon production release, including triggers and verification steps.",
+      "tags": ["rollback", "release-process"]
+    },
+    {
+      "id": "t10",
+      "prompt": "I think spin.toml is missing something, but I'm not sure which fields are required for Fermyon static hosting. Check docs freshness and propose next steps without guessing.",
+      "tags": ["docs-freshness", "manifest", "anti-hallucination"]
+    }
+  ],
+  "should_not_trigger": [
+    {
+      "id": "n1",
+      "prompt": "Implement the /portfolio route in Astro and wire it to the content collections.",
+      "tags": ["astro-implementation"]
+    },
+    {
+      "id": "n2",
+      "prompt": "Build the Three.js Hybrid Cloud Control Room scene with nodes, edges, and packet flows.",
+      "tags": ["threejs-implementation"]
+    },
+    {
+      "id": "n3",
+      "prompt": "Rewrite my About page so it's recruiter-friendly and aligned with DevSecOps roles.",
+      "tags": ["recruiter-copy", "content-strategy"]
+    },
+    {
+      "id": "n4",
+      "prompt": "Plan the information architecture for the site and decide the primary routes and case study taxonomy.",
+      "tags": ["architecture-planning"]
+    },
+    {
+      "id": "n5",
+      "prompt": "Fix this Astro component's CSS so the hero looks more premium on mobile.",
+      "tags": ["astro-ui"]
+    },
+    {
+      "id": "n6",
+      "prompt": "Near miss: Deploy this site to Vercel and set up preview deployments.",
+      "tags": ["deploy", "vercel"]
+    },
+    {
+      "id": "n7",
+      "prompt": "Near miss: Add GitHub Actions CI with linting, typechecking, and gitleaks.",
+      "tags": ["ci", "devsecops"]
+    },
+    {
+      "id": "n8",
+      "prompt": "Near miss: Can you write a Node script that parses TOML files in general?",
+      "tags": ["generic-scripting"]
+    },
+    {
+      "id": "n9",
+      "prompt": "I want a new case study page for my Kubernetes platform project, including screenshots and narrative.",
+      "tags": ["case-study", "content"]
+    },
+    {
+      "id": "n10",
+      "prompt": "Is Fermyon a good hosting option in general? Give me a high-level pros/cons comparison against Netlify.",
+      "tags": ["general-advice"]
+    }
+  ]
+}
+

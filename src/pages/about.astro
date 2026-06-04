@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfilePortrait from '../components/ProfilePortrait.astro';
+
+const title = 'About';
+const description =
+  'A short overview of my background, principles, and the kind of work I enjoy.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="card pad about-intro">
+    <div class="about-intro-media">
+      <ProfilePortrait size="lg" />
+    </div>
+    <div class="about-intro-body">
+      <h1>About</h1>
+      <p>
+        I work at the intersection of software engineering, operations, and
+        security. My goal is to make delivery predictable: fast feedback, safe
+        releases, and clear ownership.
+      </p>
+      <p>
+        I have hands-on experience with regulated and safety-critical
+        environments, where correctness and traceability matter as much as speed.
+        I like systems that are observable, documented, and easy to operate.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid cols-2" style="margin-top: 1rem">
+    <article class="card pad">
+      <h2>Focus areas</h2>
+      <ul>
+        <li>Cloud-native platforms and Kubernetes-based delivery</li>
+        <li>GitOps workflows and progressive delivery</li>
+        <li>Security automation: SBOM, scanning, signing, and provenance</li>
+        <li>Developer experience: templates, golden paths, and self-service</li>
+      </ul>
+    </article>
+
+    <article class="card pad">
+      <h2>Working style</h2>
+      <ul>
+        <li>Start from the outcome, then design the simplest path to it</li>
+        <li>Make quality visible: SLOs, dashboards, and actionable alerts</li>
+        <li>Prefer composable tools over monoliths</li>
+        <li>Automate the boring parts and keep humans for judgment calls</li>
+      </ul>
+    </article>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-intro {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .about-intro {
+      grid-template-columns: 168px 1fr;
+    }
+  }
+
+  .about-intro-media {
+    display: grid;
+    justify-content: start;
+  }
+</style>

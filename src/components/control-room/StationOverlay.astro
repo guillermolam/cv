@@ -1,0 +1,22 @@
+---
+import type { Station, StationId } from '../../lib/control-room/stations';
+
+type Props = {
+  stations: Station[];
+  selectedStationId?: StationId;
+};
+
+const { stations, selectedStationId } = Astro.props;
+const selected = stations.find((s) => s.id === selectedStationId) ?? stations[0];
+---
+
+<div class="station-overlay" data-hero3d-overlay aria-label="Control room overlay">
+  <div class="station-overlay-left">
+    <span class="station-overlay-label">Station</span>
+    <span class="station-overlay-value">{selected?.label}</span>
+  </div>
+  <div class="station-overlay-right">
+    <a class="station-overlay-action" href="/?no3d=1#main">Skip 3D</a>
+  </div>
+</div>
+

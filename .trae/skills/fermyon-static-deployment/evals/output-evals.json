@@ -1,0 +1,105 @@
+{
+  "skill_name": "fermyon-static-deployment",
+  "purpose": "Output-quality evals for build validation, Spin/Fermyon deployment validation, rollback planning, smoke testing, routing checks, and troubleshooting.",
+  "evals": {
+    "build_validation": [
+      {
+        "id": "b1",
+        "prompt": "Validate whether this repo is ready to deploy as a static site. Run build artifact checks and report failures with evidence.",
+        "expected_output": [
+          "Runs or references scripts/inspect-spin-project.mjs and scripts/validate-static-build.mjs",
+          "Reports pass/fail for dist/ and index.html existence",
+          "Lists unresolved asset references if present",
+          "Routes Astro implementation issues to astro-portfolio-implementation"
+        ]
+      },
+      {
+        "id": "b2",
+        "prompt": "The build succeeds, but I'm worried about static hosting problems. Validate the dist output for asset path issues and SPA deep-link risks.",
+        "expected_output": [
+          "Calls out SPA deep-link risk if only one HTML file exists",
+          "Separates routing vs asset validation findings",
+          "Avoids guessing platform behavior; consults docs-freshness if needed"
+        ]
+      }
+    ],
+    "deployment": [
+      {
+        "id": "d1",
+        "prompt": "Create a deployment plan to Fermyon Cloud using Spin. Include commands (only if verified), validation gates, and a release report template.",
+        "expected_output": [
+          "Includes a step-by-step plan aligned with SKILL workflow",
+          "Includes validation gates (build, manifest, routing, assets, availability)",
+          "Does not invent CLI flags; uses docs-freshness gate when commands are uncertain",
+          "Includes release report output contract sections"
+        ]
+      },
+      {
+        "id": "d2",
+        "prompt": "Deployment succeeded but / returns 404 in production. Diagnose likely causes and propose a corrective action plan.",
+        "expected_output": [
+          "Distinguishes between packaging vs routing vs platform availability",
+          "Recommends validate-spin-manifest and validate-static-build scripts",
+          "Includes a rollback trigger recommendation if impact is high",
+          "References troubleshooting.md failure modes"
+        ]
+      }
+    ],
+    "rollback": [
+      {
+        "id": "r1",
+        "prompt": "Write a rollback plan for the Fermyon production deployment, including triggers, steps, and verification.",
+        "expected_output": [
+          "Documents rollback triggers and verification steps",
+          "Does not assume a specific rollback mechanism without docs evidence",
+          "Includes post-rollback smoke tests and report updates"
+        ]
+      }
+    ],
+    "smoke_test": [
+      {
+        "id": "s1",
+        "prompt": "Define a smoke test checklist for a deployed static site on Fermyon Cloud, focusing on assets and routing behavior.",
+        "expected_output": [
+          "Includes availability checks and asset checks",
+          "Includes at least one deep-link direct request + refresh check",
+          "Documents expected 404 behavior",
+          "Keeps checks runnable without privileged access"
+        ]
+      }
+    ],
+    "routing": [
+      {
+        "id": "rt1",
+        "prompt": "We have multi-page Astro routes. Validate that deep links behave correctly when hosted as static files on Spin.",
+        "expected_output": [
+          "Explains static hosting constraints clearly",
+          "Recommends a deployed-environment direct request test",
+          "Avoids assuming SPA fallback exists unless verified"
+        ]
+      }
+    ],
+    "troubleshooting": [
+      {
+        "id": "t1",
+        "prompt": "CSS and JS are 404ing after Fermyon deploy, but index.html loads. Provide a troubleshooting runbook and the most likely root causes.",
+        "expected_output": [
+          "Points to packaging/files inclusion and asset path base issues",
+          "References troubleshooting.md and static-site-hosting.md",
+          "Produces an actionable sequence of checks with evidence capture",
+          "Mentions security checks if exposure of unintended files is possible"
+        ]
+      },
+      {
+        "id": "t2",
+        "prompt": "The site shows old content after redeploy. Diagnose and propose validation steps before changing code.",
+        "expected_output": [
+          "Considers caching and HTML volatility vs hashed assets",
+          "Recommends verifying deployed HTML contents and headers if accessible",
+          "Avoids speculative claims about platform caching defaults"
+        ]
+      }
+    ]
+  }
+}
+

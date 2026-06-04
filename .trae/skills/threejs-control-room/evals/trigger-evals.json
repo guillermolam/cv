@@ -1,0 +1,88 @@
+{
+  "skill_name": "threejs-control-room",
+  "format": "trigger-evals-v1",
+  "should_trigger": [
+    {
+      "id": "t1",
+      "prompt": "Create a Three.js scene for the control room hero: topology nodes and subtle packet-flow lines, with a fallback."
+    },
+    {
+      "id": "t2",
+      "prompt": "Optimize the WebGL performance. The landing hero stutters on mobile and overheats."
+    },
+    {
+      "id": "t3",
+      "prompt": "Add a shader-based grid background but keep it maintainable and fast."
+    },
+    {
+      "id": "t4",
+      "prompt": "Camera behavior feels gimmicky. Make it calmer and respect prefers-reduced-motion."
+    },
+    {
+      "id": "t5",
+      "prompt": "Implement particle systems for telemetry visualization but cap counts and avoid noise."
+    },
+    {
+      "id": "t6",
+      "prompt": "We have a memory leak when navigating away from the home page; fix Three.js cleanup/disposal."
+    },
+    {
+      "id": "t7",
+      "prompt": "Integrate the Three.js scene into Astro as progressive enhancement and lazy-load it."
+    },
+    {
+      "id": "t8",
+      "prompt": "Debug: WebGL canvas is blank sometimes, maybe context lost? add handling."
+    },
+    {
+      "id": "t9",
+      "prompt": "pls make the 3d hero smoother n less heavy, like.. fewer drawcalls??"
+    },
+    {
+      "id": "t10",
+      "prompt": "Audit the scene budget: shaders, assets, animation loops, and report risks."
+    }
+  ],
+  "should_not_trigger": [
+    {
+      "id": "n1",
+      "prompt": "Rewrite my homepage headline so recruiters understand me in 30 seconds."
+    },
+    {
+      "id": "n2",
+      "prompt": "Are we ready to start building? Do we have specs, tasks, and validation gates?"
+    },
+    {
+      "id": "n3",
+      "prompt": "Deploy to Fermyon Cloud with Spin and set up a workflow."
+    },
+    {
+      "id": "n4",
+      "prompt": "Create a new Astro route for /portfolio/infra and update the header nav."
+    },
+    {
+      "id": "n5",
+      "prompt": "Improve site-wide SEO metadata and canonical URLs."
+    },
+    {
+      "id": "n6",
+      "prompt": "Change the information architecture: rename sections and move blog under portfolio."
+    },
+    {
+      "id": "n7",
+      "prompt": "Set up content collections for blog posts."
+    },
+    {
+      "id": "n8",
+      "prompt": "Make the typography and spacing more premium across the site."
+    },
+    {
+      "id": "n9",
+      "prompt": "Write a case study for my Kubernetes platform work."
+    },
+    {
+      "id": "n10",
+      "prompt": "Implement GitHub Actions CI with Trivy and Gitleaks."
+    }
+  ]
+}

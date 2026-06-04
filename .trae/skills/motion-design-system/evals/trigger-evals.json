@@ -1,0 +1,28 @@
+{
+  "skill": "motion-design-system",
+  "should_trigger": [
+    "Define a cohesive timing and easing system for the whole portfolio.",
+    "Create microinteraction patterns for buttons, links, and cards that feel premium.",
+    "Audit the current animations and propose a consistent motion language.",
+    "Design reduced-motion alternatives for the hero transitions and section reveals.",
+    "Define page transition guidelines so navigation feels alive but not slow.",
+    "Create a reveal pattern system for station sections and overlays.",
+    "Propose animation rules for system state changes (loading/success/error).",
+    "Define hover/focus/press behaviors that work on keyboard and touch.",
+    "Make motion feel cohesive across UI and Three.js overlays.",
+    "Create a motion token table (durations/easing) and usage rules."
+  ],
+  "should_not_trigger": [
+    "Implement the animations in Astro components.",
+    "Fix a WebGL memory leak in the Three.js scene.",
+    "Deploy to Fermyon Cloud.",
+    "Write recruiter copy for the homepage hero.",
+    "Refactor the i18n routing logic.",
+    "Create a new case study in markdown.",
+    "Debug a pnpm build failure.",
+    "Design the overall control-room narrative and storyline.",
+    "Write a Spin manifest for static hosting.",
+    "Create a GitHub Actions CI workflow."
+  ]
+}
+

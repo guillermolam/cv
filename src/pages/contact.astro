@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Contact';
+const description =
+  'Ways to reach me for platform engineering, DevSecOps, and cloud-native work.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="card pad">
+    <h1>Contact</h1>
+    <p>
+      If you want to collaborate on platform engineering, secure delivery, or
+      cloud-native architecture, these are the best places to reach me.
+    </p>
+
+    <ul>
+      <li>
+        Email:
+        <a href="mailto:guillermolam.m@gmail.com">guillermolam.m@gmail.com</a>
+      </li>
+      <li>
+        LinkedIn:
+        <a href="https://linkedin.com/in/guillermo-lam-28901047"
+          >linkedin.com/in/guillermo-lam-28901047</a
+        >
+      </li>
+      <li>
+        GitHub: <a href="https://github.com/guillermolam">github.com/guillermolam</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="grid cols-2" style="margin-top: 1rem">
+    <article class="card pad">
+      <h2>Topics I can help with</h2>
+      <ul>
+        <li>CI/CD design and pipeline hardening</li>
+        <li>Kubernetes platforms, GitOps, and cluster operations</li>
+        <li>Security automation (SBOM, scanning, signing, provenance)</li>
+        <li>Observability, SLOs, and production readiness</li>
+      </ul>
+    </article>
+
+    <article class="card pad">
+      <h2>Preferred context</h2>
+      <ul>
+        <li>What you are trying to achieve (outcome)</li>
+        <li>Current constraints (compliance, timelines, teams)</li>
+        <li>Systems involved (cloud, CI/CD, runtime, data)</li>
+        <li>Success criteria (SLOs, risk, cost, velocity)</li>
+      </ul>
+    </article>
+  </section>
+</BaseLayout>

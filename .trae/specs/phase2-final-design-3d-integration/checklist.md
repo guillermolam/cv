@@ -1,0 +1,13 @@
+- [ ] Tokens updated as specified (new typography/focus/scrim/glass/motion helper tokens exist and are used consistently).
+- [ ] Global styles reflect Phase 2 art direction without violating the explicit avoid list (no neon HUD/glitch/heavy bloom styling).
+- [ ] Homepage hero contains an Operator ID block with Guillermo portrait and GitHub/LinkedIn links that are visible without scrolling.
+- [ ] Recruiter Briefing Rail includes GitHub/LinkedIn links with descriptive labels and remains readable at 320px width.
+- [ ] Footer includes GitHub/LinkedIn links with consistent styling and descriptive labels.
+- [ ] GSAP motion orchestration exists only where needed (homepage) and does not require JS for content visibility.
+- [ ] Reduced motion (`prefers-reduced-motion: reduce`) disables ScrollTrigger/parallax/idle loops and preserves usability.
+- [ ] Hero3D initializes only when gating conditions pass, and `?no3d=1` prevents initialization.
+- [ ] “Skip 3D” control disables 3D immediately and leaves the content layer unchanged and readable.
+- [ ] Three.js scene respects performance constraints: lazy-init, stops when offscreen, disposes resources on teardown.
+- [ ] Accessibility: focus-visible works for nav/buttons/chips/table links; no canvas focus trap; link text is descriptive.
+- [ ] SEO: semantic headings remain correct (H1 per page); no essential text moved into canvas; build output remains indexable.
+- [ ] Tooling: pnpm run check and pnpm run build pass.

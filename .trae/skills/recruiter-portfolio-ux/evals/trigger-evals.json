@@ -1,0 +1,28 @@
+{
+  "skill": "recruiter-portfolio-ux",
+  "should_trigger": [
+    "Run a 30-second recruiter test on the homepage and report issues.",
+    "Evaluate whether CV and contact are discoverable within one interaction.",
+    "Review the motion and transitions: are they helping comprehension or adding friction?",
+    "Audit navigation discoverability for recruiters and hiring managers.",
+    "Assess reduced-motion behavior quality for the hero experience.",
+    "Evaluate if the exploration path hides key CTAs or achievements.",
+    "Create a recruiter UX review report with acceptance criteria for fixes.",
+    "Review the portfolio experience for hidden CTAs, forced scrolling, or excessive delays.",
+    "Score the interaction quality and transition quality across key pages.",
+    "Assess whether the site feels memorable within 60 seconds without harming usability."
+  ],
+  "should_not_trigger": [
+    "Implement the fix in Astro components.",
+    "Write a new About page section.",
+    "Deploy to Fermyon Cloud.",
+    "Implement a Three.js camera transition.",
+    "Define a motion design token system.",
+    "Design an immersive narrative arc for exploration.",
+    "Refactor TypeScript types.",
+    "Add a new blog post.",
+    "Fix pnpm lockfile issues.",
+    "Create a Spin manifest."
+  ]
+}
+

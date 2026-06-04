@@ -1,0 +1,699 @@
+{
+  "skill_name": "fermyon-static-deployment",
+  "basis": "Repository-derived evals for guillermolam/cv (root Astro + subproject Vite + GitHub Pages workflow evidence).",
+  "required_repo_evidence": [
+    ".github/workflows/deploy-cv.yaml",
+    "package.json (root)",
+    "astro.config.mjs",
+    "tsconfig.json",
+    "guillermo-lam-cv/package.json",
+    "vercel.json",
+    "references/project-deployment-inventory.md",
+    "references/project-pattern-mapping.md"
+  ],
+  "deployment_evals": [
+    {
+      "id": "dep-01",
+      "prompt": "Deploy this portfolio to Fermyon Cloud using Spin. Identify which build artifact should be deployed based on the repository, then propose a deployment plan and validation gates.",
+      "expected_output": [
+        "Mentions the repo has two artifacts (root Astro dist and guillermo-lam-cv dist) and chooses intentionally",
+        "References deploy-cv.yaml working-directory ./guillermo-lam-cv",
+        "References astro.config.mjs output: static when discussing root build",
+        "Includes build + manifest + routing + asset + availability validation gates"
+      ],
+      "assertions": [
+        "Includes an explicit decision: deploy root dist vs guillermo-lam-cv/dist",
+        "Does not invent spin.toml fields or CLI flags; consults docs-freshness when uncertain",
+        "Mentions missing spin.toml if applicable"
+      ]
+    },
+    {
+      "id": "dep-02",
+      "prompt": "Create spin.toml for this repo so we can deploy the Astro dist folder to Fermyon. Use Spin examples to justify manifest structure.",
+      "expected_output": [
+        "Uses Spin static-fileserver template as baseline (source.url + digest + files mapping)",
+        "Validates that dist/ exists and includes index.html and _astro/",
+        "Does not propose SPA rewrites for Astro multi-page output"
+      ],
+      "assertions": [
+        "References spinframework/spin templates/static-fileserver as evidence",
+        "Does not claim the manifest works without validation",
+        "Stops or asks to consult docs if any manifest field is uncertain"
+      ]
+    },
+    {
+      "id": "dep-03",
+      "prompt": "Deploy the site currently used by GitHub Pages to Fermyon Cloud (whatever deploy-cv.yaml builds).",
+      "expected_output": [
+        "Identifies deploy-cv.yaml builds ./guillermo-lam-cv using Bun",
+        "States the artifact path is ./guillermo-lam-cv/dist",
+        "Calls out SPA rewrite expectation in vercel.json as a risk"
+      ],
+      "assertions": [
+        "Does not assume guillermo-lam-cv/dist exists locally (notes CI builds it)",
+        "Requires a deep-link refresh validation step (routing validation)",
+        "Does not assume Spin supports SPA fallback without docs evidence"
+      ]
+    },
+    {
+      "id": "dep-04",
+      "prompt": "Add a Fermyon deploy workflow to GitHub Actions for this repo, but keep PR validation secret-free.",
+      "expected_output": [
+        "Separates CI validation from deployment (no deployment on PRs without secrets)",
+        "Uses a deploy token secret name (never printed)",
+        "Keeps build step aligned with chosen artifact (pnpm+astro vs bun+vite)"
+      ],
+      "assertions": [
+        "Mentions repo already has deploy-cv.yaml for GitHub Pages",
+        "Does not suggest pull_request_target for deployment",
+        "Explicitly avoids logging secrets"
+      ]
+    },
+    {
+      "id": "dep-05",
+      "prompt": "Spin deploy succeeded, but I want release readiness validation and a production report for this portfolio deploy.",
+      "expected_output": [
+        "Produces a report matching SKILL output contract sections",
+        "Includes repository-aware smoke tests (/, /about/, /cv/, /portfolio/ for Astro)",
+        "Includes rollback readiness section"
+      ],
+      "assertions": [
+        "Lists references loaded including project-deployment-inventory and project-pattern-mapping",
+        "Includes commands executed section (with redaction guidance)"
+      ]
+    },
+    {
+      "id": "dep-06",
+      "prompt": "Deploy the root Astro site, but ensure it is static-only and compatible with Fermyon.",
+      "expected_output": [
+        "References astro.config.mjs output: static",
+        "Validates dist structure contains per-route index.html files",
+        "Avoids SSR assumptions"
+      ],
+      "assertions": [
+        "Routes Astro implementation issues to astro-portfolio-implementation",
+        "Does not invent hosting behavior"
+      ]
+    },
+    {
+      "id": "dep-07",
+      "prompt": "We want preview deployments for PRs on Fermyon with smoke tests. Propose a workflow compatible with this repo’s current structure.",
+      "expected_output": [
+        "Notes current Pages deploy builds the subproject with Bun",
+        "Proposes preview flow that is secret-gated and does not run on untrusted PR code without approvals",
+        "Includes smoke test checklist for preview URL"
+      ],
+      "assertions": [
+        "Does not propose automatic production deploy from PRs",
+        "Mentions rollback plan even for preview if it touches shared app name/namespace"
+      ]
+    },
+    {
+      "id": "dep-08",
+      "prompt": "Our Fermyon deploy fails because spin.toml is missing. What should we do next?",
+      "expected_output": [
+        "Mentions repo has no spin.toml",
+        "Uses project-deployment-inventory to decide which artifact would be served",
+        "Uses Spin template static-fileserver as evidence for manifest baseline"
+      ],
+      "assertions": [
+        "Does not invent the manifest fields without checking Spin examples",
+        "Captures uncertainty and consults docs-freshness if needed"
+      ]
+    },
+    {
+      "id": "dep-09",
+      "prompt": "I want to deploy on Fermyon but keep GitHub Pages deployment working. Propose a parallel deployment strategy.",
+      "expected_output": [
+        "Acknowledges existing deploy-cv.yaml Pages pipeline",
+        "Proposes Fermyon as separate workflow or manual procedure",
+        "Avoids breaking the subproject build"
+      ],
+      "assertions": [
+        "Mentions dual artifact reality and avoids mixing them accidentally"
+      ]
+    },
+    {
+      "id": "dep-10",
+      "prompt": "Create a deployment inventory report for Fermyon readiness for this repo.",
+      "expected_output": [
+        "References project-deployment-inventory.md as source of truth",
+        "Mentions missing spin.toml",
+        "Mentions build commands (astro build, bun run build) and artifact paths"
+      ],
+      "assertions": [
+        "Includes risk areas: artifact ambiguity and SPA fallback mismatch"
+      ]
+    },
+    {
+      "id": "dep-11",
+      "prompt": "We need a Fermyon release workflow that includes rollback planning and security checks.",
+      "expected_output": [
+        "Includes rollback triggers aligned with portfolio critical routes",
+        "Includes security checks about not deploying private exports or .env files",
+        "Includes validation gates and release report"
+      ],
+      "assertions": [
+        "References security-checks.md and rollback-procedures.md"
+      ]
+    },
+    {
+      "id": "dep-12",
+      "prompt": "We deployed to Fermyon and got the URL, but want to ensure assets aren't being rewritten to HTML. Provide a validation plan for this repo.",
+      "expected_output": [
+        "Includes a test that requests a known built asset path directly",
+        "Differentiates Astro _astro assets vs Vite assets",
+        "Explains why rewrite-to-index can break assets"
+      ],
+      "assertions": [
+        "Mentions vercel.json rewrite as a near-miss that must not be assumed on Spin"
+      ]
+    },
+    {
+      "id": "dep-13",
+      "prompt": "Propose the minimal spin.toml needed to serve dist/ for this Astro portfolio, and list what you are unsure about.",
+      "expected_output": [
+        "Uses Spin static-fileserver template structure",
+        "Lists any uncertainty explicitly and consults docs-freshness",
+        "Keeps changes minimal"
+      ],
+      "assertions": [
+        "Does not claim SPA behavior unless validated",
+        "Uses knowledge source priority correctly (repo -> inventory -> patterns -> docs)"
+      ]
+    },
+    {
+      "id": "dep-14",
+      "prompt": "Deploy fails with an auth error. Diagnose without asking me for secrets.",
+      "expected_output": [
+        "Does not request tokens/passwords in chat",
+        "Recommends consulting official Fermyon auth docs and local CLI help",
+        "Suggests redaction and secure secret storage"
+      ],
+      "assertions": [
+        "References docs-freshness and security-checks"
+      ]
+    },
+    {
+      "id": "dep-15",
+      "prompt": "Create a Fermyon deployment report for this repo that explicitly states which artifact was deployed and why.",
+      "expected_output": [
+        "Includes artifact choice and evidence (deploy-cv.yaml vs astro.config.mjs)",
+        "Includes validation results and risks",
+        "Includes rollback readiness"
+      ],
+      "assertions": [
+        "Matches the report structure in SKILL.md output contract"
+      ]
+    }
+  ],
+  "routing_evals": [
+    {
+      "id": "route-01",
+      "prompt": "Validate deep-link behavior for the root Astro build when served as static files on Spin.",
+      "expected_output": [
+        "Notes Astro emits dist/<route>/index.html files",
+        "Requires direct request + refresh for /about/ and /cv/",
+        "Includes an expected 404 check for an invalid path"
+      ],
+      "assertions": [
+        "Does not assume SPA fallback is needed for Astro multi-page"
+      ]
+    },
+    {
+      "id": "route-02",
+      "prompt": "Validate deep-link behavior for the GitHub Pages artifact (guillermo-lam-cv) when served by a static file server.",
+      "expected_output": [
+        "Mentions vercel.json rewrite-to-index expectation as a risk indicator",
+        "Requires deployed-environment tests for deep links",
+        "Stops if hosting fallback behavior is uncertain"
+      ],
+      "assertions": [
+        "Does not claim Spin supports rewrites without docs evidence"
+      ]
+    },
+    {
+      "id": "route-03",
+      "prompt": "After deploy, /portfolio returns 404 but / works. Diagnose for root Astro deploy.",
+      "expected_output": [
+        "Checks whether dist/portfolio/index.html exists",
+        "Separates packaging error vs routing error",
+        "Proposes corrective actions with evidence"
+      ],
+      "assertions": [
+        "Routes Astro build output issues to astro-portfolio-implementation if dist is wrong"
+      ]
+    },
+    {
+      "id": "route-04",
+      "prompt": "Define expected 404 behavior for this portfolio on static hosting and how to validate it.",
+      "expected_output": [
+        "Includes explicit invalid path request test",
+        "Documents whether 404 is expected vs fallback (must be explicit)",
+        "References Spin static-response example as supporting pattern"
+      ],
+      "assertions": [
+        "Does not invent platform behavior; requires verification"
+      ]
+    },
+    {
+      "id": "route-05",
+      "prompt": "We want / to redirect to /en/ in the future. How would Spin redirects work and how should we validate them?",
+      "expected_output": [
+        "References Spin redirect template as evidence",
+        "States that implementing redirects is a routing/architecture decision and may require governance approval",
+        "Defines validation steps for 302 + Location header"
+      ],
+      "assertions": [
+        "Routes architecture decisions to portfolio-delivery-governance"
+      ]
+    },
+    {
+      "id": "route-06",
+      "prompt": "On Fermyon, refreshing /cv breaks. Provide a routing diagnosis and fix plan without changing Astro code yet.",
+      "expected_output": [
+        "First checks whether /cv maps to dist/cv/index.html",
+        "If deploying SPA artifact, checks rewrite assumptions",
+        "Captures evidence before proposing changes"
+      ],
+      "assertions": [
+        "Does not jump directly to adding rewrites without docs"
+      ]
+    },
+    {
+      "id": "route-07",
+      "prompt": "List the top routes we must validate for this portfolio and why.",
+      "expected_output": [
+        "Includes /, /cv/, /portfolio/, /about/ at minimum",
+        "Mentions recruiter-critical paths and static-hosting constraints",
+        "Includes one invalid path test"
+      ],
+      "assertions": [
+        "Is consistent with project-deployment-inventory routes for root dist"
+      ]
+    },
+    {
+      "id": "route-08",
+      "prompt": "We deployed and got correct HTML, but navigation links go to 404. Diagnose likely cause.",
+      "expected_output": [
+        "Checks whether links are absolute vs relative and whether files exist",
+        "Distinguishes Astro multi-page vs SPA link behavior",
+        "Proposes verification steps"
+      ],
+      "assertions": [
+        "Uses validate-static-build output for evidence"
+      ]
+    },
+    {
+      "id": "route-09",
+      "prompt": "Does Spin support route parameters like /users/:id/... ? Explain how to validate routing behavior.",
+      "expected_output": [
+        "References Spin http-routing testcase route pattern",
+        "Proposes validation via direct requests to parameterized paths",
+        "Avoids claiming exact semantics beyond evidence"
+      ],
+      "assertions": [
+        "References example-catalog or spin-pattern-catalog"
+      ]
+    },
+    {
+      "id": "route-10",
+      "prompt": "We want SPA fallback behavior for the Vite subproject. What should we do on Fermyon?",
+      "expected_output": [
+        "Stops if hosting behavior is uncertain",
+        "Consults Spin/Fermyon docs or verified examples for rewrites/fallbacks",
+        "Documents risk of rewriting asset paths"
+      ],
+      "assertions": [
+        "Does not invent a rewrite configuration in spin.toml without docs"
+      ]
+    }
+  ],
+  "release_evals": [
+    {
+      "id": "rel-01",
+      "prompt": "Create a release checklist for a Fermyon production deploy of the root Astro site in this repo.",
+      "expected_output": [
+        "Includes build validation (astro build -> dist)",
+        "Includes manifest validation (spin.toml)",
+        "Includes smoke tests for /about/ /cv/ /portfolio/"
+      ],
+      "assertions": [
+        "References release-process.md and deployment-validation.md"
+      ]
+    },
+    {
+      "id": "rel-02",
+      "prompt": "Define a rollback plan for a broken Fermyon deploy of this portfolio.",
+      "expected_output": [
+        "Includes rollback triggers tied to recruiter-critical routes",
+        "Includes rollback verification steps (repeat smoke tests)",
+        "Includes what metadata to capture (url, version, commit)"
+      ],
+      "assertions": [
+        "References rollback-procedures.md"
+      ]
+    },
+    {
+      "id": "rel-03",
+      "prompt": "We want versioned releases. Propose how to record version/tag for this repo’s Fermyon deployment report.",
+      "expected_output": [
+        "Uses repo evidence: package.json version + commit SHA as release metadata",
+        "Avoids inventing platform-specific version storage",
+        "Includes release report fields"
+      ],
+      "assertions": [
+        "Includes a consistent definition of 'last known good'"
+      ]
+    },
+    {
+      "id": "rel-04",
+      "prompt": "Create an incident workflow for a production deploy failure for this portfolio.",
+      "expected_output": [
+        "Captures evidence first, then fix-forward vs rollback decision",
+        "Updates validation/troubleshooting docs after recovery",
+        "Avoids repeated blind redeploys"
+      ],
+      "assertions": [
+        "References spin-workflow.md incident workflow section"
+      ]
+    },
+    {
+      "id": "rel-05",
+      "prompt": "Define security gates for a Fermyon release of this portfolio.",
+      "expected_output": [
+        "Includes 'no secrets in dist/public' checks",
+        "Includes review of private exports and .env files",
+        "Includes token handling guidance"
+      ],
+      "assertions": [
+        "References security-checks.md"
+      ]
+    },
+    {
+      "id": "rel-06",
+      "prompt": "Our deploy is green but we suspect broken assets. What release gate should have caught this and what should we add?",
+      "expected_output": [
+        "Identifies asset validation gate",
+        "Adds direct asset request test",
+        "Explains why hashed assets and HTML differ"
+      ],
+      "assertions": [
+        "Uses deployment-validation.md as the canonical checklist"
+      ]
+    },
+    {
+      "id": "rel-07",
+      "prompt": "Make a release plan that keeps GitHub Pages deployment intact while adding Fermyon deployment.",
+      "expected_output": [
+        "Acknowledges deploy-cv.yaml deploys subproject dist to Pages",
+        "Keeps Fermyon workflow separate and explicit about artifact choice",
+        "Avoids changing Pages artifact path"
+      ],
+      "assertions": [
+        "Mentions risk of mixing artifacts"
+      ]
+    },
+    {
+      "id": "rel-08",
+      "prompt": "We need post-deploy validation for reduced-motion and WebGL-off behavior. Who owns this and what does release validation check?",
+      "expected_output": [
+        "Routes WebGL behavior to threejs skill ownership when relevant",
+        "Keeps deployment validation focused on routing/assets/availability",
+        "Mentions that essential content must not depend on WebGL"
+      ],
+      "assertions": [
+        "Respects ownership boundaries in SKILL.md"
+      ]
+    },
+    {
+      "id": "rel-09",
+      "prompt": "Define what 'release readiness' means for this repo’s Fermyon deployment and when to declare done.",
+      "expected_output": [
+        "Uses SKILL definition of done gates",
+        "Includes rollback readiness and security review",
+        "Produces a release report"
+      ],
+      "assertions": [
+        "Matches SKILL.md Definition of done"
+      ]
+    },
+    {
+      "id": "rel-10",
+      "prompt": "We want a canary release. Propose the safe approach and stop conditions.",
+      "expected_output": [
+        "Defines separate URLs/apps for canary vs production when platform supports it (docs-backed)",
+        "Includes stop conditions for uncertainty",
+        "Includes rollback strategy"
+      ],
+      "assertions": [
+        "Does not invent platform features"
+      ]
+    }
+  ],
+  "troubleshooting_evals": [
+    {
+      "id": "tri-01",
+      "prompt": "Fermyon deploy succeeded but / returns 404. Diagnose using repository evidence and Spin patterns.",
+      "expected_output": [
+        "Asks which artifact was deployed (root dist vs subproject dist)",
+        "Checks existence of index.html in the chosen artifact",
+        "Uses static-fileserver template pattern as baseline"
+      ],
+      "assertions": [
+        "References project-deployment-inventory or project-pattern-mapping"
+      ]
+    },
+    {
+      "id": "tri-02",
+      "prompt": "CSS is 404ing after deploy. Provide diagnosis steps and verification checks.",
+      "expected_output": [
+        "Distinguishes Astro _astro assets vs Vite assets",
+        "Requests a direct GET to one asset path and checks content-type",
+        "Warns about rewrite-to-index breaking assets"
+      ],
+      "assertions": [
+        "Does not propose rewriting assets to index.html"
+      ]
+    },
+    {
+      "id": "tri-03",
+      "prompt": "Deep links work in-app but 404 on refresh. Diagnose for both Astro and SPA cases.",
+      "expected_output": [
+        "Branches on artifact type (Astro multi-page vs SPA)",
+        "For Astro: maps route to dist/<route>/index.html",
+        "For SPA: stops unless fallback behavior is docs-backed"
+      ],
+      "assertions": [
+        "Mentions vercel.json as an SPA hint for the subproject"
+      ]
+    },
+    {
+      "id": "tri-04",
+      "prompt": "After redeploy, content is stale. Provide a caching diagnosis plan.",
+      "expected_output": [
+        "Verifies the artifact changed before redeploy",
+        "Validates HTML freshness separately from hashed assets",
+        "Avoids claims about platform caching defaults"
+      ],
+      "assertions": [
+        "Includes evidence capture steps"
+      ]
+    },
+    {
+      "id": "tri-05",
+      "prompt": "Our Spin manifest includes absolute paths and fails in CI. Diagnose and fix safely.",
+      "expected_output": [
+        "Flags absolute paths as non-portable",
+        "Recommends relative paths and validates artifact directory existence",
+        "Uses validate-spin-manifest output as evidence"
+      ],
+      "assertions": [
+        "Mentions manifest anti-patterns"
+      ]
+    },
+    {
+      "id": "tri-06",
+      "prompt": "Spin deploy command changed and my flags don’t work. What do we do?",
+      "expected_output": [
+        "Stops and consults docs-freshness",
+        "Runs spin --help to discover current commands",
+        "Does not guess flags"
+      ],
+      "assertions": [
+        "Explicitly states uncertainty and avoids invention"
+      ]
+    },
+    {
+      "id": "tri-07",
+      "prompt": "We suspect we deployed private files. Provide immediate response steps.",
+      "expected_output": [
+        "Treats as security incident: capture evidence, restrict, rollback if needed",
+        "Reviews artifact directories for sensitive files",
+        "References security-checks"
+      ],
+      "assertions": [
+        "Does not suggest publishing private exports"
+      ]
+    },
+    {
+      "id": "tri-08",
+      "prompt": "Vite subproject deploy is broken but Astro deploy works. Diagnose likely reasons.",
+      "expected_output": [
+        "Calls out SPA fallback mismatch as likely cause",
+        "Requires deep link refresh tests",
+        "Does not change Astro code unnecessarily"
+      ],
+      "assertions": [
+        "Uses project-pattern-mapping"
+      ]
+    },
+    {
+      "id": "tri-09",
+      "prompt": "Deployment succeeded but navigation links go to 404. Diagnose using dist inspection.",
+      "expected_output": [
+        "Inspects built HTML links and checks whether target pages exist in dist",
+        "Separates link base-path issues vs missing build output",
+        "Suggests validate-static-build"
+      ],
+      "assertions": [
+        "Mentions that build success != deployment correctness"
+      ]
+    },
+    {
+      "id": "tri-10",
+      "prompt": "We got 500s at the edge after deploy. What is the safe remediation path?",
+      "expected_output": [
+        "Treats as availability incident: check status, logs, retry only with evidence",
+        "Re-validates manifest and artifact locally",
+        "Recommends rollback if impact is high and root cause unclear"
+      ],
+      "assertions": [
+        "Includes rollback triggers"
+      ]
+    }
+  ],
+  "validation_evals": [
+    {
+      "id": "val-01",
+      "prompt": "Run the local validators for Fermyon deployment readiness and summarize results for this repo.",
+      "expected_output": [
+        "Uses inspect-spin-project and validate-static-build and validate-spin-manifest",
+        "Notes missing spin.toml and any artifact issues",
+        "Lists warnings and errors with evidence"
+      ],
+      "assertions": [
+        "Does not claim deploy readiness if spin.toml is missing"
+      ]
+    },
+    {
+      "id": "val-02",
+      "prompt": "Validate that the root dist output is suitable for static file serving on Spin.",
+      "expected_output": [
+        "Confirms dist exists and has multiple HTML files",
+        "Confirms _astro assets exist",
+        "Reports unresolved asset references as 0 (or provides list if non-zero)"
+      ],
+      "assertions": [
+        "Uses validate-static-build output"
+      ]
+    },
+    {
+      "id": "val-03",
+      "prompt": "Validate that the GitHub Pages artifact path exists locally and report next steps.",
+      "expected_output": [
+        "States that guillermo-lam-cv/dist may not exist locally unless built",
+        "Provides the build command in the subproject (bun run build)",
+        "Avoids running interactive commands"
+      ],
+      "assertions": [
+        "References guillermo-lam-cv/package.json build script"
+      ]
+    },
+    {
+      "id": "val-04",
+      "prompt": "Validate that index.html asset references are resolvable in dist and explain what failures mean for deployment.",
+      "expected_output": [
+        "Lists unresolved asset references if any",
+        "Explains impact: 404 assets lead to blank/unstyled site",
+        "Recommends fix before deploy"
+      ],
+      "assertions": [
+        "Separates data output vs diagnostics (stdout JSON vs stderr)"
+      ]
+    },
+    {
+      "id": "val-05",
+      "prompt": "Validate spin.toml for static hosting assumptions (even if it is missing).",
+      "expected_output": [
+        "Reports manifest missing as an error",
+        "Provides repo-aware next steps: use template/static-fileserver pattern, choose artifact source",
+        "Does not invent fields"
+      ],
+      "assertions": [
+        "Mentions knowledge source priority"
+      ]
+    },
+    {
+      "id": "val-06",
+      "prompt": "Validate routing assumptions for Astro vs SPA and document which one this repo uses in production today.",
+      "expected_output": [
+        "States Pages deploy uses guillermo-lam-cv (SPA-like) per deploy-cv.yaml and vercel.json",
+        "States root Astro emits multi-page dist today",
+        "Identifies routing risk areas"
+      ],
+      "assertions": [
+        "References project-deployment-inventory"
+      ]
+    },
+    {
+      "id": "val-07",
+      "prompt": "Create a route inventory for the root Astro dist output and propose smoke test URLs.",
+      "expected_output": [
+        "Includes /about/, /cv/, /portfolio/, /blog/, /contact/",
+        "Includes one asset URL and one invalid URL",
+        "Explains why these routes matter (recruiter-critical)"
+      ],
+      "assertions": [
+        "Matches observed dist structure in inventory"
+      ]
+    },
+    {
+      "id": "val-08",
+      "prompt": "Validate that deployment does not publish sensitive files for this repo.",
+      "expected_output": [
+        "Lists high-risk file patterns (.env, private exports, kubeconfig, keys)",
+        "Requires reviewing public/ and dist/ contents",
+        "References security-checks"
+      ],
+      "assertions": [
+        "Does not propose committing secrets"
+      ]
+    },
+    {
+      "id": "val-09",
+      "prompt": "Validate that the build output is compatible with 'no SSR' constraint.",
+      "expected_output": [
+        "References astro.config.mjs output: static",
+        "States static hosting assumptions",
+        "Does not propose SSR"
+      ],
+      "assertions": [
+        "Mentions repo deployment constraints (static only)"
+      ]
+    },
+    {
+      "id": "val-10",
+      "prompt": "Define stop conditions for uncertainty and show how you would proceed for this repo.",
+      "expected_output": [
+        "Lists stop conditions: manifest/routing/deploy/hosting uncertainty",
+        "Consults Spin examples and official docs",
+        "Documents unknowns explicitly"
+      ],
+      "assertions": [
+        "Does not guess"
+      ]
+    }
+  ]
+}
+

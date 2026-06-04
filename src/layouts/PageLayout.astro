@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+import SocialLinks from '../components/SocialLinks.astro';
+import type { Lang } from '../lib/i18n';
+
+type Props = {
+  title: string;
+  description?: string;
+  lang?: Lang;
+  useLangPrefix?: boolean;
+};
+
+const { title, description, lang = 'en', useLangPrefix = false } = Astro.props;
+const siteName = 'Guillermo Lam Martín';
+const fullTitle = `${title} · ${siteName}`;
+
+const currentPath = Astro.url.pathname;
+const prefix = useLangPrefix ? `/${lang}` : '';
+
+const stripLangPrefix = (path: string) => {
+  const match = path.match(/^\/(en|es|fr|de)(\/|$)/);
+  if (!match) return path;
+  return path.replace(match[0], '/');
+};
+
+const pathWithoutLang = stripLangPrefix(currentPath);
+
+const nav = [
+  { href: `${prefix}/`, label: 'Home' },
+  { href: `${prefix}/about`, label: 'About' },
+  { href: `${prefix}/cv`, label: 'CV' },
+  { href: `${prefix}/portfolio`, label: 'Portfolio' },
+  { href: `${prefix}/blog`, label: 'Blog' },
+  { href: `${prefix}/contact`, label: 'Contact' }
+];
+
+const langLinks: Array<{ code: Lang; href: string }> = [
+  { code: 'en', href: `/en${pathWithoutLang}` },
+  { code: 'es', href: `/es${pathWithoutLang}` },
+  { code: 'fr', href: `/fr${pathWithoutLang}` },
+  { code: 'de', href: `/de${pathWithoutLang}` }
+];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description ? <meta name="description" content={description} /> : null}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header-inner">
+        <a class="brand" href={`${prefix}/`}>{siteName}</a>
+
+        <nav class="nav" aria-label="Primary">
+          {nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={currentPath === item.href ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <nav class="lang-nav" aria-label="Language">
+          {langLinks.map((l) => (
+            <a
+              class:list={['lang-link', l.code === lang ? 'lang-link-active' : undefined]}
+              href={l.href}
+              lang={l.code}
+            >
+              {l.code.toUpperCase()}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer-inner">
+          <SocialLinks class="site-footer-social" />
+          <p>© {new Date().getFullYear()} {siteName}. Built with Astro.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

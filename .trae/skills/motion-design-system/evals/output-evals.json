@@ -1,0 +1,19 @@
+{
+  "skill": "motion-design-system",
+  "evals": [
+    {
+      "prompt": "Create a motion system with timing tiers, easing curves, and reduced-motion alternates for UI transitions.",
+      "expected_output": {
+        "includes": ["token table", "pattern catalog", "reduced-motion map", "implementation notes"]
+      },
+      "assertions": [
+        "Defines at least 3 duration tiers and when to use each.",
+        "Defines easing guidance without relying on bouncy/overshoot defaults.",
+        "Provides reduced-motion alternates for every major pattern.",
+        "Mentions keyboard/touch parity for hover-driven affordances.",
+        "Avoids motion that blocks critical content or navigation."
+      ]
+    }
+  ]
+}
+

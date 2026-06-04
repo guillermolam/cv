@@ -1,0 +1,74 @@
+---
+import { site } from '../lib/site';
+
+type Props = {
+  size?: 'sm' | 'md' | 'lg';
+};
+
+const { size = 'md' } = Astro.props;
+const photoUrl = site.profile.photoPath;
+const initials = site.profile.initials;
+
+const sizes = {
+  sm: 56,
+  md: 96,
+  lg: 144,
+};
+
+const dimension = sizes[size] ?? sizes.md;
+---
+
+<div
+  class="profile-portrait"
+  role="img"
+  aria-label={`Portrait photo of ${site.name}`}
+  style={`--portrait-size:${dimension}px;--portrait-url:url('${photoUrl}')`}
+>
+  <span class="profile-initials" aria-hidden="true">{initials}</span>
+</div>
+
+<style>
+  .profile-portrait {
+    width: var(--portrait-size);
+    height: var(--portrait-size);
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(
+        circle at 30% 20%,
+        rgba(76, 201, 240, 0.22),
+        transparent 60%
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--color-surface-3), transparent 10%),
+        color-mix(in oklab, var(--color-surface-2), transparent 18%)
+      );
+    box-shadow: 0 14px 34px var(--shadow-2);
+    display: grid;
+    place-items: center;
+    color: var(--color-text-strong);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-portrait::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--portrait-url);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.92;
+  }
+
+  .profile-initials {
+    font-size: calc(var(--portrait-size) * 0.34);
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  }
+</style>
+

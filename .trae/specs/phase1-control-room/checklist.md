@@ -1,0 +1,12 @@
+- [ ] Spec includes Phase 1 scope and explicit non-goals.
+- [ ] Typography strategy is locked (system-first stacks + weights + scale).
+- [ ] Layout grid and breakpoints are locked (max width, gutters, sm/md/lg/xl).
+- [ ] Color tokens are locked with explicit hex values.
+- [ ] Semantic color mappings are locked (bg/surfaces/text/borders/cta/focus/status).
+- [ ] Station interaction behavior is locked (anchor-first; optional 3D emphasis only).
+- [ ] Route/deep-link behavior is locked (anchor-first; precedence rules; Phase 1 on `/`).
+- [ ] Command palette scope is decided for v1.
+- [ ] Homepage language strategy is decided for v1.
+- [ ] File ownership and integration boundaries are explicit and consistent with threejs-boundaries.md.
+- [ ] Acceptance criteria are explicit and enforce non-negotiable prohibitions.
+- [ ] Validation requirements include mobile, reduced-motion, WebGL off, and JS off checks.

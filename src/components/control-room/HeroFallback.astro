@@ -1,0 +1,16 @@
+---
+import FallbackHero from './FallbackHero.astro';
+
+type Props = {
+  eyebrow?: string;
+  headline: string;
+  subheadline: string;
+};
+
+const { eyebrow, headline, subheadline } = Astro.props;
+---
+
+<FallbackHero eyebrow={eyebrow} headline={headline} subheadline={subheadline}>
+  <slot />
+</FallbackHero>
+

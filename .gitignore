@@ -9,8 +9,9 @@ bun.lock
 .pnpm-debug.log
 bunfig.toml
 
-# Vite build output
+# Build output
 dist/
+.astro/
 .vite/
 .cache/
 .temp/
@@ -18,6 +19,7 @@ dist/
 # Local environment
 .env
 .env.*.local
+.mcp-auth/
 
 # MacOS and Windows
 .DS_Store
@@ -39,6 +41,8 @@ log.txt
 # Coverage and test outputs
 coverage/
 *.lcov
+playwright-report/
+test-results/
 
 # Misc
 *.log

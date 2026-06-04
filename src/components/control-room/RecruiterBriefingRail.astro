@@ -1,0 +1,65 @@
+---
+import OperatorId from './OperatorId.astro';
+
+type Props = {
+  roleTarget: string;
+  domains: string[];
+  proofLinks: Array<{ label: string; href: string }>;
+  snapshotLines?: string[];
+  contactLinks: Array<{ label: string; href: string }>;
+};
+
+const { roleTarget, domains, proofLinks, snapshotLines, contactLinks } = Astro.props;
+---
+
+<aside class="briefing-rail" aria-label="Recruiter briefing">
+  <div class="briefing-block">
+    <OperatorId size="sm" label="Operator" showRole={false} />
+    <h2 class="briefing-title">Recruiter briefing</h2>
+
+    <dl class="briefing-dl">
+      <div class="briefing-row">
+        <dt>Role target</dt>
+        <dd>{roleTarget}</dd>
+      </div>
+
+      <div class="briefing-row">
+        <dt>Domains</dt>
+        <dd class="briefing-domains">
+          {domains.map((d) => (
+            <span class="tag">{d}</span>
+          ))}
+        </dd>
+      </div>
+
+      <div class="briefing-row">
+        <dt>Proof</dt>
+        <dd class="briefing-links">
+          {proofLinks.map((l) => (
+            <a href={l.href}>{l.label}</a>
+          ))}
+        </dd>
+      </div>
+
+      {snapshotLines && snapshotLines.length > 0 ? (
+        <div class="briefing-row">
+          <dt>Snapshot</dt>
+          <dd class="briefing-snapshot">
+            {snapshotLines.map((line) => (
+              <div>{line}</div>
+            ))}
+          </dd>
+        </div>
+      ) : null}
+
+      <div class="briefing-row">
+        <dt>Contact</dt>
+        <dd class="briefing-links">
+          {contactLinks.map((l) => (
+            <a href={l.href}>{l.label}</a>
+          ))}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</aside>

@@ -1,0 +1,38 @@
+{
+  "skill": "immersive-storytelling",
+  "evals": [
+    {
+      "prompt": "Design an immersive homepage journey that keeps recruiter clarity within 30 seconds.",
+      "expected_output": {
+        "includes": [
+          "fast path",
+          "exploration path",
+          "state model",
+          "reveal strategy",
+          "reduced motion behavior",
+          "non-WebGL fallback",
+          "handoff plan"
+        ]
+      },
+      "assertions": [
+        "Output explicitly defines a recruiter fast path with CV/contact access.",
+        "Output includes an exploration path that does not hide critical content.",
+        "Output defines at least 3 key transitions and why each exists.",
+        "Output specifies reduced-motion alternate behavior for each key transition.",
+        "Output includes a handoff mapping to implementation owner skills."
+      ]
+    },
+    {
+      "prompt": "Create a reveal strategy for station discovery without forced delays.",
+      "expected_output": {
+        "includes": ["triggers", "rules", "anti-patterns"]
+      },
+      "assertions": [
+        "No reveal requires waiting to access text or CTAs.",
+        "Triggers include keyboard and touch equivalents for hover-only interactions.",
+        "Anti-patterns include motion-gated content and forced scrolling."
+      ]
+    }
+  ]
+}
+

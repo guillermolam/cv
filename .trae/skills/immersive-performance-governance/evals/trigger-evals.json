@@ -1,0 +1,28 @@
+{
+  "skill": "immersive-performance-governance",
+  "should_trigger": [
+    "Set performance budgets for an animation-heavy hero and define adaptive quality rules.",
+    "Review a WebGL scene plan and define degradation paths for mobile and reduced motion.",
+    "We have jank on scroll; propose a performance governance plan for the motion system.",
+    "Define stop conditions and acceptance criteria for cinematic transitions.",
+    "Audit a render loop to ensure it pauses when offscreen and cleans up resources.",
+    "Define how to cap DPR and effects for low-end devices.",
+    "Create a risk register for adding post-processing to the hero scene.",
+    "Define validation steps to ensure the portfolio remains smooth on mobile.",
+    "Establish a profiling checklist for motion + WebGL pages.",
+    "Decide go/no-go on an immersive experience proposal based on recruiter UX and performance."
+  ],
+  "should_not_trigger": [
+    "Implement a new Astro page with a portfolio section.",
+    "Write the About page copy.",
+    "Deploy the site to Fermyon.",
+    "Create a Spin manifest.",
+    "Fix a TypeScript lint error.",
+    "Design the narrative pacing and reveal strategy.",
+    "Implement a Three.js particle shader.",
+    "Add OpenGraph meta tags.",
+    "Create a new content collection schema.",
+    "Refactor CSS tokens."
+  ]
+}
+

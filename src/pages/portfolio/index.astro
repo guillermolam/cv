@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = 'Portfolio';
+const description = 'Selected work across security, infrastructure, and development.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="card pad">
+    <h1>Portfolio</h1>
+    <p>Browse selected work by category.</p>
+    <div class="cta-row">
+      <a class="button" href="/portfolio/security">Security</a>
+      <a class="button" href="/portfolio/infra">Infrastructure</a>
+      <a class="button" href="/portfolio/development">Development</a>
+    </div>
+  </section>
+</BaseLayout>
+

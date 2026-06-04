@@ -1,0 +1,18 @@
+{
+  "skill": "immersive-performance-governance",
+  "evals": [
+    {
+      "prompt": "Define performance budgets and degradation paths for a WebGL hero with section reveals and page transitions.",
+      "expected_output": {
+        "includes": ["budgets", "degradation map", "validation plan", "risk register"]
+      },
+      "assertions": [
+        "Defines explicit degradation behavior for reduced motion, mobile/low-end, and no-WebGL.",
+        "Includes a stop condition for motion that blocks reading or navigation.",
+        "Mentions pausing render loops when offscreen/hidden.",
+        "Routes implementation work to the correct owner skills."
+      ]
+    }
+  ]
+}
+

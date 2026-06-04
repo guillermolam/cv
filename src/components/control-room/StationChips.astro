@@ -1,0 +1,25 @@
+---
+import type { Station, StationId } from '../../lib/control-room/stations';
+
+type Props = {
+  stations: Station[];
+  selectedStationId?: StationId;
+};
+
+const { stations, selectedStationId } = Astro.props;
+---
+
+<nav class="station-chips" aria-label="Stations">
+  {stations.map((s) => (
+    <a
+      class:list={[
+        'station-chip',
+        selectedStationId === s.id ? 'station-chip-active' : undefined
+      ]}
+      href={s.anchor}
+    >
+      {s.label}
+    </a>
+  ))}
+</nav>
+

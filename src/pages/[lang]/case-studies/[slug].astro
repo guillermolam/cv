@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SUPPORTED_LANGS, isLang } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map((lang) => ({ params: { lang, slug: 'coming-soon' } }));
+}
+
+const { lang, slug } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Case study';
+const description = 'Case study placeholder.';
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Case study: {slug}</h1>
+    <p>This route is a placeholder for Phase 1.</p>
+    <div class="cta-row">
+      <a class="button" href={`/${lang}/portfolio`}>Back to portfolio</a>
+      <a class="button primary" href={`/${lang}/cv`}>Download CV</a>
+    </div>
+  </section>
+</BaseLayout>
+

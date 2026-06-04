@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ControlRoomLayout from '../../layouts/ControlRoomLayout.astro';
+import Hero3D from '../../components/Hero3D.astro';
+import HeroFallback from '../../components/control-room/HeroFallback.astro';
+import BriefingRail from '../../components/control-room/BriefingRail.astro';
+import StationChips from '../../components/control-room/StationChips.astro';
+import StationOverlay from '../../components/control-room/StationOverlay.astro';
+import TopologyTable from '../../components/control-room/TopologyTable.astro';
+import { STATIONS } from '../../lib/control-room/stations';
+import { getLangStaticPaths, isLang } from '../../lib/i18n';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const prefix = `/${lang}`;
+const withPrefix = (href: string) => (href.startsWith('/') ? `${prefix}${href}` : href);
+
+const stations = STATIONS.map((s) => ({
+  ...s,
+  portfolioHref: withPrefix(s.portfolioHref),
+  evidenceLinks: s.evidenceLinks.map((l) => ({ ...l, href: withPrefix(l.href) }))
+}));
+
+const title = 'Hybrid Cloud Control Room';
+const description =
+  'Cloud Security & DevSecOps Engineer. I build secure delivery pipelines, cloud-native platforms, and pragmatic guardrails that help teams ship with confidence.';
+const selectedStationId = undefined;
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <ControlRoomLayout>
+    <BriefingRail
+      slot="rail"
+      roleTarget="Cloud Security & DevSecOps / Platform Security"
+      domains={[
+        'Kubernetes',
+        'GitOps',
+        'Cloud security',
+        'Supply chain security',
+        'Infrastructure automation',
+        'Security operations'
+      ]}
+      proofLinks={[
+        { label: 'Download CV', href: withPrefix('/cv') },
+        { label: 'Portfolio', href: withPrefix('/portfolio') },
+        { label: 'GitHub', href: 'https://github.com/guillermolam' },
+        { label: 'LinkedIn', href: 'https://linkedin.com/in/guillermo-lam-28901047' }
+      ]}
+      contactLinks={[{ label: 'Contact page', href: withPrefix('/contact') }]}
+    />
+
+    <Hero3D enabled={false} selectedStationId={selectedStationId} slot="hero">
+      <HeroFallback
+        eyebrow="Hybrid Cloud Control Room"
+        headline="Cloud Security & DevSecOps Engineer"
+        subheadline="Building secure hybrid-cloud platforms with pragmatic guardrails, reliable delivery, and operational clarity."
+      >
+        <div class="hero-ctas">
+          <a class="button primary" href={withPrefix('/cv')}>Download CV</a>
+          <a class="button" href={withPrefix('/portfolio')}>View portfolio</a>
+          <a class="button" href={withPrefix('/contact')}>Contact</a>
+        </div>
+
+        <StationChips stations={stations} selectedStationId={selectedStationId} />
+      </HeroFallback>
+
+      <StationOverlay stations={stations} selectedStationId={selectedStationId} />
+    </Hero3D>
+  </ControlRoomLayout>
+
+  <TopologyTable stations={stations} />
+
+  <section class="stations" aria-label="Stations">
+    {stations.map((s) => (
+      <article class="station" id={`station-${s.id}`}>
+        <header class="station-header">
+          <h2 class="station-title">{s.label}</h2>
+          <a class="station-category" href={s.portfolioHref}>
+            View category
+          </a>
+        </header>
+        <p class="station-signal">{s.signal}</p>
+        <div class="station-links">
+          {s.evidenceLinks.map((l) => (
+            <a href={l.href}>{l.label}</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

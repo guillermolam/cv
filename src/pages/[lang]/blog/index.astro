@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getLangStaticPaths, isLang } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Blog';
+const description = 'Blog index placeholder.';
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Blog</h1>
+    <p>This route is a Phase 1 placeholder for i18n foundation.</p>
+  </section>
+</BaseLayout>
+

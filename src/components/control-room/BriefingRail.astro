@@ -1,0 +1,22 @@
+---
+import RecruiterBriefingRail from './RecruiterBriefingRail.astro';
+
+type Props = {
+  roleTarget: string;
+  domains: string[];
+  proofLinks: Array<{ label: string; href: string }>;
+  snapshotLines?: string[];
+  contactLinks: Array<{ label: string; href: string }>;
+};
+
+const { roleTarget, domains, proofLinks, snapshotLines, contactLinks } = Astro.props;
+---
+
+<RecruiterBriefingRail
+  roleTarget={roleTarget}
+  domains={domains}
+  proofLinks={proofLinks}
+  snapshotLines={snapshotLines}
+  contactLinks={contactLinks}
+/>
+

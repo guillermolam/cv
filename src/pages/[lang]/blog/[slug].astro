@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SUPPORTED_LANGS, isLang } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map((lang) => ({ params: { lang, slug: 'coming-soon' } }));
+}
+
+const { lang, slug } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Blog post';
+const description = 'Blog post placeholder.';
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Post: {slug}</h1>
+    <p>This route is a placeholder for Phase 1.</p>
+    <div class="cta-row">
+      <a class="button" href={`/${lang}/blog`}>Back to blog</a>
+    </div>
+  </section>
+</BaseLayout>
+

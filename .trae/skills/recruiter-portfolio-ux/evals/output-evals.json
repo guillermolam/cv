@@ -1,0 +1,24 @@
+{
+  "skill": "recruiter-portfolio-ux",
+  "evals": [
+    {
+      "prompt": "Evaluate the homepage for recruiter clarity, motion quality, and discoverability.",
+      "expected_output": {
+        "includes": [
+          "Fast path score",
+          "Exploration score",
+          "Motion score",
+          "Accessibility notes",
+          "Action list"
+        ]
+      },
+      "assertions": [
+        "Mentions whether CV/contact are reachable within one interaction.",
+        "Flags any hidden CTAs, forced scrolling, or motion delays.",
+        "Evaluates reduced-motion behavior explicitly.",
+        "Routes fixes to the correct implementation owner skills."
+      ]
+    }
+  ]
+}
+

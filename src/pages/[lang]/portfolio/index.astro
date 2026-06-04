@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getLangStaticPaths, isLang } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Portfolio';
+const description = 'Selected work across security, infrastructure, and development.';
+const prefix = `/${lang}`;
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Portfolio</h1>
+    <p>This route is a Phase 1 placeholder for i18n foundation.</p>
+    <div class="cta-row">
+      <a class="button" href={`${prefix}/portfolio/security`}>Security</a>
+      <a class="button" href={`${prefix}/portfolio/infra`}>Infrastructure</a>
+      <a class="button" href={`${prefix}/portfolio/development`}>Development</a>
+    </div>
+  </section>
+</BaseLayout>
+

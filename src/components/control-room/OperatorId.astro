@@ -1,0 +1,23 @@
+---
+import ProfilePortrait from '../ProfilePortrait.astro';
+import SocialLinks from '../SocialLinks.astro';
+import { site } from '../../lib/site';
+
+type Props = {
+  size?: 'sm' | 'md' | 'lg';
+  label?: string;
+  showRole?: boolean;
+};
+
+const { size = 'md', label = 'Operator', showRole = true } = Astro.props;
+---
+
+<div class="operator-id" data-operator-id>
+  <ProfilePortrait size={size} />
+  <div class="operator-id-meta">
+    <p class="operator-id-label">{label}</p>
+    <p class="operator-id-name">{site.name}</p>
+    {showRole ? <p class="operator-id-role">{site.role}</p> : null}
+    <SocialLinks ariaLabel="Operator links" />
+  </div>
+</div>

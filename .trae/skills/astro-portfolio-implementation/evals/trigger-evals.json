@@ -1,0 +1,88 @@
+{
+  "skill_name": "astro-portfolio-implementation",
+  "format": "trigger-evals-v1",
+  "should_trigger": [
+    {
+      "id": "t1",
+      "prompt": "Build a new Astro page for /portfolio/security and link it from the portfolio index."
+    },
+    {
+      "id": "t2",
+      "prompt": "Implement an Astro component for a CV download grid and reuse it on /cv."
+    },
+    {
+      "id": "t3",
+      "prompt": "Create a new route in src/pages and make sure navigation doesn't break."
+    },
+    {
+      "id": "t4",
+      "prompt": "Add an Astro island for a small interactive filter, but keep content readable without JS."
+    },
+    {
+      "id": "t5",
+      "prompt": "Set up Astro content collections for blog posts and update blog index to use them."
+    },
+    {
+      "id": "t6",
+      "prompt": "Our SEO titles are inconsistent. Fix page metadata across routes in Astro."
+    },
+    {
+      "id": "t7",
+      "prompt": "Accessibility: fix heading order and add proper landmarks in the BaseLayout."
+    },
+    {
+      "id": "t8",
+      "prompt": "Perf: reduce client JS and refactor away unnecessary hydration on the home page."
+    },
+    {
+      "id": "t9",
+      "prompt": "Can u pls refctor the astro pages so build stays static? kinda broken rn"
+    },
+    {
+      "id": "t10",
+      "prompt": "Validate the static output in dist/ and catch common Astro build output issues."
+    }
+  ],
+  "should_not_trigger": [
+    {
+      "id": "n1",
+      "prompt": "Rewrite my About section so recruiters understand me in 30 seconds."
+    },
+    {
+      "id": "n2",
+      "prompt": "Which agent should implement this feature and are we ready to start building?"
+    },
+    {
+      "id": "n3",
+      "prompt": "Deploy the portfolio to Fermyon Cloud and set up Spin workflows."
+    },
+    {
+      "id": "n4",
+      "prompt": "Create a Three.js cloud control room scene with topology nodes and packet flow."
+    },
+    {
+      "id": "n5",
+      "prompt": "Make the design more premium: typography, spacing, and dark theme polish."
+    },
+    {
+      "id": "n6",
+      "prompt": "Write a blog post about GitOps and supply chain security."
+    },
+    {
+      "id": "n7",
+      "prompt": "Implement CI with secret scanning and Trivy."
+    },
+    {
+      "id": "n8",
+      "prompt": "Change the information architecture: move Blog under Portfolio and rename routes."
+    },
+    {
+      "id": "n9",
+      "prompt": "I need a governance report: do we have specs, tasks, and validation gates?"
+    },
+    {
+      "id": "n10",
+      "prompt": "Can you copy Henry Heffernan's site design exactly?"
+    }
+  ]
+}

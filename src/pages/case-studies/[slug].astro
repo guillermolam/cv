@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return [{ params: { slug: 'coming-soon' } }];
+}
+
+const title = 'Case study';
+const description = 'Case study placeholder.';
+const { slug } = Astro.params;
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="card pad">
+    <h1>Case study: {slug}</h1>
+    <p>This route is a placeholder for Phase 1.</p>
+    <div class="cta-row">
+      <a class="button" href="/portfolio">Back to portfolio</a>
+      <a class="button primary" href="/cv">Download CV</a>
+    </div>
+  </section>
+</BaseLayout>
+

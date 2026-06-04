@@ -1,0 +1,28 @@
+{
+  "skill": "immersive-storytelling",
+  "should_trigger": [
+    "Design an immersive homepage journey with a clear recruiter fast path and an exploration mode.",
+    "Propose a reveal strategy for the portfolio stations so users discover capabilities through interaction.",
+    "Define a transition system for moving between stations and sections with narrative justification.",
+    "Turn the control-room metaphor into an interactive story: entry, progression, proof, conversion.",
+    "Create an interaction model for a project showcase where users explore system relationships spatially.",
+    "Define a guided tour vs free exploration flow for the hero experience.",
+    "Propose how navigation should feel spatial without hiding CV/contact.",
+    "Define how environmental feedback should communicate system state during exploration.",
+    "Create a narrative pacing plan for scrolling the homepage like an interactive exhibit.",
+    "Design the experience rules for reduced motion and non-WebGL users while keeping the story intact."
+  ],
+  "should_not_trigger": [
+    "Implement the Astro components for the homepage sections.",
+    "Fix a Three.js shader compile error in the hero scene.",
+    "Deploy this site to Fermyon Cloud using Spin.",
+    "Rewrite my About page copy to sound more senior.",
+    "Add OpenGraph metadata and a canonical URL.",
+    "Optimize bundle size by removing unused dependencies.",
+    "Investigate why pnpm build fails in CI.",
+    "Create a new Spin manifest for static hosting.",
+    "Implement i18n routing for /es and /en.",
+    "Refactor TypeScript types in src/lib."
+  ]
+}
+
