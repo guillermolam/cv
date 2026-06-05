@@ -1,30 +1,60 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero3D from '../../components/Hero3D.astro';
+import RetroWireframe from '../../components/three/RetroWireframe.astro';
 ---
 
 <BaseLayout title="3D Wave Effects Test">
-  <section>
-    <h2>Hero3D mount (placeholder)</h2>
-    <div class="hero-wrapper">
-      <Hero3D enabled={true}>
-        <div class="hero-overlay">
-          <h1>RETRO FUTURE</h1>
-          <p>Layered Value Noise Dots</p>
+  <main class="container">
+    <section>
+      <h2>Value Noise Wave (Dotted)</h2>
+      <div class="hero-wrapper">
+        <Hero3D enabled={true}>
+          <div class="hero-overlay">
+            <h1>RETRO FUTURE</h1>
+            <p>Layered Value Noise Dots</p>
+          </div>
+        </Hero3D>
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h2>Trigonometric Wireframe Wave (MatCap & Fog)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3>Low-Compute Metallic Grid</h3>
+          <RetroWireframe />
         </div>
-      </Hero3D>
-    </div>
-    <p class="note">
-      This route is a visual sandbox. Three.js rendering is intentionally disabled in Hero3D right now.
-    </p>
-  </section>
+        <div>
+          <h3>Custom Asset Integration</h3>
+          <RetroWireframe 
+            color="#ff0088" 
+            modelUrl="/3d/models/meshy_1780590321275.glb"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-12">
+        <p class="note">
+          <strong>Visual Note:</strong> The global film grain and scanlines are applied via the <code>AnalogOverlay</code> component in the layout. 
+          The 3D scenes use <code>MeshMatcapMaterial</code> for realistic shading without scene lights, and <code>FogExp2</code> for organic depth blending.
+        </p>
+    </section>
+  </main>
 </BaseLayout>
 
 <style>
+  .container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   .hero-wrapper {
     height: 500px;
     border: 1px solid #333;
     position: relative;
+    background: #000;
   }
   .hero-overlay {
     position: absolute;
@@ -39,9 +69,24 @@ import Hero3D from '../../components/Hero3D.astro';
   .mt-12 {
     margin-top: 3rem;
   }
-
+  .grid {
+    display: grid;
+  }
+  .grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .grid-cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .gap-8 {
+    gap: 2rem;
+  }
   .note {
     margin: 1rem 0 0;
     color: #9aa8bb;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 </style>

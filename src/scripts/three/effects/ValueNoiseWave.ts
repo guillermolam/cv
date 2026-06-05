@@ -46,6 +46,7 @@ export class ValueNoiseWave implements SceneEffect {
       size: 0.05,
       transparent: true,
       opacity: 0.8,
+      fog: true, // Enable fog interaction for analog blending
     });
 
     this.points = new THREE.Points(this.geometry, material);
@@ -58,7 +59,6 @@ export class ValueNoiseWave implements SceneEffect {
       const x = positions.getX(i);
       const z = positions.getZ(i);
       
-      // Layered noise
       const n1 = noise(x * 0.5 + time * 0.2, z * 0.5 + time * 0.1);
       const n2 = noise(x * 1.0 - time * 0.1, z * 1.0 + time * 0.3);
       const y = (n1 + n2 * 0.5) * 0.8;

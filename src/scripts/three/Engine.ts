@@ -55,6 +55,10 @@ export class Engine {
     return this.camera;
   }
 
+  public setFog(color: number | string, density: number = 0.05) {
+    this.scene.fog = new THREE.FogExp2(color, density);
+  }
+
   private animate() {
     const delta = this.clock.getElapsedTime();
     this.effects.forEach(effect => effect.update(delta));
@@ -79,12 +83,18 @@ export class Engine {
     
     // Configure Draco
     const dracoLoader = new DRACOLoader();
-    // Use a CDN for the decoder if we don't have it locally
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
     loader.setDRACOLoader(dracoLoader);
 
     return new Promise((resolve, reject) => {
       loader.load(url, (gltf: any) => resolve(gltf.scene), undefined, reject);
+    });
+  }
+
+  public static loadTexture(url: string): Promise<THREE.Texture> {
+    const loader = new THREE.TextureLoader();
+    return new Promise((resolve, reject) => {
+      loader.load(url, resolve, undefined, reject);
     });
   }
 }

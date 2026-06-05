@@ -5,6 +5,7 @@ import type { Lang } from '../lib/i18n';
 import SectionNavRail, { type NavRailItem } from '../components/nav/SectionNavRail.astro';
 import type { NavSectionId } from '../components/nav/NavSectionGlyph.astro';
 import LanguageDial from '../components/i18n/LanguageDial.astro';
+import AnalogOverlay from '../components/fx/AnalogOverlay.astro';
 
 type Props = {
   title: string;
@@ -87,5 +88,6 @@ const navRailItems: NavRailItem[] = nav.map((item) => ({
         </div>
       </div>
     </footer>
+    <AnalogOverlay />
   </body>
 </html>
