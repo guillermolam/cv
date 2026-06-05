@@ -1,0 +1,76 @@
+---
+import UiButton from './UiButton.astro';
+
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'security' | 'cloud' | 'keycap' | 'terminal' | 'control';
+type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type ButtonMotion = 'none' | 'hover-lift';
+type ButtonType = 'button' | 'submit' | 'reset';
+
+type Props = {
+  id?: string;
+  class?: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  depth?: ButtonDepth;
+  href?: string;
+  type?: ButtonType;
+  disabled?: boolean;
+  selected?: boolean;
+  icon: string;
+  iconLabel?: string;
+  ariaLabel?: string;
+  motion?: ButtonMotion;
+  target?: string;
+  rel?: string;
+  retro?: boolean;
+  keycap?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  variant = 'ghost',
+  size = 'md',
+  depth = 'raised',
+  href,
+  type = 'button',
+  disabled = false,
+  selected = false,
+  icon,
+  iconLabel,
+  ariaLabel,
+  motion = 'hover-lift',
+  target,
+  rel,
+  retro = false,
+  keycap = false,
+} = Astro.props as Props;
+
+const resolvedAriaLabel = ariaLabel ?? iconLabel;
+if (!resolvedAriaLabel || resolvedAriaLabel.trim().length === 0) {
+  throw new Error('UiIconButton: ariaLabel (or iconLabel) is required for accessibility.');
+}
+---
+
+<UiButton
+  id={id}
+  class={className}
+  attrs={{ 'data-ui-icon-button': 'true' }}
+  variant={variant}
+  size={size}
+  depth={depth}
+  href={href}
+  type={type}
+  disabled={disabled}
+  selected={selected}
+  icon={icon}
+  iconPosition="leading"
+  iconLabel={iconLabel}
+  ariaLabel={resolvedAriaLabel}
+  motion={motion}
+  target={target}
+  rel={rel}
+  retro={retro}
+  keycap={keycap}
+/>

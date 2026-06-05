@@ -1,0 +1,45 @@
+---
+import UiBarChart from './UiBarChart.astro';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title?: string;
+  description?: string;
+  labels: readonly string[];
+  datasets: readonly { label: string; data: readonly number[] }[];
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  showFallbackTable?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  title = 'Skill matrix (demo)',
+  description = 'Demo-only chart. Provide explicit values; do not infer scoring from content.',
+  labels,
+  datasets,
+  depth = 'raised',
+  tone = 'neutral',
+  motion = 'none',
+  retro = true,
+  showFallbackTable = true,
+} = Astro.props as Props;
+---
+
+<UiBarChart
+  id={id}
+  class={className}
+  title={title}
+  description={description}
+  labels={labels}
+  datasets={datasets}
+  depth={depth}
+  tone={tone}
+  motion={motion}
+  retro={retro}
+  showFallbackTable={showFallbackTable}
+/>

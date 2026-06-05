@@ -1,4 +1,4 @@
-@import './tokens.css';
+@import '../design-system/tokens/index.css';
 
 * {
   box-sizing: border-box;
@@ -28,6 +28,17 @@ a {
 
 a:hover {
   text-decoration-color: var(--color-link-hover);
+}
+
+/* Icon wrapper — used on every UnoCSS icon span.
+   presetIcons sizes the glyph; this keeps icons from shrinking in flex/grid and
+   aligns them to the text. Color follows currentColor so text utilities (or a
+   parent color) drive the monochrome/duotone tone. */
+.ui-icon {
+  flex: none;
+  display: inline-block;
+  vertical-align: middle;
+  color: inherit;
 }
 
 .container {
@@ -94,6 +105,44 @@ a:hover {
     border-color var(--motion-fast) var(--ease-standard),
     transform var(--motion-fast) var(--ease-standard),
     color var(--motion-fast) var(--ease-standard);
+}
+
+.nav a.nav-icon-link {
+  padding: 0.35rem 0.4rem;
+  border-radius: 18px;
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  min-width: 58px;
+}
+
+.nav a.nav-icon-link:hover {
+  background: color-mix(in oklab, var(--color-surface-2), transparent 65%);
+}
+
+.nav .nav-icon-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-text-muted), var(--color-accent) 22%);
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.nav a[aria-current='page'] .nav-icon-label {
+  color: var(--color-text-strong);
+  opacity: 0.85;
+}
+
+.nav a.nav-icon-link:hover .nav-icon-label,
+.nav a.nav-icon-link:focus-visible .nav-icon-label {
+  opacity: 1;
+}
+
+.nav a.nav-icon-link:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--color-accent), transparent 35%);
+  outline-offset: 2px;
 }
 
 .nav a:hover {
@@ -291,6 +340,7 @@ ul {
 a:focus-visible,
 button:focus-visible,
 .button:focus-visible,
+.tbtn:focus-visible,
 .nav a:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);

@@ -1,0 +1,45 @@
+---
+import UiRadarChart from './UiRadarChart.astro';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title?: string;
+  description?: string;
+  labels: readonly string[];
+  datasets: readonly { label: string; data: readonly number[] }[];
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  showFallbackTable?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  title = 'Security domain radar (demo)',
+  description = 'Demo-only chart. Provide explicit values; label as demo unless sourced.',
+  labels,
+  datasets,
+  depth = 'raised',
+  tone = 'security',
+  motion = 'none',
+  retro = true,
+  showFallbackTable = true,
+} = Astro.props as Props;
+---
+
+<UiRadarChart
+  id={id}
+  class={className}
+  title={title}
+  description={description}
+  labels={labels}
+  datasets={datasets}
+  depth={depth}
+  tone={tone}
+  motion={motion}
+  retro={retro}
+  showFallbackTable={showFallbackTable}
+/>

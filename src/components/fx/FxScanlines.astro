@@ -1,0 +1,56 @@
+---
+/**
+ * FxScanlines — CRT scanline + phosphor sweep overlay.
+ *
+ * Decorative only (aria-hidden). Fills its positioned parent.
+ * The phosphor breathing animation is disabled under reduced motion;
+ * the static scanline pattern always remains.
+ */
+export type Props = {
+  intensity?: 'subtle' | 'normal' | 'strong';
+  class?: string;
+};
+
+const { intensity = 'normal', class: className } = Astro.props as Props;
+
+const alphaVar =
+  intensity === 'strong'
+    ? 'calc(var(--fx-scanline-alpha) * 1.6)'
+    : intensity === 'subtle'
+      ? 'calc(var(--fx-scanline-alpha) * 0.6)'
+      : 'var(--fx-scanline-alpha)';
+---
+
+<span class:list={['fx-scanlines', className]} aria-hidden="true" data-fx-scanlines></span>
+
+<style define:vars={{ scanAlpha: alphaVar }}>
+  .fx-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    mix-blend-mode: var(--fx-scanline-blend);
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, var(--scanAlpha)) 0px,
+      rgba(255, 255, 255, calc(var(--scanAlpha) * 0.3)) 1px,
+      rgba(255, 255, 255, 0) var(--fx-scanline-gap)
+    );
+    opacity: 0.9;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fx-scanlines {
+      animation: fx-phosphor 6.5s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes fx-phosphor {
+    0% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+</style>

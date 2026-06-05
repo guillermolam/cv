@@ -1,0 +1,117 @@
+---
+import UiIcon from './UiIcon.astro';
+import UiSurface from './UiSurface.astro';
+
+type CardDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type CardMotion = 'none' | 'hover-lift';
+
+type Props = {
+  id?: string;
+  class?: string;
+  attrs?: Record<string, string | undefined>;
+  variant?: 'default' | 'panel';
+  depth?: CardDepth;
+  href?: string;
+  eyebrow?: string;
+  title?: string;
+  titleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  description?: string;
+  icon?: string;
+  iconLabel?: string;
+  image?: string;
+  imageAlt?: string;
+  selected?: boolean;
+  disabled?: boolean;
+  motion?: CardMotion;
+  retro?: boolean;
+  ariaLabel?: string;
+};
+
+const {
+  id,
+  class: className,
+  attrs,
+  variant = 'default',
+  depth = 'raised',
+  href,
+  eyebrow,
+  title,
+  titleAs = 'h3',
+  description,
+  icon,
+  iconLabel,
+  image,
+  imageAlt,
+  selected = false,
+  disabled = false,
+  motion = 'hover-lift',
+  retro = false,
+} = Astro.props as Props;
+
+const TitleTag = titleAs;
+const isLink = typeof href === 'string' && href.length > 0 && !disabled;
+const hasMediaSlot = Astro.slots.has('media');
+const hasMetaSlot = Astro.slots.has('meta');
+const hasActionsSlot = Astro.slots.has('actions');
+const hasFooterSlot = Astro.slots.has('footer');
+---
+
+<UiSurface
+  as="article"
+  id={id}
+  class={className}
+  variant={variant === 'panel' ? 'panel' : 'surface'}
+  depth={depth}
+  interactive={isLink}
+  selected={selected}
+  disabled={disabled}
+  motion={motion}
+  retro={retro}
+  attrs={{
+    ...(attrs ?? {}),
+    'data-ui-card': '',
+    'data-variant': variant,
+    'data-depth': depth,
+    'data-selected': selected ? 'true' : 'false',
+    'data-disabled': disabled ? 'true' : 'false',
+    'data-motion': motion,
+    'data-retro': retro ? 'true' : 'false',
+  }}
+>
+  {hasMediaSlot || image ? (
+    <div data-ui-card-media>
+      {hasMediaSlot ? (
+        <slot name="media" />
+      ) : image ? (
+        <img src={image} alt={imageAlt ?? ''} loading="lazy" decoding="async" />
+      ) : null}
+    </div>
+  ) : null}
+
+  {(eyebrow || title || description || icon) ? (
+    <header data-ui-card-header>
+      {eyebrow ? (
+        <div data-ui-card-eyebrow>
+          {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+          <span>{eyebrow}</span>
+        </div>
+      ) : null}
+
+      {title ? (
+        <TitleTag data-ui-card-title>
+          {isLink ? <a href={href}>{title}</a> : <span>{title}</span>}
+        </TitleTag>
+      ) : null}
+
+      {description ? <p data-ui-card-description>{description}</p> : null}
+    </header>
+  ) : null}
+
+  <div data-ui-card-body>
+    <slot />
+  </div>
+
+  {hasMetaSlot ? <div data-ui-card-meta><slot name="meta" /></div> : null}
+  {hasActionsSlot ? <div data-ui-card-actions><slot name="actions" /></div> : null}
+  {hasFooterSlot ? <footer data-ui-card-footer><slot name="footer" /></footer> : null}
+</UiSurface>

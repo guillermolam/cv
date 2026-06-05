@@ -1,0 +1,243 @@
+---
+import type { Lang } from '../../lib/i18n';
+
+export type LanguageLink = { code: Lang; href: string };
+
+export type Props = {
+  lang: Lang;
+  links: readonly LanguageLink[];
+  label?: string;
+};
+
+const { lang, links, label = 'Language selector' } = Astro.props as Props;
+
+const languageNames: Record<Lang, string> = {
+  en: 'English',
+  es: 'Español',
+  fr: 'Français',
+  de: 'Deutsch',
+};
+---
+
+<div class="lang-lcd" role="group" aria-label={label} data-lang-lcd>
+  <div class="lang-lcd-screen" aria-hidden="true">
+    <div class="lang-lcd-line">
+      <span class="lang-lcd-k">LANG</span>
+      <span class="lang-lcd-v">{lang.toUpperCase()}</span>
+    </div>
+    <div class="lang-lcd-line lang-lcd-sub">SELECT</div>
+  </div>
+
+  <nav class="lang-lcd-keys" aria-label="Languages">
+    <ol role="list">
+      {links.map((l) => {
+        const isCurrent = l.code === lang;
+        return (
+          <li>
+            <a
+              href={l.href}
+              class="lang-lcd-key"
+              aria-current={isCurrent ? 'true' : undefined}
+              aria-label={languageNames[l.code]}
+              lang={l.code}
+              data-lang={l.code}
+            >
+              <span class="lang-lcd-key-glass" aria-hidden="true"></span>
+              <span class="lang-lcd-key-code">{l.code.toUpperCase()}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  </nav>
+</div>
+
+<style>
+  .lang-lcd {
+    display: inline-grid;
+    grid-template-columns: 120px auto;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.45rem 0.55rem;
+    border-radius: 18px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 14%);
+    background:
+      radial-gradient(
+        120% 140% at 30% 0%,
+        color-mix(in oklab, var(--color-accent), transparent 92%),
+        transparent 60%
+      ),
+      linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+    box-shadow:
+      0 18px 30px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+  }
+
+  .lang-lcd-screen {
+    border-radius: 14px;
+    border: 1px solid color-mix(in oklab, var(--color-border), transparent 6%);
+    padding: 0.4rem 0.5rem;
+    background:
+      radial-gradient(120% 140% at 30% 10%, rgba(55, 214, 194, 0.18), rgba(55, 214, 194, 0.02) 60%),
+      color-mix(in oklab, var(--color-bg), transparent 20%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -8px 18px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lang-lcd-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.055) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      rgba(255, 255, 255, 0) 4px
+    );
+    opacity: 0.25;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  .lang-lcd-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: color-mix(in oklab, var(--color-text-strong), var(--color-accent) 35%);
+    text-shadow: 0 0 14px rgba(55, 214, 194, 0.18);
+  }
+
+  .lang-lcd-sub {
+    margin-top: 0.15rem;
+    opacity: 0.65;
+    letter-spacing: 0.24em;
+    font-size: 10px;
+  }
+
+  .lang-lcd-k {
+    opacity: 0.7;
+  }
+
+  .lang-lcd-v {
+    color: var(--color-text-strong);
+  }
+
+  .lang-lcd-keys ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .lang-lcd-key {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 34px;
+    border-radius: 12px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    background: linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+    text-decoration: none;
+    color: var(--color-text-muted);
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 14px 24px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+  }
+
+  .lang-lcd-key-glass {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+    opacity: 0.16;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  .lang-lcd-key-code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .lang-lcd-key[aria-current='true'] {
+    color: var(--color-text-strong);
+    border-color: color-mix(in oklab, var(--color-accent), transparent 40%);
+    box-shadow:
+      0 16px 26px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+      0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 70%);
+  }
+
+  .lang-lcd-key:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-accent), transparent 35%);
+    outline-offset: 2px;
+  }
+
+  .lang-lcd-key:active {
+    transform: translateY(1px);
+    box-shadow:
+      0 12px 18px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 2px 10px color-mix(in oklab, var(--color-bg), transparent 0%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lang-lcd-key {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .lang-lcd-key:hover {
+      transform: translateY(-1px) rotateX(2deg);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 58%);
+      box-shadow:
+        0 18px 30px var(--shadow-2),
+        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+        inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+        0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
+    }
+
+    .lang-lcd-screen::after {
+      animation: lang-lcd-phosphor 6.4s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes lang-lcd-phosphor {
+    0% {
+      opacity: 0.18;
+    }
+    100% {
+      opacity: 0.28;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .lang-lcd {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+      justify-items: end;
+    }
+  }
+</style>

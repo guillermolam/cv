@@ -1,0 +1,105 @@
+/*
+Chart tokens (CSS variables consumed by Chart.js theme adapter in future phases).
+
+These are intentionally derived from existing semantic tokens so charts match the
+control-room palette and remain contrast-safe.
+*/
+
+:root {
+  --ds-chart-grid: rgba(214, 226, 239, 0.12);
+  --ds-chart-axis: rgba(214, 226, 239, 0.32);
+
+  --ds-chart-series-1: var(--color-cta);
+  --ds-chart-series-2: var(--color-link);
+  --ds-chart-series-3: var(--color-success);
+  --ds-chart-series-4: var(--color-warning);
+
+  --ds-chart-tooltip-bg: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+  --ds-chart-tooltip-border: var(--color-border-strong);
+  --ds-chart-legend-text: var(--color-text);
+
+  --ds-chart-shell-bg: var(--ds-retro-shell-bg);
+  --ds-chart-shell-border: var(--ds-retro-shell-border);
+  --ds-chart-bay-bg: color-mix(in oklab, var(--ds-retro-crt-glass), transparent 25%);
+  --ds-chart-bay-border: color-mix(in oklab, var(--ds-chart-shell-border), transparent 20%);
+  --ds-chart-scanline-opacity: var(--ds-retro-crt-scanline);
+}
+
+[data-ui-chart-shell] {
+  display: grid;
+  gap: var(--ds-space-4);
+}
+
+[data-ui-chart-canvas-wrap] {
+  position: relative;
+  padding: var(--ds-space-4);
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-chart-bay-border);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, var(--ds-chart-scanline-opacity)) 0px,
+      rgba(255, 255, 255, 0) 2px,
+      rgba(255, 255, 255, 0) 5px
+    ),
+    radial-gradient(circle at 30% 15%, color-mix(in oklab, var(--ds-chart-bay-bg), transparent 15%), transparent 55%),
+    var(--ds-chart-bay-bg);
+  box-shadow: var(--ds-panel-bevel-highlight), var(--ds-panel-inset-shadow);
+}
+
+[data-ui-chart-canvas-wrap] canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+[data-ui-chart-summary] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--font-size-0);
+}
+
+[data-ui-chart-fallback] {
+  display: grid;
+  gap: var(--ds-space-3);
+}
+
+[data-ui-chart-table] {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-0);
+}
+
+[data-ui-chart-table] th,
+[data-ui-chart-table] td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--ds-chart-shell-border), transparent 35%);
+  text-align: left;
+}
+
+[data-ui-chart-table] th {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in oklab, var(--ds-color-text-muted), var(--ds-color-text) 10%);
+}
+
+[data-ui-chart-legend] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  color: var(--ds-chart-legend-text);
+  font-size: var(--font-size-0);
+}
+
+[data-ui-chart-tooltip] {
+  border: 1px solid var(--ds-chart-tooltip-border);
+  background: var(--ds-chart-tooltip-bg);
+  border-radius: var(--ds-radius-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-ui-chart-canvas-wrap] {
+    background:
+      radial-gradient(circle at 30% 15%, color-mix(in oklab, var(--ds-chart-bay-bg), transparent 15%), transparent 55%),
+      var(--ds-chart-bay-bg);
+  }
+}

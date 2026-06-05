@@ -1,0 +1,159 @@
+---
+export type Option = { id: string; label: string };
+
+export type Props = {
+  targetSelector: string;
+  typeOptions: Option[];
+  levelOptions: Option[];
+  statusOptions: Option[];
+  tagOptions: Option[];
+  toolOptions: Option[];
+  categoryOptions: Option[];
+  totalCount: number;
+};
+
+const { targetSelector, typeOptions, levelOptions, statusOptions, tagOptions, toolOptions, categoryOptions, totalCount } =
+  Astro.props as Props;
+
+const uid = `knowledge-filter-${Math.random().toString(16).slice(2)}`;
+const idType = `${uid}-type`;
+const idLevel = `${uid}-level`;
+const idStatus = `${uid}-status`;
+const idTag = `${uid}-tag`;
+const idTool = `${uid}-tool`;
+const idCategory = `${uid}-category`;
+---
+
+<section class="card pad filter-shell" data-knowledge-filter data-target={targetSelector}>
+  <form class="filter-form">
+    <fieldset class="filter-fieldset">
+      <legend class="filter-legend">Filter</legend>
+
+      <div class="filter-grid">
+        <div class="filter-control">
+          <label for={idType}>Type</label>
+          <select id={idType} data-filter-type>
+            <option value="">All</option>
+            {typeOptions.map((o) => (
+              <option value={o.id}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="filter-control">
+          <label for={idLevel}>Level</label>
+          <select id={idLevel} data-filter-level>
+            <option value="">All</option>
+            {levelOptions.map((o) => (
+              <option value={o.id}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="filter-control">
+          <label for={idStatus}>Status</label>
+          <select id={idStatus} data-filter-status>
+            <option value="">All</option>
+            {statusOptions.map((o) => (
+              <option value={o.id}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="filter-control">
+          <label for={idTool}>Tool</label>
+          <select id={idTool} data-filter-tool>
+            <option value="">All</option>
+            {toolOptions.map((o) => (
+              <option value={o.id}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="filter-control">
+          <label for={idCategory}>Category</label>
+          <select id={idCategory} data-filter-category>
+            <option value="">All</option>
+            {categoryOptions.map((o) => (
+              <option value={o.id}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="filter-control">
+          <label for={idTag}>Tag</label>
+          <select id={idTag} data-filter-tag>
+            <option value="">All</option>
+            {tagOptions.map((o) => (
+              <option value={o.id}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <p class="filter-count" data-filter-count aria-live="polite">
+          Showing {totalCount} of {totalCount}
+        </p>
+        <button class="button" type="button" data-filter-reset>
+          Reset
+        </button>
+      </div>
+    </fieldset>
+  </form>
+</section>
+
+<script>
+  import { initKnowledgeFilters } from '../../scripts/content-filters';
+  initKnowledgeFilters();
+</script>
+
+<style>
+  .filter-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: end;
+  }
+
+  .filter-control {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .filter-control label {
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .filter-control select {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.55rem 0.65rem;
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+    color: var(--color-text-strong);
+  }
+
+  .filter-actions {
+    margin-top: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-count {
+    margin: 0;
+    color: var(--color-text-muted);
+    display: none;
+  }
+
+  .filter-shell[data-filter-enhanced='true'] .filter-count {
+    display: block;
+  }
+</style>
+

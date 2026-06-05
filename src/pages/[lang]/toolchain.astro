@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TaxonomyPills from '../../components/content/TaxonomyPills.astro';
+import ContentCard from '../../components/content/ContentCard.astro';
+import ToolchainFilter from '../../components/content/ToolchainFilter.astro';
+
+import { getCollection } from 'astro:content';
+import { getLangStaticPaths, isLang } from '../../lib/i18n';
+import { buildContentGraph, getNodeKey, type ContentGraphNode } from '../../lib/content/graph';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Toolchain';
+const description = 'Tools and platforms referenced across the portfolio.';
+
+const toolsAll = await getCollection('tools');
+const categoriesAll = await getCollection('categories');
+const tagsAll = await getCollection('tags');
+
+const tools = toolsAll.filter((t) => t.data.lang === lang);
+const toolsFallback = tools.length > 0 ? tools : toolsAll.filter((t) => t.data.lang === 'en');
+
+const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+const categoryDimensionById = new Map(
+  categoriesAll.map((c) => [c.data.categoryId, c.data.dimension] as const),
+);
+const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+
+const graph = await buildContentGraph();
+
+const getEvidence = (toolId: string) => {
+  const toolKey = getNodeKey('tools', toolId);
+  const incoming = graph.edges.filter((e) => e.to === toolKey);
+  const projects = incoming.filter((e) => e.from.startsWith('projects:')).map((e) => e.from);
+  const caseStudies = incoming.filter((e) => e.from.startsWith('caseStudies:')).map((e) => e.from);
+  return {
+    projects: Array.from(new Set(projects)),
+    caseStudies: Array.from(new Set(caseStudies)),
+  };
+};
+
+const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
+
+const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
+const isNonEmptyString = (value: string | undefined): value is string =>
+  typeof value === 'string' && value.length > 0;
+
+const uniq = (values: string[]) => Array.from(new Set(values));
+
+const getToolTypeIds = (toolCategoryIds: string[]) =>
+  toolCategoryIds.filter((id) => categoryDimensionById.get(id) === 'toolchainDimension');
+
+const allToolCategoryIds = toolsFallback.flatMap((t) => t.data.categoryIds ?? []);
+const toolchainTypeIds = uniq(getToolTypeIds(allToolCategoryIds)).sort((a, b) =>
+  (categoryTitleById.get(a) ?? a).localeCompare(categoryTitleById.get(b) ?? b),
+);
+const hasUnclassifiedType = toolsFallback.some((t) => getToolTypeIds(t.data.categoryIds ?? []).length === 0);
+
+const typeOptions = [
+  ...(hasUnclassifiedType ? [{ id: '__none__', label: 'Unclassified' }] : []),
+  ...toolchainTypeIds.map((id) => ({ id, label: categoryTitleById.get(id) ?? id })),
+];
+
+const categoryOptionIds = uniq(
+  allToolCategoryIds.filter((id) => categoryDimensionById.get(id) !== 'toolchainDimension'),
+).sort((a, b) => (categoryTitleById.get(a) ?? a).localeCompare(categoryTitleById.get(b) ?? b));
+const categoryOptions = categoryOptionIds.map((id) => ({ id, label: categoryTitleById.get(id) ?? id }));
+
+const tagOptionIds = uniq(toolsFallback.flatMap((t) => t.data.tagIds ?? [])).sort((a, b) =>
+  (tagTitleById.get(a) ?? a).localeCompare(tagTitleById.get(b) ?? b),
+);
+const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?? id }));
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Toolchain</h1>
+    {tools.length === 0 && lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English tool entries while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    <p class="topology-subtitle">Seed dataset. Links and coverage will grow as content is added.</p>
+  </section>
+
+  <ToolchainFilter
+    targetSelector="#toolchain-items"
+    typeOptions={typeOptions}
+    tagOptions={tagOptions}
+    categoryOptions={categoryOptions}
+    totalCount={toolsFallback.length}
+  />
+
+  <section class="grid" id="toolchain-items" aria-label="Tools">
+    {toolsFallback
+      .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
+      .map((tool) => {
+        const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
+        const evidence = getEvidence(tool.data.toolId);
+        const projectLinks = evidence.projects
+          .map((k) => nodeByKey.get(k))
+          .filter(isGraphNode)
+          .map((n) => ({ label: n.title, href: `/${lang}/portfolio/${n.slug}` }));
+        const caseStudyLinks = evidence.caseStudies
+          .map((k) => nodeByKey.get(k))
+          .filter(isGraphNode)
+          .map((n) => ({ label: n.title, href: `/${lang}/case-studies/${n.slug}` }));
+
+        const categories = (tool.data.categoryIds ?? [])
+          .map((id) => categoryTitleById.get(id))
+          .filter(isNonEmptyString)
+          .map((label) => ({ label }));
+        const tags = (tool.data.tagIds ?? [])
+          .map((id) => tagTitleById.get(id))
+          .filter(isNonEmptyString)
+          .map((label) => ({ label }));
+
+        return (
+          <div
+            data-tool-item
+            data-type-ids={typeIds.join(' ')}
+            data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
+            data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
+          >
+            <ContentCard title={tool.data.name} summary={tool.data.vendor ? `Vendor: ${tool.data.vendor}` : undefined}>
+              {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+              {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
+              {projectLinks.length > 0 ? <TaxonomyPills label="Evidence projects" items={projectLinks} /> : null}
+              {caseStudyLinks.length > 0 ? (
+                <TaxonomyPills label="Evidence case studies" items={caseStudyLinks} />
+              ) : null}
+              {tool.data.website ? (
+                <p>
+                  <a href={tool.data.website} rel="noopener noreferrer" target="_blank">
+                    Website
+                  </a>
+                </p>
+              ) : null}
+            </ContentCard>
+          </div>
+        );
+      })}
+  </section>
+</BaseLayout>

@@ -1,0 +1,773 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import UiIcon from '../../components/ui/UiIcon.astro';
+import UiSurface from '../../components/ui/UiSurface.astro';
+import UiPanel from '../../components/ui/UiPanel.astro';
+import UiButton from '../../components/ui/UiButton.astro';
+import UiIconButton from '../../components/ui/UiIconButton.astro';
+import UiBadge from '../../components/ui/UiBadge.astro';
+import UiNavItem from '../../components/ui/UiNavItem.astro';
+import UiBreadcrumb from '../../components/ui/UiBreadcrumb.astro';
+import UiTabs from '../../components/ui/UiTabs.astro';
+import UiCard from '../../components/ui/UiCard.astro';
+import UiStatCard from '../../components/ui/UiStatCard.astro';
+import UiSkillBadge from '../../components/ui/UiSkillBadge.astro';
+import UiTimelineItem from '../../components/ui/UiTimelineItem.astro';
+import UiProjectCard from '../../components/ui/UiProjectCard.astro';
+import UiKnowledgeCard from '../../components/ui/UiKnowledgeCard.astro';
+import UiProofChain from '../../components/ui/UiProofChain.astro';
+import UiMetaList from '../../components/ui/UiMetaList.astro';
+import UiBarChart from '../../components/charts/UiBarChart.astro';
+import UiLineChart from '../../components/charts/UiLineChart.astro';
+import UiRadarChart from '../../components/charts/UiRadarChart.astro';
+import UiDoughnutChart from '../../components/charts/UiDoughnutChart.astro';
+import UiSkillMatrixChart from '../../components/charts/UiSkillMatrixChart.astro';
+import UiExperienceTimelineChart from '../../components/charts/UiExperienceTimelineChart.astro';
+import UiSecurityDomainRadar from '../../components/charts/UiSecurityDomainRadar.astro';
+import UiToolchainDistributionChart from '../../components/charts/UiToolchainDistributionChart.astro';
+import UiSection from '../../components/layout/UiSection.astro';
+import UiGrid from '../../components/layout/UiGrid.astro';
+import UiStack from '../../components/layout/UiStack.astro';
+import UiCluster from '../../components/layout/UiCluster.astro';
+import UiControlRoomFrame from '../../components/layout/UiControlRoomFrame.astro';
+import { listIconDefinitions } from '../../design-system/icons/icon-registry';
+import { INTERACTION_STATES } from '../../design-system/motion/interaction-states';
+import { motionTokens } from '../../design-system/motion/motion.tokens';
+import { ROUTE_TRANSITION_NAMES } from '../../design-system/motion/route-transitions';
+
+const icons = listIconDefinitions();
+const depthVariants = ['flat', 'raised', 'elevated', 'floating'] as const;
+const toneVariants = ['accent', 'security', 'cloud', 'infra', 'automation', 'compliance'] as const;
+const reducedMotionStrategies = ['none', 'minimal', 'static-depth', 'opacity-only'] as const;
+const buttonVariants = ['primary', 'secondary', 'ghost', 'security', 'cloud', 'danger'] as const;
+const buttonSizes = ['sm', 'md', 'lg'] as const;
+const badgeVariants = [
+  'neutral',
+  'accent',
+  'security',
+  'cloud',
+  'infra',
+  'automation',
+  'compliance',
+  'success',
+  'warning',
+  'danger',
+  'info',
+] as const;
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/', icon: 'command-center', iconLabel: 'Home' },
+  { label: 'Design System', href: '/design-system', icon: 'settings', iconLabel: 'Design system' },
+  { label: 'Layout', current: true, icon: 'graph-link', iconLabel: 'Layout' },
+] as const;
+
+const tabs = [
+  { id: 'overview', label: 'Overview', href: '/design-system', selected: true, icon: 'command-center', iconLabel: 'Overview' },
+  { id: 'layout', label: 'Layout', href: '/design-system', icon: 'graph-link', iconLabel: 'Layout' },
+  { id: 'nav', label: 'Navigation', href: '/design-system', icon: 'external-link', iconLabel: 'Navigation', disabled: true },
+] as const;
+
+const proofChainItems = [
+  { label: 'Profile', href: '/', icon: 'command-center' },
+  { label: 'Demo project', href: '/portfolio', icon: 'code-window' },
+  { label: 'Case study', href: '/case-studies/coming-soon', icon: 'document' },
+  { label: 'Skill', href: '/toolchain', icon: 'graph-link' },
+  { label: 'Tool', href: '/toolchain', icon: 'terminal', current: true },
+] as const;
+
+const metaItems = [
+  { label: 'Status', value: 'Coming soon (demo)', icon: 'document' },
+  { label: 'Visibility', value: 'Public', icon: 'external-link' },
+  { label: 'Location', value: 'Remote-friendly', icon: 'cloud-node' },
+] as const;
+
+const demoLabels = ['Alpha', 'Beta', 'Gamma', 'Delta'] as const;
+const demoSeries = [
+  { label: 'Demo series A', data: [2, 4, 3, 1] },
+  { label: 'Demo series B', data: [1, 3, 2, 4] },
+] as const;
+
+const demoSecurityLabels = ['AppSec', 'CloudSec', 'IAM', 'Detection', 'GRC'] as const;
+const demoSecurityDataset = [{ label: 'Demo coverage', data: [3, 4, 2, 3, 1] }] as const;
+
+const demoToolchainLabels = ['CI', 'IaC', 'K8s', 'Observability', 'Scanning'] as const;
+const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1] }] as const;
+---
+
+<BaseLayout title="Design System" description="Astro-native design library catalog (foundation only).">
+  <section class="container">
+    <h1>Design System</h1>
+    <p>
+      This route is a Phase 1 placeholder for the Astro-native component catalog. It is static HTML
+      and intentionally contains no Chart.js, GSAP, or Three.js usage yet.
+    </p>
+
+    <div class="card pad">
+      <h2>Planned Sections</h2>
+      <ul>
+        <li>Primitives (buttons, badges, surfaces, panels)</li>
+        <li>Layout (sections, grids, stacks, frames)</li>
+        <li>Navigation (nav items, command menu, breadcrumbs, tabs)</li>
+        <li>Data display (cards, stats, timelines, project/knowledge cards)</li>
+        <li>Feedback (tooltips, toasts, modals, drawers)</li>
+        <li>Charts (Chart.js components with HTML fallbacks)</li>
+        <li>Three.js shells (spatial enhancement, never canvas-only content)</li>
+        <li>Transitions (route transitions and reveals with reduced-motion support)</li>
+      </ul>
+    </div>
+
+    <div class="card pad">
+      <h2>Retro Computer Aesthetic</h2>
+      <p>
+        This design library targets a tactile, vintage workstation feel: CRT/control-room surfaces, physical depth,
+        and mechanical press/release behavior. Motion remains progressive enhancement and respects reduced-motion.
+      </p>
+
+      <h3>Keycap buttons</h3>
+      <UiCluster>
+        <UiButton variant="keycap" icon="terminal">
+          Keycap
+        </UiButton>
+        <UiButton variant="terminal" icon="terminal">
+          Terminal
+        </UiButton>
+        <UiButton variant="control" icon="shield-check">
+          Control
+        </UiButton>
+        <UiButton variant="keycap" disabled icon="document">
+          Disabled
+        </UiButton>
+        <UiIconButton variant="keycap" icon="settings" iconLabel="Keycap settings" />
+      </UiCluster>
+
+      <h3>CRT-style panels</h3>
+      <UiPanel
+        retro
+        depth="raised"
+        icon="command-center"
+        iconLabel="Module"
+        eyebrow="CRT module (demo)"
+        title="Operator console"
+        description="Retro panel skin uses scanline/glass cues as a decorative layer."
+      >
+        <UiCluster>
+          <UiBadge retro variant="neutral" icon="document">label</UiBadge>
+          <UiBadge retro variant="cloud" icon="cloud-node">cloud</UiBadge>
+          <UiBadge retro variant="security" icon="shield-check">secure</UiBadge>
+        </UiCluster>
+        <div slot="actions" class="panel-actions-demo">
+          <UiIconButton variant="keycap" icon="terminal" iconLabel="Open terminal" />
+        </div>
+      </UiPanel>
+
+      <p class="note">
+        Reduced-motion: hover/press states remain visible, but movement is suppressed via CSS under{' '}
+        <code>prefers-reduced-motion</code>.
+      </p>
+    </div>
+
+    <div class="card pad">
+      <h2>Icon Foundation</h2>
+      <p>
+        Icons render as inline SVG from a local registry. Decorative icons are hidden from assistive technology;
+        semantic icons expose accessible names.
+      </p>
+
+      <h3>Available starter icons</h3>
+      <div class="icon-grid" role="list">
+        {icons.map((icon) => (
+          <div class="icon-item" role="listitem">
+            <UiIcon name={icon.id} label={icon.label} depth="raised" motion="hover-lift" id={`ds-icon-${icon.id}`} />
+            <div class="icon-meta">
+              <div class="icon-id">{icon.id}</div>
+              <div class="icon-label">{icon.label}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h3>Decorative vs semantic</h3>
+      <div class="example-row">
+        <div class="example">
+          <UiIcon name="external-link" decorative depth="flat" />
+          <span>Decorative icon (aria-hidden)</span>
+        </div>
+        <div class="example">
+          <UiIcon name="shield-check" label="Security verified" depth="flat" />
+          <span>Semantic icon (accessible name)</span>
+        </div>
+      </div>
+
+      <h3>Depth variants</h3>
+      <div class="example-row">
+        {depthVariants.map((depth) => (
+          <div class="example">
+            <UiIcon name="command-center" label={`Depth: ${depth}`} depth={depth} motion="hover-lift" />
+            <span>{depth}</span>
+          </div>
+        ))}
+      </div>
+
+      <h3>Tone variants</h3>
+      <div class="example-row">
+        {toneVariants.map((tone) => (
+          <div class="example">
+            <UiIcon name="cloud-node" label={`Tone: ${tone}`} tone={tone} depth="raised" motion="hover-lift" />
+            <span>{tone}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="card pad">
+      <h2>Motion Foundation</h2>
+      <p>
+        Motion is progressive enhancement. No animation is required to understand content. Reduced-motion preferences
+        are respected, and all client-side animation helpers are designed to be cleanup-safe.
+      </p>
+
+      <h3>Interaction states</h3>
+      <ul class="state-list">
+        {INTERACTION_STATES.map((state) => (
+          <li>
+            <code>{state}</code>
+          </li>
+        ))}
+      </ul>
+
+      <h3>Reduced-motion strategies</h3>
+      <ul class="state-list">
+        {reducedMotionStrategies.map((strategy) => (
+          <li>
+            <code>{strategy}</code>
+          </li>
+        ))}
+      </ul>
+
+      <h3>Token names</h3>
+      <div class="token-grid">
+        <div class="token-group">
+          <h4>Duration</h4>
+          <ul>
+            {Object.keys(motionTokens.duration).map((k) => (
+              <li>
+                <code>{k}</code>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="token-group">
+          <h4>Easing</h4>
+          <ul>
+            {Object.keys(motionTokens.ease).map((k) => (
+              <li>
+                <code>{k}</code>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="token-group">
+          <h4>Route transitions</h4>
+          <ul>
+            {ROUTE_TRANSITION_NAMES.map((name) => (
+              <li>
+                <code>{name}</code>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <p class="note">
+        GSAP helpers exist for future components under <code>src/design-system/motion/gsap-actions.ts</code>. This
+        catalog does not run live GSAP demos yet.
+      </p>
+    </div>
+
+    <div class="card pad">
+      <h2>Core Primitives</h2>
+      <p>
+        Primitives render useful, accessible HTML without JavaScript. Depth and motion are CSS-driven and respect
+        reduced-motion preferences.
+      </p>
+
+      <h3>Surface</h3>
+      <div class="example-row">
+        {depthVariants.map((depth) => (
+          <UiSurface as="div" variant="surface" depth={depth} interactive motion="hover-lift" ariaLabel={`Surface ${depth}`}>
+            <div class="surface-demo">
+              <UiIcon name="command-center" decorative />
+              <span>Surface: {depth}</span>
+            </div>
+          </UiSurface>
+        ))}
+      </div>
+
+      <h3>Panel</h3>
+      <UiPanel
+        depth="raised"
+        icon="graph-link"
+        iconLabel="Graph"
+        eyebrow="Control room"
+        title="Telemetry panel"
+        description="Panel primitive with header metadata, icon, and actions slot."
+      >
+        <p class="note">Body content lives in the default slot.</p>
+        <div slot="actions" class="panel-actions-demo">
+          <UiButton size="sm" variant="ghost" icon="external-link" ariaLabel="Open panel docs">
+            Docs
+          </UiButton>
+          <UiIconButton icon="settings" iconLabel="Panel settings" variant="ghost" size="sm" />
+        </div>
+        <div slot="footer" class="panel-footer-demo">
+          <UiBadge variant="cloud" icon="cloud-node">cloud</UiBadge>
+          <UiBadge variant="security" icon="shield-check">verified</UiBadge>
+        </div>
+      </UiPanel>
+
+      <h3>Buttons</h3>
+      <div class="token-grid">
+        <div class="token-group">
+          <h4>Variants</h4>
+          <div class="button-grid">
+            {buttonVariants.map((variant) => (
+              <UiButton variant={variant} icon="terminal" iconPosition="leading">
+                {variant}
+              </UiButton>
+            ))}
+          </div>
+        </div>
+        <div class="token-group">
+          <h4>Sizes</h4>
+          <div class="button-grid">
+            {buttonSizes.map((size) => (
+              <UiButton size={size} variant="secondary" icon="code-window" iconPosition="trailing">
+                size {size}
+              </UiButton>
+            ))}
+          </div>
+        </div>
+        <div class="token-group">
+          <h4>States</h4>
+          <div class="button-grid">
+            <UiButton variant="primary" selected icon="shield-check">
+              selected
+            </UiButton>
+            <UiButton variant="secondary" disabled icon="terminal">
+              disabled
+            </UiButton>
+            <UiButton href="https://example.com" target="_blank" variant="ghost" icon="external-link" ariaLabel="Open external link">
+              external
+            </UiButton>
+          </div>
+        </div>
+      </div>
+
+      <h3>Icon buttons</h3>
+      <div class="example-row">
+        <UiIconButton icon="settings" iconLabel="Settings" variant="secondary" />
+        <UiIconButton icon="external-link" ariaLabel="Open link" variant="ghost" href="https://example.com" target="_blank" />
+        <UiIconButton icon="shield-check" iconLabel="Security" variant="security" selected />
+        <UiIconButton icon="terminal" iconLabel="Terminal" variant="cloud" disabled />
+      </div>
+
+      <h3>Badges</h3>
+      <div class="badge-grid">
+        {badgeVariants.map((variant) => (
+          <UiBadge variant={variant} icon="document">
+            {variant}
+          </UiBadge>
+        ))}
+        <UiBadge variant="accent" icon="graph-link" selected>
+          selected
+        </UiBadge>
+        <UiBadge variant="neutral" icon="code-window" disabled>
+          disabled
+        </UiBadge>
+        <UiBadge href="/design-system" variant="cloud" icon="external-link" ariaLabel="Design system link badge">
+          link badge
+        </UiBadge>
+      </div>
+
+      <h3>Accessibility notes</h3>
+      <ul>
+        <li>Icon-only buttons require <code>ariaLabel</code> or <code>iconLabel</code>.</li>
+        <li>Disabled links use <code>aria-disabled</code> and are removed from tab order.</li>
+        <li>Decorative icons are hidden from assistive technology; button text remains the primary label.</li>
+      </ul>
+
+      <p class="note">Reduced-motion: hover/press transforms are disabled under <code>prefers-reduced-motion</code>.</p>
+    </div>
+
+    <div class="card pad">
+      <h2>Layout Primitives</h2>
+      <p>Static-first layout building blocks: sections, grids, stacks, clusters, and control-room framing.</p>
+
+      <h3>Section</h3>
+      <UiSection
+        variant="default"
+        eyebrow="Layout"
+        title="UiSection example"
+        description="Semantic section wrapper with optional heading metadata."
+        icon="graph-link"
+        iconLabel="Layout"
+      >
+        <UiCluster>
+          <UiBadge variant="infra" icon="terminal">cluster</UiBadge>
+          <UiBadge variant="cloud" icon="cloud-node">static-first</UiBadge>
+          <UiBadge variant="security" icon="shield-check">a11y</UiBadge>
+        </UiCluster>
+      </UiSection>
+
+      <h3>Grid</h3>
+      <UiGrid minItemWidth="220px" gap="var(--ds-space-4)">
+        <UiPanel title="Grid item A" description="Panels inside a responsive grid." icon="command-center" iconLabel="Panel" depth="flat" />
+        <UiPanel title="Grid item B" description="Auto-fit columns with min width." icon="cloud-node" iconLabel="Cloud" depth="flat" />
+        <UiPanel title="Grid item C" description="No JavaScript required." icon="shield-check" iconLabel="Security" depth="flat" />
+      </UiGrid>
+
+      <h3>Stack</h3>
+      <UiStack gap="var(--ds-space-3)">
+        <UiBadge variant="neutral" icon="document">stack item</UiBadge>
+        <UiBadge variant="neutral" icon="document">stack item</UiBadge>
+        <UiBadge variant="neutral" icon="document">stack item</UiBadge>
+      </UiStack>
+
+      <h3>Control room frame</h3>
+      <UiControlRoomFrame showGrid showTelemetry={false} depth="raised">
+        <UiPanel title="Framed content" description="Decorative grid is aria-hidden." icon="settings" iconLabel="Frame" depth="flat">
+          <p class="note">Use this as a high-level visual wrapper without canvas/WebGL.</p>
+        </UiPanel>
+      </UiControlRoomFrame>
+    </div>
+
+    <div class="card pad">
+      <h2>Navigation Primitives</h2>
+      <p>Keyboard-friendly, static-first navigation patterns built from links and existing primitives.</p>
+
+      <h3>Nav items</h3>
+      <UiCluster>
+        <UiNavItem href="/design-system" label="Design system" icon="settings" current />
+        <UiNavItem href="/portfolio" label="Portfolio" icon="command-center" />
+        <UiNavItem href="https://example.com" label="External" icon="external-link" external />
+        <UiNavItem href="/design-system" label="Disabled" icon="shield-check" disabled />
+      </UiCluster>
+
+      <h3>Breadcrumb</h3>
+      <UiBreadcrumb items={breadcrumbItems} />
+
+      <h3>Tabs (link navigation)</h3>
+      <UiTabs tabs={tabs} variant="compact" depth="flat" ariaLabel="Design system tabs" />
+
+      <h3>Accessibility notes</h3>
+      <ul>
+        <li>Nav items expose current state via <code>aria-current="page"</code>.</li>
+        <li>Disabled items are removed from tab order via <code>tabindex="-1"</code>.</li>
+        <li>Breadcrumb separators are decorative (<code>aria-hidden</code>).</li>
+        <li>Tabs are links (not fake SPA tabs) to preserve static-first behavior.</li>
+      </ul>
+    </div>
+
+    <div class="card pad">
+      <h2>Data Display</h2>
+      <p>
+        Demo-only examples. No numeric metrics are invented here. These components are static-first and content-graph
+        aware via explicit props (and optional node props where useful).
+      </p>
+
+      <h3>Generic card</h3>
+      <UiCard
+        variant="panel"
+        depth="raised"
+        href="/portfolio"
+        eyebrow="Demo"
+        title="UiCard example"
+        description="General-purpose summary card. Link behavior is implemented via the title link to avoid nested interactive content."
+        icon="document"
+        iconLabel="Card"
+        retro
+      >
+        <UiMetaList
+          slot="meta"
+          items={metaItems}
+          retro
+        />
+        <div slot="actions">
+          <UiButton size="sm" variant="keycap" icon="external-link" ariaLabel="Open portfolio demo link">
+            Open
+          </UiButton>
+        </div>
+      </UiCard>
+
+      <h3>Stat card (qualitative)</h3>
+      <UiStatCard
+        label="Certification status"
+        value="In progress"
+        description="Stat cards can display qualitative values when numeric data is unavailable or unverified."
+        icon="shield-check"
+        iconLabel="Status"
+        status="In progress"
+        sourceLabel="CV"
+        sourceHref="/cv"
+        retro
+      />
+
+      <h3>Skill badges</h3>
+      <UiCluster>
+        <UiSkillBadge label="Kubernetes" category="Skill" level="Verified (demo)" variant="cloud" icon="cloud-node" iconLabel="Cloud" retro />
+        <UiSkillBadge label="Threat modeling" category="Security" level="In progress (demo)" variant="security" icon="shield-check" iconLabel="Security" retro />
+        <UiSkillBadge label="CI/CD" category="Automation" variant="automation" icon="terminal" iconLabel="Terminal" href="/toolchain" retro />
+      </UiCluster>
+
+      <h3>Timeline item</h3>
+      <UiTimelineItem
+        title="Demo timeline item"
+        subtitle="Role / milestone (demo only)"
+        description="Timeline items render dates semantically when provided, otherwise accept a human-provided label."
+        dateLabel="2026 — Present (demo)"
+        status="Coming soon"
+        icon="command-center"
+        iconLabel="Timeline"
+        href="/about"
+        retro
+      />
+
+      <h3>Project card</h3>
+      <UiProjectCard
+        title="Demo project"
+        description="Project card composes UiCard + badges. ID chips are optional and intended for catalog/debug."
+        href="/portfolio"
+        status="Draft (demo)"
+        projectId="demo-project"
+        caseStudyId="demo-case-study"
+        toolIds={['demo-tool']}
+        skillIds={['demo-skill']}
+        tagIds={['demo-tag']}
+        categoryIds={['demo-category']}
+        icon="code-window"
+        iconLabel="Project"
+        showIds
+        retro
+      />
+
+      <h3>Knowledge card</h3>
+      <UiKnowledgeCard
+        title="Demo knowledge resource"
+        description="Knowledge card supports draft state and optional dates only when explicitly provided."
+        href="/blog/coming-soon"
+        draft
+        categoryIds={['demo-category']}
+        tagIds={['demo-tag']}
+        icon="document"
+        iconLabel="Knowledge"
+        showIds
+        retro
+      />
+
+      <h3>Proof chain</h3>
+      <UiProofChain items={proofChainItems} ariaLabel="Demo proof chain" retro />
+
+      <h3>Metadata list</h3>
+      <UiMetaList items={metaItems} retro />
+    </div>
+
+    <div class="card pad">
+      <h2>Chart Foundation</h2>
+      <p>
+        Demo-only chart examples. Values shown here are not real career metrics. Every chart exposes its data outside the
+        canvas through a table, and reduced-motion disables Chart.js animation.
+      </p>
+
+      <h3>Bar chart (demo)</h3>
+      <UiBarChart
+        id="ds-chart-bar-demo"
+        title="Demo bar chart"
+        description="Demo data for component library validation."
+        labels={[...demoLabels]}
+        datasets={[...demoSeries]}
+        retro
+        showFallbackTable
+      />
+
+      <h3>Line chart (demo)</h3>
+      <UiLineChart
+        id="ds-chart-line-demo"
+        title="Demo line chart"
+        description="Demo data for component library validation."
+        labels={[...demoLabels]}
+        datasets={[...demoSeries]}
+        retro
+        showFallbackTable
+      />
+
+      <h3>Radar chart (demo)</h3>
+      <UiRadarChart
+        id="ds-chart-radar-demo"
+        title="Demo radar chart"
+        description="Demo data for component library validation."
+        labels={[...demoSecurityLabels]}
+        datasets={[...demoSecurityDataset]}
+        retro
+        showFallbackTable
+      />
+
+      <h3>Doughnut chart (demo)</h3>
+      <UiDoughnutChart
+        id="ds-chart-doughnut-demo"
+        title="Demo doughnut chart"
+        description="Demo data for component library validation."
+        labels={[...demoToolchainLabels]}
+        datasets={[...demoToolchainDataset]}
+        retro
+        showFallbackTable
+      />
+
+      <h3>Semantic wrappers (demo)</h3>
+      <UiGrid minItemWidth="320px">
+        <UiSecurityDomainRadar
+          id="ds-chart-security-domain-demo"
+          labels={[...demoSecurityLabels]}
+          datasets={[...demoSecurityDataset]}
+          retro
+          showFallbackTable
+        />
+        <UiToolchainDistributionChart
+          id="ds-chart-toolchain-dist-demo"
+          labels={[...demoToolchainLabels]}
+          datasets={[...demoToolchainDataset]}
+          retro
+          showFallbackTable
+        />
+        <UiSkillMatrixChart
+          id="ds-chart-skill-matrix-demo"
+          labels={[...demoLabels]}
+          datasets={[...demoSeries]}
+          retro
+          showFallbackTable
+        />
+        <UiExperienceTimelineChart
+          id="ds-chart-experience-timeline-demo"
+          labels={['T1', 'T2', 'T3', 'T4']}
+          datasets={[{ label: 'Demo timeline', data: [1, 2, 2, 3] }]}
+          retro
+          showFallbackTable
+        />
+      </UiGrid>
+
+      <h3>Accessibility notes</h3>
+      <ul>
+        <li>Canvas is never the only information source; a fallback table is rendered.</li>
+        <li>Canvas uses an accessible name and references the table/summary.</li>
+        <li>Reduced motion disables Chart.js animations automatically.</li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0 1.25rem;
+  }
+
+  .icon-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--ds-color-border);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-color-surface-raised);
+  }
+
+  .icon-meta {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .icon-id {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .icon-label {
+    color: var(--ds-color-text-muted);
+    font-size: var(--font-size-0);
+  }
+
+  .example-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  .example {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--ds-color-border);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-color-surface);
+  }
+
+  .state-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.35rem 0.9rem;
+    padding-left: 1.1rem;
+  }
+
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .token-group ul {
+    padding-left: 1.1rem;
+  }
+
+  .note {
+    margin-top: 1rem;
+    color: var(--ds-color-text-muted);
+  }
+
+  .surface-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .panel-actions-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .panel-footer-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: var(--ds-space-4);
+  }
+
+  .button-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+  }
+
+  .badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0.75rem 0 1.25rem;
+  }
+</style>

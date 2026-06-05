@@ -1,0 +1,62 @@
+---
+export type Props = {
+  title: string;
+  href?: string;
+  summary?: string;
+  meta?: string;
+};
+
+const { title, href, summary, meta } = Astro.props as Props;
+---
+
+<article class="card pad">
+  <header class="content-card-header">
+    <h2 class="content-card-title">
+      {href ? (
+        <a class="content-card-link" href={href}>
+          {title}
+        </a>
+      ) : (
+        title
+      )}
+    </h2>
+    {meta ? <p class="content-card-meta">{meta}</p> : null}
+    {summary ? <p class="content-card-summary">{summary}</p> : null}
+  </header>
+  <div class="content-card-body">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .content-card-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .content-card-title {
+    font-size: var(--font-size-4);
+    margin: 0 0 0.35rem;
+  }
+
+  .content-card-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .content-card-link:hover {
+    text-decoration: underline;
+  }
+
+  .content-card-meta {
+    margin: 0 0 0.25rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .content-card-summary {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+/**
+ * CountryFlag — minimal inline SVG flags for the language dial.
+ * region: ISO 3166-1 alpha-2 (gb | es | fr | de). Decorative (aria-hidden);
+ * the dial provides the accessible language name.
+ */
+export type Props = {
+  region: string;
+  class?: string;
+  title?: string;
+};
+
+const { region, class: className, title } = Astro.props as Props;
+const r = region.toLowerCase();
+---
+
+<span class:list={['country-flag', className]} role="img" aria-label={title ?? region}>
+  <svg viewBox="0 0 24 16" width="100%" height="100%" focusable="false" aria-hidden="true">
+    <defs>
+      <clipPath id={`flag-clip-${r}`}>
+        <rect x="0" y="0" width="24" height="16" rx="2" />
+      </clipPath>
+    </defs>
+    <g clip-path={`url(#flag-clip-${r})`}>
+      {r === 'gb' && (
+        <>
+          <rect width="24" height="16" fill="#012169" />
+          <path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="3.2" />
+          <path d="M0 0l24 16M24 0L0 16" stroke="#C8102E" stroke-width="1.8" />
+          <path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="5.2" />
+          <path d="M12 0v16M0 8h24" stroke="#C8102E" stroke-width="3" />
+        </>
+      )}
+      {r === 'es' && (
+        <>
+          <rect width="24" height="16" fill="#AA151B" />
+          <rect y="4" width="24" height="8" fill="#F1BF00" />
+        </>
+      )}
+      {r === 'fr' && (
+        <>
+          <rect width="8" height="16" fill="#002395" />
+          <rect x="8" width="8" height="16" fill="#fff" />
+          <rect x="16" width="8" height="16" fill="#ED2939" />
+        </>
+      )}
+      {r === 'de' && (
+        <>
+          <rect width="24" height="5.33" fill="#000" />
+          <rect y="5.33" width="24" height="5.33" fill="#DD0000" />
+          <rect y="10.66" width="24" height="5.34" fill="#FFCE00" />
+        </>
+      )}
+      <rect x="0.5" y="0.5" width="23" height="15" rx="1.6" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="1" />
+    </g>
+  </svg>
+</span>
+
+<style>
+  .country-flag {
+    display: inline-block;
+    width: 1.5em;
+    height: 1em;
+    line-height: 0;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+  .country-flag svg {
+    display: block;
+  }
+</style>

@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
+
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { SUPPORTED_LANGS, isLang } from '../../../lib/i18n';
+import { buildContentGraph, getNodeKey, type ContentGraphNode } from '../../../lib/content/graph';
+import { getBacklinks, getOutgoingLinks } from '../../../lib/content/backlinks';
+import { scoreRelatedEntries } from '../../../lib/content/relationships';
+
+export async function getStaticPaths() {
+  const resources = await getCollection('knowledgeResources');
+  const slugs = Array.from(new Set(resources.map((r) => r.data.resourceId)));
+  return SUPPORTED_LANGS.flatMap((lang) => slugs.map((slug) => ({ params: { lang, slug } })));
+}
+
+const { lang, slug } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+if (!slug) {
+  throw new Error('Missing slug');
+}
+
+const resourcesAll = await getCollection('knowledgeResources');
+const categoriesAll = await getCollection('categories');
+const tagsAll = await getCollection('tags');
+const toolsAll = await getCollection('tools');
+const skillsAll = await getCollection('skills');
+const projectsAll = await getCollection('projects');
+const caseStudiesAll = await getCollection('caseStudies');
+const blogAll = await getCollection('blog');
+
+const resourceLang = resourcesAll.find((r) => r.data.resourceId === slug && r.data.lang === lang);
+const resourceEn = resourcesAll.find((r) => r.data.resourceId === slug && r.data.lang === 'en');
+const resource = resourceLang ?? resourceEn;
+if (!resource) {
+  throw new Error(`Resource not found: ${slug}`);
+}
+
+const isDraftBlog = (entry: CollectionEntry<'blog'>) =>
+  Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
+const blogTitleBySlug = new Map(
+  blogAll.filter((b) => !isDraftBlog(b)).map((b) => [b.data.blogSlug, b.data.title] as const),
+);
+
+const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
+const skillTitleById = new Map(skillsAll.map((s) => [s.data.skillId, s.data.name] as const));
+const projectTitleById = new Map(projectsAll.map((p) => [p.data.projectId, p.data.title] as const));
+const caseStudyMetaById = new Map(caseStudiesAll.map((c) => [c.data.caseStudyId, { title: c.data.title, slug: c.data.slug }] as const));
+
+const graph = await buildContentGraph();
+const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
+const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
+
+const nodeKey = getNodeKey('knowledgeResources', resource.data.resourceId);
+const outgoing = getOutgoingLinks(nodeKey, graph);
+const backlinks = getBacklinks(nodeKey, graph);
+const related = scoreRelatedEntries(nodeKey, graph).slice(0, 8);
+
+const isNonEmptyString = (value: string | undefined): value is string => typeof value === 'string' && value.length > 0;
+
+const tags = (resource.data.tagIds ?? [])
+  .map((id) => tagTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+const categories = (resource.data.categoryIds ?? [])
+  .map((id) => categoryTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+const tools = (resource.data.toolIds ?? [])
+  .map((id) => toolTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+const skills = (resource.data.skillIds ?? [])
+  .map((id) => skillTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+
+const projects = (resource.data.projectIds ?? [])
+  .map((id) => ({ id, title: projectTitleById.get(id) }))
+  .filter((p): p is { id: string; title: string } => typeof p.title === 'string')
+  .map((p) => ({ label: p.title, href: `/${lang}/portfolio/${p.id}` }));
+
+const caseStudies = (resource.data.caseStudyIds ?? [])
+  .map((id) => caseStudyMetaById.get(id))
+  .filter((m): m is { title: string; slug: string } => Boolean(m?.title && m?.slug))
+  .map((m) => ({ label: m.title, href: `/${lang}/case-studies/${m.slug}` }));
+
+const blogLinks = (resource.data.blogSlugs ?? [])
+  .map((blogSlug) => ({ blogSlug, title: blogTitleBySlug.get(blogSlug) }))
+  .filter((b): b is { blogSlug: string; title: string } => typeof b.title === 'string')
+  .map((b) => ({ label: b.title, href: `/${lang}/blog/${b.blogSlug}` }));
+
+const outgoingLinks = outgoing
+  .map((e) => nodeByKey.get(e.to))
+  .filter(isGraphNode)
+  .map((n) => ({ label: n.title, href: n.url ?? `/${lang}/content-index` }));
+
+const incomingLinks = backlinks
+  .map((e) => nodeByKey.get(e.from))
+  .filter(isGraphNode)
+  .map((n) => ({ label: n.title, href: n.url ?? `/${lang}/content-index` }));
+
+const relatedLinks = related
+  .map((r) => nodeByKey.get(r.nodeKey))
+  .filter(isGraphNode)
+  .map((n) => ({ label: n.title, href: n.url ?? `/${lang}/content-index` }));
+
+const { Content } = await render(resource);
+
+const metaParts = [
+  `Type: ${resource.data.type}`,
+  resource.data.level ? `Level: ${resource.data.level}` : undefined,
+  resource.data.status ? `Status: ${resource.data.status}` : undefined,
+].filter(isNonEmptyString);
+
+const pageTitle = resource.data.title;
+const pageDescription = resource.data.summary;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>{resource.data.title}</h1>
+    {resourceLang ? null : lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English content while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    <p class="topology-subtitle">{metaParts.join(' · ')}</p>
+    <p>{resource.data.summary}</p>
+    {resource.data.url ? (
+      <p>
+        <a href={resource.data.url} target="_blank" rel="noopener noreferrer">
+          Open external resource
+        </a>
+      </p>
+    ) : null}
+    <div class="cta-row">
+      <a class="button" href={`/${lang}/knowledge`}>Back to Knowledge Center</a>
+      <a class="button primary" href={`/${lang}/cv`}>Download CV</a>
+    </div>
+  </section>
+
+  <section class="grid">
+    {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
+    {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
+    {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+    {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
+  </section>
+
+  {projects.length > 0 || caseStudies.length > 0 || blogLinks.length > 0 ? (
+    <section class="grid cols-2">
+      <div class="card pad">
+        <h2>Related</h2>
+        {projects.length > 0 ? <TaxonomyPills label="Projects" items={projects} /> : null}
+        {caseStudies.length > 0 ? <TaxonomyPills label="Case studies" items={caseStudies} /> : null}
+        {blogLinks.length > 0 ? <TaxonomyPills label="Blog" items={blogLinks} /> : null}
+      </div>
+      <div class="card pad">
+        <h2>Graph context</h2>
+        {outgoingLinks.length > 0 ? <TaxonomyPills label="Links from this resource" items={outgoingLinks} /> : <p>No outgoing links yet.</p>}
+        {incomingLinks.length > 0 ? <TaxonomyPills label="Backlinks" items={incomingLinks} /> : <p>No backlinks yet.</p>}
+      </div>
+    </section>
+  ) : null}
+
+  <section class="card pad">
+    <h2>Notes</h2>
+    <Content />
+  </section>
+
+  {relatedLinks.length > 0 ? (
+    <section class="card pad">
+      <h2>Related content</h2>
+      <ul>
+        {relatedLinks.map((l) => (
+          <li>
+            <a href={l.href}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null}
+</BaseLayout>
+

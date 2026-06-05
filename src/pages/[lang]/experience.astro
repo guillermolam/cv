@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLangStaticPaths, isLang } from '../../lib/i18n';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Experience';
+const description = 'A concise experience summary backed by the portfolio content model.';
+
+const experienceAll = await getCollection('experience');
+const experience = experienceAll.filter((e) => e.data.lang === lang);
+const experienceFallback = experience.length > 0 ? experience : experienceAll.filter((e) => e.data.lang === 'en');
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Experience</h1>
+    {experience.length === 0 && lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English entries while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    <p class="topology-subtitle">
+      This page is a summary view. Detailed case studies and proofs live in Portfolio and Tutorials.
+    </p>
+  </section>
+
+  <section class="grid" aria-label="Experience entries">
+    {experienceFallback
+      .slice()
+      .sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''))
+      .map((exp) => (
+        <article class="card pad">
+          <h2 style="margin:0 0 0.25rem 0; font-size: var(--font-size-3);">
+            {exp.data.companyName} · {exp.data.roleTitle}
+          </h2>
+          <p class="topology-subtitle" style="margin:0;">
+            {exp.data.location ? `${exp.data.location} · ` : ''}
+            {exp.data.startDate}
+            {exp.data.isCurrent ? ' — Present' : exp.data.endDate ? ` — ${exp.data.endDate}` : ''}
+          </p>
+          {exp.data.summary ? <p style="margin:0.75rem 0 0 0;">{exp.data.summary}</p> : null}
+          {exp.data.highlights?.length ? (
+            <ul style="margin:0.75rem 0 0 1.15rem;">
+              {exp.data.highlights.map((h) => (
+                <li>{h}</li>
+              ))}
+            </ul>
+          ) : null}
+        </article>
+      ))}
+  </section>
+</BaseLayout>
+

@@ -1,0 +1,93 @@
+---
+import UiIcon from '../ui/UiIcon.astro';
+import UiSurface from '../ui/UiSurface.astro';
+
+type SectionAs = 'section' | 'div' | 'article' | 'aside' | 'header' | 'footer';
+type SectionDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+
+type HeadingTag = 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+type Props = {
+  as?: SectionAs;
+  id?: string;
+  class?: string;
+  variant?: 'default' | 'surface' | 'panel';
+  depth?: SectionDepth;
+  eyebrow?: string;
+  title?: string;
+  titleAs?: HeadingTag;
+  description?: string;
+  icon?: string;
+  iconLabel?: string;
+  align?: 'start' | 'center';
+  spacing?: 'normal' | 'tight' | 'loose';
+  constrained?: boolean;
+  labelledBy?: string;
+};
+
+const {
+  as = 'section',
+  id,
+  class: className,
+  variant = 'default',
+  depth = 'flat',
+  eyebrow,
+  title,
+  titleAs = 'h2',
+  description,
+  icon,
+  iconLabel,
+  align = 'start',
+  spacing = 'normal',
+  constrained = true,
+  labelledBy,
+} = Astro.props as Props;
+
+const TitleTag = titleAs;
+const headerId = title ? `${id ?? 'ui-section'}-title` : undefined;
+const effectiveLabelledBy = labelledBy ?? headerId;
+---
+
+<UiSurface
+  as={as}
+  id={id}
+  class={className}
+  variant={variant === 'panel' ? 'panel' : variant === 'surface' ? 'surface' : 'surface'}
+  depth={variant === 'default' ? 'flat' : depth}
+  interactive={false}
+  selected={false}
+  disabled={false}
+  motion="none"
+  attrs={{
+    'data-ui-section': '',
+    'data-variant': variant,
+    'data-depth': depth,
+    'data-align': align,
+    'data-spacing': spacing,
+    'data-constrained': constrained ? 'true' : 'false',
+    ...(effectiveLabelledBy ? { 'aria-labelledby': effectiveLabelledBy } : {}),
+  }}
+>
+  <div data-ui-section-inner>
+    {(eyebrow || title || description || icon || Astro.slots.has('header')) ? (
+      <div data-ui-section-header>
+        {Astro.slots.has('header') ? (
+          <slot name="header" />
+        ) : (
+          <div>
+            {eyebrow ? (
+              <div data-ui-section-eyebrow>
+                {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+                <span>{eyebrow}</span>
+              </div>
+            ) : null}
+            {title ? <TitleTag id={headerId} data-ui-section-title>{title}</TitleTag> : null}
+            {description ? <p data-ui-section-description>{description}</p> : null}
+          </div>
+        )}
+      </div>
+    ) : null}
+
+    <slot />
+  </div>
+</UiSurface>

@@ -1,0 +1,166 @@
+:root {
+  --ds-layout-section-padding-y: var(--ds-space-10);
+  --ds-layout-section-gap: var(--ds-space-4);
+  --ds-layout-grid-gap: var(--ds-space-4);
+  --ds-layout-stack-gap: var(--ds-space-4);
+  --ds-layout-cluster-gap: var(--ds-space-2);
+  --ds-layout-frame-padding: var(--ds-space-6);
+  --ds-layout-frame-grid-opacity: 0.08;
+}
+
+[data-ui-section] {
+  display: block;
+  padding-block: var(--ds-layout-section-padding-y);
+}
+
+[data-ui-section][data-constrained='true'] > [data-ui-section-inner] {
+  width: min(calc(100% - (var(--page-padding) * 2)), var(--max-width));
+  margin-inline: auto;
+}
+
+[data-ui-section] [data-ui-section-header] {
+  display: grid;
+  gap: var(--ds-layout-section-gap);
+  margin-bottom: var(--ds-space-6);
+}
+
+[data-ui-section] [data-ui-section-eyebrow] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--font-size-0);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+}
+
+[data-ui-section] [data-ui-section-title] {
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+[data-ui-section] [data-ui-section-description] {
+  margin: 0;
+  color: var(--ds-color-text-muted);
+}
+
+[data-ui-grid] {
+  display: grid;
+  gap: var(--ui-grid-gap, var(--ds-layout-grid-gap));
+  grid-template-columns: repeat(auto-fit, minmax(var(--ui-grid-min-item-width, 260px), 1fr));
+  align-items: var(--ui-grid-align, stretch);
+}
+
+[data-ui-grid][data-dense='true'] {
+  grid-auto-flow: dense;
+}
+
+[data-ui-stack] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-stack-gap, var(--ds-layout-stack-gap));
+  align-items: var(--ui-stack-align, stretch);
+  justify-content: var(--ui-stack-justify, flex-start);
+}
+
+[data-ui-cluster] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-cluster-gap, var(--ds-layout-cluster-gap));
+  align-items: var(--ui-cluster-align, center);
+  justify-content: var(--ui-cluster-justify, flex-start);
+}
+
+[data-ui-control-room-frame] {
+  position: relative;
+  overflow: hidden;
+  padding: var(--ds-layout-frame-padding);
+}
+
+[data-ui-control-room-frame] [data-ui-frame-grid] {
+  position: absolute;
+  inset: 0;
+  opacity: var(--ds-layout-frame-grid-opacity);
+  background-image:
+    linear-gradient(to right, rgba(214, 226, 239, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 226, 239, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+[data-ui-control-room-frame][data-show-grid='false'] [data-ui-frame-grid] {
+  display: none;
+}
+
+[data-ui-control-room-frame] [data-ui-frame-telemetry] {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--ds-space-6);
+  border-bottom: 1px solid var(--ds-color-border);
+  background: color-mix(in oklab, var(--ds-color-bg), transparent 12%);
+  pointer-events: none;
+}
+
+[data-ui-control-room-frame][data-show-telemetry='false'] [data-ui-frame-telemetry] {
+  display: none;
+}
+
+[data-ui-control-room-frame] [data-ui-frame-content] {
+  position: relative;
+  z-index: 1;
+}
+
+[data-ui-nav-item] {
+  display: inline-flex;
+}
+
+[data-ui-nav-item][data-current='true'] [data-ui-button] {
+  border-color: color-mix(in oklab, var(--ds-color-accent), var(--ds-color-border) 40%);
+  box-shadow:
+    var(--ds-shadow-raised),
+    0 0 16px color-mix(in oklab, var(--ds-color-accent), transparent 78%);
+}
+
+[data-ui-nav-item][data-disabled='true'] {
+  opacity: 0.65;
+}
+
+[data-ui-breadcrumb] ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+[data-ui-breadcrumb] [data-ui-breadcrumb-sep] {
+  color: var(--ds-color-text-muted);
+}
+
+[data-ui-tabs] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  align-items: center;
+}
+
+[data-ui-tabs] a {
+  text-decoration: none;
+}
+
+[data-ui-tabs] [data-tab-selected='true'] {
+  border-color: color-mix(in oklab, var(--ds-color-accent), var(--ds-color-border) 40%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-ui-control-room-frame] [data-ui-frame-grid] {
+    opacity: 0.05;
+  }
+}

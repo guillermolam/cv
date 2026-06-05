@@ -23,26 +23,26 @@ const { enabled = false, selectedStationId, reducedMotion = 'auto' } = Astro.pro
 
 <script>
   (() => {
-    const root = document.currentScript?.previousElementSibling
-    if (!(root instanceof HTMLElement)) return
+    const root = document.querySelector('[data-hero3d]');
+    if (!(root instanceof HTMLElement)) return;
 
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(window.location.search);
     if (params.get('no3d') === '1') {
-      root.dataset.hero3dState = 'disabled'
+      root.dataset.hero3dState = 'disabled';
     }
 
-    if (root.dataset.hero3dReducedMotion !== 'auto') return
+    if (root.dataset.hero3dReducedMotion !== 'auto') return;
 
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const apply = () => {
-      root.dataset.hero3dReducedMotion = media.matches ? '1' : '0'
+      root.dataset.hero3dReducedMotion = media.matches ? '1' : '0';
       if (media.matches) {
-        root.dataset.hero3dState = 'disabled'
+        root.dataset.hero3dState = 'disabled';
       }
-    }
-    apply()
+    };
+    apply();
     if (typeof media.addEventListener === 'function') {
-      media.addEventListener('change', apply)
+      media.addEventListener('change', apply);
     }
-  })()
+  })();
 </script>

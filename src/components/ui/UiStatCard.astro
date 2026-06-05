@@ -1,0 +1,103 @@
+---
+import UiIcon from './UiIcon.astro';
+import UiSurface from './UiSurface.astro';
+import UiBadge from './UiBadge.astro';
+
+type StatDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type StatVariant = 'neutral' | 'accent' | 'security' | 'cloud' | 'danger' | 'info';
+
+type Props = {
+  id?: string;
+  class?: string;
+  variant?: StatVariant;
+  depth?: StatDepth;
+  label: string;
+  value: string;
+  unit?: string;
+  description?: string;
+  icon?: string;
+  iconLabel?: string;
+  trend?: 'up' | 'down' | 'flat';
+  status?: 'Available' | 'Coming soon' | 'In progress' | 'Verified' | 'Draft' | string;
+  sourceLabel?: string;
+  sourceHref?: string;
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  variant = 'neutral',
+  depth = 'raised',
+  label,
+  value,
+  unit,
+  description,
+  icon,
+  iconLabel,
+  trend,
+  status,
+  sourceLabel,
+  sourceHref,
+  motion = 'hover-lift',
+  retro = false,
+} = Astro.props as Props;
+
+const hasSource = typeof sourceHref === 'string' && sourceHref.length > 0;
+const sourceText = sourceLabel ?? 'Source';
+---
+
+<UiSurface
+  as="section"
+  id={id}
+  class={className}
+  variant="panel"
+  depth={depth}
+  interactive={false}
+  selected={false}
+  disabled={false}
+  motion={motion}
+  retro={retro}
+  attrs={{
+    'data-ui-stat-card': '',
+    'data-variant': variant,
+    'data-depth': depth,
+    'data-motion': motion,
+    'data-retro': retro ? 'true' : 'false',
+  }}
+>
+  <div data-ui-stat-header>
+    {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+    <div data-ui-stat-label>{label}</div>
+  </div>
+
+  <div data-ui-stat-value>
+    <span>{value}</span>
+    {unit ? <span aria-hidden="true"> {unit}</span> : null}
+  </div>
+
+  {status ? (
+    <div>
+      <UiBadge variant={variant === 'neutral' ? 'neutral' : variant} size="sm" depth="flat">
+        {status}
+      </UiBadge>
+    </div>
+  ) : null}
+
+  {trend ? (
+    <div>
+      <UiBadge variant="neutral" size="sm" depth="flat" ariaLabel={`Trend: ${trend}`}>
+        Trend: {trend}
+      </UiBadge>
+    </div>
+  ) : null}
+
+  {description ? <p data-ui-stat-description>{description}</p> : null}
+
+  {hasSource ? (
+    <div data-ui-stat-source>
+      <a href={sourceHref}>{sourceText}</a>
+    </div>
+  ) : null}
+</UiSurface>

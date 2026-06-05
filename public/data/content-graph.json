@@ -1,0 +1,1909 @@
+{
+  "generatedAt": "2026-06-04T17:58:11.251Z",
+  "nodes": [
+    {
+      "key": "blog:practical-content-graph-for-devsecops-portfolio",
+      "collection": "blog",
+      "id": "practical-content-graph-for-devsecops-portfolio",
+      "slug": "practical-content-graph-for-devsecops-portfolio",
+      "lang": "en",
+      "title": "Practical Content Graph for a DevSecOps Portfolio",
+      "url": "/en/blog/practical-content-graph-for-devsecops-portfolio",
+      "categoryIds": [
+        "devsecops"
+      ],
+      "tagIds": [
+        "astro",
+        "ci-cd"
+      ],
+      "toolIds": [
+        "astro",
+        "typescript"
+      ],
+      "skillIds": [
+        "static-site-architecture",
+        "devsecops"
+      ]
+    },
+    {
+      "key": "caseStudies:control-room-portfolio-content-graph",
+      "collection": "caseStudies",
+      "id": "control-room-portfolio-content-graph",
+      "slug": "control-room-portfolio-content-graph",
+      "lang": "en",
+      "title": "Content Graph Foundations for a DevSecOps Portfolio",
+      "url": "/en/case-studies/control-room-portfolio-content-graph",
+      "categoryIds": [
+        "devsecops",
+        "platform-engineering",
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "astro",
+        "threejs",
+        "sbom",
+        "wasm"
+      ],
+      "toolIds": [
+        "astro",
+        "typescript"
+      ],
+      "skillIds": [
+        "static-site-architecture",
+        "interactive-frontend-architecture",
+        "devsecops"
+      ]
+    },
+    {
+      "key": "categories:ai-security",
+      "collection": "categories",
+      "id": "ai-security",
+      "slug": "ai-security",
+      "lang": "en",
+      "title": "AI Security"
+    },
+    {
+      "key": "categories:cloud-security",
+      "collection": "categories",
+      "id": "cloud-security",
+      "slug": "cloud-security",
+      "lang": "en",
+      "title": "Cloud Security"
+    },
+    {
+      "key": "categories:creative-frontend",
+      "collection": "categories",
+      "id": "creative-frontend",
+      "slug": "creative-frontend",
+      "lang": "en",
+      "title": "Creative Frontend"
+    },
+    {
+      "key": "categories:devsecops",
+      "collection": "categories",
+      "id": "devsecops",
+      "slug": "devsecops",
+      "lang": "en",
+      "title": "DevSecOps"
+    },
+    {
+      "key": "categories:gitops-delivery",
+      "collection": "categories",
+      "id": "gitops-delivery",
+      "slug": "gitops-delivery",
+      "lang": "en",
+      "title": "GitOps & Delivery"
+    },
+    {
+      "key": "categories:hybrid-edge",
+      "collection": "categories",
+      "id": "hybrid-edge",
+      "slug": "hybrid-edge",
+      "lang": "en",
+      "title": "Hybrid / Edge"
+    },
+    {
+      "key": "categories:kubernetes-platform",
+      "collection": "categories",
+      "id": "kubernetes-platform",
+      "slug": "kubernetes-platform",
+      "lang": "en",
+      "title": "Kubernetes Platform"
+    },
+    {
+      "key": "categories:kubernetes-security",
+      "collection": "categories",
+      "id": "kubernetes-security",
+      "slug": "kubernetes-security",
+      "lang": "en",
+      "title": "Kubernetes Security"
+    },
+    {
+      "key": "categories:platform-engineering",
+      "collection": "categories",
+      "id": "platform-engineering",
+      "slug": "platform-engineering",
+      "lang": "en",
+      "title": "Platform Engineering"
+    },
+    {
+      "key": "categories:runtime-security",
+      "collection": "categories",
+      "id": "runtime-security",
+      "slug": "runtime-security",
+      "lang": "en",
+      "title": "Runtime Security"
+    },
+    {
+      "key": "categories:secops",
+      "collection": "categories",
+      "id": "secops",
+      "slug": "secops",
+      "lang": "en",
+      "title": "Security Operations"
+    },
+    {
+      "key": "categories:supply-chain-security",
+      "collection": "categories",
+      "id": "supply-chain-security",
+      "slug": "supply-chain-security",
+      "lang": "en",
+      "title": "Supply Chain Security"
+    },
+    {
+      "key": "categories:supply-chain",
+      "collection": "categories",
+      "id": "supply-chain",
+      "slug": "supply-chain",
+      "lang": "en",
+      "title": "Supply Chain"
+    },
+    {
+      "key": "certifications:az-500",
+      "collection": "certifications",
+      "id": "az-500",
+      "slug": "az-500",
+      "lang": "en",
+      "title": "Microsoft Azure Security Technologies (AZ-500)",
+      "categoryIds": [
+        "cloud-security"
+      ]
+    },
+    {
+      "key": "certifications:cka",
+      "collection": "certifications",
+      "id": "cka",
+      "slug": "cka",
+      "lang": "en",
+      "title": "Certified Kubernetes Administrator (CKA)",
+      "categoryIds": [
+        "kubernetes-security",
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "key": "certifications:cks",
+      "collection": "certifications",
+      "id": "cks",
+      "slug": "cks",
+      "lang": "en",
+      "title": "Certified Kubernetes Security Specialist (CKS)",
+      "categoryIds": [
+        "kubernetes-security",
+        "cloud-security"
+      ],
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "key": "contactChannels:channels",
+      "collection": "contactChannels",
+      "id": "channels",
+      "slug": "channels",
+      "lang": "en",
+      "title": "Contact Channels",
+      "url": "/en/contact"
+    },
+    {
+      "key": "cvFormats:ats",
+      "collection": "cvFormats",
+      "id": "ats",
+      "slug": "ats",
+      "lang": "en",
+      "title": "ATS-friendly CV",
+      "url": "/en/cv"
+    },
+    {
+      "key": "cvFormats:europass",
+      "collection": "cvFormats",
+      "id": "europass",
+      "slug": "europass",
+      "lang": "en",
+      "title": "Europass CV",
+      "url": "/en/cv"
+    },
+    {
+      "key": "cvFormats:full-technical",
+      "collection": "cvFormats",
+      "id": "full-technical",
+      "slug": "full-technical",
+      "lang": "en",
+      "title": "Full technical CV",
+      "url": "/en/cv"
+    },
+    {
+      "key": "cvFormats:modern",
+      "collection": "cvFormats",
+      "id": "modern",
+      "slug": "modern",
+      "lang": "en",
+      "title": "Modern CV",
+      "url": "/en/cv"
+    },
+    {
+      "key": "cvFormats:one-page",
+      "collection": "cvFormats",
+      "id": "one-page",
+      "slug": "one-page",
+      "lang": "en",
+      "title": "One-page CV",
+      "url": "/en/cv"
+    },
+    {
+      "key": "cvFormats:recruiter",
+      "collection": "cvFormats",
+      "id": "recruiter",
+      "slug": "recruiter",
+      "lang": "en",
+      "title": "Recruiter CV",
+      "url": "/en/cv"
+    },
+    {
+      "key": "experience:skyguide-antaes-2025",
+      "collection": "experience",
+      "id": "skyguide-antaes-2025",
+      "slug": "skyguide-antaes-2025",
+      "lang": "en",
+      "title": "Skyguide — Senior DevOps Engineer",
+      "categoryIds": [
+        "devsecops",
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "key": "knowledgeResources:astro-content-collections",
+      "collection": "knowledgeResources",
+      "id": "astro-content-collections",
+      "slug": "astro-content-collections",
+      "lang": "en",
+      "title": "Astro Content Collections (Official Guide)",
+      "url": "/en/knowledge/astro-content-collections",
+      "categoryIds": [
+        "platform-engineering",
+        "devsecops"
+      ],
+      "tagIds": [
+        "astro"
+      ],
+      "toolIds": [
+        "astro"
+      ],
+      "skillIds": [
+        "static-site-architecture"
+      ]
+    },
+    {
+      "key": "knowledgeResources:astro-view-transitions",
+      "collection": "knowledgeResources",
+      "id": "astro-view-transitions",
+      "slug": "astro-view-transitions",
+      "lang": "en",
+      "title": "Astro View Transitions (Official Guide)",
+      "url": "/en/knowledge/astro-view-transitions",
+      "categoryIds": [
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "astro"
+      ],
+      "toolIds": [
+        "astro"
+      ],
+      "skillIds": [
+        "interactive-frontend-architecture"
+      ]
+    },
+    {
+      "key": "knowledgeResources:fermyon-spin-documentation",
+      "collection": "knowledgeResources",
+      "id": "fermyon-spin-documentation",
+      "slug": "fermyon-spin-documentation",
+      "lang": "en",
+      "title": "Fermyon Spin Documentation",
+      "url": "/en/knowledge/fermyon-spin-documentation",
+      "categoryIds": [
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "spin",
+        "fermyon",
+        "wasm"
+      ],
+      "toolIds": [
+        "spin",
+        "fermyon"
+      ],
+      "skillIds": [
+        "static-site-architecture"
+      ]
+    },
+    {
+      "key": "knowledgeResources:khronos-gltf-overview",
+      "collection": "knowledgeResources",
+      "id": "khronos-gltf-overview",
+      "slug": "khronos-gltf-overview",
+      "lang": "en",
+      "title": "Khronos glTF Overview",
+      "url": "/en/knowledge/khronos-gltf-overview",
+      "categoryIds": [
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "threejs"
+      ],
+      "toolIds": [
+        "threejs"
+      ],
+      "skillIds": [
+        "interactive-frontend-architecture"
+      ]
+    },
+    {
+      "key": "knowledgeResources:kubernetes-documentation",
+      "collection": "knowledgeResources",
+      "id": "kubernetes-documentation",
+      "slug": "kubernetes-documentation",
+      "lang": "en",
+      "title": "Kubernetes Documentation",
+      "url": "/en/knowledge/kubernetes-documentation",
+      "categoryIds": [
+        "kubernetes-platform",
+        "platform-engineering",
+        "devsecops"
+      ],
+      "tagIds": [
+        "kubernetes"
+      ],
+      "toolIds": [
+        "kubernetes"
+      ],
+      "skillIds": [
+        "kubernetes-platform-engineering",
+        "devsecops"
+      ]
+    },
+    {
+      "key": "knowledgeResources:slsa-framework",
+      "collection": "knowledgeResources",
+      "id": "slsa-framework",
+      "slug": "slsa-framework",
+      "lang": "en",
+      "title": "SLSA (Supply-chain Levels for Software Artifacts)",
+      "url": "/en/knowledge/slsa-framework",
+      "categoryIds": [
+        "supply-chain-security",
+        "devsecops"
+      ],
+      "tagIds": [
+        "ci-cd",
+        "sbom"
+      ],
+      "skillIds": [
+        "software-supply-chain-security",
+        "devsecops"
+      ]
+    },
+    {
+      "key": "knowledgeResources:threejs-documentation",
+      "collection": "knowledgeResources",
+      "id": "threejs-documentation",
+      "slug": "threejs-documentation",
+      "lang": "en",
+      "title": "Three.js Documentation",
+      "url": "/en/knowledge/threejs-documentation",
+      "categoryIds": [
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "threejs"
+      ],
+      "toolIds": [
+        "threejs"
+      ],
+      "skillIds": [
+        "interactive-frontend-architecture"
+      ]
+    },
+    {
+      "key": "knowledgeResources:trivy-documentation",
+      "collection": "knowledgeResources",
+      "id": "trivy-documentation",
+      "slug": "trivy-documentation",
+      "lang": "en",
+      "title": "Trivy Documentation",
+      "url": "/en/knowledge/trivy-documentation",
+      "categoryIds": [
+        "supply-chain-security",
+        "devsecops"
+      ],
+      "tagIds": [
+        "sbom"
+      ],
+      "toolIds": [
+        "trivy"
+      ],
+      "skillIds": [
+        "software-supply-chain-security",
+        "devsecops"
+      ]
+    },
+    {
+      "key": "profile:primary",
+      "collection": "profile",
+      "id": "primary",
+      "slug": "primary",
+      "lang": "en",
+      "title": "Cloud Security & DevSecOps Engineer",
+      "url": "/en/"
+    },
+    {
+      "key": "projects:control-room-portfolio",
+      "collection": "projects",
+      "id": "control-room-portfolio",
+      "slug": "control-room-portfolio",
+      "lang": "en",
+      "title": "Hybrid Cloud Control Room Portfolio",
+      "categoryIds": [
+        "creative-frontend",
+        "devsecops",
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "astro",
+        "threejs",
+        "wasm",
+        "fermyon"
+      ],
+      "toolIds": [
+        "astro",
+        "typescript",
+        "threejs",
+        "fermyon",
+        "spin"
+      ],
+      "skillIds": [
+        "static-site-architecture",
+        "interactive-frontend-architecture"
+      ]
+    },
+    {
+      "key": "skills:cloud-security",
+      "collection": "skills",
+      "id": "cloud-security",
+      "slug": "cloud-security",
+      "lang": "en",
+      "title": "Cloud Security",
+      "categoryIds": [
+        "cloud-security"
+      ],
+      "toolIds": [
+        "aws",
+        "terraform"
+      ]
+    },
+    {
+      "key": "skills:detection-engineering",
+      "collection": "skills",
+      "id": "detection-engineering",
+      "slug": "detection-engineering",
+      "lang": "en",
+      "title": "Detection Engineering",
+      "tagIds": [
+        "threat-detection"
+      ]
+    },
+    {
+      "key": "skills:devsecops",
+      "collection": "skills",
+      "id": "devsecops",
+      "slug": "devsecops",
+      "lang": "en",
+      "title": "DevSecOps",
+      "categoryIds": [
+        "devsecops"
+      ],
+      "tagIds": [
+        "ci-cd",
+        "sbom"
+      ],
+      "toolIds": [
+        "github-actions",
+        "trivy",
+        "syft",
+        "grype"
+      ]
+    },
+    {
+      "key": "skills:interactive-frontend-architecture",
+      "collection": "skills",
+      "id": "interactive-frontend-architecture",
+      "slug": "interactive-frontend-architecture",
+      "lang": "en",
+      "title": "Interactive Frontend Architecture",
+      "categoryIds": [
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "threejs",
+        "astro"
+      ],
+      "toolIds": [
+        "typescript",
+        "threejs",
+        "astro"
+      ]
+    },
+    {
+      "key": "skills:kubernetes-platform-engineering",
+      "collection": "skills",
+      "id": "kubernetes-platform-engineering",
+      "slug": "kubernetes-platform-engineering",
+      "lang": "en",
+      "title": "Kubernetes Platform Engineering",
+      "categoryIds": [
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "kubernetes"
+      ],
+      "toolIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "key": "skills:software-supply-chain-security",
+      "collection": "skills",
+      "id": "software-supply-chain-security",
+      "slug": "software-supply-chain-security",
+      "lang": "en",
+      "title": "Software Supply Chain Security",
+      "categoryIds": [
+        "supply-chain-security"
+      ],
+      "tagIds": [
+        "sbom"
+      ],
+      "toolIds": [
+        "syft",
+        "grype",
+        "trivy"
+      ]
+    },
+    {
+      "key": "skills:static-site-architecture",
+      "collection": "skills",
+      "id": "static-site-architecture",
+      "slug": "static-site-architecture",
+      "lang": "en",
+      "title": "Static Site Architecture",
+      "tagIds": [
+        "astro"
+      ],
+      "toolIds": [
+        "astro"
+      ]
+    },
+    {
+      "key": "socialLinks:links",
+      "collection": "socialLinks",
+      "id": "links",
+      "slug": "links",
+      "lang": "en",
+      "title": "Social Links",
+      "url": "/en/contact"
+    },
+    {
+      "key": "tags:astro",
+      "collection": "tags",
+      "id": "astro",
+      "slug": "astro",
+      "lang": "en",
+      "title": "Astro"
+    },
+    {
+      "key": "tags:aws",
+      "collection": "tags",
+      "id": "aws",
+      "slug": "aws",
+      "lang": "en",
+      "title": "AWS"
+    },
+    {
+      "key": "tags:ci-cd",
+      "collection": "tags",
+      "id": "ci-cd",
+      "slug": "ci-cd",
+      "lang": "en",
+      "title": "CI/CD"
+    },
+    {
+      "key": "tags:fermyon",
+      "collection": "tags",
+      "id": "fermyon",
+      "slug": "fermyon",
+      "lang": "en",
+      "title": "Fermyon"
+    },
+    {
+      "key": "tags:gitops",
+      "collection": "tags",
+      "id": "gitops",
+      "slug": "gitops",
+      "lang": "en",
+      "title": "GitOps"
+    },
+    {
+      "key": "tags:kubernetes",
+      "collection": "tags",
+      "id": "kubernetes",
+      "slug": "kubernetes",
+      "lang": "en",
+      "title": "Kubernetes"
+    },
+    {
+      "key": "tags:sbom",
+      "collection": "tags",
+      "id": "sbom",
+      "slug": "sbom",
+      "lang": "en",
+      "title": "SBOM"
+    },
+    {
+      "key": "tags:spin",
+      "collection": "tags",
+      "id": "spin",
+      "slug": "spin",
+      "lang": "en",
+      "title": "Spin"
+    },
+    {
+      "key": "tags:threat-detection",
+      "collection": "tags",
+      "id": "threat-detection",
+      "slug": "threat-detection",
+      "lang": "en",
+      "title": "Threat Detection"
+    },
+    {
+      "key": "tags:threejs",
+      "collection": "tags",
+      "id": "threejs",
+      "slug": "threejs",
+      "lang": "en",
+      "title": "Three.js"
+    },
+    {
+      "key": "tags:wasm",
+      "collection": "tags",
+      "id": "wasm",
+      "slug": "wasm",
+      "lang": "en",
+      "title": "WebAssembly"
+    },
+    {
+      "key": "tools:astro",
+      "collection": "tools",
+      "id": "astro",
+      "slug": "astro",
+      "lang": "en",
+      "title": "Astro",
+      "categoryIds": [
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "astro"
+      ]
+    },
+    {
+      "key": "tools:aws",
+      "collection": "tools",
+      "id": "aws",
+      "slug": "aws",
+      "lang": "en",
+      "title": "AWS",
+      "categoryIds": [
+        "cloud-security"
+      ],
+      "tagIds": [
+        "aws"
+      ]
+    },
+    {
+      "key": "tools:cilium",
+      "collection": "tools",
+      "id": "cilium",
+      "slug": "cilium",
+      "lang": "en",
+      "title": "Cilium",
+      "categoryIds": [
+        "kubernetes-security"
+      ]
+    },
+    {
+      "key": "tools:fermyon",
+      "collection": "tools",
+      "id": "fermyon",
+      "slug": "fermyon",
+      "lang": "en",
+      "title": "Fermyon",
+      "categoryIds": [
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "fermyon",
+        "wasm"
+      ]
+    },
+    {
+      "key": "tools:github-actions",
+      "collection": "tools",
+      "id": "github-actions",
+      "slug": "github-actions",
+      "lang": "en",
+      "title": "GitHub Actions",
+      "categoryIds": [
+        "devsecops"
+      ],
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "key": "tools:grype",
+      "collection": "tools",
+      "id": "grype",
+      "slug": "grype",
+      "lang": "en",
+      "title": "Grype",
+      "categoryIds": [
+        "supply-chain-security"
+      ],
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "key": "tools:kubernetes",
+      "collection": "tools",
+      "id": "kubernetes",
+      "slug": "kubernetes",
+      "lang": "en",
+      "title": "Kubernetes",
+      "categoryIds": [
+        "platform-engineering",
+        "kubernetes-security"
+      ],
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "key": "tools:nanostores",
+      "collection": "tools",
+      "id": "nanostores",
+      "slug": "nanostores",
+      "lang": "en",
+      "title": "Nanostores",
+      "categoryIds": [
+        "creative-frontend"
+      ]
+    },
+    {
+      "key": "tools:spin",
+      "collection": "tools",
+      "id": "spin",
+      "slug": "spin",
+      "lang": "en",
+      "title": "Spin",
+      "categoryIds": [
+        "platform-engineering"
+      ],
+      "tagIds": [
+        "spin",
+        "wasm"
+      ]
+    },
+    {
+      "key": "tools:syft",
+      "collection": "tools",
+      "id": "syft",
+      "slug": "syft",
+      "lang": "en",
+      "title": "Syft",
+      "categoryIds": [
+        "supply-chain-security"
+      ],
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "key": "tools:terraform",
+      "collection": "tools",
+      "id": "terraform",
+      "slug": "terraform",
+      "lang": "en",
+      "title": "Terraform",
+      "categoryIds": [
+        "platform-engineering"
+      ]
+    },
+    {
+      "key": "tools:threejs",
+      "collection": "tools",
+      "id": "threejs",
+      "slug": "threejs",
+      "lang": "en",
+      "title": "Three.js",
+      "categoryIds": [
+        "creative-frontend"
+      ],
+      "tagIds": [
+        "threejs"
+      ]
+    },
+    {
+      "key": "tools:trivy",
+      "collection": "tools",
+      "id": "trivy",
+      "slug": "trivy",
+      "lang": "en",
+      "title": "Trivy",
+      "categoryIds": [
+        "supply-chain-security"
+      ],
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "key": "tools:typescript",
+      "collection": "tools",
+      "id": "typescript",
+      "slug": "typescript",
+      "lang": "en",
+      "title": "TypeScript",
+      "categoryIds": [
+        "creative-frontend"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "tags:ci-cd",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "tools:typescript",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "skills:static-site-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "blog:practical-content-graph-for-devsecops-portfolio",
+      "to": "skills:devsecops",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "tags:threejs",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "tags:wasm",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "tools:typescript",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "skills:static-site-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "skills:interactive-frontend-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "caseStudies:control-room-portfolio-content-graph",
+      "to": "skills:devsecops",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:az-500",
+      "to": "categories:cloud-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:cka",
+      "to": "tags:kubernetes",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:cka",
+      "to": "categories:kubernetes-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:cka",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:cks",
+      "to": "tags:kubernetes",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:cks",
+      "to": "categories:kubernetes-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "certifications:cks",
+      "to": "categories:cloud-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "experience:skyguide-antaes-2025",
+      "to": "tags:ci-cd",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "experience:skyguide-antaes-2025",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "experience:skyguide-antaes-2025",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "skills:static-site-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "projects:control-room-portfolio",
+      "type": "projectIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-content-collections",
+      "to": "caseStudies:control-room-portfolio-content-graph",
+      "type": "caseStudyIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-view-transitions",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-view-transitions",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-view-transitions",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-view-transitions",
+      "to": "skills:interactive-frontend-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:astro-view-transitions",
+      "to": "projects:control-room-portfolio",
+      "type": "projectIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "tags:spin",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "tags:fermyon",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "tags:wasm",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "tools:spin",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "tools:fermyon",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "skills:static-site-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:fermyon-spin-documentation",
+      "to": "projects:control-room-portfolio",
+      "type": "projectIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:khronos-gltf-overview",
+      "to": "tags:threejs",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:khronos-gltf-overview",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:khronos-gltf-overview",
+      "to": "tools:threejs",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:khronos-gltf-overview",
+      "to": "skills:interactive-frontend-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:khronos-gltf-overview",
+      "to": "projects:control-room-portfolio",
+      "type": "projectIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "tags:kubernetes",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "categories:kubernetes-platform",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "tools:kubernetes",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "skills:kubernetes-platform-engineering",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:kubernetes-documentation",
+      "to": "skills:devsecops",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "tags:ci-cd",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "categories:supply-chain-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "skills:software-supply-chain-security",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "skills:devsecops",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:slsa-framework",
+      "to": "projects:control-room-portfolio",
+      "type": "projectIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:threejs-documentation",
+      "to": "tags:threejs",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:threejs-documentation",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:threejs-documentation",
+      "to": "tools:threejs",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:threejs-documentation",
+      "to": "skills:interactive-frontend-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:threejs-documentation",
+      "to": "projects:control-room-portfolio",
+      "type": "projectIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:trivy-documentation",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:trivy-documentation",
+      "to": "categories:supply-chain-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:trivy-documentation",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:trivy-documentation",
+      "to": "tools:trivy",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:trivy-documentation",
+      "to": "skills:software-supply-chain-security",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "knowledgeResources:trivy-documentation",
+      "to": "skills:devsecops",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "cvFormats:recruiter",
+      "type": "cvFormatIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "cvFormats:ats",
+      "type": "cvFormatIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "cvFormats:one-page",
+      "type": "cvFormatIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "cvFormats:full-technical",
+      "type": "cvFormatIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "cvFormats:modern",
+      "type": "cvFormatIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "cvFormats:europass",
+      "type": "cvFormatIds",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "projects:control-room-portfolio",
+      "type": "featuredProject",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "caseStudies:control-room-portfolio-content-graph",
+      "type": "featuredCaseStudy",
+      "source": "reference"
+    },
+    {
+      "from": "profile:primary",
+      "to": "blog:practical-content-graph-for-devsecops-portfolio",
+      "type": "featuredBlog",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tags:threejs",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tags:wasm",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tags:fermyon",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tools:typescript",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tools:threejs",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tools:fermyon",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "tools:spin",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "skills:static-site-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "projects:control-room-portfolio",
+      "to": "skills:interactive-frontend-architecture",
+      "type": "skillIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:cloud-security",
+      "to": "categories:cloud-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:cloud-security",
+      "to": "tools:aws",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:cloud-security",
+      "to": "tools:terraform",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:detection-engineering",
+      "to": "tags:threat-detection",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "tags:ci-cd",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "tools:github-actions",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "tools:trivy",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "tools:syft",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:devsecops",
+      "to": "tools:grype",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:interactive-frontend-architecture",
+      "to": "tags:threejs",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:interactive-frontend-architecture",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:interactive-frontend-architecture",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:interactive-frontend-architecture",
+      "to": "tools:typescript",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:interactive-frontend-architecture",
+      "to": "tools:threejs",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:interactive-frontend-architecture",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:kubernetes-platform-engineering",
+      "to": "tags:kubernetes",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:kubernetes-platform-engineering",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:kubernetes-platform-engineering",
+      "to": "tools:kubernetes",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:software-supply-chain-security",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:software-supply-chain-security",
+      "to": "categories:supply-chain-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:software-supply-chain-security",
+      "to": "tools:syft",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:software-supply-chain-security",
+      "to": "tools:grype",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:software-supply-chain-security",
+      "to": "tools:trivy",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:static-site-architecture",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "skills:static-site-architecture",
+      "to": "tools:astro",
+      "type": "toolIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:astro",
+      "to": "tags:astro",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:astro",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:aws",
+      "to": "tags:aws",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:aws",
+      "to": "categories:cloud-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:cilium",
+      "to": "categories:kubernetes-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:fermyon",
+      "to": "tags:fermyon",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:fermyon",
+      "to": "tags:wasm",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:fermyon",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:github-actions",
+      "to": "tags:ci-cd",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:github-actions",
+      "to": "categories:devsecops",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:grype",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:grype",
+      "to": "categories:supply-chain-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:kubernetes",
+      "to": "tags:kubernetes",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:kubernetes",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:kubernetes",
+      "to": "categories:kubernetes-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:nanostores",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:spin",
+      "to": "tags:spin",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:spin",
+      "to": "tags:wasm",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:spin",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:syft",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:syft",
+      "to": "categories:supply-chain-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:terraform",
+      "to": "categories:platform-engineering",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:threejs",
+      "to": "tags:threejs",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:threejs",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:trivy",
+      "to": "tags:sbom",
+      "type": "tagIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:trivy",
+      "to": "categories:supply-chain-security",
+      "type": "categoryIds",
+      "source": "reference"
+    },
+    {
+      "from": "tools:typescript",
+      "to": "categories:creative-frontend",
+      "type": "categoryIds",
+      "source": "reference"
+    }
+  ],
+  "stats": {
+    "collectionCounts": {
+      "blog": 1,
+      "caseStudies": 1,
+      "categories": 13,
+      "certifications": 3,
+      "contactChannels": 1,
+      "cvFormats": 6,
+      "experience": 1,
+      "knowledgeResources": 8,
+      "profile": 1,
+      "projects": 1,
+      "skills": 7,
+      "socialLinks": 1,
+      "tags": 11,
+      "tools": 14
+    },
+    "totalNodes": 69,
+    "totalEdges": 156
+  },
+  "warnings": [
+    {
+      "nodeKey": "certifications:az-500",
+      "file": "certifications/en/az-500.md",
+      "message": "Entry contains needsConfirmation."
+    },
+    {
+      "nodeKey": "certifications:cka",
+      "file": "certifications/en/cka.md",
+      "message": "Entry contains needsConfirmation."
+    },
+    {
+      "nodeKey": "certifications:cks",
+      "file": "certifications/en/cks.md",
+      "message": "Entry contains needsConfirmation."
+    },
+    {
+      "nodeKey": "categories:ai-security",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "categories:gitops-delivery",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "categories:hybrid-edge",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "categories:runtime-security",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "categories:secops",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "categories:supply-chain",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "contactChannels:channels",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "socialLinks:links",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    },
+    {
+      "nodeKey": "tags:gitops",
+      "message": "Orphan node (no incoming/outgoing edges)."
+    }
+  ]
+}

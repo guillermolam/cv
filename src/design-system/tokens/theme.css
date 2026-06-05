@@ -1,0 +1,41 @@
+/*
+Theme tokens (dark-mode first).
+
+These tokens provide semantic aliases that components and UnoCSS shortcuts can rely on.
+They intentionally map to existing site semantic tokens to avoid breaking the current UI.
+*/
+
+:root {
+  --ds-color-bg: var(--color-bg);
+  --ds-color-surface: var(--color-surface-1);
+  --ds-color-surface-raised: var(--color-surface-2);
+  --ds-color-border: var(--color-border);
+  --ds-color-text: var(--color-text);
+  --ds-color-text-muted: var(--color-text-muted);
+  --ds-color-accent: var(--color-cta);
+
+  --ds-color-success: var(--color-success);
+  --ds-color-warning: var(--color-warning);
+  --ds-color-danger: var(--color-danger);
+  --ds-color-info: var(--color-link);
+
+  --ds-color-security: var(--color-cta);
+  --ds-color-cloud: var(--color-cta);
+  --ds-color-infra: var(--color-link);
+  --ds-color-automation: var(--color-link-hover);
+  --ds-color-compliance: var(--color-warning);
+
+  --ds-retro-shell-bg: color-mix(in oklab, var(--ds-color-surface-raised), var(--ds-color-bg) 35%);
+  --ds-retro-shell-border: color-mix(in oklab, var(--ds-color-border), black 35%);
+  --ds-retro-shell-highlight: color-mix(in oklab, var(--ds-color-text), transparent 85%);
+  --ds-retro-crt-glass: color-mix(in oklab, var(--ds-color-surface), transparent 25%);
+  --ds-retro-crt-scanline: 0.06;
+
+  --ds-keycap-bg: var(--ds-retro-shell-bg);
+  --ds-keycap-top: color-mix(in oklab, var(--ds-color-surface-raised), white 6%);
+  --ds-keycap-side: color-mix(in oklab, var(--ds-color-surface-raised), black 22%);
+  --ds-keycap-underside: color-mix(in oklab, var(--ds-color-bg), black 55%);
+  --ds-keycap-border: color-mix(in oklab, var(--ds-color-border), black 25%);
+  --ds-keycap-highlight: color-mix(in oklab, white, transparent 88%);
+  --ds-keycap-focus-glow: color-mix(in oklab, var(--ds-color-accent), transparent 72%);
+}

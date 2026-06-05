@@ -1,0 +1,56 @@
+---
+import UiSurface from '../ui/UiSurface.astro';
+
+type FrameDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type Props = {
+  id?: string;
+  class?: string;
+  variant?: 'default' | 'hud';
+  depth?: FrameDepth;
+  density?: 'normal' | 'dense';
+  showGrid?: boolean;
+  showTelemetry?: boolean;
+  labelledBy?: string;
+};
+
+const {
+  id,
+  class: className,
+  variant = 'default',
+  depth = 'raised',
+  density = 'normal',
+  showGrid = true,
+  showTelemetry = false,
+  labelledBy,
+} = Astro.props as Props;
+---
+
+<UiSurface
+  as="section"
+  id={id}
+  class={className}
+  variant="panel"
+  depth={depth}
+  interactive={false}
+  selected={false}
+  disabled={false}
+  motion="none"
+  attrs={{
+    'data-ui-control-room-frame': '',
+    'data-variant': variant,
+    'data-depth': depth,
+    'data-density': density,
+    'data-show-grid': showGrid ? 'true' : 'false',
+    'data-show-telemetry': showTelemetry ? 'true' : 'false',
+    ...(labelledBy ? { 'aria-labelledby': labelledBy } : {}),
+  }}
+>
+  <div data-ui-frame-grid aria-hidden="true"></div>
+  <div data-ui-frame-telemetry aria-hidden="true">
+    <span>Telemetry</span>
+    <span>Status: nominal</span>
+  </div>
+  <div data-ui-frame-content>
+    <slot />
+  </div>
+</UiSurface>

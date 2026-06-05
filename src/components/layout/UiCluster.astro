@@ -1,0 +1,31 @@
+---
+type Props = {
+  id?: string;
+  class?: string;
+  gap?: string;
+  align?: 'center' | 'start';
+  justify?: 'flex-start' | 'center' | 'space-between';
+  labelledBy?: string;
+};
+
+const { id, class: className, gap, align = 'center', justify = 'flex-start', labelledBy } = Astro.props as Props;
+
+const styleParts: string[] = [];
+if (gap) styleParts.push(`--ui-cluster-gap:${gap}`);
+styleParts.push(`--ui-cluster-align:${align === 'start' ? 'flex-start' : 'center'}`);
+styleParts.push(`--ui-cluster-justify:${justify}`);
+const style = styleParts.length > 0 ? styleParts.join(';') : undefined;
+---
+
+<div
+  id={id}
+  class={className}
+  data-ui-cluster
+  data-gap={gap}
+  data-align={align}
+  data-justify={justify}
+  aria-labelledby={labelledBy}
+  style={style}
+>
+  <slot />
+</div>

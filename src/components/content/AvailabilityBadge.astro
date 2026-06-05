@@ -1,0 +1,13 @@
+---
+export type Props = {
+  availability: 'available' | 'coming-soon';
+};
+
+const { availability } = Astro.props as Props;
+const label = availability === 'available' ? 'Available' : 'Coming soon';
+---
+
+<span class="station-chip" aria-label={`CV format availability: ${label}`}>
+  {label}
+</span>
+

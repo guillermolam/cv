@@ -2,6 +2,9 @@
 import '../styles/global.css';
 import SocialLinks from '../components/SocialLinks.astro';
 import type { Lang } from '../lib/i18n';
+import SectionNavRail, { type NavRailItem } from '../components/nav/SectionNavRail.astro';
+import type { NavSectionId } from '../components/nav/NavSectionGlyph.astro';
+import LanguageDial from '../components/i18n/LanguageDial.astro';
 
 type Props = {
   title: string;
@@ -25,13 +28,14 @@ const stripLangPrefix = (path: string) => {
 
 const pathWithoutLang = stripLangPrefix(currentPath);
 
+const primaryPrefix = `/${lang}`;
 const nav = [
-  { href: `${prefix}/`, label: 'Home' },
-  { href: `${prefix}/about`, label: 'About' },
-  { href: `${prefix}/cv`, label: 'CV' },
-  { href: `${prefix}/portfolio`, label: 'Portfolio' },
-  { href: `${prefix}/blog`, label: 'Blog' },
-  { href: `${prefix}/contact`, label: 'Contact' }
+  { href: `${primaryPrefix}/`, label: 'Whoami', id: 'whoami' as const },
+  { href: `${primaryPrefix}/toolchain`, label: 'Toolchain', id: 'toolchain' as const },
+  { href: `${primaryPrefix}/experience`, label: 'Experience', id: 'experience' as const },
+  { href: `${primaryPrefix}/blog`, label: 'Tutorials', id: 'tutorials' as const },
+  { href: `${primaryPrefix}/knowledge`, label: 'Knowledge Center', id: 'knowledge' as const },
+  { href: `${primaryPrefix}/contact`, label: 'Contact', id: 'contact' as const },
 ];
 
 const langLinks: Array<{ code: Lang; href: string }> = [
@@ -40,6 +44,13 @@ const langLinks: Array<{ code: Lang; href: string }> = [
   { code: 'fr', href: `/fr${pathWithoutLang}` },
   { code: 'de', href: `/de${pathWithoutLang}` }
 ];
+
+const navRailItems: NavRailItem[] = nav.map((item) => ({
+  id: item.id as NavSectionId,
+  label: item.label,
+  href: item.href,
+  current: stripLangPrefix(item.href) === pathWithoutLang,
+}));
 ---
 
 <!doctype html>
@@ -48,6 +59,7 @@ const langLinks: Array<{ code: Lang; href: string }> = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {description ? <meta name="description" content={description} /> : null}
   </head>
   <body>
@@ -57,28 +69,9 @@ const langLinks: Array<{ code: Lang; href: string }> = [
       <div class="container site-header-inner">
         <a class="brand" href={`${prefix}/`}>{siteName}</a>
 
-        <nav class="nav" aria-label="Primary">
-          {nav.map((item) => (
-            <a
-              href={item.href}
-              aria-current={currentPath === item.href ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+        <SectionNavRail items={navRailItems} label="Primary" />
 
-        <nav class="lang-nav" aria-label="Language">
-          {langLinks.map((l) => (
-            <a
-              class:list={['lang-link', l.code === lang ? 'lang-link-active' : undefined]}
-              href={l.href}
-              lang={l.code}
-            >
-              {l.code.toUpperCase()}
-            </a>
-          ))}
-        </nav>
+        <LanguageDial lang={lang} links={langLinks} />
       </div>
     </header>
 

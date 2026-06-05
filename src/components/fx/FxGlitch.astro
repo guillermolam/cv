@@ -1,0 +1,88 @@
+---
+/**
+ * FxGlitch — RGB-split / clip-path glitch wrapper.
+ *
+ * Wraps arbitrary content (slot). Glitch can be triggered by adding
+ * data-glitch="true" to the element (e.g. on hover/route change via JS),
+ * or set trigger="hover" for a pure-CSS hover glitch.
+ *
+ * Fully disabled under prefers-reduced-motion (renders content untouched).
+ */
+export type Props = {
+  trigger?: 'manual' | 'hover';
+  intensity?: 'normal' | 'strong';
+  class?: string;
+  /** text content to duplicate for the RGB split layers (optional) */
+  text?: string;
+};
+
+const { trigger = 'manual', intensity = 'normal', class: className, text } = Astro.props as Props;
+
+const offsetVar =
+  intensity === 'strong' ? 'var(--fx-glitch-offset-strong)' : 'var(--fx-glitch-offset)';
+---
+
+<span
+  class:list={['fx-glitch', `fx-glitch--${trigger}`, className]}
+  data-fx-glitch
+  data-text={text}
+>
+  <slot />
+</span>
+
+<style define:vars={{ glitchOffset: offsetVar }}>
+  .fx-glitch {
+    position: relative;
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fx-glitch::before,
+    .fx-glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      clip-path: inset(0 0 0 0);
+    }
+
+    .fx-glitch::before {
+      color: var(--fx-glitch-r);
+      transform: translateX(calc(var(--glitchOffset) * -1));
+    }
+
+    .fx-glitch::after {
+      color: var(--fx-glitch-b);
+      transform: translateX(var(--glitchOffset));
+    }
+
+    /* Hover trigger */
+    .fx-glitch--hover:hover::before,
+    .fx-glitch--hover:hover::after,
+    /* Manual trigger via JS */
+    .fx-glitch[data-glitch='true']::before,
+    .fx-glitch[data-glitch='true']::after {
+      opacity: 0.9;
+      animation: fx-glitch-jitter 0.32s steps(2) 2;
+    }
+  }
+
+  @keyframes fx-glitch-jitter {
+    0% {
+      clip-path: inset(0 0 78% 0);
+    }
+    25% {
+      clip-path: inset(40% 0 30% 0);
+    }
+    50% {
+      clip-path: inset(70% 0 8% 0);
+    }
+    75% {
+      clip-path: inset(20% 0 55% 0);
+    }
+    100% {
+      clip-path: inset(0 0 78% 0);
+    }
+  }
+</style>

@@ -15,6 +15,7 @@ dist/
 .vite/
 .cache/
 .temp/
+.pnpm-store/
 
 # Local environment
 .env

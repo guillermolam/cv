@@ -1,0 +1,107 @@
+---
+import UiIcon from './UiIcon.astro';
+import UiSurface from './UiSurface.astro';
+import UiBadge from './UiBadge.astro';
+
+type TimelineDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+  dateLabel?: string;
+  status?: string;
+  href?: string;
+  icon?: string;
+  iconLabel?: string;
+  variant?: 'default' | 'panel';
+  depth?: TimelineDepth;
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  title,
+  subtitle,
+  description,
+  startDate,
+  endDate,
+  dateLabel,
+  status,
+  href,
+  icon,
+  iconLabel,
+  variant = 'panel',
+  depth = 'raised',
+  motion = 'hover-lift',
+  retro = false,
+} = Astro.props as Props;
+
+const isIsoLike = (value: string) => /^\d{4}(-\d{2})?(-\d{2})?$/.test(value);
+const startDateTime = startDate && isIsoLike(startDate) ? startDate : undefined;
+const endDateTime = endDate && isIsoLike(endDate) ? endDate : undefined;
+
+const isLink = typeof href === 'string' && href.length > 0;
+---
+
+<UiSurface
+  as="article"
+  id={id}
+  class={className}
+  variant={variant === 'panel' ? 'panel' : 'surface'}
+  depth={depth}
+  interactive={isLink}
+  selected={false}
+  disabled={false}
+  motion={motion}
+  retro={retro}
+  attrs={{
+    'data-ui-timeline-item': '',
+    'data-variant': variant,
+    'data-depth': depth,
+    'data-motion': motion,
+    'data-retro': retro ? 'true' : 'false',
+  }}
+>
+  <div data-ui-timeline-rail aria-hidden="true"></div>
+  <div data-ui-timeline-dot aria-hidden="true"></div>
+
+  <header>
+    <div data-ui-card-eyebrow>
+      {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+      {dateLabel ? (
+        <span>{dateLabel}</span>
+      ) : (
+        <span>
+          {startDate ? (startDateTime ? <time datetime={startDateTime}>{startDate}</time> : <span>{startDate}</span>) : null}
+          {startDate || endDate ? <span aria-hidden="true"> — </span> : null}
+          {endDate ? (endDateTime ? <time datetime={endDateTime}>{endDate}</time> : <span>{endDate}</span>) : null}
+        </span>
+      )}
+    </div>
+
+    <h3 data-ui-card-title>{isLink ? <a href={href}>{title}</a> : <span>{title}</span>}</h3>
+    {subtitle ? <p data-ui-card-description>{subtitle}</p> : null}
+  </header>
+
+  {status ? (
+    <div>
+      <UiBadge variant="neutral" size="sm" depth="flat">
+        {status}
+      </UiBadge>
+    </div>
+  ) : null}
+
+  {description ? <p>{description}</p> : null}
+
+  {Astro.slots.has('meta') ? <div data-ui-card-meta><slot name="meta" /></div> : null}
+  {Astro.slots.has('actions') ? <div data-ui-card-actions><slot name="actions" /></div> : null}
+  {Astro.slots.has('footer') ? <footer data-ui-card-footer><slot name="footer" /></footer> : null}
+  <slot />
+</UiSurface>

@@ -1,0 +1,45 @@
+---
+import UiButton from './UiButton.astro';
+
+export type UiTab = {
+  id: string;
+  label: string;
+  href: string;
+  selected?: boolean;
+  icon?: string;
+  iconLabel?: string;
+  disabled?: boolean;
+};
+
+type Props = {
+  id?: string;
+  class?: string;
+  tabs: readonly UiTab[];
+  variant?: 'default' | 'compact';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  ariaLabel?: string;
+};
+
+const { id, class: className, tabs, variant = 'default', depth = 'flat', ariaLabel = 'Tabs' } = Astro.props as Props;
+---
+
+<nav id={id} class={className} data-ui-tabs data-variant={variant} data-depth={depth} aria-label={ariaLabel}>
+  {tabs.map((tab) => (
+    <UiButton
+      href={tab.href}
+      variant={tab.selected ? 'primary' : 'ghost'}
+      size={variant === 'compact' ? 'sm' : 'md'}
+      depth={depth}
+      disabled={tab.disabled}
+      icon={tab.icon}
+      iconLabel={tab.iconLabel}
+      attrs={{
+        'data-tab-id': tab.id,
+        'data-tab-selected': tab.selected ? 'true' : 'false',
+        ...(tab.selected ? { 'aria-current': 'page' } : {}),
+      }}
+    >
+      {tab.label}
+    </UiButton>
+  ))}
+</nav>

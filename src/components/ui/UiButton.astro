@@ -1,0 +1,123 @@
+---
+import UiIcon from './UiIcon.astro';
+
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'security' | 'cloud' | 'keycap' | 'terminal' | 'control';
+type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type ButtonMotion = 'none' | 'hover-lift';
+type ButtonType = 'button' | 'submit' | 'reset';
+type IconPosition = 'leading' | 'trailing';
+
+type Props = {
+  id?: string;
+  class?: string;
+  attrs?: Record<string, string | undefined>;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  depth?: ButtonDepth;
+  href?: string;
+  type?: ButtonType;
+  disabled?: boolean;
+  selected?: boolean;
+  icon?: string;
+  iconPosition?: IconPosition;
+  iconLabel?: string;
+  motion?: ButtonMotion;
+  ariaLabel?: string;
+  target?: string;
+  rel?: string;
+  retro?: boolean;
+  keycap?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  attrs,
+  variant = 'secondary',
+  size = 'md',
+  depth = 'raised',
+  href,
+  type = 'button',
+  disabled = false,
+  selected = false,
+  icon,
+  iconPosition = 'leading',
+  iconLabel,
+  motion = 'hover-lift',
+  ariaLabel,
+  target,
+  rel,
+  retro = false,
+  keycap = false,
+} = Astro.props as Props;
+
+const isLink = typeof href === 'string' && href.length > 0;
+const hasDefaultSlot = Astro.slots.has('default');
+const isIconOnly = Boolean(icon) && !hasDefaultSlot;
+const resolvedAriaLabel = ariaLabel ?? iconLabel;
+const isKeycap = keycap || variant === 'keycap';
+const isRetro = retro || isKeycap || variant === 'terminal' || variant === 'control';
+
+if (isIconOnly && (!resolvedAriaLabel || resolvedAriaLabel.trim().length === 0)) {
+  throw new Error('UiButton: ariaLabel (or iconLabel) is required when rendering an icon-only button/link.');
+}
+
+const safeRel = (() => {
+  if (!isLink) return rel;
+  if (target !== '_blank') return rel;
+  const base = (rel ?? '').split(/\s+/).filter(Boolean);
+  const add = (token: string) => {
+    if (!base.includes(token)) base.push(token);
+  };
+  add('noopener');
+  add('noreferrer');
+  return base.join(' ');
+})();
+
+const commonAttrs = {
+  id,
+  class: className,
+  ...((attrs ?? {}) as Record<string, string | undefined>),
+  'data-ui-button': '',
+  'data-variant': variant,
+  'data-size': size,
+  'data-depth': depth,
+  'data-motion': motion,
+  'data-selected': selected ? 'true' : 'false',
+  'data-disabled': disabled ? 'true' : 'false',
+  'data-retro': isRetro ? 'true' : 'false',
+  'data-keycap': isKeycap ? 'true' : 'false',
+  'data-motion-state': 'idle',
+  ...(resolvedAriaLabel ? { 'aria-label': resolvedAriaLabel } : {}),
+} as const;
+---
+
+{isLink ? (
+  <a
+    {...commonAttrs}
+    href={disabled ? undefined : href}
+    target={target}
+    rel={safeRel}
+    aria-disabled={disabled ? 'true' : undefined}
+    tabindex={disabled ? '-1' : undefined}
+  >
+    {icon && iconPosition === 'leading' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+    ) : null}
+    {hasDefaultSlot ? <span data-ui-button-content><slot /></span> : null}
+    {icon && iconPosition === 'trailing' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+    ) : null}
+  </a>
+) : (
+  <button {...commonAttrs} type={type} disabled={disabled}>
+    {icon && iconPosition === 'leading' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+    ) : null}
+    {hasDefaultSlot ? <span data-ui-button-content><slot /></span> : null}
+    {icon && iconPosition === 'trailing' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+    ) : null}
+  </button>
+)}

@@ -1,0 +1,30 @@
+/*
+Motion tokens (duration + easing).
+
+These tokens are consumed by CSS transitions and by GSAP utilities (future phases).
+Reduced-motion defaults are included so components can align without JS.
+*/
+
+:root {
+  --ds-duration-instant: 1ms;
+  --ds-duration-fast: var(--motion-fast);
+  --ds-duration-normal: var(--motion-standard);
+  --ds-duration-deliberate: var(--motion-emphasis);
+  --ds-duration-route: var(--motion-scene);
+
+  --ds-ease-soft-out: var(--ease-standard);
+  --ds-ease-press-in: var(--ease-standard);
+  --ds-ease-spring-out: var(--ease-emphasis);
+  --ds-ease-magnetic: var(--ease-emphasis);
+
+  --ds-ease-cinematic-reveal: var(--ds-ease-soft-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-duration-fast: 1ms;
+    --ds-duration-normal: 1ms;
+    --ds-duration-deliberate: 1ms;
+    --ds-duration-route: 1ms;
+  }
+}

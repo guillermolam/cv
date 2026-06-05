@@ -9,7 +9,7 @@ export type SocialLink = {
 export const site: {
   name: string;
   role: string;
-  profile: { initials: string; photoPath: string };
+  profile: { initials: string; photoPath: string; avatarModelPath: string };
   social: SocialLink[];
 } = {
   name: 'Guillermo Lam Martín',
@@ -17,6 +17,7 @@ export const site: {
   profile: {
     initials: 'GL',
     photoPath: '/images/profile/guillermo-portrait.png',
+    avatarModelPath: '/3d/guillermolam-avatar.glb',
   },
   social: [
     { kind: 'github', label: 'GitHub', href: 'https://github.com/guillermolam' },

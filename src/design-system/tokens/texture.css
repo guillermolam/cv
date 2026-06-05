@@ -1,0 +1,57 @@
+/*
+Texture / FX token layer.
+
+Purpose:
+- Provide a stable namespace (`--fx-*`) for the analog/vintage texture vocabulary:
+  grain, scanlines, rust/patina, glitch, glow bloom.
+- Consumed by the reusable FX components in src/components/fx/.
+- All motion-bearing values degrade under prefers-reduced-motion (see component CSS).
+*/
+
+:root {
+  /* ── Grain / noise ───────────────────────────────────────────────────── */
+  --fx-grain-opacity: 0.06;
+  --fx-grain-opacity-strong: 0.12;
+  --fx-grain-blend: soft-light;
+
+  /* ── Scanlines (reuse CRT token from theme) ──────────────────────────── */
+  --fx-scanline-alpha: var(--ds-retro-crt-scanline, 0.06);
+  --fx-scanline-gap: 3px;
+  --fx-scanline-blend: soft-light;
+
+  /* ── Glow / phosphor bloom ───────────────────────────────────────────── */
+  --fx-glow-accent: var(--accent-glow, rgba(76, 201, 240, 0.14));
+  --fx-glow-radius: 16px;
+  --fx-glow-radius-strong: 28px;
+
+  /* ── Glitch (RGB split offsets) ──────────────────────────────────────── */
+  --fx-glitch-offset: 2px;
+  --fx-glitch-offset-strong: 4px;
+  --fx-glitch-r: rgba(255, 60, 90, 0.55);
+  --fx-glitch-b: rgba(76, 201, 240, 0.55);
+
+  /* ── Rust / patina / vintage bronze metal ────────────────────────────── */
+  --fx-rust-base: #2a2018;
+  --fx-rust-mid: #5a3e29;
+  --fx-rust-hi: #8a5e38;
+  --fx-rust-oxide: #b3702f;
+  /* warm charcoal-bronze housing (matches the premium reference bezel) */
+  --fx-metal-base: #17140f;
+  --fx-metal-2: #221c14;
+  --fx-metal-bronze: #6b4f2e;
+  --fx-metal-edge: color-mix(in oklab, var(--fx-metal-bronze), #000 35%);
+  --fx-metal-highlight: color-mix(in oklab, #ffd9a0, transparent 84%);
+  --fx-screw: radial-gradient(
+    circle at 38% 34%,
+    color-mix(in oklab, #fff, transparent 70%) 0%,
+    color-mix(in oklab, var(--fx-metal-base), #000 30%) 42%,
+    #0c0a08 100%
+  );
+
+  /* ── Vignette / bezel inner shadow ───────────────────────────────────── */
+  --fx-vignette: radial-gradient(
+    120% 120% at 50% 45%,
+    transparent 58%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}

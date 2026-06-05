@@ -1,0 +1,89 @@
+---
+import UiIcon from './UiIcon.astro';
+import UiSurface from './UiSurface.astro';
+
+type PanelDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type PanelMotion = 'none' | 'hover-lift';
+type HeadingTag = 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+type Props = {
+  id?: string;
+  class?: string;
+  variant?: 'panel' | 'surface';
+  depth?: PanelDepth;
+  eyebrow?: string;
+  title?: string;
+  titleAs?: HeadingTag;
+  description?: string;
+  icon?: string;
+  iconLabel?: string;
+  interactive?: boolean;
+  selected?: boolean;
+  disabled?: boolean;
+  motion?: PanelMotion;
+  retro?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  variant = 'panel',
+  depth = 'raised',
+  eyebrow,
+  title,
+  titleAs = 'h3',
+  description,
+  icon,
+  iconLabel,
+  interactive = false,
+  selected = false,
+  disabled = false,
+  motion = 'none',
+  retro = false,
+} = Astro.props as Props;
+
+const TitleTag = titleAs;
+const hasHeaderSlot = Astro.slots.has('header');
+const hasActionsSlot = Astro.slots.has('actions');
+const hasFooterSlot = Astro.slots.has('footer');
+const hasHeaderContent = hasHeaderSlot || Boolean(eyebrow || title || description || icon || hasActionsSlot);
+---
+
+<UiSurface
+  as="section"
+  id={id}
+  class={className}
+  variant={variant === 'panel' ? 'panel' : 'surface'}
+  depth={depth}
+  interactive={interactive}
+  selected={selected}
+  disabled={disabled}
+  motion={motion}
+  retro={retro}
+  attrs={{ 'data-ui-panel': '' }}
+>
+  {hasHeaderContent ? (
+    <header data-ui-panel-header>
+      {hasHeaderSlot ? (
+        <slot name="header" />
+      ) : (
+        <div>
+          {eyebrow ? <span data-ui-panel-eyebrow>{eyebrow}</span> : null}
+          {title ? <TitleTag data-ui-panel-title>{title}</TitleTag> : null}
+          {description ? <p data-ui-panel-description>{description}</p> : null}
+        </div>
+      )}
+
+      <div data-ui-panel-actions>
+        {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+        {hasActionsSlot ? <slot name="actions" /> : null}
+      </div>
+    </header>
+  ) : null}
+
+  <div data-ui-panel-body>
+    <slot />
+  </div>
+
+  {hasFooterSlot ? <footer data-ui-panel-footer><slot name="footer" /></footer> : null}
+</UiSurface>

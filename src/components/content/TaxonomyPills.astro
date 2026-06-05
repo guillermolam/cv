@@ -1,0 +1,45 @@
+---
+export type Pill = {
+  label: string;
+  href?: string;
+};
+
+export type Props = {
+  label: string;
+  items: Pill[];
+};
+
+const { label, items } = Astro.props as Props;
+---
+
+<section class="card pad" aria-label={label}>
+  <h2 class="taxonomy-title">{label}</h2>
+  <div class="taxonomy-items">
+    {items.map((item) =>
+      item.href ? (
+        <a class="tag taxonomy-pill" href={item.href}>
+          {item.label}
+        </a>
+      ) : (
+        <span class="tag taxonomy-pill">{item.label}</span>
+      ),
+    )}
+  </div>
+</section>
+
+<style>
+  .taxonomy-title {
+    font-size: var(--font-size-3);
+    margin: 0 0 0.75rem;
+  }
+
+  .taxonomy-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .taxonomy-pill {
+    text-decoration: none;
+  }
+</style>

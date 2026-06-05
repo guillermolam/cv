@@ -1,0 +1,37 @@
+/*
+Depth tokens (3.5D / 3D cues).
+
+These are foundational values used by future components and UnoCSS shortcuts to create
+consistent depth without turning the UI into a pile of floating rectangles.
+*/
+
+:root {
+  --ds-depth-flat: 0;
+  --ds-depth-raised: 1;
+  --ds-depth-elevated: 2;
+  --ds-depth-floating: 3;
+  --ds-depth-modal: 4;
+
+  --ds-perspective-sm: 600px;
+  --ds-perspective-md: 900px;
+  --ds-perspective-lg: 1200px;
+
+  --ds-shadow-raised: 0 12px 30px var(--shadow-1);
+  --ds-shadow-elevated: 0 18px 44px var(--shadow-2);
+  --ds-shadow-floating: 0 26px 70px rgba(0, 0, 0, 0.62);
+
+  --ds-glow-accent: var(--accent-glow);
+
+  --ds-transform-hover: translate3d(0, -1px, 0);
+  --ds-transform-press: translate3d(0, 1px, 0) scale(0.99);
+
+  --ds-keycap-shadow-1: inset 0 1px 0 var(--ds-retro-shell-highlight);
+  --ds-keycap-shadow-2: 0 6px 0 var(--ds-keycap-side);
+  --ds-keycap-shadow-3: 0 18px 34px rgba(0, 0, 0, 0.58);
+  --ds-keycap-press-distance: 2px;
+  --ds-keycap-hover-lift: 1px;
+
+  --ds-panel-inset-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-color-border), transparent 35%),
+    inset 0 16px 24px rgba(0, 0, 0, 0.35);
+  --ds-panel-bevel-highlight: inset 0 1px 0 var(--ds-retro-shell-highlight);
+}

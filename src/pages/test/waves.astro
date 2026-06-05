@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero3D from '../../components/Hero3D.astro';
+---
+
+<BaseLayout title="3D Wave Effects Test">
+  <section>
+    <h2>Hero3D mount (placeholder)</h2>
+    <div class="hero-wrapper">
+      <Hero3D enabled={true}>
+        <div class="hero-overlay">
+          <h1>RETRO FUTURE</h1>
+          <p>Layered Value Noise Dots</p>
+        </div>
+      </Hero3D>
+    </div>
+    <p class="note">
+      This route is a visual sandbox. Three.js rendering is intentionally disabled in Hero3D right now.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-wrapper {
+    height: 500px;
+    border: 1px solid #333;
+    position: relative;
+  }
+  .hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    pointer-events: none;
+  }
+  .mt-12 {
+    margin-top: 3rem;
+  }
+
+  .note {
+    margin: 1rem 0 0;
+    color: #9aa8bb;
+  }
+</style>

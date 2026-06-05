@@ -1,0 +1,116 @@
+---
+import UiCard from './UiCard.astro';
+import UiBadge from './UiBadge.astro';
+import UiCluster from '../layout/UiCluster.astro';
+import UiSkillBadge from './UiSkillBadge.astro';
+import type { ContentGraphNode } from '../../lib/content/graph';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title?: string;
+  description?: string;
+  href?: string;
+  status?: string;
+  projectId?: string;
+  caseStudyId?: string;
+  categoryIds?: string[];
+  tagIds?: string[];
+  toolIds?: string[];
+  skillIds?: string[];
+  icon?: string;
+  iconLabel?: string;
+  variant?: 'default' | 'panel';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  node?: ContentGraphNode;
+  showIds?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  title,
+  description,
+  href,
+  status,
+  projectId,
+  caseStudyId,
+  categoryIds,
+  tagIds,
+  toolIds,
+  skillIds,
+  icon,
+  iconLabel,
+  variant = 'panel',
+  depth = 'raised',
+  motion = 'hover-lift',
+  retro = false,
+  node,
+  showIds = false,
+} = Astro.props as Props;
+
+const resolvedTitle = title ?? node?.title ?? 'Demo project';
+const resolvedHref = href ?? node?.url;
+const resolvedDescription = description;
+
+const ids = {
+  projectId,
+  caseStudyId,
+  categoryIds,
+  tagIds,
+  toolIds,
+  skillIds,
+};
+---
+
+<UiCard
+  id={id}
+  class={className}
+  attrs={{ 'data-ui-project-card': '', 'data-retro': retro ? 'true' : 'false' }}
+  variant={variant}
+  depth={depth}
+  href={resolvedHref}
+  eyebrow="Project"
+  title={resolvedTitle}
+  description={resolvedDescription}
+  icon={icon}
+  iconLabel={iconLabel}
+  motion={motion}
+  retro={retro}
+>
+  {status ? (
+    <div slot="meta">
+      <UiBadge variant="neutral" size="sm" depth="flat">
+        {status}
+      </UiBadge>
+    </div>
+  ) : null}
+
+  {showIds ? (
+    <div>
+      <UiCluster>
+        {ids.projectId ? <UiBadge variant="neutral" size="sm" depth="flat">projectId: {ids.projectId}</UiBadge> : null}
+        {ids.caseStudyId ? <UiBadge variant="neutral" size="sm" depth="flat">caseStudyId: {ids.caseStudyId}</UiBadge> : null}
+      </UiCluster>
+      <UiCluster>
+        {(ids.skillIds ?? []).map((v) => (
+          <UiSkillBadge label={`skillId: ${v}`} variant="neutral" depth="flat" />
+        ))}
+        {(ids.toolIds ?? []).map((v) => (
+          <UiSkillBadge label={`toolId: ${v}`} variant="neutral" depth="flat" />
+        ))}
+        {(ids.categoryIds ?? []).map((v) => (
+          <UiSkillBadge label={`categoryId: ${v}`} variant="neutral" depth="flat" />
+        ))}
+        {(ids.tagIds ?? []).map((v) => (
+          <UiSkillBadge label={`tagId: ${v}`} variant="neutral" depth="flat" />
+        ))}
+      </UiCluster>
+    </div>
+  ) : null}
+
+  <slot />
+  {Astro.slots.has('evidence') ? <div slot="footer"><slot name="evidence" /></div> : null}
+</UiCard>

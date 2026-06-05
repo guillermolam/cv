@@ -1,0 +1,54 @@
+---
+type SurfaceAs = 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer';
+type SurfaceDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type SurfaceMotion = 'none' | 'hover-lift';
+
+type Props = {
+  as?: SurfaceAs;
+  id?: string;
+  class?: string;
+  attrs?: Record<string, string | undefined>;
+  variant?: 'surface' | 'panel';
+  depth?: SurfaceDepth;
+  interactive?: boolean;
+  selected?: boolean;
+  disabled?: boolean;
+  motion?: SurfaceMotion;
+  ariaLabel?: string;
+  retro?: boolean;
+};
+
+const {
+  as = 'div',
+  id,
+  class: className,
+  attrs,
+  variant = 'surface',
+  depth = 'flat',
+  interactive = false,
+  selected = false,
+  disabled = false,
+  motion = 'none',
+  ariaLabel,
+  retro = false,
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  id={id}
+  class={className}
+  {...(attrs ?? {})}
+  data-ui-surface
+  data-variant={variant}
+  data-depth={depth}
+  data-interactive={interactive ? 'true' : 'false'}
+  data-selected={selected ? 'true' : 'false'}
+  data-disabled={disabled ? 'true' : 'false'}
+  data-retro={retro ? 'true' : 'false'}
+  data-motion={motion}
+  aria-label={ariaLabel}
+>
+  <slot />
+</Tag>

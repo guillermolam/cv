@@ -1,0 +1,48 @@
+---
+import UiIcon from './UiIcon.astro';
+
+export type MetaListItem = {
+  label: string;
+  value: string;
+  href?: string;
+  icon?: string;
+  iconLabel?: string;
+  status?: 'neutral' | 'success' | 'warning' | 'danger' | 'info';
+};
+
+type Props = {
+  id?: string;
+  class?: string;
+  items: readonly MetaListItem[];
+  variant?: 'default' | 'compact';
+  density?: 'normal' | 'dense';
+  icon?: string;
+  iconLabel?: string;
+  retro?: boolean;
+};
+
+const { id, class: className, items, variant = 'default', density = 'normal', retro = false } = Astro.props as Props;
+---
+
+<div
+  id={id}
+  class={className}
+  data-ui-meta-list
+  data-variant={variant}
+  data-density={density}
+  data-retro={retro ? 'true' : 'false'}
+>
+  <dl>
+    {items.map((item) => (
+      <>
+        <dt>
+          {item.icon ? <UiIcon name={item.icon} label={item.iconLabel} decorative={!item.iconLabel} depth="flat" /> : null}
+          <span>{item.label}</span>
+        </dt>
+        <dd>
+          {item.href ? <a href={item.href}>{item.value}</a> : <span>{item.value}</span>}
+        </dd>
+      </>
+    ))}
+  </dl>
+</div>

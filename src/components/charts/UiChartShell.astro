@@ -1,0 +1,84 @@
+---
+import UiPanel from '../ui/UiPanel.astro';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title: string;
+  description?: string;
+  summary?: string;
+  summaryId?: string;
+  icon?: string;
+  iconLabel?: string;
+  variant?: 'default' | 'module';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  showFallbackTable?: boolean;
+  ariaLabel?: string;
+};
+
+const {
+  id,
+  class: className,
+  title,
+  description,
+  summary,
+  summaryId,
+  icon,
+  iconLabel,
+  variant = 'default',
+  depth = 'raised',
+  tone = 'neutral',
+  motion = 'none',
+  retro = true,
+  showFallbackTable = true,
+  ariaLabel,
+} = Astro.props as Props;
+
+const hasChartSlot = Astro.slots.has('chart') || Astro.slots.has('default');
+const hasFallbackSlot = Astro.slots.has('fallback');
+const hasActionsSlot = Astro.slots.has('actions');
+const hasFooterSlot = Astro.slots.has('footer');
+---
+
+<UiPanel
+  id={id}
+  class={className}
+  depth={depth}
+  eyebrow={variant === 'module' ? 'Chart module' : 'Chart'}
+  title={title}
+  description={description}
+  icon={icon}
+  iconLabel={iconLabel}
+  motion={motion}
+  retro={retro}
+>
+  <div
+    data-ui-chart-shell
+    data-variant={variant}
+    data-depth={depth}
+    data-tone={tone}
+    data-motion={motion}
+    data-retro={retro ? 'true' : 'false'}
+    aria-label={ariaLabel}
+  >
+    {summary ? <p id={summaryId} data-ui-chart-summary>{summary}</p> : null}
+
+    {hasChartSlot ? (
+      <div data-ui-chart-canvas-wrap>
+        {Astro.slots.has('chart') ? <slot name="chart" /> : <slot />}
+      </div>
+    ) : null}
+
+    {showFallbackTable ? (
+      <div data-ui-chart-fallback>
+        {hasFallbackSlot ? <slot name="fallback" /> : null}
+      </div>
+    ) : null}
+
+    {hasActionsSlot ? <div data-ui-chart-legend><slot name="actions" /></div> : null}
+    {hasFooterSlot ? <footer><slot name="footer" /></footer> : null}
+  </div>
+</UiPanel>

@@ -35,7 +35,7 @@ Composition layers:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ Header: Logo/Name | About | CV | Portfolio | Blog | Contact | Lang Switcher   │
+│ Header: Whoami | Toolchain | Experience | Tutorials | Knowledge Center | Contact | Lang │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌───────────────────────────────────────────────┐  ┌─────────────────────┐ │
@@ -44,7 +44,7 @@ Composition layers:
 │  │  H1: Cloud Security & DevSecOps Engineer      │  │                     │ │
 │  │  H2: Building secure hybrid-cloud platforms   │  │ Role Target         │ │
 │  │                                               │  │ Domains             │ │
-│  │  CTAs: [Download CV] [View Portfolio]         │  │ Proof Links         │ │
+│  │  CTAs: [Briefing Pack] [Experience]           │  │ Proof Links         │ │
 │  │        [Flagship Case Study]                  │  │ Availability/Loc    │ │
 │  │                                               │  │ Contact shortcuts   │ │
 │  │  Station Chips: Supply Chain | GitOps | ...   │  └─────────────────────┘ │

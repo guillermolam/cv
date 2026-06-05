@@ -1,0 +1,224 @@
+---
+import FxBezel from '../fx/FxBezel.astro';
+import FxGrain from '../fx/FxGrain.astro';
+import FxScanlines from '../fx/FxScanlines.astro';
+import HeroParticleField from '../three/HeroParticleField.astro';
+import OperatorStatsGrid from './OperatorStatsGrid.astro';
+import AudioToggle from './AudioToggle.astro';
+import WhoamiOperatorProfile from '../whoami/WhoamiOperatorProfile.astro';
+import { site } from '../../lib/site';
+
+/**
+ * ControlRoomConsole — the single top-level homepage component.
+ *
+ * Orchestrates the immersive console: a rusty metallic bezel (FxBezel) housing
+ * a WebGL hero backdrop (HeroParticleField, gated/lazy) with grain + scanline
+ * overlays, a console topbar (title + status + AudioToggle), and the operator
+ * profile panels as the body. Interactive parts are self-initialising islands
+ * driven by the control-room nanostores.
+ *
+ * Phase A wires the bio + radar + nav pieces (via WhoamiOperatorProfile) inside
+ * the console chrome. The full panel grid (badges, capabilities, stat cards,
+ * in-console keyboard row) lands in Phase B.
+ */
+export type Props = {
+  lang?: string;
+  prefix?: string;
+};
+
+const { lang = 'en', prefix = '' } = Astro.props as Props;
+---
+
+<FxBezel label="Hybrid Cloud Control Room" class="console-bezel">
+  <div class="console" data-control-room-console>
+    {/* ── Topbar ─────────────────────────────────────────────────────── */}
+    <header class="console-topbar">
+      <p class="console-title">
+        <span class="ui-icon i-solar-soundwave-bold-duotone" aria-hidden="true"></span>
+        Hybrid Cloud Control Room
+      </p>
+      <div class="console-topbar-meta">
+        <span class="console-node" aria-label="Operator node">
+          NODE: GLM-01
+        </span>
+        <span class="console-status">
+          <span class="console-status-dot" aria-hidden="true"></span>
+          ONLINE
+        </span>
+        <AudioToggle />
+      </div>
+    </header>
+
+    {/* ── Hero backdrop + intro ──────────────────────────────────────── */}
+    <section class="console-hero" aria-label={`${site.name} — operator console`}>
+      <HeroParticleField />
+      <FxScanlines intensity="subtle" />
+      <FxGrain intensity="subtle" />
+      <div class="console-hero-overlay">
+        <p class="console-hero-eyebrow">Operator console online</p>
+        <p class="console-hero-sub">
+          Cloud Security &amp; DevSecOps · secure delivery, platforms, guardrails
+        </p>
+      </div>
+    </section>
+
+    {/* ── Operator stats grid (CV-derived) ───────────────────────────── */}
+    <OperatorStatsGrid lang={lang} class="console-stats" />
+
+    {/* ── Panel body ─────────────────────────────────────────────────── */}
+    <div class="console-body">
+      <WhoamiOperatorProfile lang={lang} prefix={prefix} />
+    </div>
+
+    {/* console-wide grain overlay */}
+    <FxGrain intensity="subtle" class="console-grain" />
+  </div>
+</FxBezel>
+
+<script>
+  import { initCapabilities } from '../../stores/control-room';
+  initCapabilities();
+</script>
+
+<style>
+  .console-bezel {
+    margin-block: 1rem 2rem;
+  }
+
+  .console {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    isolation: isolate;
+  }
+
+  /* ── Topbar ───────────────────────────────────────────────────────── */
+  .console-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-border), transparent 10%);
+  }
+
+  .console-title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-techno, var(--font-display));
+    font-size: var(--font-size-1);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .console-title .ui-icon {
+    color: var(--color-cta);
+    font-size: 1.1rem;
+  }
+
+  .console-topbar-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .console-node,
+  .console-status {
+    font-family: var(--font-digital, var(--font-mono));
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .console-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 6px var(--color-success);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .console-status-dot {
+      animation: console-pulse 2s ease-in-out infinite;
+    }
+  }
+
+  @keyframes console-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Hero ─────────────────────────────────────────────────────────── */
+  .console-hero {
+    position: relative;
+    min-height: 160px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--color-border), transparent 12%);
+    background: color-mix(in oklab, var(--color-bg), transparent 20%);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .console-hero-overlay {
+    position: relative;
+    z-index: 4;
+    padding: 1rem 1.1rem;
+  }
+
+  .console-hero-eyebrow {
+    margin: 0 0 0.2rem;
+    font-family: var(--font-techno, var(--font-display));
+    font-size: var(--font-size-0);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+    text-shadow: 0 0 14px var(--fx-glow-accent);
+  }
+
+  .console-hero-sub {
+    margin: 0;
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+  }
+
+  .console-hero-monolith {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.5rem;
+    z-index: 5;
+    width: clamp(64px, 12vw, 110px);
+    touch-action: none;
+  }
+
+  @media (max-width: 520px) {
+    .console-hero-monolith {
+      display: none;
+    }
+  }
+
+  /* ── Body ─────────────────────────────────────────────────────────── */
+  .console-body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .console-grain {
+    z-index: 6;
+  }
+
+  @media (max-width: 520px) {
+    .console-hero {
+      min-height: 120px;
+    }
+  }
+</style>

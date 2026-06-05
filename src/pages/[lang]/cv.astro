@@ -1,5 +1,11 @@
 ---
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AvailabilityBadge from '../../components/content/AvailabilityBadge.astro';
+
+import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../lib/i18n';
 
 export function getStaticPaths() {
@@ -13,12 +19,63 @@ if (!lang || !isLang(lang)) {
 
 const title = 'CV';
 const description = 'Curriculum vitae.';
+
+const formatsAll = await getCollection('cvFormats');
+const formatsLang = formatsAll.filter((f) => f.data.lang === lang);
+const formats = formatsLang.length > 0 ? formatsLang : formatsAll.filter((f) => f.data.lang === 'en');
+
+const publicRoot = path.resolve(process.cwd(), 'public');
+
+const exists = async (publicPath: string) => {
+  const resolved = path.resolve(publicRoot, publicPath.replace(/^\//, ''));
+  try {
+    await fs.access(resolved);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const cards = await Promise.all(
+  formats.map(async (format) => {
+    const canDownload =
+      format.data.availability === 'available' &&
+      typeof format.data.downloadPath === 'string' &&
+      (await exists(format.data.downloadPath));
+
+    return { format, canDownload };
+  }),
+);
 ---
 
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
   <section class="card pad">
     <h1>CV</h1>
-    <p>This route is a Phase 1 placeholder for i18n foundation.</p>
+    {formatsLang.length === 0 && lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English CV format entries while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    <p class="topology-subtitle">Downloads are enabled only when the PDF exists under public/cv/.</p>
+  </section>
+
+  <section class="grid cols-2" aria-label="CV formats">
+    {cards.map(({ format, canDownload }) => (
+      <article class="card pad">
+        <h2>{format.data.title}</h2>
+        <p class="topology-subtitle">{format.data.useCase}</p>
+        <p>{format.data.description}</p>
+        <div class="station-chips">
+          <AvailabilityBadge availability={format.data.availability} />
+          {canDownload ? (
+            <a class="station-chip" href={format.data.downloadPath}>
+              Download PDF
+            </a>
+          ) : (
+            <span class="station-chip" aria-disabled="true">
+              Download unavailable
+            </span>
+          )}
+        </div>
+      </article>
+    ))}
   </section>
 </BaseLayout>
-

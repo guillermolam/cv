@@ -1,0 +1,34 @@
+---
+type Props = {
+  id?: string;
+  class?: string;
+  gap?: string;
+  align?: 'stretch' | 'start' | 'center';
+  justify?: 'flex-start' | 'center' | 'space-between';
+  splitAfter?: number;
+  labelledBy?: string;
+};
+
+const { id, class: className, gap, align = 'stretch', justify = 'flex-start', splitAfter, labelledBy } =
+  Astro.props as Props;
+
+const styleParts: string[] = [];
+if (gap) styleParts.push(`--ui-stack-gap:${gap}`);
+styleParts.push(`--ui-stack-align:${align}`);
+styleParts.push(`--ui-stack-justify:${justify}`);
+const style = styleParts.length > 0 ? styleParts.join(';') : undefined;
+---
+
+<div
+  id={id}
+  class={className}
+  data-ui-stack
+  data-gap={gap}
+  data-align={align}
+  data-justify={justify}
+  data-split-after={typeof splitAfter === 'number' ? String(splitAfter) : undefined}
+  aria-labelledby={labelledBy}
+  style={style}
+>
+  <slot />
+</div>

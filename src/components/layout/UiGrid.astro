@@ -1,0 +1,46 @@
+---
+type Props = {
+  id?: string;
+  class?: string;
+  columns?: number;
+  gap?: string;
+  minItemWidth?: string;
+  variant?: 'default' | 'tight';
+  dense?: boolean;
+  align?: 'stretch' | 'start' | 'center';
+  labelledBy?: string;
+};
+
+const {
+  id,
+  class: className,
+  columns,
+  gap,
+  minItemWidth,
+  variant = 'default',
+  dense = false,
+  align = 'stretch',
+  labelledBy,
+} = Astro.props as Props;
+
+const styleParts: string[] = [];
+if (minItemWidth) styleParts.push(`--ui-grid-min-item-width:${minItemWidth}`);
+if (gap) styleParts.push(`--ui-grid-gap:${gap}`);
+styleParts.push(`--ui-grid-align:${align}`);
+const style = styleParts.length > 0 ? styleParts.join(';') : undefined;
+---
+
+<div
+  id={id}
+  class={className}
+  data-ui-grid
+  data-columns={typeof columns === 'number' ? String(columns) : undefined}
+  data-gap={gap}
+  data-variant={variant}
+  data-dense={dense ? 'true' : 'false'}
+  data-align={align}
+  aria-labelledby={labelledBy}
+  style={style}
+>
+  <slot />
+</div>

@@ -1,0 +1,68 @@
+---
+import UiBadge from './UiBadge.astro';
+import type { IconId } from '../../design-system/icons/icon-types';
+
+type Props = {
+  id?: string;
+  class?: string;
+  label: string;
+  href?: string;
+  level?: string;
+  category?: string;
+  icon?: IconId | string;
+  iconLabel?: string;
+  variant?:
+    | 'neutral'
+    | 'accent'
+    | 'security'
+    | 'cloud'
+    | 'infra'
+    | 'automation'
+    | 'compliance'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  selected?: boolean;
+  disabled?: boolean;
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  label,
+  href,
+  level,
+  category,
+  icon,
+  iconLabel,
+  variant = 'neutral',
+  depth = 'flat',
+  selected = false,
+  disabled = false,
+  motion = 'none',
+  retro = false,
+} = Astro.props as Props;
+
+const meta = [category, level].filter(Boolean).join(' · ');
+---
+
+<span id={id} class={className} data-ui-skill-badge data-variant={variant} data-depth={depth} data-motion={motion}>
+  <UiBadge
+    href={href}
+    variant={variant}
+    depth={depth}
+    selected={selected}
+    disabled={disabled}
+    icon={icon}
+    iconLabel={iconLabel}
+    motion={motion}
+    retro={retro}
+    ariaLabel={meta ? `${label} (${meta})` : label}
+  >
+    {label}
+  </UiBadge>
+</span>

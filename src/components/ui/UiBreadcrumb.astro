@@ -1,0 +1,57 @@
+---
+import UiIcon from './UiIcon.astro';
+
+export type BreadcrumbItem = {
+  label: string;
+  href?: string;
+  current?: boolean;
+  icon?: string;
+  iconLabel?: string;
+};
+
+type Props = {
+  id?: string;
+  class?: string;
+  items: readonly BreadcrumbItem[];
+  labelledBy?: string;
+  label?: string;
+};
+
+const { id, class: className, items, labelledBy, label = 'Breadcrumb' } = Astro.props as Props;
+---
+
+<nav
+  id={id}
+  class={className}
+  data-ui-breadcrumb
+  aria-label={label}
+  aria-labelledby={labelledBy}
+>
+  <ol>
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      const isCurrent = Boolean(item.current) || isLast;
+      const content = (
+        <>
+          {item.icon ? <UiIcon name={item.icon} label={item.iconLabel} decorative={!item.iconLabel} depth="flat" /> : null}
+          <span>{item.label}</span>
+        </>
+      );
+
+      return (
+        <li>
+          {item.href && !isCurrent ? (
+            <a href={item.href}>{content}</a>
+          ) : (
+            <span aria-current={isCurrent ? 'page' : undefined}>{content}</span>
+          )}
+          {!isLast ? (
+            <span data-ui-breadcrumb-sep aria-hidden="true">
+              ›
+            </span>
+          ) : null}
+        </li>
+      );
+    })}
+  </ol>
+</nav>

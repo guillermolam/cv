@@ -1,0 +1,122 @@
+---
+/**
+ * HeroParticleField — WebGL particle topology behind the console hero.
+ *
+ * Progressive enhancement: the static SVG topology fallback is always in the
+ * DOM. The WebGL canvas only initialises when capability allows (WebGL +
+ * not-reduced-motion + not ?no3d=1), lazy-loading the three.js scene chunk on
+ * first viewport entry, pausing offscreen, and disposing on teardown.
+ */
+export type Props = {
+  class?: string;
+};
+const { class: className } = Astro.props as Props;
+---
+
+<div class:list={['hero-field', className]} data-hero-field>
+  {/* Static fallback — always present, decorative */}
+  <svg
+    class="hero-field-fallback"
+    viewBox="0 0 600 320"
+    preserveAspectRatio="xMidYMid slice"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <defs>
+      <radialGradient id="hf-glow" cx="30%" cy="20%" r="80%">
+        <stop offset="0" stop-color="var(--color-cta)" stop-opacity="0.18" />
+        <stop offset="1" stop-color="var(--color-cta)" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <rect width="600" height="320" fill="url(#hf-glow)" />
+    {Array.from({ length: 7 }).map((_, r) =>
+      Array.from({ length: 13 }).map((__, c) => (
+        <circle
+          cx={20 + c * 46}
+          cy={30 + r * 42}
+          r="1.6"
+          fill="var(--color-cta)"
+          opacity="0.35"
+        />
+      )),
+    )}
+  </svg>
+
+  {/* WebGL canvas — enhanced only */}
+  <canvas class="hero-field-canvas" data-hero-canvas aria-hidden="true"></canvas>
+</div>
+
+<style>
+  .hero-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-field-fallback,
+  .hero-field-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .hero-field-canvas {
+    opacity: 0;
+    transition: opacity 600ms var(--ease-standard);
+  }
+
+  /* once the scene reports ready, fade canvas in and dim the fallback */
+  .hero-field[data-hero-ready='true'] .hero-field-canvas {
+    opacity: 1;
+  }
+  .hero-field[data-hero-ready='true'] .hero-field-fallback {
+    opacity: 0.25;
+  }
+</style>
+
+<script>
+  import { heroWebglAllowed } from '../../design-system/three/capability';
+
+  const root = document.querySelector<HTMLElement>('[data-hero-field]');
+  const canvas = root?.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
+
+  if (root && canvas && heroWebglAllowed()) {
+    let controller: import('../../design-system/three/particle-field').HeroFieldController | null = null;
+    let inited = false;
+
+    const io = new IntersectionObserver(
+      async (entries) => {
+        const visible = entries.some((e) => e.isIntersecting);
+        if (visible && !inited) {
+          inited = true;
+          const { createHeroField } = await import('../../design-system/three/particle-field');
+          controller = createHeroField(canvas);
+          controller.start();
+          root.dataset.heroReady = 'true';
+        } else if (controller) {
+          if (visible) controller.start();
+          else controller.pause();
+        }
+      },
+      { threshold: 0.05 },
+    );
+    io.observe(root);
+
+    const onResize = () => controller?.resize();
+    window.addEventListener('resize', onResize, { passive: true });
+
+    // dispose on navigation (Astro view transitions or unload)
+    const dispose = () => {
+      io.disconnect();
+      window.removeEventListener('resize', onResize);
+      controller?.dispose();
+      controller = null;
+    };
+    window.addEventListener('pagehide', dispose, { once: true });
+    document.addEventListener('astro:before-swap', dispose, { once: true });
+  }
+</script>

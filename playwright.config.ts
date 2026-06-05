@@ -14,7 +14,7 @@ export default defineConfig({
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
   webServer: {
-    command: 'pnpm dev -- --host 127.0.0.1 --port 4321',
+    command: 'pnpm astro dev --host 127.0.0.1 --port 4321 --force',
     url: 'http://localhost:4321/',
     timeout: 120000,
     reuseExistingServer: !process.env.CI,

@@ -1,0 +1,96 @@
+---
+import UiIcon from './UiIcon.astro';
+
+type BadgeVariant =
+  | 'neutral'
+  | 'accent'
+  | 'security'
+  | 'cloud'
+  | 'infra'
+  | 'automation'
+  | 'compliance'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info';
+type BadgeSize = 'sm' | 'md';
+type BadgeDepth = 'flat' | 'raised' | 'elevated' | 'floating';
+type BadgeMotion = 'none' | 'hover-lift';
+type IconPosition = 'leading' | 'trailing';
+
+type Props = {
+  id?: string;
+  class?: string;
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+  depth?: BadgeDepth;
+  icon?: string;
+  iconPosition?: IconPosition;
+  iconLabel?: string;
+  href?: string;
+  selected?: boolean;
+  disabled?: boolean;
+  motion?: BadgeMotion;
+  ariaLabel?: string;
+  retro?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  variant = 'neutral',
+  size = 'sm',
+  depth = 'flat',
+  icon,
+  iconPosition = 'leading',
+  href,
+  selected = false,
+  disabled = false,
+  motion = 'none',
+  ariaLabel,
+  retro = false,
+} = Astro.props as Props;
+
+const isLink = typeof href === 'string' && href.length > 0;
+const hasDefaultSlot = Astro.slots.has('default');
+
+if (!hasDefaultSlot) {
+  throw new Error('UiBadge: text content is required. Badges must not be icon-only.');
+}
+
+const commonAttrs = {
+  id,
+  class: className,
+  'data-ui-badge': '',
+  'data-variant': variant,
+  'data-size': size,
+  'data-depth': depth,
+  'data-motion': motion,
+  'data-selected': selected ? 'true' : 'false',
+  'data-disabled': disabled ? 'true' : 'false',
+  'data-retro': retro ? 'true' : 'false',
+  ...(ariaLabel ? { 'aria-label': ariaLabel } : {}),
+} as const;
+---
+
+{isLink ? (
+  <a {...commonAttrs} href={disabled ? undefined : href} aria-disabled={disabled ? 'true' : undefined} tabindex={disabled ? '-1' : undefined}>
+    {icon && iconPosition === 'leading' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+    ) : null}
+    <span data-ui-badge-content><slot /></span>
+    {icon && iconPosition === 'trailing' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+    ) : null}
+  </a>
+) : (
+  <span {...commonAttrs}>
+    {icon && iconPosition === 'leading' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+    ) : null}
+    <span data-ui-badge-content><slot /></span>
+    {icon && iconPosition === 'trailing' ? (
+      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+    ) : null}
+  </span>
+)}

@@ -1,0 +1,44 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { Lang } from '../lib/i18n';
+
+type Props = {
+  title: string;
+  description?: string;
+  publishedDate?: string;
+  lang?: Lang;
+  useLangPrefix?: boolean;
+  backHref?: string;
+  fallbackNote?: string;
+};
+
+const {
+  title,
+  description,
+  publishedDate,
+  lang,
+  useLangPrefix,
+  backHref,
+  fallbackNote,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix={useLangPrefix}>
+  <section class="card pad">
+    <header class="post-header">
+      <h1>{title}</h1>
+      {fallbackNote ? <p class="topology-subtitle">{fallbackNote}</p> : null}
+      {publishedDate ? <p class="topology-subtitle">Published: {publishedDate}</p> : null}
+      {description ? <p>{description}</p> : null}
+    </header>
+
+    {backHref ? (
+      <div class="cta-row">
+        <a class="button" href={backHref}>Back to blog</a>
+      </div>
+    ) : null}
+  </section>
+
+  <slot />
+</BaseLayout>
+

@@ -1,0 +1,83 @@
+---
+import { renderPreset, type HeerichPreset } from '../../lib/heerich/presets';
+
+/**
+ * HeerichScene — renders a heerich voxel scene to inline SVG.
+ *
+ * By default this is BUILD-TIME only: the SVG is generated in frontmatter and
+ * emitted statically (zero client JS, fully accessible/printable). When
+ * `interactive` is set, the same static SVG is the no-JS baseline and an Alpine
+ * island (`heerichScene`) lazily rebuilds + rotates the scene on interaction.
+ */
+export type Props = {
+  preset: HeerichPreset;
+  tile?: number;
+  padding?: number;
+  /** oblique camera angle (also the interactive start angle) */
+  angle?: number;
+  interactive?: boolean;
+  label?: string;
+  class?: string;
+};
+
+const {
+  preset,
+  tile = 28,
+  padding = 2,
+  angle = 45,
+  interactive = false,
+  label,
+  class: className,
+} = Astro.props as Props;
+
+const svg = renderPreset(preset, {
+  tile,
+  padding,
+  camera: { type: 'oblique', angle, distance: 15 },
+});
+
+const decorative = !label;
+---
+
+<figure
+  class:list={['heerich-scene', className]}
+  data-heerich-scene={interactive ? preset : undefined}
+  data-tile={interactive ? String(tile) : undefined}
+  data-angle={interactive ? String(angle) : undefined}
+  data-padding={interactive ? String(padding) : undefined}
+  x-data={interactive ? 'heerichScene()' : undefined}
+  role={decorative ? 'presentation' : 'img'}
+  aria-label={label}
+  aria-hidden={decorative ? 'true' : undefined}
+>
+  <div class="heerich-scene-stage" data-heerich-stage set:html={svg}></div>
+  {label && <figcaption class="sr-only">{label}</figcaption>}
+</figure>
+
+<style>
+  .heerich-scene {
+    margin: 0;
+    display: inline-block;
+    line-height: 0;
+  }
+
+  .heerich-scene-stage :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 10px 22px var(--shadow-2));
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

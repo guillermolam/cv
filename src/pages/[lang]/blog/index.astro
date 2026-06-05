@@ -1,5 +1,9 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ContentCard from '../../../components/content/ContentCard.astro';
+import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
+
+import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../../lib/i18n';
 
 export function getStaticPaths() {
@@ -12,13 +16,73 @@ if (!lang || !isLang(lang)) {
 }
 
 const title = 'Blog';
-const description = 'Blog index placeholder.';
+const description = 'Notes on cloud security, DevSecOps, and platform engineering.';
+
+const postsAll = await getCollection('blog');
+const tagsAll = await getCollection('tags');
+const toolsAll = await getCollection('tools');
+const categoriesAll = await getCollection('categories');
+
+const postsLang = postsAll.filter((p) => p.data.lang === lang);
+const postsLangFallback = postsLang.length > 0 ? postsLang : postsAll.filter((p) => p.data.lang === 'en');
+
+const isDraft = (entry: any) => Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
+const published = postsLangFallback.filter((p) => !isDraft(p));
+const drafts = postsLangFallback.filter((p) => isDraft(p));
+
+const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
+const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
 ---
 
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
   <section class="card pad">
     <h1>Blog</h1>
-    <p>This route is a Phase 1 placeholder for i18n foundation.</p>
+    {postsLang.length === 0 && lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English posts while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    {published.length === 0 ? (
+      <p class="topology-subtitle">
+        No published posts yet. Drafts: {drafts.length}
+      </p>
+    ) : (
+      <p class="topology-subtitle">Published posts: {published.length}</p>
+    )}
   </section>
-</BaseLayout>
 
+  {published.length > 0 ? (
+    <section class="grid cols-2" aria-label="Blog posts">
+      {published
+        .sort((a, b) => (a.data.publishedDate ?? '').localeCompare(b.data.publishedDate ?? ''))
+        .reverse()
+        .map((post) => {
+          const href = `/${lang}/blog/${post.data.blogSlug}`;
+          const tags = (post.data.tagIds ?? [])
+            .map((id) => tagTitleById.get(id))
+            .filter((label): label is string => typeof label === 'string')
+            .map((label) => ({ label }));
+          const tools = (post.data.toolIds ?? [])
+            .map((id) => toolTitleById.get(id))
+            .filter((label): label is string => typeof label === 'string')
+            .map((label) => ({ label }));
+          const categories = (post.data.categoryIds ?? [])
+            .map((id) => categoryTitleById.get(id))
+            .filter((label): label is string => typeof label === 'string')
+            .map((label) => ({ label }));
+
+          return (
+            <ContentCard
+              title={post.data.title}
+              href={href}
+              summary={post.data.summary}
+              meta={`Published: ${post.data.publishedDate}`}
+            >
+              {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+              {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
+              {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
+            </ContentCard>
+          );
+        })}
+    </section>
+  ) : null}
+</BaseLayout>

@@ -1,0 +1,94 @@
+---
+import fs from 'node:fs/promises';
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLangStaticPaths, isLang } from '../../lib/i18n';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Content index';
+const description = 'Internal index of content graph nodes and warnings.';
+
+const graphUrl = new URL('../../../public/data/content-graph.json', import.meta.url);
+let graph:
+  | {
+      generatedAt: string;
+      nodes: Array<{ collection: string }>;
+      warnings: unknown[];
+    }
+  | undefined;
+let graphLoadError: string | undefined;
+
+try {
+  const graphText = await fs.readFile(graphUrl, 'utf8');
+  graph = JSON.parse(graphText) as {
+    generatedAt: string;
+    nodes: Array<{ collection: string }>;
+    warnings: unknown[];
+  };
+} catch (err) {
+  graph = { generatedAt: new Date(0).toISOString(), nodes: [], warnings: [] };
+  graphLoadError = err instanceof Error ? err.message : 'Unknown error';
+}
+
+const counts: Record<string, number> = {};
+for (const node of graph.nodes) {
+  counts[node.collection] = (counts[node.collection] ?? 0) + 1;
+}
+const collections = Object.keys(counts).sort();
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Content index</h1>
+    {graphLoadError ? (
+      <p class="topology-subtitle">
+        Content graph not available ({graphLoadError}). Run <code>pnpm content:graph</code> to regenerate
+        <code>/public/data/content-graph.json</code>.
+      </p>
+    ) : null}
+    <p class="topology-subtitle">
+      Generated at <time datetime={graph.generatedAt}>{graph.generatedAt}</time>
+    </p>
+    <p class="topology-subtitle">Warnings: {graph.warnings?.length ?? 0}</p>
+  </section>
+
+  <section class="card pad">
+    <h2>Routes</h2>
+    <div class="cta-row">
+      <a class="button" href={`/${lang}/cv`}>CV</a>
+      <a class="button" href={`/${lang}/portfolio`}>Portfolio</a>
+      <a class="button" href={`/${lang}/blog`}>Blog</a>
+      <a class="button" href={`/${lang}/toolchain`}>Toolchain</a>
+    </div>
+  </section>
+
+  <section class="card pad">
+    <h2>Collections</h2>
+    <div class="topology-table-wrap" role="region" aria-label="Content collections">
+      <table class="topology-table">
+        <thead>
+          <tr>
+            <th scope="col">Collection</th>
+            <th scope="col">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {collections.map((name) => (
+            <tr>
+              <th scope="row">{name}</th>
+              <td>{counts[name]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</BaseLayout>

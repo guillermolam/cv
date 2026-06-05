@@ -1,6 +1,12 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ContentCard from '../../../components/content/ContentCard.astro';
+import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
+import PortfolioFilter from '../../../components/content/PortfolioFilter.astro';
+
+import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../../lib/i18n';
+import { buildContentGraph, getNodeKey, type ContentGraphNode } from '../../../lib/content/graph';
 
 export function getStaticPaths() {
   return getLangStaticPaths();
@@ -13,18 +19,134 @@ if (!lang || !isLang(lang)) {
 
 const title = 'Portfolio';
 const description = 'Selected work across security, infrastructure, and development.';
-const prefix = `/${lang}`;
+
+const projectsAll = await getCollection('projects');
+const categoriesAll = await getCollection('categories');
+const tagsAll = await getCollection('tags');
+const toolsAll = await getCollection('tools');
+const skillsAll = await getCollection('skills');
+
+const projects = projectsAll.filter((p) => p.data.lang === lang);
+const projectsFallback = projects.length > 0 ? projects : projectsAll.filter((p) => p.data.lang === 'en');
+
+const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
+const skillTitleById = new Map(skillsAll.map((s) => [s.data.skillId, s.data.name] as const));
+
+const graph = await buildContentGraph();
+const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
+
+const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
+
+const uniq = (values: string[]) => Array.from(new Set(values));
+
+const statusOrder = ['active', 'maintained', 'archived', 'experimental'] as const;
+const statusOptions = statusOrder
+  .filter((s) => projectsFallback.some((p) => p.data.status === s))
+  .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }));
+
+const toolOptionIds = uniq(projectsFallback.flatMap((p) => p.data.toolIds ?? []));
+const toolOptions = toolOptionIds
+  .map((id) => ({ id, label: toolTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const skillOptionIds = uniq(projectsFallback.flatMap((p) => p.data.skillIds ?? []));
+const skillOptions = skillOptionIds
+  .map((id) => ({ id, label: skillTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const categoryOptionIds = uniq(projectsFallback.flatMap((p) => p.data.categoryIds ?? []));
+const categoryOptions = categoryOptionIds
+  .map((id) => ({ id, label: categoryTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const tagOptionIds = uniq(projectsFallback.flatMap((p) => p.data.tagIds ?? []));
+const tagOptions = tagOptionIds
+  .map((id) => ({ id, label: tagTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const getCaseStudiesForProject = (projectId: string) => {
+  const projectKey = getNodeKey('projects', projectId);
+  const sources = graph.edges.filter((e) => e.to === projectKey).map((e) => e.from);
+  const caseStudyKeys = sources.filter((k) => k.startsWith('caseStudies:'));
+  return caseStudyKeys
+    .map((k) => nodeByKey.get(k))
+    .filter(isGraphNode)
+    .map((n) => ({ label: n.title, href: `/${lang}/case-studies/${n.slug}` }));
+};
 ---
 
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
   <section class="card pad">
     <h1>Portfolio</h1>
-    <p>This route is a Phase 1 placeholder for i18n foundation.</p>
-    <div class="cta-row">
-      <a class="button" href={`${prefix}/portfolio/security`}>Security</a>
-      <a class="button" href={`${prefix}/portfolio/infra`}>Infrastructure</a>
-      <a class="button" href={`${prefix}/portfolio/development`}>Development</a>
-    </div>
+    {projects.length === 0 && lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English projects while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    <p class="topology-subtitle">Seed dataset. Proof trails will expand as more projects and case studies are added.</p>
+  </section>
+
+  <PortfolioFilter
+    targetSelector="#portfolio-items"
+    statusOptions={statusOptions}
+    toolOptions={toolOptions}
+    skillOptions={skillOptions}
+    categoryOptions={categoryOptions}
+    tagOptions={tagOptions}
+    totalCount={projectsFallback.length}
+  />
+
+  <section class="grid cols-2" aria-label="Projects" id="portfolio-items">
+    {projectsFallback
+      .sort((a, b) => (a.data.title ?? '').localeCompare(b.data.title ?? ''))
+      .map((project) => {
+        const href = `/${lang}/portfolio/${project.data.projectId}`;
+        const categories = (project.data.categoryIds ?? [])
+          .map((id) => categoryTitleById.get(id))
+          .filter((label): label is string => typeof label === 'string')
+          .map((label) => ({ label }));
+        const tags = (project.data.tagIds ?? [])
+          .map((id) => tagTitleById.get(id))
+          .filter((label): label is string => typeof label === 'string')
+          .map((label) => ({ label }));
+        const tools = (project.data.toolIds ?? [])
+          .map((id) => toolTitleById.get(id))
+          .filter((label): label is string => typeof label === 'string')
+          .map((label) => ({ label }));
+        const skills = (project.data.skillIds ?? [])
+          .map((id) => skillTitleById.get(id))
+          .filter((label): label is string => typeof label === 'string')
+          .map((label) => ({ label }));
+
+        const caseStudies = getCaseStudiesForProject(project.data.projectId);
+
+        return (
+          <div
+            data-project-item
+            data-status={project.data.status}
+            data-tool-ids={(project.data.toolIds ?? []).join(' ')}
+            data-skill-ids={(project.data.skillIds ?? []).join(' ')}
+            data-category-ids={(project.data.categoryIds ?? []).join(' ')}
+            data-tag-ids={(project.data.tagIds ?? []).join(' ')}
+          >
+            <ContentCard
+              title={project.data.title}
+              href={href}
+              summary={project.data.summary}
+              meta={`Status: ${project.data.status}`}
+            >
+              {caseStudies.length > 0 ? <TaxonomyPills label="Case studies" items={caseStudies} /> : null}
+              {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
+              {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
+              {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+              {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
+            </ContentCard>
+          </div>
+        );
+      })}
   </section>
 </BaseLayout>
-

@@ -1,0 +1,81 @@
+---
+/**
+ * FxGrain — animated film/CRT grain overlay via SVG feTurbulence.
+ *
+ * Decorative only (aria-hidden). Absolutely positioned to fill its
+ * positioned parent. Flicker animation is disabled under reduced motion;
+ * a static grain layer remains for texture.
+ */
+export type Props = {
+  intensity?: 'subtle' | 'normal' | 'strong';
+  class?: string;
+  /** baseFrequency for feTurbulence — higher = finer grain */
+  frequency?: number;
+};
+
+const { intensity = 'normal', class: className, frequency = 0.9 } = Astro.props as Props;
+
+const opacityVar =
+  intensity === 'strong'
+    ? 'var(--fx-grain-opacity-strong)'
+    : intensity === 'subtle'
+      ? 'calc(var(--fx-grain-opacity) * 0.6)'
+      : 'var(--fx-grain-opacity)';
+
+// Unique id so multiple instances don't collide
+const uid = Math.random().toString(36).slice(2, 8);
+---
+
+<span class:list={['fx-grain', className]} aria-hidden="true" data-fx-grain>
+  <svg width="100%" height="100%" preserveAspectRatio="none" focusable="false">
+    <filter id={`fx-grain-${uid}`}>
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency={frequency}
+        numOctaves="2"
+        stitchTiles="stitch"
+      />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+    <rect width="100%" height="100%" filter={`url(#fx-grain-${uid})`} />
+  </svg>
+</span>
+
+<style define:vars={{ grainOpacity: opacityVar }}>
+  .fx-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: var(--grainOpacity);
+    mix-blend-mode: var(--fx-grain-blend);
+    overflow: hidden;
+  }
+
+  .fx-grain svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fx-grain {
+      animation: fx-grain-flicker 0.6s steps(3) infinite;
+    }
+  }
+
+  @keyframes fx-grain-flicker {
+    0% {
+      transform: translate(0, 0);
+    }
+    33% {
+      transform: translate(-1%, 1%);
+    }
+    66% {
+      transform: translate(1%, -1%);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+</style>

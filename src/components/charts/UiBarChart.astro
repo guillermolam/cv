@@ -1,0 +1,180 @@
+---
+import UiChartShell from './UiChartShell.astro';
+import { createChartA11yIds, createChartSummary, createCanvasA11yAttributes, createFallbackRows } from '../../design-system/charts/chart-accessibility';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title: string;
+  description?: string;
+  labels: readonly string[];
+  datasets: readonly { label: string; data: readonly number[] }[];
+  variant?: 'default' | 'module';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  icon?: string;
+  iconLabel?: string;
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  showLegend?: boolean;
+  showTooltip?: boolean;
+  showFallbackTable?: boolean;
+  reducedMotionStrategy?: 'disable-animations' | 'opacity-only' | 'static';
+};
+
+const {
+  id,
+  class: className,
+  title,
+  description,
+  labels,
+  datasets,
+  variant = 'module',
+  depth = 'raised',
+  tone = 'neutral',
+  icon = 'chart-radar',
+  iconLabel,
+  motion = 'none',
+  retro = true,
+  showLegend = true,
+  showTooltip = true,
+  showFallbackTable = true,
+} = Astro.props as Props;
+
+const baseId = id ?? `ui-bar-${(title ?? 'chart').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const a11y = createChartA11yIds(baseId);
+const summaryText = createChartSummary({ title, description, labels, datasets });
+const fallbackRows = createFallbackRows(labels, datasets);
+
+const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+---
+
+<UiChartShell
+  id={baseId}
+  class={className}
+  title={title}
+  description={description}
+  summary={summaryText}
+  summaryId={a11y.summaryId}
+  icon={icon}
+  iconLabel={iconLabel}
+  variant={variant}
+  depth={depth}
+  tone={tone}
+  motion={motion}
+  retro={retro}
+  showFallbackTable={showFallbackTable}
+>
+  <canvas
+    slot="chart"
+    id={a11y.canvasId}
+    width="800"
+    height="420"
+    data-ui-chart-canvas
+    data-labels={safeJson(labels)}
+    data-datasets={safeJson(datasets)}
+    data-show-legend={showLegend ? 'true' : 'false'}
+    data-show-tooltip={showTooltip ? 'true' : 'false'}
+    {...createCanvasA11yAttributes({ title, description, summaryId: a11y.summaryId, tableId: showFallbackTable ? a11y.tableId : undefined })}
+  >
+    Chart data is available in the table below.
+  </canvas>
+
+  {showFallbackTable ? (
+    <div slot="fallback">
+      <table id={a11y.tableId} data-ui-chart-table>
+        <thead>
+          <tr>
+            <th scope="col">Label</th>
+            {datasets.map((ds) => (
+              <th scope="col">{ds.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {fallbackRows.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              {row.values.map((v) => (
+                <td>{v.value}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : null}
+
+  <script>
+    (() => {
+      const root = document.currentScript?.closest('[data-ui-chart-shell]');
+      if (!(root instanceof HTMLElement)) return;
+
+      const canvas = root.querySelector('canvas[data-ui-chart-canvas]');
+      if (!(canvas instanceof HTMLCanvasElement)) return;
+
+      let labels: unknown = [];
+      let datasets: unknown = [];
+      try {
+        labels = JSON.parse(canvas.dataset.labels ?? '[]');
+        datasets = JSON.parse(canvas.dataset.datasets ?? '[]');
+      } catch {
+        return;
+      }
+
+      if (!Array.isArray(labels) || !Array.isArray(datasets)) return;
+
+      const showLegend = canvas.dataset.showLegend !== 'false';
+      const showTooltip = canvas.dataset.showTooltip !== 'false';
+
+      const withAlpha = (color: string, alpha: number) => {
+        const match = color.match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)/i);
+        if (!match) return color;
+        const r = Number(match[1]);
+        const g = Number(match[2]);
+        const b = Number(match[3]);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      };
+
+      const init = async () => {
+        const [{ createChart }, { getChartTheme, createChartScalesDefaults }] = await Promise.all([
+          import('../../design-system/charts/chart-lifecycle'),
+          import('../../design-system/charts/chart-theme'),
+        ]);
+
+        const theme = getChartTheme(root);
+        const scaleDefaults = createChartScalesDefaults(root);
+
+        const config = {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: (datasets as any[]).map((ds, index) => ({
+              label: ds.label,
+              data: ds.data,
+              borderColor: theme.series[index % theme.series.length],
+              backgroundColor: withAlpha(theme.series[index % theme.series.length], 0.22),
+              borderWidth: 2,
+            })),
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: Boolean(showLegend), labels: { color: theme.legendText } },
+              tooltip: { enabled: Boolean(showTooltip), backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, borderWidth: 1 },
+            },
+            scales: {
+              x: scaleDefaults,
+              y: scaleDefaults,
+            },
+          },
+        };
+
+        await createChart(canvas, config, { root, enableResize: true });
+      };
+
+      void init();
+    })();
+  </script>
+</UiChartShell>

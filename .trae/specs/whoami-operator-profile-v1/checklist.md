@@ -1,0 +1,22 @@
+# Checklist
+
+- [ ] Whoami hero is replaced by Operator Profile layout on `/` and `/{lang}/` without changing route paths
+- [ ] Primary navigation labels remain exactly: Whoami, Toolchain, Experience, Tutorials, Knowledge Center, Contact
+- [ ] Baseline (no-JS): keyboard cluster works as anchor navigation and all panels are reachable by scroll
+- [ ] Enhanced (JS): keys show active/pressed state and optional panel emphasis without hiding essential content
+- [ ] Reduced-motion: no idle loops; transitions are disabled or reduced to ≤180ms crossfade where necessary
+- [ ] Stats panel shows 8 categories (Cloud, Security, DevSecOps, Kubernetes, Architecture, Leadership, Automation, AI)
+- [ ] No invented metrics: every numeric score either derives from content evidence or is shown as “N/A”
+- [ ] Each stats row shows score + confidence + evidence summary (human-readable)
+- [ ] Draft blog posts are excluded from evidence counts and are never linked as public detail pages
+- [ ] Radar chart exists and has an accessible table/list fallback with all axis values and evidence summaries
+- [ ] Badges are factual and derived from existing content/taxonomy (no implied certifications or achievements)
+- [ ] Accessibility: semantic headings, meaningful link labels, keyboard navigation, visible focus states, no color-only meaning
+- [ ] Performance: no new runtime dependencies; Whoami incremental client JS ≤ 8KB gzip; no extra blocking requests
+- [ ] Validation passes:
+  - [ ] `pnpm content:validate`
+  - [ ] `pnpm content:graph`
+  - [ ] `pnpm check`
+  - [ ] `pnpm astro check`
+  - [ ] `pnpm build`
+  - [ ] `pnpm exec playwright test --project=chromium --reporter=line`

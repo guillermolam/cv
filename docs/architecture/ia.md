@@ -4,50 +4,61 @@ Source of truth: [.trae/documents/master-implementation-plan-hybrid-cloud-contro
 
 This document defines the route hierarchy, navigation hierarchy, recruiter journey, CTA placement, and canonical routes for v1.
 
+Primary navigation labels are defined in: [navigation-labels.md](file:///Users/guillermolammartin/Git/guillermolam/cv/docs/architecture/navigation-labels.md)
+
 ---
 
 ## Route Hierarchy
 
 Language-scoped primary routes:
-- `/{lang}/` — Control Room landing
-- `/{lang}/about` — Professional summary, values, timeline highlights
-- `/{lang}/cv` — Canonical CV page + downloads
-- `/{lang}/portfolio` — Overview
+- `/{lang}/` — Whoami (Control Room landing)
+- `/{lang}/toolchain` — Toolchain
+- `/{lang}/experience` — Experience
+- `/{lang}/blog` — Tutorials (existing blog collection; drafts not published)
+  - `/{lang}/blog/{slug}` — Tutorial detail
+- `/{lang}/knowledge` — Knowledge Center
+  - `/{lang}/knowledge/{slug}` — Knowledge resource detail
+- `/{lang}/contact` — Contact + professional channels
+
+Language-scoped secondary/utility routes (not in primary nav):
+- `/{lang}/cv` — Briefing Pack (CV formats + downloads)
+- `/{lang}/portfolio` — Proofs/Deployments (secondary proof browsing; may later merge into Experience views)
   - `/{lang}/portfolio/development`
   - `/{lang}/portfolio/infra`
   - `/{lang}/portfolio/security`
-- `/{lang}/case-studies/{slug}` — Case study detail (long-form proof)
-- `/{lang}/blog` — Blog index (initially can be EN-first for posts; index still exists in all langs)
-  - `/{lang}/blog/{slug}` — Blog post
-- `/{lang}/contact` — Contact + social links
+- `/{lang}/case-studies/{slug}` — Mission Dossier (case study detail)
+- `/{lang}/about` — Operator File (long-form identity; optional secondary link)
+- `/{lang}/content-index` — Graph diagnostics / content inventory
 
 Non-language root:
 - `/` — English default landing (or a light language chooser that routes to `/en/`, `/es/`, `/fr/`, `/de/`)
 
-Supported languages (v1 requirement):
-- `en`, `es`, `fr`, `de`
+Language support (current implementation):
+- Content collections validate `en|es`.
+- Route scaffolding may exist for `fr|de` as future translation work; navigation labels and content must be honest where translations are missing.
 
 ---
 
 ## Navigation Hierarchy
 
 Primary navigation (header, persistent):
-- Home
-- About
-- CV
-- Portfolio
-- Blog
+- Whoami
+- Toolchain
+- Experience
+- Tutorials
+- Knowledge Center
 - Contact
 - Language switcher
 
-Secondary navigation (within Portfolio):
-- Overview
-- Development
-- Infrastructure
-- Security
+Secondary navigation (contextual, not primary):
+- Briefing Pack (CV downloads)
+- Proofs/Deployments (portfolio index)
+- Mission Dossiers (case studies index, if present later)
+- Content Index / Graph Diagnostics
+- Model Test (dev-only)
 
 Tertiary navigation (contextual, within case studies and blog):
-- Breadcrumbs (Home → Portfolio → Category → Item)
+- Breadcrumbs (Whoami → Proofs/Deployments → Category → Item)
 - “Related” modules (case studies/projects/blog) to connect proof pathways
 
 Control Room (landing) in-page navigation (supplemental, non-essential):
@@ -64,21 +75,21 @@ Rules:
 
 ### Primary recruiter questions (mapped to routes)
 1. Who is Guillermo and what role is he targeting?
-   - Answered on `/{lang}/` (first screen) and `/{lang}/about`
+   - Answered on `/{lang}/` (Whoami); deeper details optionally on `/{lang}/about` (Operator File)
 2. What domains is he strong in?
-   - Answered on `/{lang}/` (briefing rail + topology table) and `/{lang}/portfolio`
+   - Answered on `/{lang}/` (briefing rail + topology table) and `/{lang}/toolchain`
 3. Where is the proof?
-   - Answered via portfolio category routes + case studies + scannable topology index
+   - Answered via `/{lang}/experience` (timeline + proof links) and `/{lang}/portfolio`/case studies as secondary deep proof
 4. Can I download a CV that fits my process (ATS, one-page, recruiter)?
-   - Answered on `/{lang}/cv`
+   - Answered on `/{lang}/cv` (Briefing Pack; cvFormats as source of truth)
 5. How do I contact him quickly?
    - Answered via persistent header CTA and `/{lang}/contact`
 
 ### Ideal flow (fast path)
-`/{lang}/` → (Download CV) → (Portfolio) → (Flagship Case Study) → (Contact)
+`/{lang}/` → (Briefing Pack) → (Experience) → (Flagship Mission Dossier) → (Contact)
 
 ### Alternate flow (deep technical)
-`/{lang}/` → Portfolio category → Case study → Blog post → CV → Contact
+`/{lang}/` → Toolchain → Tutorials → Knowledge Center → Experience → Briefing Pack → Contact
 
 ---
 
@@ -95,9 +106,9 @@ CV page:
 - Direct download links (or “Coming soon” if a PDF is not present)
 - Secondary CTA: Contact
 
-Portfolio overview:
-- Category entry cards (Development / Infrastructure / Security)
-- Case study highlights
+Portfolio overview (secondary):
+- Project cards
+- Case study evidence links where available
 
 Case study detail:
 - “Back to Portfolio”
@@ -144,4 +155,3 @@ Enforce:
 - Recruiter-first scannability.
 - Content-first semantics.
 - Progressive enhancement for any 3D.
-

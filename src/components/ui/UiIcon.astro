@@ -1,0 +1,95 @@
+---
+import { FALLBACK_ICON_ID, getIconDefinition, iconRegistry } from '../../design-system/icons/icon-registry';
+import { getIconA11y } from '../../design-system/icons/icon-accessibility';
+import {
+  iconDepthClass,
+  iconMotionClass,
+  iconToneClass,
+  reducedMotionSafeClassName,
+} from '../../design-system/icons/icon-motion';
+import type { IconDepth, IconId, IconMotion, IconTone } from '../../design-system/icons/icon-types';
+
+type Props = {
+  name: IconId;
+  label?: string;
+  title?: string;
+  description?: string;
+  decorative?: boolean;
+  tone?: IconTone;
+  depth?: IconDepth;
+  size?: number | string;
+  motion?: IconMotion;
+  class?: string;
+  id?: string;
+  attrs?: Record<string, string | undefined>;
+};
+
+const {
+  name,
+  label,
+  title,
+  description,
+  decorative,
+  tone = 'neutral',
+  depth = 'flat',
+  motion = 'none',
+  size,
+  class: className,
+  id,
+  attrs,
+} = Astro.props as Props;
+
+const isKnown = Object.hasOwn(iconRegistry, name);
+const definition = getIconDefinition(name);
+const resolvedName = definition.id;
+const isMissing = !isKnown && name !== FALLBACK_ICON_ID;
+
+const mode = decorative === true ? 'decorative' : definition.defaultAccessibility;
+const a11y = getIconA11y({
+  iconId: resolvedName,
+  mode,
+  label,
+  title,
+  description,
+  fallbackLabel: definition.label,
+  instanceId: id,
+});
+
+const style =
+  typeof size === 'number'
+    ? `--ds-icon-size:${size}px`
+    : typeof size === 'string' && size.trim().length > 0
+      ? `--ds-icon-size:${size.trim()}`
+      : undefined;
+
+const classes = [
+  className,
+  iconToneClass[tone],
+  iconDepthClass[depth],
+  iconMotionClass[motion],
+  reducedMotionSafeClassName,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<svg
+  id={id}
+  class={classes || undefined}
+  {...(attrs ?? {})}
+  data-ui-icon
+  data-icon-name={resolvedName}
+  data-icon-tone={tone}
+  data-icon-depth={depth}
+  data-icon-motion={motion}
+  data-decorative={mode === 'decorative' ? 'true' : 'false'}
+  data-icon-missing={isMissing ? 'true' : 'false'}
+  viewBox={definition.viewBox}
+  style={style}
+  {...a11y.svgAttrs}
+>
+  {a11y.title ? <title id={a11y.titleId}>{a11y.title}</title> : null}
+  {a11y.description ? <desc id={a11y.descId}>{a11y.description}</desc> : null}
+  {definition.layers.secondary ? <g data-icon-layer="secondary" set:html={definition.layers.secondary} /> : null}
+  <g data-icon-layer="primary" set:html={definition.layers.primary} />
+</svg>

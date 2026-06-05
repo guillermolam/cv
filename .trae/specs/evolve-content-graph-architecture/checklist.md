@@ -1,0 +1,16 @@
+- [ ] Architecture docs updated/created as listed in this spec (content-model, ia, blueprint, content-graph, data-flow, islands-and-state, linking-taxonomy, linkedin-sync, seo-content-strategy).
+- [ ] Astro Content Collections exist under `src/content/**` and validate with Zod schemas.
+- [ ] All required collections exist: profile, stats, categories, tags, tools, skills, achievements, certifications, education, languages, hobbies, softSkills, experience, projects, caseStudies, blog, knowledgeResources, contactChannels, socialLinks, cvFormats.
+- [ ] Stable IDs are used consistently (`categoryId`, `tagId`, `toolId`, `skillId`, `projectId`, `experienceId`, `resourceId`, `blogSlug`, `caseStudyId`, `certificationId`, `achievementId`).
+- [ ] Cross-links resolve: no broken internal references (tools/skills/tags/categories/security facets/typed links).
+- [ ] Security facets are enforced as orthogonal dimensions: referenced security categories match their `dimension`.
+- [ ] Backlinks are generated build-time and appear on detail pages (or in a consistent “Referenced by” module).
+- [ ] Hub pages are HTML-first with usable JS-disabled fallbacks: Toolchain, Experience, Portfolio, Blog, Knowledge.
+- [ ] Optional islands do not hide essential content and have static fallbacks.
+- [ ] Reduced-motion behavior is respected for any animated counters or interactive enhancements.
+- [ ] Three.js boundaries are preserved: no essential content moved into WebGL/canvas.
+- [ ] Static deployment remains valid (Astro static output compatible with Fermyon/GitHub Pages).
+- [ ] No React dependency added.
+- [ ] No headless CMS dependency added.
+- [ ] Validation gates pass: `pnpm astro check`, `pnpm build`, plus content graph validation tests.
+- [ ] README documents authoring workflow: adding tools/projects/resources, linking, backlinks, recruiter stats derivation, manual LinkedIn sync, validation commands.

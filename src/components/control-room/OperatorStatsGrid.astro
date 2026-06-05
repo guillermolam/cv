@@ -1,0 +1,151 @@
+---
+import { getCollection } from 'astro:content';
+import { computeOperatorStats } from '../../lib/content/operator-stats';
+
+/**
+ * OperatorStatsGrid — the "Operator Stats" card grid (reference mockup, top-right).
+ *
+ * Values are derived strictly from the content graph via computeOperatorStats;
+ * a stat with no backing evidence renders "N/A" (no invented numbers, per the
+ * recruiter-first rule). Build-time only, zero client JS.
+ */
+export type Props = {
+  lang?: string;
+  class?: string;
+};
+
+const { lang = 'en', class: className } = Astro.props as Props;
+
+const byLang = <T extends { data: { lang: string } }>(all: T[]) => {
+  const inLang = all.filter((e) => e.data.lang === lang);
+  return inLang.length > 0 ? inLang : all.filter((e) => e.data.lang === 'en');
+};
+
+const isDraftBlog = (e: { data: { draft?: boolean; visibility?: string } }) =>
+  Boolean(e.data.draft) || e.data.visibility === 'draft';
+
+const [projectsAll, caseStudiesAll, experienceAll, blogAll, toolsAll, certsAll, knowledgeAll] =
+  await Promise.all([
+    getCollection('projects'),
+    getCollection('caseStudies'),
+    getCollection('experience'),
+    getCollection('blog'),
+    getCollection('tools'),
+    getCollection('certifications'),
+    getCollection('knowledgeResources'),
+  ]);
+
+const stats = computeOperatorStats({
+  projects: byLang(projectsAll),
+  caseStudies: byLang(caseStudiesAll),
+  experience: byLang(experienceAll),
+  publishedBlog: byLang(blogAll).filter((b) => !isDraftBlog(b)),
+  tools: byLang(toolsAll),
+  certifications: byLang(certsAll),
+  knowledgeResources: byLang(knowledgeAll),
+});
+
+const fmt = (value: number | null, suffix?: string) =>
+  value === null ? 'N/A' : `${value}${suffix ?? ''}`;
+---
+
+<section class:list={['op-stats-grid', className]} aria-label="Operator stats">
+  <header class="op-stats-grid-header">
+    <p class="op-stats-grid-eyebrow">
+      <span class="ui-icon i-solar-chart-2-bold-duotone" aria-hidden="true"></span>
+      Operator stats
+    </p>
+  </header>
+
+  <ul class="op-stats-grid-list" role="list">
+    {stats.map((stat) => (
+      <li class="op-stat-card" data-na={stat.value === null ? 'true' : undefined}>
+        <span class={`op-stat-icon ui-icon ${stat.icon}`} aria-hidden="true"></span>
+        <span class="op-stat-value">{fmt(stat.value, stat.suffix)}</span>
+        <span class="op-stat-label">{stat.label}</span>
+        <span class="op-stat-derived" hidden>{stat.derivedFrom}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .op-stats-grid {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .op-stats-grid-eyebrow {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-techno, var(--font-display));
+    font-size: var(--font-size-0);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .op-stats-grid-eyebrow .ui-icon {
+    color: var(--color-cta);
+    font-size: 1rem;
+  }
+
+  .op-stats-grid-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  @media (min-width: 680px) {
+    .op-stats-grid-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .op-stat-card {
+    position: relative;
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.7rem 0.75rem;
+    border-radius: var(--radius-2);
+    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(120% 120% at 20% 0%, color-mix(in oklab, var(--color-cta), transparent 92%), transparent 60%),
+      color-mix(in oklab, var(--color-surface-2), transparent 14%);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 40%),
+      0 8px 20px var(--shadow-2);
+  }
+
+  .op-stat-icon {
+    font-size: 1.05rem;
+    color: var(--color-cta);
+    opacity: 0.85;
+  }
+
+  .op-stat-value {
+    font-family: var(--font-digital, var(--font-mono));
+    font-size: var(--font-size-4);
+    line-height: 1.05;
+    color: var(--color-text-strong);
+    text-shadow: 0 0 14px var(--fx-glow-accent);
+  }
+
+  .op-stat-card[data-na='true'] .op-stat-value {
+    color: var(--color-text-muted);
+    text-shadow: none;
+    opacity: 0.6;
+  }
+
+  .op-stat-label {
+    font-size: var(--font-size-00);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+</style>

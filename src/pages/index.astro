@@ -1,88 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ControlRoomLayout from '../layouts/ControlRoomLayout.astro';
-import Hero3D from '../components/Hero3D.astro';
-import HeroFallback from '../components/control-room/HeroFallback.astro';
-import BriefingRail from '../components/control-room/BriefingRail.astro';
-import OperatorId from '../components/control-room/OperatorId.astro';
-import StationChips from '../components/control-room/StationChips.astro';
-import StationOverlay from '../components/control-room/StationOverlay.astro';
-import TopologyTable from '../components/control-room/TopologyTable.astro';
-import { STATIONS } from '../lib/control-room/stations';
+import ControlRoomConsole from '../components/control-room/ControlRoomConsole.astro';
 
 const title = 'Hybrid Cloud Control Room';
 const description =
   'Cloud Security & DevSecOps Engineer. I build secure delivery pipelines, cloud-native platforms, and pragmatic guardrails that help teams ship with confidence.';
-
-const selectedStationId = undefined;
 ---
 
 <BaseLayout title={title} description={description}>
-  <ControlRoomLayout>
-    <BriefingRail
-      slot="rail"
-      roleTarget="Cloud Security & DevSecOps / Platform Security"
-      domains={[
-        'Kubernetes',
-        'GitOps',
-        'Cloud security',
-        'Supply chain security',
-        'Infrastructure automation',
-        'Security operations'
-      ]}
-      proofLinks={[
-        { label: 'Download CV', href: '/cv' },
-        { label: 'Portfolio', href: '/portfolio' },
-        { label: 'GitHub', href: 'https://github.com/guillermolam' },
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/guillermo-lam-28901047' }
-      ]}
-      contactLinks={[{ label: 'Contact page', href: '/contact' }]}
-    />
-
-    <Hero3D enabled={false} slot="hero">
-      <HeroFallback
-        eyebrow="Hybrid Cloud Control Room"
-        headline="Cloud Security & DevSecOps Engineer"
-        subheadline="Building secure hybrid-cloud platforms with pragmatic guardrails, reliable delivery, and operational clarity."
-      >
-        <OperatorId size="md" label="Operator" showRole={false} />
-        <div class="hero-ctas">
-          <a class="button primary" href="/cv">Download CV</a>
-          <a class="button" href="/portfolio">View portfolio</a>
-          <a class="button" href="/contact">Contact</a>
-        </div>
-
-        <StationChips stations={STATIONS} selectedStationId={selectedStationId} />
-      </HeroFallback>
-
-      <StationOverlay stations={STATIONS} selectedStationId={selectedStationId} />
-    </Hero3D>
-  </ControlRoomLayout>
-
-  <TopologyTable stations={STATIONS} />
-
-  <section class="stations" aria-label="Stations">
-    {STATIONS.map((s) => (
-      <article class="station" id={`station-${s.id}`}>
-        <header class="station-header">
-          <h2 class="station-title">{s.label}</h2>
-          <a class="station-category" href={s.portfolioHref}>
-            View category
-          </a>
-        </header>
-        <p class="station-signal">{s.signal}</p>
-        <div class="station-links">
-          {s.evidenceLinks.map((l) => (
-            <a href={l.href}>{l.label}</a>
-          ))}
-        </div>
-      </article>
-    ))}
-  </section>
-
-  <script>
-    import initHomeMotion from '../scripts/home-motion';
-
-    initHomeMotion();
-  </script>
+  <ControlRoomConsole lang="en" prefix="/en" />
 </BaseLayout>

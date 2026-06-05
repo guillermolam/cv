@@ -1,0 +1,55 @@
+---
+import UiButton from './UiButton.astro';
+
+type Props = {
+  id?: string;
+  class?: string;
+  href: string;
+  label: string;
+  icon?: string;
+  iconLabel?: string;
+  current?: boolean;
+  disabled?: boolean;
+  external?: boolean;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'security' | 'cloud' | 'keycap' | 'terminal' | 'control';
+  size?: 'sm' | 'md' | 'lg';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+};
+
+const {
+  id,
+  class: className,
+  href,
+  label,
+  icon,
+  iconLabel,
+  current = false,
+  disabled = false,
+  external = false,
+  variant = 'ghost',
+  size = 'md',
+  depth = 'flat',
+} = Astro.props as Props;
+
+const target = external ? '_blank' : undefined;
+---
+
+<span data-ui-nav-item data-current={current ? 'true' : 'false'} data-disabled={disabled ? 'true' : 'false'} data-external={external ? 'true' : 'false'}>
+  <UiButton
+    id={id}
+    class={className}
+    href={href}
+    target={target}
+    disabled={disabled}
+    variant={variant}
+    size={size}
+    depth={depth}
+    icon={icon}
+    iconLabel={iconLabel}
+    attrs={{
+      ...(current ? { 'aria-current': 'page' } : {}),
+    }}
+  >
+    {label}
+  </UiButton>
+</span>

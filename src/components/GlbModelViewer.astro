@@ -1,0 +1,189 @@
+---
+type Props = {
+  /**
+   * Site-relative path to the GLB file (must be under `public/`).
+   * Example: `/3d/model.glb`
+   */
+  src: string;
+  poster?: string;
+  reveal?: 'auto' | 'interaction';
+  title: string;
+  description?: string;
+  class?: string;
+};
+
+const { src, poster, reveal = 'interaction', title, description, class: className } = Astro.props;
+
+if (typeof src !== 'string' || !src.startsWith('/')) {
+  throw new Error('GlbModelViewer: `src` must be a site-relative path starting with "/"');
+}
+
+if (typeof poster !== 'undefined' && (typeof poster !== 'string' || !poster.startsWith('/'))) {
+  throw new Error('GlbModelViewer: `poster` must be a site-relative path starting with "/"');
+}
+
+if (reveal !== 'auto' && reveal !== 'interaction') {
+  throw new Error('GlbModelViewer: `reveal` must be "auto" or "interaction"');
+}
+
+if (typeof title !== 'string' || title.trim().length === 0) {
+  throw new Error('GlbModelViewer: `title` is required');
+}
+
+const idSafe = title
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/(^-|-$)/g, '');
+
+const captionId = `glb-caption-${idSafe || 'model'}`;
+---
+
+<figure class:list={['glb-viewer', 'card', 'pad', className]} aria-labelledby={captionId}>
+  <div class="glb-frame" data-glb-viewer>
+    <model-viewer
+      src={src}
+      poster={poster}
+      alt={title}
+      camera-controls
+      reveal={reveal}
+      interaction-prompt="none"
+      shadow-intensity="0.7"
+      aria-describedby={captionId}
+    />
+    <div class="glb-frame-fallback" aria-hidden="true">
+      <span>Interactive 3D preview unavailable.</span>
+    </div>
+  </div>
+
+  <figcaption class="glb-caption" id={captionId}>
+    <div class="glb-caption-header">
+      <strong class="glb-title">{title}</strong>
+      <a class="glb-download" href={src} download>
+        Download .glb
+      </a>
+    </div>
+    {description ? <p class="glb-description">{description}</p> : null}
+    <p class="glb-fallback">
+      If the interactive preview doesn’t load (no JavaScript/WebGL support), use the download link.
+    </p>
+  </figcaption>
+</figure>
+
+<script>
+  const loadModelViewer = async () => {
+    try {
+      await import('@google/model-viewer');
+    } catch {
+      return;
+    }
+
+    const frames = Array.from(document.querySelectorAll('[data-glb-viewer]'));
+    for (const frame of frames) {
+      const modelViewer = frame.querySelector('model-viewer');
+      if (!modelViewer) continue;
+
+      frame.setAttribute('data-glb-viewer-enhanced', 'true');
+
+      const setError = (hasError: boolean) => {
+        if (hasError) frame.setAttribute('data-glb-viewer-error', 'true');
+        else frame.removeAttribute('data-glb-viewer-error');
+      };
+
+      setError(false);
+      modelViewer.addEventListener('load', () => setError(false), { once: true });
+      modelViewer.addEventListener('error', () => setError(true));
+    }
+  };
+
+  loadModelViewer();
+</script>
+
+<style>
+  .glb-viewer {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .glb-frame {
+    border-radius: var(--radius-3);
+    border: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+    overflow: hidden;
+    min-height: 260px;
+  }
+
+  model-viewer {
+    display: block;
+    width: 100%;
+    height: clamp(260px, 40vw, 420px);
+    background: radial-gradient(
+      circle at 30% 20%,
+      color-mix(in oklab, var(--color-surface-1), transparent 20%),
+      color-mix(in oklab, var(--color-surface-2), transparent 0%)
+    );
+  }
+
+  /* No-JS / non-enhanced fallback: keep layout stable, but don’t show an empty box. */
+  model-viewer:not(:defined) {
+    display: none;
+  }
+
+  [data-glb-viewer][data-glb-viewer-enhanced='true']:not([data-glb-viewer-error='true'])
+    .glb-frame-fallback {
+    display: none;
+  }
+
+  .glb-frame-fallback {
+    display: grid;
+    place-items: center;
+    height: clamp(260px, 40vw, 420px);
+    padding: 1rem;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .glb-caption {
+    margin: 0;
+  }
+
+  .glb-caption-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.35rem;
+  }
+
+  .glb-title {
+    color: var(--color-text-strong);
+  }
+
+  .glb-download {
+    text-decoration: none;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.35rem 0.6rem;
+    color: var(--color-text-strong);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+  }
+
+  .glb-download:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .glb-description {
+    margin: 0.3rem 0 0;
+  }
+
+  .glb-fallback {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    model-viewer {
+      --progress-bar-color: transparent;
+    }
+  }
+</style>

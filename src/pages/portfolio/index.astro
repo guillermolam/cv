@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import GlbModelViewer from '../../components/GlbModelViewer.astro';
 
 const title = 'Portfolio';
 const description = 'Selected work across security, infrastructure, and development.';
+const portfolioGlb = '/3d/guillermolam-avatar.glb';
 ---
 
 <BaseLayout title={title} description={description}>
@@ -15,5 +17,12 @@ const description = 'Selected work across security, infrastructure, and developm
       <a class="button" href="/portfolio/development">Development</a>
     </div>
   </section>
-</BaseLayout>
 
+  <section aria-label="3D asset preview">
+    <GlbModelViewer
+      src={portfolioGlb}
+      title="Guillermo Lam avatar (3D)"
+      description="Interactive preview for a bundled GLB model. If it doesn’t load, the file is still available via the download link."
+    />
+  </section>
+</BaseLayout>

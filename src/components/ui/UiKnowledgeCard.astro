@@ -1,0 +1,113 @@
+---
+import UiCard from './UiCard.astro';
+import UiBadge from './UiBadge.astro';
+import UiCluster from '../layout/UiCluster.astro';
+import UiSkillBadge from './UiSkillBadge.astro';
+import type { ContentGraphNode } from '../../lib/content/graph';
+
+type Props = {
+  id?: string;
+  class?: string;
+  title?: string;
+  description?: string;
+  href?: string;
+  publishedDate?: string;
+  updatedDate?: string;
+  readingTime?: string;
+  draft?: boolean;
+  categoryIds?: string[];
+  tagIds?: string[];
+  icon?: string;
+  iconLabel?: string;
+  variant?: 'default' | 'panel';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  node?: ContentGraphNode;
+  showIds?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  title,
+  description,
+  href,
+  publishedDate,
+  updatedDate,
+  readingTime,
+  draft = false,
+  categoryIds,
+  tagIds,
+  icon,
+  iconLabel,
+  variant = 'panel',
+  depth = 'raised',
+  motion = 'hover-lift',
+  retro = false,
+  node,
+  showIds = false,
+} = Astro.props as Props;
+
+const resolvedTitle = title ?? node?.title ?? 'Demo knowledge';
+const resolvedHref = href ?? node?.url;
+const isIsoLike = (value: string) => /^\d{4}(-\d{2})?(-\d{2})?$/.test(value);
+const publishedDateTime = publishedDate && isIsoLike(publishedDate) ? publishedDate : undefined;
+const updatedDateTime = updatedDate && isIsoLike(updatedDate) ? updatedDate : undefined;
+---
+
+<UiCard
+  id={id}
+  class={className}
+  attrs={{ 'data-ui-knowledge-card': '', 'data-retro': retro ? 'true' : 'false' }}
+  variant={variant}
+  depth={depth}
+  href={resolvedHref}
+  eyebrow="Knowledge"
+  title={resolvedTitle}
+  description={description}
+  icon={icon}
+  iconLabel={iconLabel}
+  motion={motion}
+  retro={retro}
+>
+  <div slot="meta">
+    <UiCluster>
+      {draft ? (
+        <UiBadge variant="warning" size="sm" depth="flat">
+          Draft
+        </UiBadge>
+      ) : null}
+      {publishedDate ? (
+        <UiBadge variant="neutral" size="sm" depth="flat">
+          Published:{' '}
+          {publishedDateTime ? <time datetime={publishedDateTime}>{publishedDate}</time> : <span>{publishedDate}</span>}
+        </UiBadge>
+      ) : null}
+      {updatedDate ? (
+        <UiBadge variant="neutral" size="sm" depth="flat">
+          Updated:{' '}
+          {updatedDateTime ? <time datetime={updatedDateTime}>{updatedDate}</time> : <span>{updatedDate}</span>}
+        </UiBadge>
+      ) : null}
+      {readingTime ? (
+        <UiBadge variant="neutral" size="sm" depth="flat">
+          {readingTime}
+        </UiBadge>
+      ) : null}
+    </UiCluster>
+  </div>
+
+  {showIds ? (
+    <UiCluster>
+      {(categoryIds ?? []).map((v) => (
+        <UiSkillBadge label={`categoryId: ${v}`} variant="neutral" depth="flat" />
+      ))}
+      {(tagIds ?? []).map((v) => (
+        <UiSkillBadge label={`tagId: ${v}`} variant="neutral" depth="flat" />
+      ))}
+    </UiCluster>
+  ) : null}
+
+  <slot />
+</UiCard>

@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ContentCard from '../../../components/content/ContentCard.astro';
+import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
+import KnowledgeFilter from '../../../components/content/KnowledgeFilter.astro';
+
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getLangStaticPaths, isLang } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
+
+const { lang } = Astro.params;
+if (!lang || !isLang(lang)) {
+  throw new Error('Invalid language');
+}
+
+const title = 'Knowledge Center';
+const description = 'Curated references that support the portfolio’s architecture and implementation choices.';
+
+const resourcesAll = await getCollection('knowledgeResources');
+const categoriesAll = await getCollection('categories');
+const tagsAll = await getCollection('tags');
+const toolsAll = await getCollection('tools');
+const skillsAll = await getCollection('skills');
+const projectsAll = await getCollection('projects');
+const caseStudiesAll = await getCollection('caseStudies');
+const blogAll = await getCollection('blog');
+
+const resources = resourcesAll.filter((r) => r.data.lang === lang);
+const resourcesFallback = resources.length > 0 ? resources : resourcesAll.filter((r) => r.data.lang === 'en');
+
+const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
+const skillTitleById = new Map(skillsAll.map((s) => [s.data.skillId, s.data.name] as const));
+const projectTitleById = new Map(projectsAll.map((p) => [p.data.projectId, p.data.title] as const));
+const caseStudyMetaById = new Map(caseStudiesAll.map((c) => [c.data.caseStudyId, { title: c.data.title, slug: c.data.slug }] as const));
+
+const isDraftBlog = (entry: CollectionEntry<'blog'>) =>
+  Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
+const publishedBlogSlugs = new Set(blogAll.filter((b) => !isDraftBlog(b)).map((b) => b.data.blogSlug));
+
+const isNonEmptyString = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
+
+const uniq = (values: string[]) => Array.from(new Set(values));
+
+const typeOptions = uniq(resourcesFallback.map((r) => r.data.type))
+  .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+type ResourceLevel = 'intro' | 'intermediate' | 'advanced' | 'reference';
+type ResourceStatus = 'planned' | 'reading' | 'completed' | 'reference' | 'archived';
+
+const levelValues = resourcesFallback
+  .map((r) => r.data.level)
+  .filter((value): value is ResourceLevel => typeof value === 'string' && value.length > 0);
+const levelOptions = uniq(levelValues)
+  .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const statusValues = resourcesFallback
+  .map((r) => r.data.status)
+  .filter((value): value is ResourceStatus => typeof value === 'string' && value.length > 0);
+const statusOptions = uniq(statusValues)
+  .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const tagOptions = uniq(resourcesFallback.flatMap((r) => r.data.tagIds ?? []))
+  .map((id) => ({ id, label: tagTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const toolOptions = uniq(resourcesFallback.flatMap((r) => r.data.toolIds ?? []))
+  .map((id) => ({ id, label: toolTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const categoryOptions = uniq(resourcesFallback.flatMap((r) => r.data.categoryIds ?? []))
+  .map((id) => ({ id, label: categoryTitleById.get(id) }))
+  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const groups = new Map<string, Array<CollectionEntry<'knowledgeResources'>>>();
+for (const r of resourcesFallback) {
+  const key = r.data.type;
+  groups.set(key, [...(groups.get(key) ?? []), r]);
+}
+const groupEntries = Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
+---
+
+<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
+  <section class="card pad">
+    <h1>Knowledge Center</h1>
+    {resources.length === 0 && lang !== 'en' ? (
+      <p class="topology-subtitle">Showing English resources while {lang.toUpperCase()} content is being authored.</p>
+    ) : null}
+    <p class="topology-subtitle">Curated references used to justify and extend the portfolio’s content graph and control-room architecture.</p>
+  </section>
+
+  {resourcesFallback.length === 0 ? (
+    <section class="card pad">
+      <h2>No resources yet</h2>
+      <p>This section will grow as the portfolio’s knowledge base expands.</p>
+    </section>
+  ) : (
+    <>
+      <KnowledgeFilter
+        targetSelector="#knowledge-items"
+        typeOptions={typeOptions}
+        levelOptions={levelOptions}
+        statusOptions={statusOptions}
+        tagOptions={tagOptions}
+        toolOptions={toolOptions}
+        categoryOptions={categoryOptions}
+        totalCount={resourcesFallback.length}
+      />
+
+      <div id="knowledge-items">
+        {groupEntries.map(([type, entries]) => (
+          <section class="card pad" aria-label={`Resources: ${type}`} data-knowledge-group>
+            <h2 style="text-transform: capitalize">{type}</h2>
+            <div class="grid cols-2" style="margin-top: 0.75rem">
+              {entries
+                .slice()
+                .sort((a, b) => a.data.title.localeCompare(b.data.title))
+                .map((resource) => {
+                  const href = `/${lang}/knowledge/${resource.data.resourceId}`;
+                  const metaParts = [
+                    `Type: ${resource.data.type}`,
+                    resource.data.level ? `Level: ${resource.data.level}` : undefined,
+                    resource.data.status ? `Status: ${resource.data.status}` : undefined,
+                  ].filter(isNonEmptyString);
+
+                  const tags = (resource.data.tagIds ?? [])
+                    .map((id) => tagTitleById.get(id))
+                    .filter(isNonEmptyString)
+                    .map((label) => ({ label }));
+                  const categories = (resource.data.categoryIds ?? [])
+                    .map((id) => categoryTitleById.get(id))
+                    .filter(isNonEmptyString)
+                    .map((label) => ({ label }));
+                  const tools = (resource.data.toolIds ?? [])
+                    .map((id) => toolTitleById.get(id))
+                    .filter(isNonEmptyString)
+                    .map((label) => ({ label }));
+                  const skills = (resource.data.skillIds ?? [])
+                    .map((id) => skillTitleById.get(id))
+                    .filter(isNonEmptyString)
+                    .map((label) => ({ label }));
+
+                  const projects = (resource.data.projectIds ?? [])
+                    .map((id) => ({ id, title: projectTitleById.get(id) }))
+                    .filter((p): p is { id: string; title: string } => typeof p.title === 'string')
+                    .map((p) => ({ label: p.title, href: `/${lang}/portfolio/${p.id}` }));
+
+                  const caseStudies = (resource.data.caseStudyIds ?? [])
+                    .map((id) => caseStudyMetaById.get(id))
+                    .filter((m): m is { title: string; slug: string } => Boolean(m?.title && m?.slug))
+                    .map((m) => ({ label: m.title, href: `/${lang}/case-studies/${m.slug}` }));
+
+                  const blogLinks = (resource.data.blogSlugs ?? [])
+                    .filter((slug) => publishedBlogSlugs.has(slug))
+                    .map((slug) => ({ label: `Blog: ${slug}`, href: `/${lang}/blog/${slug}` }));
+
+                  return (
+                    <div
+                      data-knowledge-item
+                      data-type={resource.data.type}
+                      data-level={resource.data.level ?? ''}
+                      data-status={resource.data.status ?? ''}
+                      data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
+                      data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
+                      data-category-ids={(resource.data.categoryIds ?? []).join(' ')}
+                    >
+                      <ContentCard
+                        title={resource.data.title}
+                        href={href}
+                        summary={resource.data.summary}
+                        meta={metaParts.join(' · ')}
+                      >
+                        {resource.data.url ? (
+                          <p>
+                            <a href={resource.data.url} target="_blank" rel="noopener noreferrer">
+                              Open external resource
+                            </a>
+                          </p>
+                        ) : null}
+                        {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
+                        {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
+                        {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+                        {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
+                        {projects.length > 0 ? <TaxonomyPills label="Related projects" items={projects} /> : null}
+                        {caseStudies.length > 0 ? <TaxonomyPills label="Related case studies" items={caseStudies} /> : null}
+                        {blogLinks.length > 0 ? <TaxonomyPills label="Related blog" items={blogLinks} /> : null}
+                      </ContentCard>
+                    </div>
+                  );
+                })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </>
+  )}
+</BaseLayout>

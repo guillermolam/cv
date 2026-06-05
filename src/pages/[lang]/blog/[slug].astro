@@ -1,27 +1,87 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogPostLayout from '../../../layouts/BlogPostLayout.astro';
+import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
+
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { SUPPORTED_LANGS, isLang } from '../../../lib/i18n';
 
-export function getStaticPaths() {
-  return SUPPORTED_LANGS.map((lang) => ({ params: { lang, slug: 'coming-soon' } }));
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const isDraft = (entry: CollectionEntry<'blog'>) =>
+    Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
+  const published = posts.filter((p) => !isDraft(p));
+
+  const slugs = Array.from(new Set(published.map((p) => p.data.blogSlug)));
+  return SUPPORTED_LANGS.flatMap((lang) => slugs.map((slug) => ({ params: { lang, slug } })));
 }
 
 const { lang, slug } = Astro.params;
 if (!lang || !isLang(lang)) {
   throw new Error('Invalid language');
 }
+if (!slug) {
+  throw new Error('Missing slug');
+}
 
-const title = 'Blog post';
-const description = 'Blog post placeholder.';
+const postsAll = await getCollection('blog');
+const tagsAll = await getCollection('tags');
+const toolsAll = await getCollection('tools');
+const categoriesAll = await getCollection('categories');
+
+const isDraft = (entry: CollectionEntry<'blog'>) =>
+  Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
+
+const postLang = postsAll.find((p) => p.data.blogSlug === slug && p.data.lang === lang);
+const postEn = postsAll.find((p) => p.data.blogSlug === slug && p.data.lang === 'en');
+const post = postLang ?? postEn;
+if (!post || isDraft(post)) {
+  throw new Error(`Post not found: ${slug}`);
+}
+
+const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
+const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+
+const isNonEmptyString = (value: string | undefined): value is string =>
+  typeof value === 'string' && value.length > 0;
+
+const tags = (post.data.tagIds ?? [])
+  .map((id) => tagTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+const tools = (post.data.toolIds ?? [])
+  .map((id) => toolTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+const categories = (post.data.categoryIds ?? [])
+  .map((id) => categoryTitleById.get(id))
+  .filter(isNonEmptyString)
+  .map((label) => ({ label }));
+
+const { Content } = await render(post);
+
+const title = post.data.title;
+const description = post.data.summary;
+const fallbackNote =
+  postLang ? undefined : lang !== 'en' ? `Showing English content while ${lang.toUpperCase()} content is being authored.` : undefined;
 ---
 
-<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
-  <section class="card pad">
-    <h1>Post: {slug}</h1>
-    <p>This route is a placeholder for Phase 1.</p>
-    <div class="cta-row">
-      <a class="button" href={`/${lang}/blog`}>Back to blog</a>
-    </div>
+<BlogPostLayout
+  title={title}
+  description={description}
+  publishedDate={post.data.publishedDate}
+  lang={lang}
+  useLangPrefix
+  backHref={`/${lang}/blog`}
+  fallbackNote={fallbackNote}
+>
+  <section class="grid">
+    {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+    {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
+    {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
   </section>
-</BaseLayout>
 
+  <section class="card pad">
+    <Content />
+  </section>
+</BlogPostLayout>

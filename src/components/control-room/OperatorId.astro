@@ -1,5 +1,5 @@
 ---
-import ProfilePortrait from '../ProfilePortrait.astro';
+import Avatar3D from '../Avatar3D.astro';
 import SocialLinks from '../SocialLinks.astro';
 import { site } from '../../lib/site';
 
@@ -13,7 +13,7 @@ const { size = 'md', label = 'Operator', showRole = true } = Astro.props;
 ---
 
 <div class="operator-id" data-operator-id>
-  <ProfilePortrait size={size} />
+  <Avatar3D size={size} ariaLabel={`3D avatar of ${site.name}`} />
   <div class="operator-id-meta">
     <p class="operator-id-label">{label}</p>
     <p class="operator-id-name">{site.name}</p>

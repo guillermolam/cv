@@ -1,0 +1,72 @@
+---
+import UiIcon from './UiIcon.astro';
+
+export type ProofChainItem = {
+  label: string;
+  href?: string;
+  kind?: 'profile' | 'project' | 'case-study' | 'skill' | 'tool' | 'knowledge' | 'other';
+  icon?: string;
+  current?: boolean;
+};
+
+type Props = {
+  id?: string;
+  class?: string;
+  items: readonly ProofChainItem[];
+  variant?: 'default' | 'compact';
+  depth?: 'flat' | 'raised' | 'elevated' | 'floating';
+  motion?: 'none' | 'hover-lift';
+  retro?: boolean;
+  ariaLabel?: string;
+};
+
+const {
+  id,
+  class: className,
+  items,
+  variant = 'default',
+  depth = 'flat',
+  motion = 'none',
+  retro = false,
+  ariaLabel = 'Proof chain',
+} = Astro.props as Props;
+---
+
+<nav
+  id={id}
+  class={className}
+  data-ui-proof-chain
+  data-variant={variant}
+  data-depth={depth}
+  data-motion={motion}
+  data-retro={retro ? 'true' : 'false'}
+  aria-label={ariaLabel}
+>
+  <ol>
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      const isCurrent = Boolean(item.current) || isLast;
+      const content = (
+        <>
+          {item.icon ? <UiIcon name={item.icon} decorative depth="flat" /> : null}
+          <span>{item.label}</span>
+        </>
+      );
+
+      return (
+        <li>
+          {item.href && !isCurrent ? (
+            <a href={item.href}>{content}</a>
+          ) : (
+            <span aria-current={isCurrent ? 'page' : undefined}>{content}</span>
+          )}
+          {!isLast ? (
+            <span data-ui-proof-sep aria-hidden="true">
+              →
+            </span>
+          ) : null}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
