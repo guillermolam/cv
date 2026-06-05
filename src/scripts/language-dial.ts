@@ -1,6 +1,8 @@
 import { setLang } from '../stores/control-room';
 import type { Lang } from '../lib/i18n';
 import { emitSfx } from '../lib/audio/events';
+import { Engine } from './three/Engine';
+import { BrushedMetalEffect } from './three/effects/BrushedMetalEffect';
 
 type DialLink = { code: Lang; href: string; name: string };
 
@@ -19,11 +21,26 @@ const initOne = (root: HTMLElement) => {
   const items = Array.from(root.querySelectorAll<HTMLElement>('[data-lcd-item]'));
   const knob = root.querySelector<HTMLElement>('[data-lang-knob]');
   const knobCore = root.querySelector<HTMLElement>('[data-knob-core]');
+  const bgMount = root.querySelector<HTMLElement>('[data-bg-mount]');
   const prevHit = root.querySelector<HTMLAnchorElement>('[data-dir="prev"]');
   const nextHit = root.querySelector<HTMLAnchorElement>('[data-dir="next"]');
   const stepDeg = links.length > 0 ? 360 / links.length : 90;
 
   let rotationSteps = 0;
+
+  if (bgMount && !bgMount.dataset.initialized) {
+    const engine = new Engine(bgMount);
+    const scene = engine.getScene();
+    
+    // Setup camera so it looks directly at the plane
+    const camera = engine.getCamera();
+    camera.position.z = 1;
+
+    const metalEffect = new BrushedMetalEffect(scene);
+    engine.addEffect(metalEffect);
+    
+    bgMount.dataset.initialized = 'true';
+  }
 
   const render = () => {
     const active = links[previewIdx]!;
