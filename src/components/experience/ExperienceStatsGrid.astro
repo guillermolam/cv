@@ -1,0 +1,204 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+import UiGrid from '../layout/UiGrid.astro';
+import UiIcon from '../ui/UiIcon.astro';
+import type {
+  ExperienceBucketGroup,
+  ExperienceStat,
+} from '../../lib/content/experience-cards';
+
+type Props = {
+  stats: ExperienceStat[];
+  buckets?: ExperienceBucketGroup[];
+};
+
+const { stats, buckets = [] } = Astro.props as Props;
+const activeBuckets = buckets.filter((bucket) => bucket.items.length > 0);
+const maxBucketValue = Math.max(
+  1,
+  ...activeBuckets.map((bucket) => bucket.items.length),
+);
+---
+
+<ExperiencePanel title="Stats" eyebrow="Signal" icon="chart-radar">
+  <UiGrid minItemWidth="9rem" gap="0.75rem" class="experience-stats">
+    {
+      stats.map((stat, index) => (
+        <article
+          class="experience-stats__item"
+          data-pending={stat.pending ? 'true' : 'false'}
+          style={`--experience-step:${index};`}
+        >
+          <div class="experience-stats__top">
+            <UiIcon
+              name={stat.icon}
+              size={16}
+              tone={stat.pending ? 'neutral' : 'accent'}
+              decorative
+            />
+            <span>{stat.label}</span>
+          </div>
+          <strong>{stat.value}</strong>
+          {stat.note ? <p>{stat.note}</p> : null}
+        </article>
+      ))
+    }
+  </UiGrid>
+
+  {
+    activeBuckets.length > 0 ? (
+      <div class="experience-stats__bands" aria-label="Signal distribution">
+        {activeBuckets.map((bucket, index) => (
+          <article
+            class="experience-stats__band"
+            style={`--experience-step:${index + stats.length}; --experience-fill:${bucket.items.length / maxBucketValue};`}
+          >
+            <div class="experience-stats__band-label">
+              <span>{bucket.label}</span>
+              <strong>{bucket.items.length}</strong>
+            </div>
+            <div class="experience-stats__band-track" aria-hidden="true">
+              <span class="experience-stats__band-fill"></span>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : null
+  }
+</ExperiencePanel>
+
+<style>
+  .experience-stats__item {
+    display: grid;
+    gap: 0.45rem;
+    min-height: 8rem;
+    padding: 0.85rem;
+    border-radius: 18px;
+    border: 1px solid color-mix(in oklab, var(--color-border), transparent 16%);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, white, transparent 96%) 0%,
+        color-mix(in oklab, var(--color-surface-3), transparent 16%) 100%
+      );
+    box-shadow:
+      0 14px 30px rgb(2 6 23 / 0.08),
+      inset 0 1px 0 rgb(255 255 255 / 0.55);
+  }
+
+  .experience-stats__item[data-pending='true'] {
+    border-style: dashed;
+    opacity: 0.88;
+  }
+
+  .experience-stats__top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+  }
+
+  .experience-stats__item strong {
+    font-size: var(--font-size-4);
+    line-height: 1.1;
+  }
+
+  .experience-stats__item p {
+    margin: 0;
+    font-size: var(--font-size-00);
+    color: var(--color-text-muted);
+  }
+
+  .experience-stats__bands {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+  }
+
+  .experience-stats__band {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .experience-stats__band-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: center;
+    font-size: var(--font-size-0);
+  }
+
+  .experience-stats__band-track {
+    position: relative;
+    height: 0.55rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--color-surface-3), transparent 18%);
+  }
+
+  .experience-stats__band-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--experience-fill) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-accent), transparent 20%),
+      color-mix(in oklab, var(--color-accent), transparent 64%)
+    );
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-stats__item {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        background var(--motion-fast) var(--ease-standard);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: experience-stats-step 480ms var(--ease-standard) forwards;
+      animation-delay: calc(var(--experience-step) * 70ms);
+    }
+
+    .experience-stats__item:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 62%);
+      background: color-mix(in oklab, var(--color-accent), transparent 92%);
+    }
+
+    .experience-stats__band {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: experience-stats-step 480ms var(--ease-standard) forwards;
+      animation-delay: calc(var(--experience-step) * 70ms);
+    }
+
+    .experience-stats__band-fill {
+      transform-origin: left center;
+      transform: scaleX(0);
+      animation: experience-band-fill 620ms var(--ease-emphasis) forwards;
+      animation-delay: calc((var(--experience-step) * 70ms) + 140ms);
+    }
+  }
+
+  @keyframes experience-stats-step {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes experience-band-fill {
+    0% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+</style>

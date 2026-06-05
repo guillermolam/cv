@@ -1,0 +1,95 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+import UiBadge from '../ui/UiBadge.astro';
+import ExperienceLogoMark from './ExperienceLogoMark.astro';
+import type { ExperienceCardViewModel } from '../../lib/content/experience-cards';
+
+type Props = {
+  companyName: string;
+  clientName?: string;
+  roleTitle: string;
+  summary: string;
+  logo: ExperienceCardViewModel['logo'];
+  importanceTier: ExperienceCardViewModel['importanceTier'];
+  importanceScore: number;
+};
+
+const {
+  companyName,
+  clientName,
+  roleTitle,
+  summary,
+  logo,
+  importanceTier,
+  importanceScore,
+} = Astro.props as Props;
+---
+
+<ExperiencePanel title="Company" eyebrow="Assignment" icon="command-center">
+  <div class="experience-company">
+    <div class="experience-company__heading" data-tier={importanceTier}>
+      <ExperienceLogoMark
+        logo={logo}
+        companyName={companyName}
+        importanceTier={importanceTier}
+        importanceScore={importanceScore}
+      />
+      <div class="experience-company__copy">
+        <h4>{companyName}</h4>
+        <p>{roleTitle}</p>
+      </div>
+      {
+        clientName ? (
+          <UiBadge variant="accent" size="sm" depth="flat">
+            via {clientName}
+          </UiBadge>
+        ) : null
+      }
+    </div>
+    <p class="experience-company__summary">{summary}</p>
+  </div>
+</ExperiencePanel>
+
+<style>
+  .experience-company {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .experience-company__heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: start;
+    flex-wrap: wrap;
+  }
+
+  .experience-company__copy {
+    flex: 1 1 18rem;
+    min-width: 0;
+  }
+
+  .experience-company__heading h4,
+  .experience-company__heading p,
+  .experience-company__summary {
+    margin: 0;
+  }
+
+  .experience-company__heading h4 {
+    font-size: clamp(1.45rem, 2vw, 2rem);
+  }
+
+  .experience-company__heading p,
+  .experience-company__summary {
+    color: var(--color-text-muted);
+  }
+
+  .experience-company__heading[data-tier='flagship'] p {
+    font-size: var(--font-size-2);
+    color: var(--color-text-strong);
+  }
+
+  .experience-company__heading[data-tier='priority'] p {
+    font-size: var(--font-size-1);
+  }
+</style>

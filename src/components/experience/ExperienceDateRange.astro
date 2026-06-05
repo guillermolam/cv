@@ -1,0 +1,73 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+import UiBadge from '../ui/UiBadge.astro';
+
+type Props = {
+  startDate: string;
+  endDate?: string;
+  isCurrent?: boolean;
+  totalTimeLabel: string;
+  importanceTier?: 'standard' | 'priority' | 'flagship';
+};
+
+const {
+  startDate,
+  endDate,
+  isCurrent = false,
+  totalTimeLabel,
+  importanceTier = 'standard',
+} = Astro.props as Props;
+---
+
+<ExperiencePanel title="Time window" eyebrow="Dates" icon="document">
+  <div class="experience-dates" data-tier={importanceTier}>
+    <div class="experience-dates__line">
+      <span class="experience-dates__label">Start</span>
+      <strong>{startDate}</strong>
+    </div>
+    <div class="experience-dates__line">
+      <span class="experience-dates__label"
+        >{isCurrent ? 'Current' : 'End'}</span
+      >
+      <strong>{isCurrent ? 'Present' : (endDate ?? 'Not set')}</strong>
+    </div>
+    <div class="experience-dates__footer">
+      <UiBadge variant="neutral" size="sm" depth="flat"
+        >{totalTimeLabel}</UiBadge
+      >
+    </div>
+  </div>
+</ExperiencePanel>
+
+<style>
+  .experience-dates {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .experience-dates__line {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .experience-dates strong {
+    font-size: var(--font-size-1);
+  }
+
+  .experience-dates[data-tier='flagship'] strong {
+    font-size: var(--font-size-2);
+  }
+
+  .experience-dates__label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .experience-dates__footer {
+    padding-top: 0.2rem;
+  }
+</style>

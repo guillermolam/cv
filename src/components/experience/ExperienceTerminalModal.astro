@@ -1,0 +1,200 @@
+---
+import UiButton from '../ui/UiButton.astro';
+import UiBadge from '../ui/UiBadge.astro';
+import UiGrid from '../layout/UiGrid.astro';
+import UiDoughnutChart from '../charts/UiDoughnutChart.astro';
+import ExperienceProjectsList from './ExperienceProjectsList.astro';
+import ExperienceAchievements from './ExperienceAchievements.astro';
+import ExperienceSkillBuckets from './ExperienceSkillBuckets.astro';
+import type { ExperienceCardViewModel } from '../../lib/content/experience-cards';
+
+type Props = {
+  entry: ExperienceCardViewModel;
+};
+
+const { entry } = Astro.props as Props;
+---
+
+<dialog
+  class="experience-modal"
+  x-ref="modal"
+  x-effect="modalOpen ? (!$refs.modal.open && $refs.modal.showModal()) : ($refs.modal.open && $refs.modal.close())"
+  x-on:close="modalOpen = false"
+  x-on:cancel="modalOpen = false"
+  x-on:click="if ($event.target === $el) closeModal($event)"
+  aria-labelledby={`${entry.anchorId}-modal-title`}
+>
+  <article class="experience-modal__shell">
+    <header class="experience-modal__header">
+      <div class="experience-modal__prompt">
+        <span>terminal://experience/{entry.id}</span>
+        <span class="experience-modal__cursor" aria-hidden="true"></span>
+      </div>
+      <UiButton
+        variant="terminal"
+        size="sm"
+        depth="flat"
+        icon="terminal"
+        attrs={{ 'x-on:click': 'closeModal($event)' }}
+      >
+        Close
+      </UiButton>
+    </header>
+
+    <div class="experience-modal__meta">
+      <div>
+        <p class="experience-modal__eyebrow">Role briefing</p>
+        <h3 id={`${entry.anchorId}-modal-title`}>{entry.companyName} · {entry.roleTitle}</h3>
+      </div>
+      <div class="experience-modal__badges">
+        <UiBadge variant="accent" size="sm" depth="flat">{entry.totalTimeLabel}</UiBadge>
+        <UiBadge variant="cloud" size="sm" depth="flat">{entry.dateRangeLabel}</UiBadge>
+        {entry.ageAtStartLabel ? <UiBadge variant="info" size="sm" depth="flat">{entry.ageAtStartLabel}</UiBadge> : null}
+      </div>
+    </div>
+
+    <p class="experience-modal__summary">{entry.summary}</p>
+
+    <UiGrid minItemWidth="18rem" gap="1rem">
+      <section class="experience-modal__section">
+        <h4>Responsibilities</h4>
+        <ExperienceAchievements achievements={entry.responsibilities} />
+      </section>
+      <section class="experience-modal__section">
+        <h4>Signal distribution</h4>
+        <UiDoughnutChart
+          id={`${entry.anchorId}-bucket-chart`}
+          title={`${entry.companyName} domain mix`}
+          description={`Mapped Dev, Sec, Ops, and AI signals for ${entry.companyName}.`}
+          labels={entry.bucketChart.labels}
+          datasets={entry.bucketChart.datasets}
+          tone="cloud"
+          depth="flat"
+          retro
+          showFallbackTable={true}
+          showLegend={true}
+          showTooltip={true}
+        />
+      </section>
+    </UiGrid>
+
+    <section class="experience-modal__section">
+      <h4>Projects and proof</h4>
+      <ExperienceProjectsList projects={entry.projects} />
+    </section>
+
+    <section class="experience-modal__section">
+      <h4>Skills and technologies</h4>
+      <ExperienceSkillBuckets buckets={entry.buckets} />
+    </section>
+  </article>
+</dialog>
+
+<style>
+  .experience-modal {
+    width: min(72rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+  }
+
+  .experience-modal::backdrop {
+    background: color-mix(in oklab, #020611, transparent 28%);
+    backdrop-filter: blur(10px);
+  }
+
+  .experience-modal__shell {
+    display: grid;
+    gap: 1rem;
+    padding: 1.1rem;
+    border-radius: 18px;
+    border: 1px solid color-mix(in oklab, var(--color-accent), transparent 62%);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, #020611, transparent 4%),
+        color-mix(in oklab, var(--color-surface-2), transparent 8%)
+      );
+    box-shadow:
+      0 22px 80px color-mix(in oklab, #01040c, transparent 42%),
+      inset 0 0 0 1px color-mix(in oklab, var(--color-border-strong), transparent 48%);
+  }
+
+  .experience-modal__header,
+  .experience-modal__meta,
+  .experience-modal__badges {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .experience-modal__prompt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 36%);
+    background: color-mix(in oklab, var(--color-surface-3), transparent 18%);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+  }
+
+  .experience-modal__cursor {
+    width: 0.6rem;
+    height: 1rem;
+    background: color-mix(in oklab, var(--color-accent), white 12%);
+  }
+
+  .experience-modal__eyebrow,
+  .experience-modal__summary {
+    margin: 0;
+  }
+
+  .experience-modal__eyebrow {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .experience-modal__meta h3 {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+  }
+
+  .experience-modal__summary {
+    color: var(--color-text-muted);
+  }
+
+  .experience-modal__section {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .experience-modal__section h4 {
+    margin: 0;
+    font-size: var(--font-size-1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-modal__cursor {
+      animation: experience-modal-cursor 1.1s steps(1) infinite;
+    }
+  }
+
+  @keyframes experience-modal-cursor {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0.2;
+    }
+  }
+</style>

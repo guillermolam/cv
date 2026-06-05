@@ -1,0 +1,34 @@
+---
+import UiGrid from '../layout/UiGrid.astro';
+import ExperiencePanel from './ExperiencePanel.astro';
+import ExperienceBucketGroup from './ExperienceBucketGroup.astro';
+import type { ExperienceBucketGroup as ExperienceBucketGroupModel } from '../../lib/content/experience-cards';
+
+type Props = {
+  buckets: ExperienceBucketGroupModel[];
+};
+
+const { buckets } = Astro.props as Props;
+const visibleBuckets = buckets.filter((bucket) => bucket.items.length > 0);
+---
+
+<ExperiencePanel title="Skills and technologies" eyebrow="Mapped domains" icon="code-window">
+  {
+    visibleBuckets.length > 0 ? (
+      <UiGrid minItemWidth="12rem" gap="0.75rem">
+        {visibleBuckets.map((bucket) => <ExperienceBucketGroup bucket={bucket} />)}
+      </UiGrid>
+    ) : (
+      <p class="experience-skill-buckets__empty">
+        No tools or categories are modeled for this role yet.
+      </p>
+    )
+  }
+</ExperiencePanel>
+
+<style>
+  .experience-skill-buckets__empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>

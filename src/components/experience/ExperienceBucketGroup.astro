@@ -1,0 +1,95 @@
+---
+import UiBadge from '../ui/UiBadge.astro';
+import UiIcon from '../ui/UiIcon.astro';
+import type { ExperienceBucketGroup as ExperienceBucketGroupModel } from '../../lib/content/experience-cards';
+
+type Props = {
+  bucket: ExperienceBucketGroupModel;
+};
+
+const { bucket } = Astro.props as Props;
+---
+
+<article class="experience-bucket" data-bucket={bucket.id}>
+  <header class="experience-bucket__header">
+    <div class="experience-bucket__label">
+      <UiIcon name={bucket.icon} size={16} decorative />
+      <strong>{bucket.label}</strong>
+    </div>
+    <UiBadge variant={bucket.variant} size="sm" depth="flat">
+      {bucket.items.length} signals
+    </UiBadge>
+  </header>
+
+  {
+    bucket.items.length > 0 ? (
+      <div class="experience-bucket__chips">
+        {bucket.items.map((item) => (
+          <UiBadge
+            variant={bucket.variant}
+            size="sm"
+            depth="flat"
+            motion="hover-lift"
+          >
+            {item.label}
+          </UiBadge>
+        ))}
+      </div>
+    ) : (
+      <p class="experience-bucket__empty">No mapped signals yet.</p>
+    )
+  }
+</article>
+
+<style>
+  .experience-bucket {
+    display: grid;
+    gap: 0.8rem;
+    min-height: 100%;
+    padding: 0.95rem;
+    border-radius: 14px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 26%);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-surface-3), transparent 18%),
+        color-mix(in oklab, var(--color-surface-2), transparent 24%)
+      );
+  }
+
+  .experience-bucket__header,
+  .experience-bucket__label,
+  .experience-bucket__chips {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .experience-bucket__header {
+    justify-content: space-between;
+  }
+
+  .experience-bucket__chips {
+    align-items: flex-start;
+  }
+
+  .experience-bucket__empty {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-bucket {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .experience-bucket:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 60%);
+    }
+  }
+</style>

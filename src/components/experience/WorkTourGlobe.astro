@@ -1,0 +1,318 @@
+---
+import {
+  formatMonths,
+  getWorkTourPlaces,
+  workTourStops,
+} from '../../lib/content/work-tour';
+
+export type Props = {
+  lowProfile?: boolean;
+  class?: string;
+};
+
+const { lowProfile = false, class: className } = Astro.props;
+const places = getWorkTourPlaces();
+const placesJson = JSON.stringify(places);
+const stopsJson = JSON.stringify(workTourStops);
+---
+
+<section
+  class:list={[
+    'work-tour',
+    !lowProfile && 'card pad',
+    lowProfile && 'work-tour--low',
+    className,
+  ]}
+  aria-labelledby="work-tour-title"
+  data-work-tour-globe
+  data-places={placesJson}
+  data-stops={stopsJson}
+>
+  {
+    !lowProfile && (
+      <div class="work-tour__header">
+        <div>
+          <p class="work-tour__eyebrow">World tour</p>
+          <h2 id="work-tour-title">Career geography</h2>
+        </div>
+        <p class="work-tour__lede">
+          A D3 globe loops through Guillermo&apos;s work history starting in
+          Madrid, with each location colored by dated time spent there.
+        </p>
+      </div>
+    )
+  }
+
+  <div class:list={['work-tour__layout', lowProfile && 'work-tour__layout--low']}>
+    <div class="work-tour__viewport">
+      <div class="work-tour__canvas" data-work-tour-canvas aria-hidden="true">
+      </div>
+
+      <aside class="work-tour__toast" aria-live="polite" data-work-tour-toast>
+        <p class="work-tour__toast-kicker" data-work-tour-kicker>First stop</p>
+        <h3 class="work-tour__toast-title" data-work-tour-title>
+          Madrid, Spain
+        </h3>
+        <p class="work-tour__toast-meta" data-work-tour-meta>Everis</p>
+        <p class="work-tour__toast-duration" data-work-tour-duration></p>
+        <p class="work-tour__toast-age" data-work-tour-age></p>
+        <p class="work-tour__toast-note" data-work-tour-note hidden></p>
+      </aside>
+
+      <div class="work-tour__legend" aria-hidden="true">
+        <span>Short stay</span>
+        <span class="work-tour__legend-scale"></span>
+        <span>Long stay</span>
+      </div>
+    </div>
+  </div>
+
+  {
+    !lowProfile && (
+      <div class="work-tour__fallback">
+        {places.map((place) => (
+          <article class="work-tour__place" id={`place-${place.id}`}>
+            <header class="work-tour__place-header">
+              <div>
+                <h3>{place.label}</h3>
+                <p>{formatMonths(place.durationMonths)}</p>
+              </div>
+              <p class="work-tour__place-age">
+                Age(s): {place.ageLabels.join(', ')}
+              </p>
+            </header>
+            <p class="work-tour__place-companies">
+              {place.companies.join(' · ')}
+            </p>
+            <ul>
+              {place.stayLabels.map((stayLabel) => (
+                <li>{stayLabel}</li>
+              ))}
+            </ul>
+            {place.note ? (
+              <p class="work-tour__place-note">{place.note}</p>
+            ) : null}
+          </article>
+        ))}
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .work-tour {
+    display: grid;
+    gap: 1rem;
+    overflow: hidden;
+  }
+
+  .work-tour:not(.work-tour--low) {
+    background: color-mix(in oklab, var(--color-surface-2), transparent 12%);
+    border-color: color-mix(in oklab, var(--color-border), transparent 2%);
+  }
+
+  .work-tour__header {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .work-tour__eyebrow {
+    margin: 0 0 0.25rem;
+    font-size: var(--font-size-0);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  .work-tour__header h2 {
+    margin: 0;
+    font-size: var(--font-size-5);
+  }
+
+  .work-tour__lede {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--color-text-muted);
+  }
+
+  .work-tour__layout {
+    display: block; /* No longer needs grid as toast is an overlay */
+    height: 100%;
+  }
+
+  .work-tour__viewport {
+    position: relative;
+    border-radius: 18px;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 30%);
+    background:
+      radial-gradient(
+        circle at 50% 18%,
+        color-mix(in oklab, var(--color-accent), transparent 84%),
+        transparent 48%
+      ),
+      color-mix(in oklab, var(--color-bg), transparent 10%);
+    min-height: 22rem;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-tour__canvas {
+    flex-grow: 1;
+    min-height: 22rem;
+  }
+
+  .work-tour__legend {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-surface-3), transparent 12%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 22%);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-00);
+    z-index: 5;
+    backdrop-filter: blur(8px);
+  }
+
+  .work-tour__legend-scale {
+    width: 4rem;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #5ea8ff 0%, #4fd7b8 50%, #e4c26d 100%);
+  }
+
+  .work-tour__toast {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 280px;
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.85rem;
+    border-radius: 16px;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 25%);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      0 12px 32px var(--shadow-2);
+    z-index: 10;
+    pointer-events: none;
+    transition: transform var(--motion-standard) var(--ease-standard);
+  }
+
+  .work-tour__toast-kicker,
+  .work-tour__toast-meta,
+  .work-tour__toast-duration,
+  .work-tour__toast-age,
+  .work-tour__toast-note {
+    margin: 0;
+  }
+
+  .work-tour__toast-kicker {
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    opacity: 0.8;
+  }
+
+  .work-tour__toast-title {
+    margin: 0;
+    font-size: var(--font-size-2);
+    line-height: 1.2;
+    color: var(--color-text-strong);
+  }
+
+  .work-tour__toast-meta {
+    font-size: var(--font-size-0);
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .work-tour__toast-duration,
+  .work-tour__toast-age,
+  .work-tour__toast-note {
+    font-size: var(--font-size-00);
+    color: var(--color-text-muted);
+  }
+
+  .work-tour__toast-note {
+    margin-top: 0.2rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid color-mix(in oklab, var(--color-border), transparent 80%);
+    font-style: italic;
+  }
+
+  .work-tour__fallback {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  .work-tour__place {
+    padding: 1rem;
+    border-radius: 16px;
+    border: 1px solid color-mix(in oklab, var(--color-border), transparent 5%);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 18%);
+  }
+
+  .work-tour__place-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .work-tour__place-header h3,
+  .work-tour__place-header p,
+  .work-tour__place-companies,
+  .work-tour__place-note {
+    margin: 0;
+  }
+
+  .work-tour__place-header p,
+  .work-tour__place-age,
+  .work-tour__place-note {
+    color: var(--color-text-muted);
+  }
+
+  .work-tour__place-companies {
+    margin-top: 0.75rem;
+    font-size: var(--font-size-0);
+  }
+
+  .work-tour__place ul {
+    margin: 0.75rem 0 0;
+    padding-left: 1.1rem;
+  }
+
+  .work-tour__place-note {
+    margin-top: 0.75rem;
+    font-size: var(--font-size-0);
+  }
+
+  @media (max-width: 480px) {
+    .work-tour__toast {
+      width: calc(100% - 2rem);
+      left: 1rem;
+      top: 1rem;
+    }
+  }
+</style>
+
+<script>
+  import { initWorkTourGlobes } from '../../scripts/work-tour-globe';
+
+  void initWorkTourGlobes();
+</script>

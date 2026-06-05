@@ -1,0 +1,42 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+import UiBadge from '../ui/UiBadge.astro';
+
+type Props = {
+  location?: string;
+};
+
+const { location } = Astro.props as Props;
+---
+
+<ExperiencePanel title="Location" eyebrow="Placement" icon="cloud-node">
+  {
+    location ? (
+      <div class="experience-location">
+        <strong>{location}</strong>
+        <UiBadge variant="cloud" size="sm" depth="flat">
+          Geo-tagged
+        </UiBadge>
+      </div>
+    ) : (
+      <p class="experience-location__empty">
+        Location is not modeled for this role.
+      </p>
+    )
+  }
+</ExperiencePanel>
+
+<style>
+  .experience-location {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .experience-location__empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>

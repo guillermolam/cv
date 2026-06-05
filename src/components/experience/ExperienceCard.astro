@@ -1,0 +1,384 @@
+---
+import UiCard from '../ui/UiCard.astro';
+import UiGrid from '../layout/UiGrid.astro';
+import UiBadge from '../ui/UiBadge.astro';
+import UiButton from '../ui/UiButton.astro';
+import UiIcon from '../ui/UiIcon.astro';
+import FxGrain from '../fx/FxGrain.astro';
+import FxScanlines from '../fx/FxScanlines.astro';
+import ExperienceCompanyBlock from './ExperienceCompanyBlock.astro';
+import ExperienceDateRange from './ExperienceDateRange.astro';
+import ExperienceLocationBlock from './ExperienceLocationBlock.astro';
+import ExperienceStatsGrid from './ExperienceStatsGrid.astro';
+import ExperienceProjectsList from './ExperienceProjectsList.astro';
+import ExperienceAchievements from './ExperienceAchievements.astro';
+import ExperienceSkillBuckets from './ExperienceSkillBuckets.astro';
+import ExperienceTerminalModal from './ExperienceTerminalModal.astro';
+import type { ExperienceCardViewModel } from '../../lib/content/experience-cards';
+
+type Props = {
+  entry: ExperienceCardViewModel;
+};
+
+const { entry } = Astro.props as Props;
+---
+
+<UiCard
+  id={entry.anchorId}
+  class="experience-card relative overflow-hidden !rounded-[24px]"
+  variant="panel"
+  depth="elevated"
+  title={`${entry.companyName} · ${entry.roleTitle}`}
+  eyebrow="Experience"
+  icon="command-center"
+  description={entry.summary}
+  motion="hover-lift"
+  retro={false}
+  attrs={{
+    'x-data': 'experienceCard()',
+    'x-bind:data-panel': 'active',
+    'x-on:click': 'handleSurfaceClick($event)',
+    'x-on:keydown.enter.prevent': 'openModal($event)',
+    'x-on:keydown.space.prevent': 'openModal($event)',
+    'data-experience-card': entry.id,
+    'data-tier': entry.importanceTier,
+    tabindex: '0',
+    'aria-label': `Open experience briefing for ${entry.companyName} as ${entry.roleTitle}`,
+  }}
+>
+  <FxGrain intensity="subtle" class="experience-card__grain" />
+  <FxScanlines intensity="subtle" class="experience-card__scanlines" />
+  <span class="experience-card__glow" aria-hidden="true"></span>
+
+  <div
+    class="experience-card__command"
+    slot="meta"
+    data-experience-ignore-click
+  >
+    <UiBadge variant="accent" size="sm" depth="flat" motion="hover-lift">
+      {entry.totalTimeLabel}
+    </UiBadge>
+    {
+      entry.location ? (
+        <UiBadge variant="cloud" size="sm" depth="flat" motion="hover-lift">
+          {entry.location}
+        </UiBadge>
+      ) : null
+    }
+    {
+      entry.ageAtStartLabel ? (
+        <UiBadge variant="info" size="sm" depth="flat" motion="hover-lift">
+          {entry.ageAtStartLabel}
+        </UiBadge>
+      ) : null
+    }
+    {
+      entry.isCurrent ? (
+        <UiBadge variant="success" size="sm" depth="flat" motion="hover-lift">
+          Current role
+        </UiBadge>
+      ) : null
+    }
+  </div>
+
+  <div class="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.92fr)]">
+    <div class="grid gap-4">
+      <ExperienceCompanyBlock
+        companyName={entry.companyName}
+        clientName={entry.clientName}
+        roleTitle={entry.roleTitle}
+        summary={entry.summary}
+        logo={entry.logo}
+        importanceTier={entry.importanceTier}
+        importanceScore={entry.importanceScore}
+      />
+
+      <UiGrid minItemWidth="16rem" gap="1rem">
+        <ExperienceDateRange
+          startDate={entry.startDate}
+          endDate={entry.endDate}
+          isCurrent={entry.isCurrent}
+          totalTimeLabel={entry.totalTimeLabel}
+          importanceTier={entry.importanceTier}
+        />
+        <ExperienceLocationBlock location={entry.location} />
+      </UiGrid>
+    </div>
+
+    <ExperienceStatsGrid stats={entry.stats} buckets={entry.buckets} />
+  </div>
+
+  <div class="experience-card__toggle mt-4" data-experience-ignore-click>
+    <button
+      type="button"
+      class="experience-card__toggle-button"
+      x-on:click="setActive('achievements')"
+      x-bind:aria-pressed="is('achievements')"
+      x-bind:data-active="is('achievements')"
+      x-bind:data-flash="isFlashing('achievements')"
+      data-experience-ignore-click
+    >
+      <span class="experience-card__toggle-copy">
+        <UiIcon name="document" size={16} decorative />
+        <span>Achievements</span>
+      </span>
+    </button>
+    <button
+      type="button"
+      class="experience-card__toggle-button"
+      x-on:click="setActive('projects')"
+      x-bind:aria-pressed="is('projects')"
+      x-bind:data-active="is('projects')"
+      x-bind:data-flash="isFlashing('projects')"
+      data-experience-ignore-click
+    >
+      <span class="experience-card__toggle-copy">
+        <UiIcon name="graph-link" size={16} decorative />
+        <span>Projects</span>
+      </span>
+    </button>
+    <button
+      type="button"
+      class="experience-card__toggle-button"
+      x-on:click="setActive('skills')"
+      x-bind:aria-pressed="is('skills')"
+      x-bind:data-active="is('skills')"
+      x-bind:data-flash="isFlashing('skills')"
+      data-experience-ignore-click
+    >
+      <span class="experience-card__toggle-copy">
+        <UiIcon name="code-window" size={16} decorative />
+        <span>Skills</span>
+      </span>
+    </button>
+  </div>
+
+  <div class="experience-card__stage mt-4">
+    <div
+      x-show="is('achievements')"
+      x-transition:enter="motion-safe:transition motion-safe:duration-300 motion-safe:ease-out"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="motion-safe:transition motion-safe:duration-180 motion-safe:ease-out"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-1"
+    >
+      <ExperienceAchievements achievements={entry.achievements} />
+    </div>
+    <div
+      x-show="is('projects')"
+      x-transition:enter="motion-safe:transition motion-safe:duration-300 motion-safe:ease-out"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="motion-safe:transition motion-safe:duration-180 motion-safe:ease-out"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-1"
+      style="display:none"
+    >
+      <ExperienceProjectsList projects={entry.projects} />
+    </div>
+    <div
+      x-show="is('skills')"
+      x-transition:enter="motion-safe:transition motion-safe:duration-300 motion-safe:ease-out"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="motion-safe:transition motion-safe:duration-180 motion-safe:ease-out"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-1"
+      style="display:none"
+    >
+      <ExperienceSkillBuckets buckets={entry.buckets} />
+    </div>
+  </div>
+
+  <div class="experience-card__footer" slot="actions" data-experience-ignore-click>
+    <UiButton
+      variant="secondary"
+      size="md"
+      depth="raised"
+      icon="external-link"
+      attrs={{ 'x-on:click': 'openModal($event)' }}
+    >
+      View details
+    </UiButton>
+  </div>
+
+  <ExperienceTerminalModal entry={entry} />
+</UiCard>
+
+<style>
+  .experience-card {
+    cursor: pointer;
+  }
+
+  .experience-card__grain {
+    z-index: 0;
+    opacity: 0.03;
+  }
+
+  .experience-card__scanlines {
+    z-index: 0;
+    opacity: 0.04;
+  }
+
+  .experience-card__glow {
+    position: absolute;
+    inset: -10rem auto auto -8rem;
+    width: 20rem;
+    height: 20rem;
+    border-radius: 999px;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-accent), transparent 90%) 0%,
+      transparent 68%
+    );
+    filter: blur(24px);
+    pointer-events: none;
+  }
+
+  .experience-card__command,
+  .experience-card__toggle,
+  .experience-card__stage,
+  .experience-card__footer {
+    position: relative;
+    z-index: 1;
+  }
+
+  .experience-card__command {
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    padding: 0.2rem 0;
+  }
+
+  .experience-card__toggle {
+    display: inline-grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    width: min(100%, 30rem);
+    padding: 0.22rem;
+    border-radius: 10px;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 34%);
+    background: color-mix(in oklab, var(--color-surface-3), transparent 18%);
+    backdrop-filter: blur(10px);
+  }
+
+  .experience-card__toggle-button {
+    min-height: 2.7rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 7px;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    transition:
+      background var(--motion-fast) var(--ease-standard),
+      color var(--motion-fast) var(--ease-standard),
+      box-shadow var(--motion-fast) var(--ease-standard),
+      transform var(--motion-fast) var(--ease-standard);
+  }
+
+  .experience-card__toggle-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+  }
+
+  .experience-card :global(button[data-active='true']) {
+    background: color-mix(in oklab, white, transparent 8%);
+    color: var(--color-text-strong);
+    box-shadow:
+      0 6px 14px rgb(15 23 42 / 0.12),
+      inset 0 1px 0 rgb(255 255 255 / 0.6);
+  }
+
+  .experience-card :global(button[data-flash='true']) {
+    animation: experience-toggle-flash 420ms var(--ease-emphasis);
+  }
+
+  .experience-card__stage {
+    min-height: 14rem;
+  }
+
+  .experience-card__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .experience-card {
+        animation: experience-scroll-fade linear both;
+        animation-timeline: view(block);
+        animation-range: entry 18% exit 82%;
+      }
+    }
+
+    .experience-card {
+      transition:
+        transform var(--motion-standard) var(--ease-standard),
+        box-shadow var(--motion-standard) var(--ease-standard),
+        border-color var(--motion-standard) var(--ease-standard);
+    }
+
+    .experience-card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 66%);
+    }
+
+    .experience-card:hover .experience-card__glow {
+      transform: translate3d(0.8rem, 0.2rem, 0);
+      transition: transform var(--motion-emphasis) var(--ease-emphasis);
+    }
+
+    .experience-card :global(button:hover) {
+      color: var(--color-text-strong);
+      background: color-mix(in oklab, white, transparent 14%);
+    }
+
+    .experience-card :global(button:active) {
+      transform: translateY(1px);
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .experience-card__toggle {
+      width: 100%;
+    }
+  }
+
+  @keyframes experience-toggle-flash {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent), transparent 100%);
+    }
+    40% {
+      box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-accent), transparent 92%);
+    }
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent), transparent 100%);
+    }
+  }
+
+  @keyframes experience-scroll-fade {
+    0%,
+    100% {
+      opacity: 0.22;
+      transform: translateY(24px) scale(0.985);
+      filter: saturate(0.88);
+    }
+    18%,
+    82% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: saturate(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .experience-card__stage {
+      min-height: auto;
+    }
+  }
+</style>

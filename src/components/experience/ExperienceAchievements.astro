@@ -1,0 +1,41 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+
+type Props = {
+  achievements: string[];
+};
+
+const { achievements } = Astro.props as Props;
+---
+
+<ExperiencePanel title="Achievements" eyebrow="Outcomes" icon="shield-check">
+  {
+    achievements.length > 0 ? (
+      <ul class="experience-achievements">
+        {achievements.map((achievement) => (
+          <li>{achievement}</li>
+        ))}
+      </ul>
+    ) : (
+      <p class="experience-achievements__empty">No achievements modeled yet.</p>
+    )
+  }
+</ExperiencePanel>
+
+<style>
+  .experience-achievements {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .experience-achievements li::marker {
+    color: var(--color-accent);
+  }
+
+  .experience-achievements__empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>

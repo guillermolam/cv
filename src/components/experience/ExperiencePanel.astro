@@ -1,0 +1,148 @@
+---
+import UiIcon from '../ui/UiIcon.astro';
+import FxGrain from '../fx/FxGrain.astro';
+
+type Props = {
+  title: string;
+  icon?: string;
+  class?: string;
+  eyebrow?: string;
+};
+
+const { title, icon, class: className, eyebrow } = Astro.props as Props;
+---
+
+<section class:list={['experience-panel', className]}>
+  <FxGrain intensity="subtle" class="experience-panel__grain" />
+  <span class="experience-panel__grid" aria-hidden="true"></span>
+  <header class="experience-panel__header">
+    <div class="experience-panel__title-row">
+      {icon ? <UiIcon name={icon} size={18} tone="accent" decorative /> : null}
+      <div>
+        {eyebrow ? <p class="experience-panel__eyebrow">{eyebrow}</p> : null}
+        <h3 class="experience-panel__title">{title}</h3>
+      </div>
+    </div>
+  </header>
+  <div class="experience-panel__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .experience-panel {
+    position: relative;
+    display: grid;
+    gap: 0.8rem;
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 28%);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-accent), transparent 94%),
+        transparent 65%
+      ),
+      color-mix(in oklab, var(--color-surface-2), transparent 16%);
+    overflow: hidden;
+  }
+
+  .experience-panel__grain {
+    z-index: 0;
+    opacity: 0.05;
+  }
+
+  .experience-panel__grid {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 0,
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.025) 0,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 100%
+      );
+    background-size: 24px 24px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), transparent 80%);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .experience-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 48%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: translateX(-100%);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .experience-panel__header,
+  .experience-panel__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .experience-panel__title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .experience-panel__eyebrow {
+    margin: 0 0 0.15rem;
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  .experience-panel__title {
+    margin: 0;
+    font-size: var(--font-size-2);
+    line-height: 1.2;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-panel {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard);
+    }
+
+    .experience-panel:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 55%);
+      box-shadow: 0 18px 34px var(--shadow-2);
+    }
+
+    .experience-panel:hover .experience-panel__grid {
+      opacity: 0.48;
+      transition: opacity var(--motion-standard) var(--ease-standard);
+    }
+
+    .experience-panel:hover::after {
+      opacity: 1;
+      transform: translateX(100%);
+      transition:
+        transform 900ms var(--ease-standard),
+        opacity 180ms linear;
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import UiIcon from '../ui/UiIcon.astro';
+import type { ExperienceLinkItem } from '../../lib/content/experience-cards';
+
+type Props = {
+  project: ExperienceLinkItem;
+};
+
+const { project } = Astro.props as Props;
+const label =
+  project.kind === 'case-study'
+    ? 'Case study'
+    : project.kind === 'project'
+      ? 'Project'
+      : 'Proof';
+---
+
+<a class="experience-project-item" href={project.href}>
+  <div class="experience-project-item__header">
+    <UiIcon name="external-link" size={15} tone="accent" decorative />
+    <span>{label}</span>
+  </div>
+  <strong>{project.title}</strong>
+  {project.description ? <p>{project.description}</p> : null}
+</a>
+
+<style>
+  .experience-project-item {
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.85rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+    background: color-mix(in oklab, var(--color-surface-3), transparent 16%);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .experience-project-item__header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .experience-project-item strong,
+  .experience-project-item p {
+    margin: 0;
+  }
+
+  .experience-project-item p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-project-item {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .experience-project-item:hover,
+    .experience-project-item:focus-visible {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 55%);
+    }
+  }
+</style>

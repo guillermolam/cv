@@ -1,0 +1,35 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+import ExperienceProjectItem from './ExperienceProjectItem.astro';
+import UiGrid from '../layout/UiGrid.astro';
+import type { ExperienceLinkItem } from '../../lib/content/experience-cards';
+
+type Props = {
+  projects: ExperienceLinkItem[];
+};
+
+const { projects } = Astro.props as Props;
+---
+
+<ExperiencePanel title="Projects" eyebrow="Linked proof" icon="graph-link">
+  {
+    projects.length > 0 ? (
+      <UiGrid minItemWidth="14rem" gap="0.75rem">
+        {projects.map((project) => (
+          <ExperienceProjectItem project={project} />
+        ))}
+      </UiGrid>
+    ) : (
+      <p class="experience-projects__empty">
+        No linked projects or case studies are modeled for this role yet.
+      </p>
+    )
+  }
+</ExperiencePanel>
+
+<style>
+  .experience-projects__empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>

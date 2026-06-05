@@ -1,0 +1,236 @@
+---
+import UiGrid from '../layout/UiGrid.astro';
+import UiBarChart from '../charts/UiBarChart.astro';
+import UiLineChart from '../charts/UiLineChart.astro';
+import UiDoughnutChart from '../charts/UiDoughnutChart.astro';
+import UiIcon from '../ui/UiIcon.astro';
+import type { ExperienceCardViewModel, ExperienceBucketId } from '../../lib/content/experience-cards';
+
+type Props = {
+  entries: ExperienceCardViewModel[];
+};
+
+const { entries } = Astro.props as Props;
+
+const totalMonths = entries.reduce((sum, entry) => sum + entry.totalMonths, 0);
+const totalProof = entries.reduce((sum, entry) => sum + entry.projects.length, 0);
+const totalAchievements = entries.reduce(
+  (sum, entry) => sum + entry.achievements.length,
+  0,
+);
+const currentRoles = entries.filter((entry) => entry.isCurrent).length;
+
+const bucketOrder: ExperienceBucketId[] = ['dev', 'sec', 'ops', 'ai'];
+const bucketLabels = bucketOrder.map((bucketId) =>
+  entries[0]?.buckets.find((bucket) => bucket.id === bucketId)?.label ??
+  bucketId.toUpperCase(),
+);
+const bucketTotals = bucketOrder.map((bucketId) =>
+  entries.reduce((sum, entry) => {
+    const bucket = entry.buckets.find((item) => item.id === bucketId);
+    return sum + (bucket?.items.length ?? 0);
+  }, 0),
+);
+
+const roleLabels = entries.map((entry) => entry.companyName);
+const tenureDataset = [{ label: 'Months', data: entries.map((entry) => entry.totalMonths) }];
+const proofDataset = [
+  { label: 'Projects', data: entries.map((entry) => entry.projects.length) },
+  { label: 'Achievements', data: entries.map((entry) => entry.achievements.length) },
+];
+
+const summaryStats = [
+  {
+    label: 'Tracked roles',
+    value: String(entries.length),
+    icon: 'graph-link',
+    note: 'Modeled experience cards',
+  },
+  {
+    label: 'Career span',
+    value: `${Math.round(totalMonths / 12)}y`,
+    icon: 'document',
+    note: `${totalMonths} total months across modeled entries`,
+  },
+  {
+    label: 'Proof links',
+    value: String(totalProof),
+    icon: 'external-link',
+    note: 'Projects and case studies linked',
+  },
+  {
+    label: 'Highlights',
+    value: String(totalAchievements),
+    icon: 'command-center',
+    note: `${currentRoles} current role${currentRoles === 1 ? '' : 's'} modeled`,
+  },
+];
+---
+
+<section class="experience-overview" aria-labelledby="experience-overview-title">
+  <header class="experience-overview__header">
+    <div>
+      <p class="experience-overview__eyebrow">Operational summary</p>
+      <h2 id="experience-overview-title">Section analytics</h2>
+    </div>
+    <p class="experience-overview__summary">
+      Modeled proof, tenure, and signal distribution across the experience map.
+    </p>
+  </header>
+
+  <UiGrid minItemWidth="12rem" gap="0.85rem" class="experience-overview__stats">
+    {
+      summaryStats.map((item, index) => (
+        <article class="experience-overview__stat" style={`--experience-step:${index};`}>
+          <div class="experience-overview__stat-top">
+            <UiIcon name={item.icon} size={16} decorative />
+            <span>{item.label}</span>
+          </div>
+          <strong>{item.value}</strong>
+          <p>{item.note}</p>
+        </article>
+      ))
+    }
+  </UiGrid>
+
+  <UiGrid minItemWidth="18rem" gap="1rem">
+    <UiBarChart
+      id="experience-tenure-chart"
+      title="Tenure by role"
+      description="Relative time spent in each modeled role."
+      labels={roleLabels}
+      datasets={tenureDataset}
+      tone="cloud"
+      depth="raised"
+      motion="hover-lift"
+      retro={false}
+      showLegend={false}
+      showTooltip={true}
+    />
+    <UiLineChart
+      id="experience-proof-chart"
+      title="Proof density"
+      description="How much explicit evidence is attached to each role."
+      labels={roleLabels}
+      datasets={proofDataset}
+      tone="accent"
+      depth="raised"
+      motion="hover-lift"
+      retro={false}
+      showLegend={true}
+      showTooltip={true}
+    />
+    <UiDoughnutChart
+      id="experience-bucket-overview"
+      title="Domain mix"
+      description="Combined Dev, Sec, Ops, and AI signals across modeled roles."
+      labels={bucketLabels}
+      datasets={[{ label: 'Signals', data: bucketTotals }]}
+      tone="infra"
+      depth="raised"
+      motion="hover-lift"
+      retro={false}
+      showLegend={true}
+      showTooltip={true}
+    />
+  </UiGrid>
+</section>
+
+<style>
+  .experience-overview {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .experience-overview__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+    flex-wrap: wrap;
+  }
+
+  .experience-overview__eyebrow,
+  .experience-overview__summary,
+  .experience-overview__stat p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .experience-overview__eyebrow {
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .experience-overview__header h2 {
+    margin: 0.28rem 0 0;
+    font-size: clamp(1.3rem, 1vw + 1.05rem, 1.75rem);
+  }
+
+  .experience-overview__summary {
+    max-width: 36rem;
+  }
+
+  .experience-overview__stat {
+    display: grid;
+    gap: 0.45rem;
+    min-height: 8.5rem;
+    padding: 1rem;
+    border-radius: 20px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 30%);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, white, transparent 96%) 0%,
+        color-mix(in oklab, var(--color-surface-3), transparent 14%) 100%
+      );
+    box-shadow:
+      0 18px 40px rgb(2 6 23 / 0.11),
+      inset 0 1px 0 rgb(255 255 255 / 0.58);
+  }
+
+  .experience-overview__stat-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+  }
+
+  .experience-overview__stat strong {
+    font-size: clamp(1.7rem, 1vw + 1.45rem, 2.4rem);
+    line-height: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-overview__stat {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: experience-overview-step 560ms var(--ease-standard) forwards;
+      animation-delay: calc(var(--experience-step) * 90ms);
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .experience-overview__stat:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 62%);
+    }
+  }
+
+  @keyframes experience-overview-step {
+    0% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.985);
+    }
+    65% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

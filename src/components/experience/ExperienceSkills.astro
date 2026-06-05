@@ -1,0 +1,40 @@
+---
+import ExperiencePanel from './ExperiencePanel.astro';
+import UiCluster from '../layout/UiCluster.astro';
+import UiBadge from '../ui/UiBadge.astro';
+
+type Props = {
+  skills: string[];
+};
+
+const { skills } = Astro.props as Props;
+---
+
+<ExperiencePanel
+  title="Skills and technologies"
+  eyebrow="Toolchain"
+  icon="code-window"
+>
+  {
+    skills.length > 0 ? (
+      <UiCluster gap="0.5rem" align="start">
+        {skills.map((skill) => (
+          <UiBadge variant="neutral" size="sm" depth="flat" motion="hover-lift">
+            {skill}
+          </UiBadge>
+        ))}
+      </UiCluster>
+    ) : (
+      <p class="experience-skills__empty">
+        No tools or categories are modeled for this role yet.
+      </p>
+    )
+  }
+</ExperiencePanel>
+
+<style>
+  .experience-skills__empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>
