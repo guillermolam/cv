@@ -2,6 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../lib/i18n';
+import ExperienceCard from '../../components/experience/ExperienceCard.astro';
+import ExperienceTimelineGraph from '../../components/experience/ExperienceTimelineGraph.astro';
+import { buildExperienceCardModel } from '../../lib/content/experience-cards';
 
 export function getStaticPaths() {
   return getLangStaticPaths();
@@ -13,48 +16,206 @@ if (!lang || !isLang(lang)) {
 }
 
 const title = 'Experience';
-const description = 'A concise experience summary backed by the portfolio content model.';
+const description =
+  'A concise experience summary backed by the portfolio content model.';
 
 const experienceAll = await getCollection('experience');
+const toolsAll = await getCollection('tools');
+const categoriesAll = await getCollection('categories');
+const projectsAll = await getCollection('projects');
+const caseStudiesAll = await getCollection('caseStudies');
 const experience = experienceAll.filter((e) => e.data.lang === lang);
-const experienceFallback = experience.length > 0 ? experience : experienceAll.filter((e) => e.data.lang === 'en');
+const experienceFallback =
+  experience.length > 0
+    ? experience
+    : experienceAll.filter((e) => e.data.lang === 'en');
+const toolsFallback =
+  toolsAll.filter((tool) => tool.data.lang === lang).length > 0
+    ? toolsAll.filter((tool) => tool.data.lang === lang)
+    : toolsAll.filter((tool) => tool.data.lang === 'en');
+const categoriesFallback =
+  categoriesAll.filter((category) => category.data.lang === lang).length > 0
+    ? categoriesAll.filter((category) => category.data.lang === lang)
+    : categoriesAll.filter((category) => category.data.lang === 'en');
+const projectsFallback =
+  projectsAll.filter((project) => project.data.lang === lang).length > 0
+    ? projectsAll.filter((project) => project.data.lang === lang)
+    : projectsAll.filter((project) => project.data.lang === 'en');
+const caseStudiesFallback =
+  caseStudiesAll.filter((caseStudy) => caseStudy.data.lang === lang).length > 0
+    ? caseStudiesAll.filter((caseStudy) => caseStudy.data.lang === lang)
+    : caseStudiesAll.filter((caseStudy) => caseStudy.data.lang === 'en');
+
+const toolsById = new Map(
+  toolsFallback.map((tool) => [tool.data.toolId, tool] as const),
+);
+const categoriesById = new Map(
+  categoriesFallback.map(
+    (category) => [category.data.categoryId, category] as const,
+  ),
+);
+const projectsById = new Map(
+  projectsFallback.map((project) => [project.data.projectId, project] as const),
+);
+const caseStudiesById = new Map(
+  caseStudiesFallback.map(
+    (caseStudy) => [caseStudy.data.caseStudyId, caseStudy] as const,
+  ),
+);
+
+const experienceCards = experienceFallback
+  .slice()
+  .sort((a, b) =>
+    (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''),
+  )
+  .map((entry) =>
+    buildExperienceCardModel(entry, {
+      lang,
+      toolsById,
+      categoriesById,
+      relatedProjectsById: projectsById,
+      relatedCaseStudiesById: caseStudiesById,
+    }),
+  );
 ---
 
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
-  <section class="card pad">
-    <h1>Experience</h1>
-    {experience.length === 0 && lang !== 'en' ? (
-      <p class="topology-subtitle">Showing English entries while {lang.toUpperCase()} content is being authored.</p>
-    ) : null}
-    <p class="topology-subtitle">
-      This page is a summary view. Detailed case studies and proofs live in Portfolio and Tutorials.
-    </p>
-  </section>
-
-  <section class="grid" aria-label="Experience entries">
-    {experienceFallback
-      .slice()
-      .sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''))
-      .map((exp) => (
-        <article class="card pad">
-          <h2 style="margin:0 0 0.25rem 0; font-size: var(--font-size-3);">
-            {exp.data.companyName} · {exp.data.roleTitle}
-          </h2>
-          <p class="topology-subtitle" style="margin:0;">
-            {exp.data.location ? `${exp.data.location} · ` : ''}
-            {exp.data.startDate}
-            {exp.data.isCurrent ? ' — Present' : exp.data.endDate ? ` — ${exp.data.endDate}` : ''}
+  <div class="experience-page">
+    <section class="card pad">
+      <h1>Experience</h1>
+      {
+        experience.length === 0 && lang !== 'en' ? (
+          <p class="topology-subtitle">
+            Showing English entries while {lang.toUpperCase()} content is being
+            authored.
           </p>
-          {exp.data.summary ? <p style="margin:0.75rem 0 0 0;">{exp.data.summary}</p> : null}
-          {exp.data.highlights?.length ? (
-            <ul style="margin:0.75rem 0 0 1.15rem;">
-              {exp.data.highlights.map((h) => (
-                <li>{h}</li>
-              ))}
-            </ul>
-          ) : null}
-        </article>
-      ))}
-  </section>
+        ) : null
+      }
+      <p class="topology-subtitle">
+        This page is a summary view. Detailed case studies and proofs live in
+        Portfolio and Tutorials.
+      </p>
+    </section>
+
+    <ExperienceTimelineGraph entries={experienceCards} />
+
+    <section class="grid" aria-label="Experience entries">
+      {experienceCards.map((entry) => <ExperienceCard entry={entry} />)}
+    </section>
+  </div>
 </BaseLayout>
 
+<style>
+  .experience-page {
+    --experience-display-font:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --experience-accent-font:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --experience-title-font:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --experience-body-font:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --experience-mono-font:
+      "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .experience-page :global(.card.pad) {
+    padding: 1.1rem 1.1rem 1rem;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 30%);
+    border-radius: 24px;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, white, transparent 96%) 0%,
+        color-mix(in oklab, var(--color-surface-3), transparent 10%) 100%
+      );
+    box-shadow:
+      0 20px 60px rgb(2 6 23 / 0.14),
+      inset 0 1px 0 rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(14px);
+  }
+
+  .experience-page :global(h1),
+  .experience-page :global(h2),
+  .experience-page :global(h3),
+  .experience-page :global(h4),
+  .experience-page :global([data-ui-card-title]) {
+    font-family: var(--experience-display-font);
+    letter-spacing: 0;
+    line-height: 0.98;
+  }
+
+  .experience-page :global(h1) {
+    font-family: var(--experience-title-font);
+    font-size: clamp(2rem, 1.7vw + 1.55rem, 3.1rem);
+    font-weight: 700;
+    line-height: 1.02;
+  }
+
+  .experience-page :global(.topology-subtitle),
+  .experience-page :global([data-ui-card-eyebrow] span:first-child) {
+    font-family: var(--experience-accent-font);
+    font-size: clamp(0.98rem, 0.28vw + 0.95rem, 1.08rem);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+  }
+
+  .experience-page :global(p),
+  .experience-page :global(li),
+  .experience-page :global(span),
+  .experience-page :global(a),
+  .experience-page :global(button),
+  .experience-page :global(label),
+  .experience-page :global(strong),
+  .experience-page :global(time),
+  .experience-page :global([data-ui-badge]),
+  .experience-page :global([data-ui-card-description]) {
+    font-family: var(--experience-body-font);
+    letter-spacing: 0;
+  }
+
+  .experience-page :global([data-ui-badge]) {
+    min-height: 2.1rem;
+    padding: 0.5rem 0.85rem;
+    border-width: 1px;
+    border-radius: 999px;
+    font-size: clamp(0.82rem, 0.18vw + 0.8rem, 0.96rem);
+    line-height: 1.1;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55);
+    backdrop-filter: blur(10px);
+  }
+
+  .experience-page :global([data-ui-badge] [data-ui-badge-content]) {
+    font-weight: 500;
+  }
+
+  .experience-page :global([data-ui-badge] [data-ui-icon]) {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .experience-page :global([data-ui-card]) {
+    box-shadow:
+      0 24px 64px rgb(2 6 23 / 0.14),
+      inset 0 1px 0 rgb(255 255 255 / 0.5);
+  }
+
+  .experience-page :global([data-ui-card-body]),
+  .experience-page :global([data-ui-card-meta]),
+  .experience-page :global([data-ui-card-actions]) {
+    margin-top: 0.75rem;
+  }
+
+  .experience-page :global(.experience-card__toggle-button),
+  .experience-page :global(.experience-timeline__date),
+  .experience-page :global(.experience-modal__prompt),
+  .experience-page :global(.experience-panel__eyebrow) {
+    font-family: var(--experience-mono-font);
+  }
+</style>

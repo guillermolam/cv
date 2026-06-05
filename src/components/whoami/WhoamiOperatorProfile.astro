@@ -5,6 +5,7 @@ import OperatorIdentityPanel from './OperatorIdentityPanel.astro';
 import OperatorStatsPanel from './OperatorStatsPanel.astro';
 import OperatorFrameSvg from './OperatorFrameSvg.astro';
 import CircuitTraceSvg from './CircuitTraceSvg.astro';
+import WorkTourGlobe from '../experience/WorkTourGlobe.astro';
 
 import { site } from '../../lib/site';
 import { computeWhoamiStats } from '../../lib/content/whoami-stats';
@@ -178,7 +179,10 @@ const badges = badgeCandidates
         weight={weight}
         badges={badges}
       />
-      <OperatorStatsPanel axes={statsAxes} sections={sectionData} />
+      <div class="whoami-secondary-col">
+        <OperatorStatsPanel axes={statsAxes} sections={sectionData} />
+        <WorkTourGlobe lowProfile class="whoami-globe-integrated" />
+      </div>
     </div>
   </div>
 </section>
@@ -269,16 +273,29 @@ const badges = badgeCandidates
   .whoami-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    grid-template-areas: 'center right';
+    grid-template-areas: 'center secondary';
     gap: 1rem;
-    align-items: start;
+    align-items: stretch; /* Changed from start to stretch for column alignment */
     position: relative;
     z-index: 1;
   }
 
+  .whoami-secondary-col {
+    grid-area: secondary;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  :global(.whoami-globe-integrated) {
+    flex-grow: 1;
+    min-height: 24rem;
+  }
+
   /* Grid area token — consumed by OperatorStatsPanel's own CSS */
   :global(.whoami-stats) {
-    grid-area: right;
+    /* No longer needs grid-area: right here if we use the named area for the col */
   }
 
   /* ── Responsive: stack at narrow viewports ───────────────────────────── */
@@ -287,7 +304,7 @@ const badges = badgeCandidates
       grid-template-columns: 1fr;
       grid-template-areas:
         'center'
-        'right';
+        'secondary';
     }
   }
 

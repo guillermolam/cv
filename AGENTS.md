@@ -1,305 +1,134 @@
-# AGENTS.md
+# 🤖 Local AI Agent Environment (LM Studio + OpenCode)
 
-# Portfolio Project
-
-## Mission
-
-Build a world-class portfolio for Guillermo Lam that communicates expertise in:
-
-- Cloud Architecture
-- Platform Engineering
-- DevSecOps
-- Cloud Security
-- Internal Developer Platforms
-- AI Infrastructure
-- Kubernetes
-- Multi-Cloud Operations
-
-The experience should resemble a modern cloud control room and demonstrate engineering excellence without sacrificing usability.
+This project uses a battle-tested local AI configuration to provide **100% free**, RAM-efficient, and offline-capable intelligence via **LM Studio** and the **OpenCode** CLI.
 
 ---
 
-## Primary Audience
+## 🚀 Quick Start (Restore Setup)
 
-1. Recruiters
-2. Hiring Managers
-3. Engineering Directors
-4. CTOs
-5. Platform Engineering Leaders
+If RAM is tight or you need to restart the local provider, run these commands:
 
-Technical peers are a secondary audience.
+```bash
+# 1. Clear any stuck models
+lms unload --all
 
----
+# 2. Load the optimized model (RNJ-1) with a spoofed ID and 32k context
+lms load essentialai/rnj-1 \
+  --identifier "qwen/qwen3.6-35b-a3b" \
+  --context-length 32768 \
+  --ttl 3600 \
+  --yes
 
-## Success Criteria
-
-Within 30 seconds a visitor should understand:
-
-- Who Guillermo Lam is
-- What he specializes in
-- What differentiates him from other candidates
-- How to contact him
-
-Every page should support hiring outcomes.
+# 3. Verify with a simple prompt
+opencode run -m lmstudio/qwen/qwen3.6-35b-a3b "Hello local AI"
+```
 
 ---
 
-## Source Of Truth
-
-Before implementing changes consult:
-
-### Architecture
-
-docs/architecture/
-
-### Design
-
-docs/design/
-
-### Specifications
-
-docs/spec.md
-
-### Tasks
-
-docs/tasks.md
-
-### Validation
-
-docs/checklist.md
-
-If implementation conflicts with documentation:
-
-STOP.
-
-Update the appropriate specification or architecture document first.
+## 📊 Current Battle-Tested Setup
+- **Host Hardware:** MacBook Pro 32GB (M1/M2/M3 Max).
+- **Primary Local Model:** `essentialai/rnj-1` (GGUF, ~5GB RAM).
+- **Status:** Verified callable from `opencode` with project context enabled.
+- **Provider ID:** `lmstudio` (Truly Free).
 
 ---
 
-## Decision Hierarchy
+## 🛠️ LM Studio CLI (`lms`) Commands
 
-When guidance conflicts:
+The `lms` CLI is the primary way to manage your local hardware resources.
 
-1. docs/spec.md
-2. Architecture documents
-3. Design documents
-4. AGENTS.md
-5. Local implementation preferences
+### Model Management
+- **List available models:** `lms ls`
+- **Check currently loaded models:** `lms ps` (Shows RAM usage and TTL).
+- **Unload a specific model:** `lms unload <identifier>`
+- **Unload everything:** `lms unload --all`
+- **Download a new model:** `lms get <model-name-or-url>`
 
-Specifications always take precedence.
-
----
-
-## Architecture Principles
-
-The project is:
-
-- Astro-first
-- Accessibility-first
-- Recruiter-first
-- SEO-first
-- Performance-first
-- Motion-first (when it improves understanding)
-
-Prefer:
-
-- Content-first, indexable HTML
-- Progressive enhancement (motion/3D as enhancements)
-- Build-time rendering where possible
-- Islands architecture and hydration only when interaction requires it
-
-Avoid introducing SSR unless explicitly approved.
+### Server & System
+- **Check server status:** `lms server status`
+- **Restart the background daemon:** `lms daemon up`
+- **Check logs in real-time:** `lms log stream`
 
 ---
 
-## Recruiter Experience Principles
+## ⚙️ Core Configurations
 
-Prioritize:
+### Optimized Parameters for 32GB RAM
+To keep the system responsive while running an IDE (Trae/VS Code) and browser:
 
-- Clarity
-- Credibility
-- Discoverability
-- Conversion
+| Parameter | Recommended | Purpose |
+| :--- | :--- | :--- |
+| **Context Length** | `32768` | **CRITICAL.** OpenCode sends ~20k tokens of project context. Anything lower will cause `Unexpected Server Error`. |
+| **TTL** | `300` to `3600` | Time in seconds before the model auto-unloads from RAM. Use `300` (5 mins) for maximum RAM recovery. |
+| **GPU Offload** | `max` | Offloads processing to the M1/M2/M3 GPU (Unified Memory). |
+| **Parallelism** | `1` | Keep at 1 to prevent memory spikes on smaller machines. |
 
-Motion is a product feature when it improves understanding.
-
-Visual effects must never reduce readability or hide critical content.
-
-Understanding is more important than novelty.
-
----
-
-## Control Room Narrative
-
-The portfolio represents a cloud operations control room.
-
-Every feature should reinforce one or more of:
-
-- Observability
-- Cloud Operations
-- Platform Engineering
-- Security Engineering
-- Distributed Systems
-- Reliability Engineering
-
-Avoid:
-
-- Generic SaaS aesthetics
-- Startup landing-page clichés
-- Decorative dashboards
-- Visual effects without narrative purpose
+### Important Files & Paths
+- **Main App Settings:** `~/.lmstudio/settings.json`
+- **Model Defaults:** `~/.lmstudio/.internal/user-concrete-model-default-config/essentialai/rnj-1.json`
+- **Server Logs:** `~/.lmstudio/server-logs/` (Useful for diagnosing `err_XXXX` codes).
+- **Auth/Providers:** `~/.local/share/opencode/auth.json`
 
 ---
 
-## ThreeJS Philosophy
+## 🧪 Testing with OpenCode
 
-ThreeJS enhances storytelling.
+To verify the system is configured correctly, run these tests in order:
 
-ThreeJS is never the primary content.
+### 1. The "Pure" Test (No Context)
+Checks if the provider is reachable and the model is loaded.
+```bash
+opencode run -m lmstudio/qwen/qwen3.6-35b-a3b --pure "hi"
+```
 
-All critical content must remain accessible:
+### 2. The "Context" Test (Full Project)
+Checks if the `context-length` (32k) is sufficient to handle the project size.
+```bash
+opencode run -m lmstudio/qwen/qwen3.6-35b-a3b "Explain this project structure"
+```
 
-- Without WebGL
-- Without JavaScript
-- With reduced motion enabled
-
-Follow:
-
-docs/architecture/threejs-boundaries.md
-
----
-
-## Design Philosophy
-
-Follow:
-
-- docs/design/design-system.md
-- docs/design/art-direction.md
-- docs/design/motion-system.md
-- docs/design/ui-patterns.md
-
-Reuse existing patterns.
-
-Do not create competing visual systems.
+### 3. The "Debug" Test (Error Analysis)
+If it fails, use these flags to see the raw communication:
+```bash
+opencode run -m lmstudio/qwen/qwen3.6-35b-a3b "hi" --print-logs --log-level DEBUG
+```
 
 ---
 
-## Accessibility Requirements
+## ⚠️ Gotchas & FAQ
 
-All features must support:
+### Q: Why use the "qwen" identifier for a different model?
+**The "Spoofing" Hack:** `opencode` has an internal whitelist of supported models for the `lmstudio` provider. By spoofing the identifier of a known model (like Qwen 35B) while actually loading a smaller one (like RNJ-1), we gain full functionality without the massive RAM penalty.
 
-- Keyboard navigation
-- Semantic HTML
-- Screen readers
-- Reduced motion preferences
-- Responsive layouts
+### Q: I'm getting an "Unexpected Server Error"
+- **Cause A:** Model not loaded. Run `lms ps`.
+- **Cause B:** Context too small. Ensure you used `--context-length 32768` during `lms load`.
+- **Cause C:** Identifier mismatch. Ensure the ID in `opencode` matches the `--identifier` in `lms load`.
 
-Animations must never block access to content.
-
----
-
-## Performance Requirements
-
-Prioritize:
-
-1. Accessibility
-2. Performance
-3. SEO
-4. Visual effects
-
-Prefer build-time solutions over runtime solutions.
-
-Avoid unnecessary dependencies.
-
-Minimize client-side JavaScript.
+### Q: How do I run it without any local RAM?
+If you don't need local privacy, use the free hosted models:
+```bash
+opencode run -m opencode/mimo-v2.5-free "your prompt"
+```
 
 ---
 
-## Agent Workflow
+## 📊 Example Input/Output
 
-Before implementation determine:
+**Input:**
+```bash
+opencode run -m lmstudio/qwen/qwen3.6-35b-a3b "Say 'OK'"
+```
 
-- Architecture exists
-- Specification exists
-- Ownership exists
-- Validation exists
-
-If any are missing:
-
-STOP.
-
-Create the missing artifact first.
-
-### Planning
-
-Use:
-
-SOLO /plan
-
-### Specification
-
-Use:
-
-SOLO /spec
-
-### Implementation
-
-Implementation agents must not redesign architecture.
-
-Large architectural changes require returning to planning and specification phases.
+**Output:**
+```text
+> build · qwen/qwen3.6-35b-a3b
+OK.
+```
 
 ---
 
-## Agent Ownership
-
-Respect agent ownership boundaries.
-
-Avoid modifying unrelated directories.
-
-Keep changes scoped to assigned responsibilities.
-
-Large repository-wide changes require explicit justification.
-
----
-
-## Validation Requirements
-
-Before completing work verify:
-
-- Build passes
-- Lint passes
-- Type checking passes
-- Accessibility remains valid
-- Mobile layouts remain valid
-
-Do not mark work complete without validation.
-
----
-
-## Deployment
-
-Deployment targets:
-
-- Fermyon
-- GitHub Pages
-
-Assume:
-
-- Static hosting
-- CDN delivery
-- No server runtime
-
-Do not introduce SSR without explicit approval.
-
----
-
-## Guiding Principle
-
-When choosing between:
-
-- Complexity and simplicity
-- Animation and clarity
-- Novelty and usability
-- Visual impact and recruiter comprehension
-
-Choose the option that improves understanding and hiring outcomes.
+## 📖 References
+- [LM Studio CLI Docs](https://lmstudio.ai/docs/cli)
+- [OpenCode CLI Help](run `opencode --help`)
+- [System Memory Tools](run `memory_pressure` or `top -o mem`)

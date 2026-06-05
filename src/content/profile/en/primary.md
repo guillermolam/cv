@@ -1,12 +1,14 @@
 ---
 lang: en
 fullName: Guillermo Lam
-headline: Cloud Security & DevSecOps Engineer
-subheadline: Building secure hybrid-cloud platforms and delivery systems
+headline: Senior DevSecOps Engineer | Cloud Engineer
+subheadline: 15+ years of end-to-end technical experience in cloud security and platform operations
 summary: >-
-  Hands-on DevSecOps and platform engineer focused on cloud-native delivery, Kubernetes
-  platforms, and software supply chain security. This site is a control-room narrative: proof,
-  systems, and learning artifacts are linked like a knowledge base.
+  Guillermo Lam is a hands-on DevSecOps Architect and Platform Security Engineer with 15+ years
+  of end-to-end technical experience, spanning software engineering, cloud security, Kubernetes
+  platform operations, and continuous compliance. With roots in full-stack development, he builds
+  secure-by-design, cloud-native, and scalable platforms grounded in Clean Architecture, DDD,
+  and modern DevSecOps principles.
 cvFormatIds:
   - recruiter
   - ats

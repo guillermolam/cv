@@ -2,26 +2,25 @@
 lang: en
 experienceId: ciklum-sportsbook-2024
 companyName: Ciklum
-clientName: Sportsbook Betting Platform
-roleTitle: DevOps Engineer
-location: Remote
+roleTitle: DevOps Senior Engineer
+location: Málaga, ES
 startDate: "2024-04"
 endDate: "2024-11"
-summary: CI/CD, ephemeral environments, and GitOps delivery for a live real-time sportsbook platform.
+isCurrent: false
+summary: DevOps Senior Engineer building a high-performance sportsbook platform using event-driven microservices.
 highlights:
-  - Built CI/CD pipelines with GitHub Actions and ArgoCD; introduced the GitOps bridge pattern.
-  - Provisioned ephemeral AWS EKS environments with Terraform; authored Helm charts and ArgoCD apps.
-  - Automated performance testing (K6, TestKube) and infra testing with Kind clusters.
-  - Supported continuous deployment for .NET backend teams using Microsoft Orleans (Actor-Model).
-tagIds: [ci-cd, kubernetes]
-categoryIds: [devsecops, gitops-delivery, kubernetes-platform]
-toolIds: [aws, kubernetes, terraform, github-actions]
+  - Developed and maintained an event-driven architecture using ASP.NET Core 8, Microsoft Orleans, Apache Pulsar, and RabbitMQ.
+  - Implemented GitOps-driven CI/CD pipelines using AWS (EKS, ECS, S3, EC2).
+  - Automated infrastructure provisioning with Terraform and Pulumi.
+  - Leveraged ArgoCD and Argo Rollouts for progressive delivery (blue/green, canary).
+  - Integrated observability tools including Datadog and GitHub Actions.
+  - "Applied security best practices: IAM policies, TLS/mTLS, container scanning (Grype, Trivy), and SBOM generation (Syft, CycloneDX)."
+tagIds: [aws, kubernetes, terraform, pulumi, gitops, dotnet]
+categoryIds: [devsecops, platform-engineering]
+toolIds: [terraform, pulumi, argocd, github-actions, datadog, grype, trivy, syft, cosign]
 links:
   - type: classified_as
     targetCollection: categories
-    targetId: gitops-delivery
-  - type: implemented_with
-    targetCollection: tools
-    targetId: terraform
+    targetId: devsecops
 visibility: public
 ---

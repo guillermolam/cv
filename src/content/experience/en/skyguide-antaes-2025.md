@@ -5,14 +5,16 @@ companyName: Skyguide
 clientName: Antaes Consulting
 roleTitle: Senior DevOps Engineer
 location: Zurich, CH
-startDate: "2025-01"
-isCurrent: true
-summary: DevSecOps and CI/CD work for safety-critical air-traffic-management systems.
+startDate: "2024-11"
+endDate: "2025-05"
+isCurrent: false
+summary: DevSecOps and CI/CD work for safety-critical air-traffic-management systems in a high-compliance environment.
 highlights:
   - Integrated DevSecOps practices across CI/CD (SAST, DAST, build and delivery workflows).
-  - Built custom Jenkins/Maven automation to reduce manual overhead.
-  - Supported operations work including DR/BC drills and automation with Bash and Python.
-tagIds: [ci-cd]
+  - Developed custom CI plugins to enhance build processes and reduce operational overhead.
+  - Applied SAFe Framework and Lean Six Sigma principles to promote quality improvement.
+  - Linux Administration including AppArmor and SELinux hardening.
+tagIds: [devsecops, ci-cd, safe, linux]
 categoryIds: [devsecops, platform-engineering]
 links:
   - type: classified_as

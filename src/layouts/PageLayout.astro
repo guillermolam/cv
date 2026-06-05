@@ -13,7 +13,12 @@ type Props = {
   useLangPrefix?: boolean;
 };
 
-const { title, description, lang = 'en', useLangPrefix = false } = Astro.props;
+const { 
+  title, 
+  description, 
+  lang = 'en', 
+  useLangPrefix = false
+} = Astro.props;
 const siteName = 'Guillermo Lam Martín';
 const fullTitle = `${title} · ${siteName}`;
 
