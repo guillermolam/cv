@@ -25,9 +25,6 @@ const {
   async function initWireframe() {
     const containers = document.querySelectorAll('[data-retro-wireframe]');
     
-    // Load Matcap once
-    const matcap = await Engine.loadTexture('/3d/textures/matcap-retro.png');
-
     for (const container of containers) {
       if (!(container instanceof HTMLElement)) continue;
       if (container.dataset.initialized === 'true') continue;
@@ -42,40 +39,25 @@ const {
       const engine = new Engine(mount);
       const scene = engine.getScene();
 
-      // Add atmospheric fog for analog blending
-      engine.setFog('#000000', 0.08);
-
-      // Add Wave Effect with Matcap
-      const wave = new TrigWireframeWave(scene, color, matcap);
+      // Add Wave Effect
+      const wave = new TrigWireframeWave(scene, color);
       engine.addEffect(wave);
 
       // Position camera
       engine.getCamera().position.set(0, 4, 8);
       engine.getCamera().lookAt(0, 0, 0);
 
-      // No expensive lights needed because of MatCap!
-      // But we can add a very dim ambient light if the GLB models aren't using MatCaps
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+      // Add Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
       scene.add(ambientLight);
+      const pointLight = new THREE.PointLight(0xffffff, 1);
+      pointLight.position.set(-5, 5, 5);
+      scene.add(pointLight);
 
       // Load Model
       if (modelUrl) {
         try {
           const model = await Engine.loadModel(modelUrl);
-          
-          // Apply matcap to the model if it has standard materials
-          model.traverse((child: any) => {
-            if (child.isMesh) {
-              const oldMat = child.material;
-              child.material = new THREE.MeshMatcapMaterial({
-                matcap: matcap,
-                color: oldMat.color,
-                map: oldMat.map
-              });
-              oldMat.dispose();
-            }
-          });
-
           model.scale.set(1.2, 1.2, 1.2);
           model.position.y = 1.5;
           scene.add(model);
