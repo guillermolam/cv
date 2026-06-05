@@ -2,6 +2,7 @@
   color-scheme: dark;
 
   --font-sans:
+    "Inter",
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -11,7 +12,29 @@
     Arial,
     "Apple Color Emoji",
     "Segoe UI Emoji";
+  --font-display:
+    "Space Grotesk",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  /* Squared techno display — badges, dial labels, section codes */
+  --font-techno:
+    "Orbitron",
+    "Space Grotesk",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  /* CRT / LCD digital readouts — radar scores, counters, dial screen */
+  --font-digital:
+    "Share Tech Mono",
+    "JetBrains Mono",
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
   --font-mono:
+    "JetBrains Mono",
     ui-monospace,
     SFMono-Regular,
     Menlo,
@@ -53,6 +76,7 @@
   --color-border: rgba(214, 226, 239, 0.12);
   --color-border-strong: rgba(214, 226, 239, 0.22);
 
+  --color-accent: var(--accent-6);
   --color-link: var(--accent-6);
   --color-link-hover: var(--accent-7);
   --color-cta: var(--accent-6);

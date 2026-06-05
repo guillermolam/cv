@@ -1,0 +1,350 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import OperatorIdentityPanel from './OperatorIdentityPanel.astro';
+import OperatorStatsPanel from './OperatorStatsPanel.astro';
+import OperatorFrameSvg from './OperatorFrameSvg.astro';
+import CircuitTraceSvg from './CircuitTraceSvg.astro';
+
+import { site } from '../../lib/site';
+import { computeWhoamiStats } from '../../lib/content/whoami-stats';
+
+export type Props = {
+  lang?: string;
+  prefix?: string;
+};
+
+const { lang = 'en' } = Astro.props as Props;
+
+const profileAll = await getCollection('profile');
+const profileLang = profileAll.find((p) => p.data.lang === lang);
+const profileEn = profileAll.find((p) => p.data.lang === 'en');
+const profile = profileLang ?? profileEn;
+
+const skillsAll = await getCollection('skills');
+const certificationsAll = await getCollection('certifications');
+const experienceAll = await getCollection('experience');
+const projectsAll = await getCollection('projects');
+const caseStudiesAll = await getCollection('caseStudies');
+const blogAll = await getCollection('blog');
+const categoriesAll = await getCollection('categories');
+const toolsAll = await getCollection('tools');
+
+const skills = skillsAll.filter((s) => s.data.lang === lang);
+const certifications = certificationsAll.filter((c) => c.data.lang === lang);
+const experience = experienceAll.filter((e) => e.data.lang === lang);
+const projects = projectsAll.filter((p) => p.data.lang === lang);
+const caseStudies = caseStudiesAll.filter((c) => c.data.lang === lang);
+
+const fallbackToEn = <T extends { data: { lang: string } }>(items: T[], all: T[]) =>
+  items.length > 0 ? items : all.filter((x) => x.data.lang === 'en');
+
+const skillsFallback = fallbackToEn(skills, skillsAll);
+const certificationsFallback = fallbackToEn(certifications, certificationsAll);
+const experienceFallback = fallbackToEn(experience, experienceAll);
+const projectsFallback = fallbackToEn(projects, projectsAll);
+const caseStudiesFallback = fallbackToEn(caseStudies, caseStudiesAll);
+const toolsFallback = toolsAll.filter((t) => t.data.lang === lang).length > 0 ? toolsAll.filter((t) => t.data.lang === lang) : toolsAll.filter((t) => t.data.lang === 'en');
+
+const isDraftBlog = (entry: CollectionEntry<'blog'>) =>
+  Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
+const publishedBlog = blogAll.filter((b) => !isDraftBlog(b) && b.data.lang === lang);
+const publishedBlogFallback = publishedBlog.length > 0 ? publishedBlog : blogAll.filter((b) => !isDraftBlog(b) && b.data.lang === 'en');
+
+const statsAxes = computeWhoamiStats({
+  projects: projectsFallback,
+  caseStudies: caseStudiesFallback,
+  experience: experienceFallback,
+  publishedBlog: publishedBlogFallback,
+  skills: skillsFallback,
+  tools: toolsFallback,
+  certifications: certificationsFallback,
+});
+
+const educationAll = await getCollection('education');
+const languagesAll = await getCollection('languages');
+const educationFallback = fallbackToEn(
+  educationAll.filter((e) => e.data.lang === lang),
+  educationAll,
+);
+const languagesFallback = fallbackToEn(
+  languagesAll.filter((l) => l.data.lang === lang),
+  languagesAll,
+);
+
+const categoriesById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+
+// CEFR → 0..100 for language proficiency bars
+const cefrPct: Record<string, number> = { native: 100, C2: 95, C1: 80, B2: 65, B1: 50, A2: 35, A1: 20 };
+
+// Data for the keyboard-switchable core panel (one component, many views).
+const sectionData = {
+  skills: skillsFallback
+    .slice()
+    .sort((a, b) => a.data.name.localeCompare(b.data.name))
+    .map((s) => ({
+      name: s.data.name,
+      categories: (s.data.categoryIds ?? [])
+        .map((id) => categoriesById.get(id))
+        .filter((v): v is string => typeof v === 'string'),
+    })),
+  certifications: certificationsFallback
+    .slice()
+    .sort((a, b) => a.data.name.localeCompare(b.data.name))
+    .map((c) => ({ name: c.data.name, issuer: c.data.issuer, status: c.data.status ?? 'unknown' })),
+  education: educationFallback.map((e) => ({
+    degree: e.data.degree,
+    institution: e.data.institution,
+    field: e.data.field,
+  })),
+  languages: languagesFallback.map((l) => ({
+    name: l.data.name,
+    level: l.data.level,
+    flagRegion: l.data.flagRegion,
+    pct: cefrPct[l.data.level] ?? 0,
+  })),
+  experience: experienceFallback
+    .slice()
+    .sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''))
+    .map((e) => ({
+      company: e.data.companyName,
+      role: e.data.roleTitle,
+      start: e.data.startDate,
+      end: e.data.isCurrent ? 'Present' : (e.data.endDate ?? ''),
+    })),
+};
+
+const parseFocus = (value: string | undefined) => {
+  if (!value) return undefined;
+  const firstSentence = value.split('.').map((s) => s.trim()).filter(Boolean)[0];
+  return firstSentence ? `${firstSentence}.` : value;
+};
+
+const focus = parseFocus(profile?.data.summary);
+const name = profile?.data.fullName ?? site.name;
+const role = profile?.data.headline ?? site.role;
+const dob = '07 November 1985';
+const birthPlace = 'Madrid, Spain';
+const zodiac = 'Scorpio';
+const height = '1.85 m';
+const weight = '80 kg';
+const nationality = 'Spain';
+const locationMode = 'Remote-first · EU/LATAM';
+const availability = 'Open to opportunities';
+
+const badgeCandidates = [
+  { id: 'cloud-security', label: categoriesById.get('cloud-security') ?? 'Cloud Security' },
+  { id: 'devsecops', label: categoriesById.get('devsecops') ?? 'DevSecOps' },
+  { id: 'kubernetes-platform', label: categoriesById.get('kubernetes-platform') ?? 'Kubernetes' },
+  { id: 'platform-engineering', label: categoriesById.get('platform-engineering') ?? 'Platform Engineering' },
+  { id: 'ai-security', label: categoriesById.get('ai-security') ?? 'AI Security' },
+  { id: 'supply-chain-security', label: categoriesById.get('supply-chain-security') ?? 'Supply Chain Security' },
+];
+
+const hasCategoryEvidence = (categoryId: string) => {
+  const all = [
+    ...projectsFallback.map((e) => e.data.categoryIds ?? []),
+    ...caseStudiesFallback.map((e) => e.data.categoryIds ?? []),
+    ...experienceFallback.map((e) => e.data.categoryIds ?? []),
+    ...skillsFallback.map((e) => e.data.categoryIds ?? []),
+    ...certificationsFallback.map((e) => e.data.categoryIds ?? []),
+  ];
+  return all.some((ids) => ids.includes(categoryId));
+};
+
+const badges = badgeCandidates
+  .filter((b) => hasCategoryEvidence(b.id))
+  .map((b) => ({ label: b.label }));
+
+---
+
+<section class="whoami-surface" aria-label="Whoami operator profile" id="core">
+  <div class="whoami-shell" data-whoami-shell>
+    <OperatorFrameSvg id="whoami-shell-frame" class="whoami-shell-frame" />
+    <CircuitTraceSvg id="whoami-shell-trace" class="whoami-shell-trace" />
+
+    <div class="whoami-grid" x-data="operatorConsole()">
+      <OperatorIdentityPanel
+        name={name}
+        role={role}
+        focus={focus}
+        locationMode={locationMode}
+        availability={availability}
+        nationality={nationality}
+        dob={dob}
+        birthPlace={birthPlace}
+        zodiac={zodiac}
+        height={height}
+        weight={weight}
+        badges={badges}
+      />
+      <OperatorStatsPanel axes={statsAxes} sections={sectionData} />
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Outer surface ───────────────────────────────────────────────────── */
+  .whoami-surface {
+    margin-top: 1rem;
+  }
+
+  /* ── Shell: CRT-glass outer wrapper ─────────────────────────────────── */
+  .whoami-shell {
+    position: relative;
+    border-radius: 28px;
+    padding: 1.15rem;
+    background:
+      radial-gradient(
+        1200px 620px at 14% 10%,
+        color-mix(in oklab, var(--color-accent), transparent 92%),
+        transparent 62%
+      ),
+      radial-gradient(
+        900px 520px at 85% 10%,
+        color-mix(in oklab, var(--color-accent), transparent 94%),
+        transparent 64%
+      ),
+      color-mix(in oklab, var(--color-surface-2), transparent 6%);
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    box-shadow:
+      0 34px 80px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%);
+    overflow: hidden;
+  }
+
+  .whoami-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.035) 0px,
+        rgba(255, 255, 255, 0.015) 1px,
+        rgba(255, 255, 255, 0) 4px
+      ),
+      radial-gradient(
+        120% 160% at 50% -20%,
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0) 58%
+      );
+    opacity: 0.22;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  .whoami-shell::before {
+    content: '';
+    position: absolute;
+    inset: -40% -60%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.08) 46%,
+      rgba(255, 255, 255, 0) 72%
+    );
+    transform: translateX(-28%) translateY(-8%);
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  :global(.whoami-shell-frame) {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.95;
+  }
+
+  :global(.whoami-shell-trace) {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.22;
+    filter: blur(0.2px);
+  }
+
+  /* ── Outer 2-column grid ─────────────────────────────────────────────── */
+  .whoami-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-areas: 'center right';
+    gap: 1rem;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Grid area token — consumed by OperatorStatsPanel's own CSS */
+  :global(.whoami-stats) {
+    grid-area: right;
+  }
+
+  /* ── Responsive: stack at narrow viewports ───────────────────────────── */
+  @media (max-width: 900px) {
+    .whoami-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'center'
+        'right';
+    }
+  }
+
+  /* ── Entrance animations ─────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: no-preference) {
+    .whoami-shell {
+      animation: whoami-boot 520ms var(--ease-standard) 1 both;
+    }
+
+    .whoami-shell::after {
+      animation:
+        whoami-scan 900ms var(--ease-standard) 1 both,
+        whoami-phosphor 6.5s ease-in-out 1.1s infinite alternate;
+    }
+
+    .whoami-shell::before {
+      animation: whoami-sweep 900ms var(--ease-standard) 1 both;
+      animation-delay: 180ms;
+    }
+
+    .whoami-grid > * {
+      animation: whoami-rise 520ms var(--ease-standard) 1 both;
+    }
+
+    .whoami-grid > :nth-child(1) { animation-delay: 80ms; }
+    .whoami-grid > :nth-child(2) { animation-delay: 140ms; }
+    .whoami-grid > :nth-child(3) { animation-delay: 200ms; }
+  }
+
+  @keyframes whoami-boot {
+    0%   { transform: translateY(10px); opacity: 0; filter: saturate(0.92); }
+    100% { transform: translateY(0);    opacity: 1; filter: saturate(1); }
+  }
+
+  @keyframes whoami-rise {
+    0%   { transform: translateY(10px); opacity: 0; }
+    100% { transform: translateY(0);    opacity: 1; }
+  }
+
+  @keyframes whoami-scan {
+    0%   { opacity: 0.05; transform: translateY(-6px); }
+    100% { opacity: 0.22; transform: translateY(0); }
+  }
+
+  @keyframes whoami-sweep {
+    0%   { opacity: 0;    transform: translateX(-28%) translateY(-8%); }
+    20%  { opacity: 0.26; }
+    100% { opacity: 0;    transform: translateX(28%) translateY(10%); }
+  }
+
+  @keyframes whoami-phosphor {
+    0%   { opacity: 0.18; }
+    100% { opacity: 0.25; }
+  }
+</style>
+
+<script>
+  import initWhoamiMotion from '../../scripts/whoami-motion';
+  void initWhoamiMotion();
+</script>

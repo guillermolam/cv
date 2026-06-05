@@ -1,0 +1,108 @@
+---
+import NavSectionGlyph, { type NavSectionId } from './NavSectionGlyph.astro';
+
+/**
+ * SectionNavRail — the primary section navigation as an animated-SVG glyph rail.
+ *
+ * Glyph is the primary signal; the text label is tiny and a tooltip carries the
+ * full name (provided by NavSectionGlyph). Hover/activate emit SFX and a 3D lift.
+ */
+export type NavRailItem = {
+  id: NavSectionId;
+  label: string;
+  href: string;
+  current: boolean;
+};
+
+export type Props = {
+  items: readonly NavRailItem[];
+  label?: string;
+  class?: string;
+};
+
+const { items, label = 'Primary', class: className } = Astro.props as Props;
+---
+
+<nav class:list={['section-nav-rail', className]} aria-label={label} data-section-nav>
+  {items.map((item) => (
+    (() => {
+      const words = item.label.split(/\s+/).filter(Boolean);
+      return (
+    <a
+      href={item.href}
+      class="section-nav-link"
+      aria-current={item.current ? 'page' : undefined}
+      aria-label={item.label}
+      data-nav-link
+    >
+      <NavSectionGlyph id={item.id} label={item.label} current={item.current} />
+      <span class="section-nav-label" aria-hidden="true">
+        {words.map((w) => (
+          <span class="section-nav-word">{w}</span>
+        ))}
+      </span>
+    </a>
+      );
+    })()
+  ))}
+</nav>
+
+<style>
+  .section-nav-rail {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .section-nav-link {
+    display: inline-grid;
+    justify-items: center;
+    gap: 0.15rem;
+    text-decoration: none;
+    color: var(--color-text-muted);
+    border-radius: 14px;
+    padding: 0.1rem;
+  }
+
+  .section-nav-link:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  .section-nav-label {
+    display: grid;
+    justify-items: center;
+    gap: 0.05rem;
+    font-family: var(--font-techno, var(--font-display));
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    opacity: 0.6;
+    transition: opacity var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+  }
+
+  .section-nav-word {
+    display: block;
+    line-height: 1.05;
+  }
+
+  .section-nav-link[aria-current='page'] .section-nav-label,
+  .section-nav-link:hover .section-nav-label,
+  .section-nav-link:focus-visible .section-nav-label {
+    opacity: 1;
+    color: var(--color-text-strong);
+  }
+
+  @media (max-width: 760px) {
+    .section-nav-label {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { initSectionNav } from '../../scripts/section-nav';
+  void initSectionNav();
+</script>

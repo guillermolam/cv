@@ -1,0 +1,44 @@
+---
+export type Props = {
+  id?: string;
+  class?: string;
+};
+
+const { id = 'radar-frame', class: className } = Astro.props as Props;
+const uid = id.replace(/[^a-zA-Z0-9\-_]/g, '');
+---
+
+<svg
+  class={className}
+  viewBox="0 0 240 240"
+  aria-hidden="true"
+  focusable="false"
+  data-whoami-radar-frame
+>
+  <defs>
+    <linearGradient id={`${uid}-edge`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="var(--color-border-strong)" stop-opacity="0.85" />
+      <stop offset="1" stop-color="var(--color-border)" stop-opacity="0.45" />
+    </linearGradient>
+    <linearGradient id={`${uid}-glow`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--color-accent)" stop-opacity="0.12" />
+      <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0.02" />
+    </linearGradient>
+  </defs>
+
+  <rect x="6" y="6" width="228" height="228" rx="16" fill="none" stroke={`url(#${uid}-edge)`} stroke-width="1.25" />
+  <path
+    d="M18 36 V18 H36 M204 18 H222 V36 M18 204 V222 H36 M204 222 H222 V204"
+    fill="none"
+    stroke={`url(#${uid}-glow)`}
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <g opacity="0.55" fill="none" stroke="var(--color-border)" stroke-width="1">
+    <path d="M120 14 V28" />
+    <path d="M120 212 V226" />
+    <path d="M14 120 H28" />
+    <path d="M212 120 H226" />
+  </g>
+</svg>
+

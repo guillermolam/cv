@@ -1,0 +1,265 @@
+---
+export type KeyItem = {
+  id: string;
+  label: string;
+  href?: string;
+  number?: string;
+};
+
+export type Props = {
+  label?: string;
+  keys: KeyItem[];
+};
+
+const { label = 'Profile navigation', keys } = Astro.props as Props;
+---
+
+<nav class="whoami-keys" aria-label={label} data-whoami-keys>
+  <ol class="whoami-key-row" role="list">
+    {keys.map((k, index) => (
+      <li>
+        <button
+          type="button"
+          class="whoami-key"
+          data-key={k.id}
+          data-key-index={String(index)}
+          x-on:click={`setActive('${k.id}')`}
+          x-bind:data-active={`is('${k.id}') ? 'true' : null`}
+          x-bind:aria-current={`is('${k.id}') ? 'true' : null`}
+        >
+          <span class="whoami-key-glass" aria-hidden="true"></span>
+          <span class="whoami-key-top">
+            <span class="whoami-key-head">
+              <span class="whoami-key-icon" aria-hidden="true">
+                {k.id === 'bio' ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 12.2a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    <path d="M5 21c1.7-4 12.3-4 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  </svg>
+                ) : null}
+                {k.id === 'skills' ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 2l1.7 5.2L19 9l-5.3 1.8L12 16l-1.7-5.2L5 9l5.3-1.8L12 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                    <path d="M19.5 13.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+                  </svg>
+                ) : null}
+                {k.id === 'certifications' ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M7.5 3.5h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.6" />
+                    <path d="M9 20l3-2 3 2v-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.3 9.5l1.7 1.7 3.7-3.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                ) : null}
+                {k.id === 'education' ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M2.5 9.5L12 4.5l9.5 5-9.5 5-9.5-5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                    <path d="M6 12.2v4.2c2.5 1.8 9.5 1.8 12 0v-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M21.5 10v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                  </svg>
+                ) : null}
+                {k.id === 'languages' ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z" fill="none" stroke="currentColor" stroke-width="1.6" />
+                    <path d="M3.5 12h17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M12 3c3.2 3.6 3.2 14.4 0 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M12 3c-3.2 3.6-3.2 14.4 0 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                  </svg>
+                ) : null}
+                {k.id === 'experience' ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M8 7V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M5.5 7.5h13A2 2 0 0 1 20.5 9.5v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.6" />
+                    <path d="M9.5 12h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  </svg>
+                ) : null}
+              </span>
+              <span class="whoami-key-num">{k.number ?? String(index + 1).padStart(2, '0')}</span>
+            </span>
+            <span class="whoami-key-label">{k.label}</span>
+          </span>
+        </button>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .whoami-keys {
+    width: 100%;
+  }
+
+  .whoami-key-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .whoami-key {
+    --key-radius: 12px;
+    --key-h: 58px;
+    --key-press: 0px;
+    --key-tilt: 0deg;
+
+    display: grid;
+    align-items: center;
+    width: 100%;
+    min-height: var(--key-h);
+    padding: 0.55rem 0.6rem;
+    border-radius: var(--key-radius);
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    text-decoration: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    color: var(--color-text-strong);
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-surface-2), transparent 0%) 0%,
+        color-mix(in oklab, var(--color-surface-3), transparent 0%) 100%
+      );
+    box-shadow:
+      0 12px 18px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+    transform: translate3d(0, var(--key-press), 0) rotateX(var(--key-tilt));
+    user-select: none;
+  }
+
+  .whoami-key-glass {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        90% 70% at 30% 10%,
+        color-mix(in oklab, var(--color-accent), transparent 84%),
+        transparent 60%
+      ),
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.14),
+        rgba(255, 255, 255, 0) 46%,
+        rgba(255, 255, 255, 0.06) 100%
+      );
+    opacity: 0.18;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .whoami-key {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+      --key-tilt: 0deg;
+    }
+
+    .whoami-key:hover {
+      --key-tilt: 2deg;
+      box-shadow:
+        0 18px 30px var(--shadow-2),
+        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+        inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+        0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
+    }
+  }
+
+  .whoami-key:active {
+    --key-press: 2px;
+    box-shadow:
+      0 12px 18px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 2px 10px color-mix(in oklab, var(--color-bg), transparent 0%);
+  }
+
+  .whoami-key[data-active='true'] {
+    border-color: color-mix(in oklab, var(--color-accent), transparent 40%);
+    box-shadow:
+      0 18px 30px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+      0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 70%);
+  }
+
+  .whoami-key[data-active='true'] .whoami-key-glass {
+    opacity: 0.6;
+    background:
+      radial-gradient(
+        85% 70% at 40% 15%,
+        color-mix(in oklab, var(--color-success), transparent 40%),
+        transparent 62%
+      ),
+      radial-gradient(
+        120% 160% at 40% 120%,
+        color-mix(in oklab, var(--color-success), transparent 74%),
+        transparent 62%
+      ),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 54%);
+  }
+
+  .whoami-key:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-accent), transparent 35%);
+    outline-offset: 2px;
+  }
+
+  .whoami-key-top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+    align-items: baseline;
+    position: relative;
+    z-index: 1;
+  }
+
+  .whoami-key-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .whoami-key-icon {
+    width: 16px;
+    height: 16px;
+    color: color-mix(in oklab, var(--color-text-strong), var(--color-cta) 22%);
+    opacity: 0.85;
+    flex: none;
+  }
+
+  .whoami-key-icon svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+  }
+
+  .whoami-key-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: color-mix(in oklab, var(--color-text-muted), var(--color-text) 10%);
+    letter-spacing: 0.04em;
+  }
+
+  .whoami-key-label {
+    font-family: var(--font-techno, var(--font-display));
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+
+  @media (max-width: 400px) {
+    .whoami-key-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .whoami-key {
+      min-height: 54px;
+    }
+  }
+</style>

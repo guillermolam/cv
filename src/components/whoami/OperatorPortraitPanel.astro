@@ -1,0 +1,115 @@
+---
+import SocialLinks from '../SocialLinks.astro';
+import RetroKeyboardNav, { type KeyItem } from './RetroKeyboardNav.astro';
+import StatusGlyphSvg from './StatusGlyphSvg.astro';
+
+export type Props = {
+  keys: KeyItem[];
+  statusLabel?: string;
+  statusValue?: string;
+};
+
+const { keys, statusLabel = 'Operator status', statusValue = 'ONLINE' } = Astro.props as Props;
+---
+
+<section class="whoami-left card pad" aria-label="Operator portrait">
+  <header class="whoami-left-header">
+    <p class="whoami-left-eyebrow">Player bio</p>
+    <div class="whoami-status" aria-label={statusLabel}>
+      <StatusGlyphSvg class="whoami-status-glyph" />
+      <span class="whoami-status-dot" aria-hidden="true"></span>
+      <span class="whoami-status-label">{statusValue}</span>
+    </div>
+  </header>
+
+  <div class="whoami-left-links">
+    <SocialLinks ariaLabel="Operator links" />
+  </div>
+
+  <div class="whoami-keyboard">
+    <RetroKeyboardNav label="Operator modules" keys={keys} />
+  </div>
+</section>
+
+<style>
+  .whoami-left {
+    display: grid;
+    gap: 1rem;
+    overflow: hidden;
+  }
+
+  .whoami-left-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .whoami-left-eyebrow {
+    margin: 0;
+    font-size: var(--font-size-0);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  .whoami-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+  }
+
+  .whoami-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-accent), transparent 25%);
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--color-accent), transparent 85%),
+      0 0 16px color-mix(in oklab, var(--color-accent), transparent 70%);
+  }
+
+  .whoami-status-label {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-00);
+    letter-spacing: 0.08em;
+    color: var(--color-text-strong);
+  }
+
+  .whoami-status-glyph {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+
+  .whoami-left-links :global(.social-links) {
+    justify-content: flex-start;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .whoami-status-dot {
+      animation: whoami-led 2.8s ease-in-out infinite;
+    }
+  }
+
+  @keyframes whoami-led {
+    0%,
+    100% {
+      transform: translateZ(0);
+      opacity: 0.9;
+      box-shadow:
+        0 0 0 2px color-mix(in oklab, var(--color-accent), transparent 85%),
+        0 0 12px color-mix(in oklab, var(--color-accent), transparent 78%);
+    }
+    50% {
+      opacity: 0.55;
+      box-shadow:
+        0 0 0 2px color-mix(in oklab, var(--color-accent), transparent 88%),
+        0 0 22px color-mix(in oklab, var(--color-accent), transparent 65%);
+    }
+  }
+</style>

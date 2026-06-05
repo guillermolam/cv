@@ -1,0 +1,148 @@
+---
+export type Badge = {
+  label: string;
+  detail?: string;
+};
+
+export type Props = {
+  label?: string;
+  badges: Badge[];
+};
+
+const { label = 'Badges', badges } = Astro.props as Props;
+---
+
+<section class="whoami-badges" aria-label={label}>
+  <h2 class="whoami-badges-title">{label}</h2>
+  {badges.length === 0 ? (
+    <p class="whoami-badges-empty">Badges will appear as more evidence is added to the content graph.</p>
+  ) : (
+    <ul class="whoami-badge-row" role="list">
+      {badges.map((b) => (
+        <li class="whoami-badge" data-shimmer="true">
+          <span class="whoami-badge-label">{b.label}</span>
+          {b.detail ? <span class="whoami-badge-detail">{b.detail}</span> : null}
+        </li>
+      ))}
+    </ul>
+  )}
+</section>
+
+<style>
+  .whoami-badges-title {
+    margin: 0 0 0.6rem 0;
+    font-size: var(--font-size-0);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  .whoami-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .whoami-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 14px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 18%);
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(110% 120% at 25% 10%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 58%),
+      radial-gradient(
+        90% 140% at 30% 0%,
+        color-mix(in oklab, var(--color-accent), transparent 90%),
+        transparent 60%
+      ),
+      linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+    box-shadow:
+      0 16px 26px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 30%),
+      inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+  }
+
+  .whoami-badge::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--color-accent), #fff 18%);
+    box-shadow:
+      0 0 10px color-mix(in oklab, var(--color-accent), transparent 72%),
+      0 0 20px color-mix(in oklab, var(--color-accent), transparent 82%);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .whoami-badge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.12) 38%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    opacity: 0.0;
+    transform: translateX(-40%);
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  .whoami-badge-label {
+    font-size: var(--font-size-0);
+    color: var(--color-text-strong);
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  .whoami-badge-detail {
+    font-size: var(--font-size-00);
+    color: var(--color-text-muted);
+  }
+
+  .whoami-badges-empty {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .whoami-badge {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .whoami-badge:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 58%);
+    }
+
+    .whoami-badge[data-shimmer='true']::after {
+      opacity: 0.22;
+      animation: whoami-badge-shimmer 900ms var(--ease-standard) 1 both;
+    }
+  }
+
+  @keyframes whoami-badge-shimmer {
+    0% {
+      transform: translateX(-55%);
+    }
+    100% {
+      transform: translateX(55%);
+    }
+  }
+</style>

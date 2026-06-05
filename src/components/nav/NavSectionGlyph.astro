@@ -1,0 +1,172 @@
+---
+export type NavSectionId = 'whoami' | 'toolchain' | 'experience' | 'tutorials' | 'knowledge' | 'contact';
+
+export type Props = {
+  id: NavSectionId;
+  label: string;
+  current?: boolean;
+};
+
+const { id, label, current = false } = Astro.props as Props;
+
+const pathsById: Record<NavSectionId, string[]> = {
+  whoami: [
+    'M6.5 7.5h11c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-11c-1.1 0-2-.9-2-2v-9c0-1.1.9-2 2-2Z',
+    'M10.2 11a2 2 0 1 0-2-2 2 2 0 0 0 2 2Z',
+    'M8.2 16.8h8',
+  ],
+  toolchain: [
+    'M7 7.5h4l1-2h2l1 2h4a2 2 0 0 1 2 2v2.8a2 2 0 0 1-2 2h-4l-1 2h-2l-1-2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z',
+    'M9.2 11.4h5.6',
+    'M12 9.2v4.4',
+  ],
+  experience: [
+    'M8 7V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1',
+    'M6.5 7.5h11c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-11c-1.1 0-2-.9-2-2v-9c0-1.1.9-2 2-2Z',
+    'M9.5 12h5',
+  ],
+  tutorials: [
+    'M8 4.5h7l3 3v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z',
+    'M15 4.5v3h3',
+    'M10 12.2l5 2.8-5 2.8v-5.6Z',
+  ],
+  knowledge: [
+    'M6.5 6.5h6.2a2 2 0 0 1 2 2v12.5a2.6 2.6 0 0 0-2-1H6.5a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2Z',
+    'M17.5 6.5h-6.2a2 2 0 0 0-2 2v12.5a2.6 2.6 0 0 1 2-1h6.2a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2Z',
+    'M8.6 10.2h4.2',
+  ],
+  contact: [
+    'M7 9.5h10c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2Z',
+    'M6.5 12l5.5 4 5.5-4',
+    'M8.8 7.6h6.4',
+  ],
+};
+
+const paths = pathsById[id];
+---
+
+<span class="nav-glyph" data-nav-glyph data-current={current ? 'true' : 'false'}>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {paths.map((d) => (
+      <path d={d} class="nav-glyph-path" pathLength="100" />
+    ))}
+  </svg>
+  <span class="nav-glyph-tooltip" role="tooltip" aria-hidden="true">
+    {label}
+  </span>
+</span>
+
+<style>
+  .nav-glyph {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 16%);
+    background:
+      radial-gradient(
+        100% 90% at 30% 12%,
+        color-mix(in oklab, var(--color-accent), transparent 90%),
+        transparent 60%
+      ),
+      linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+    box-shadow:
+      0 18px 30px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .nav-glyph svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav-glyph-path {
+    fill: none;
+    stroke: color-mix(in oklab, var(--color-text-strong), var(--color-accent) 20%);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.92;
+  }
+
+  .nav-glyph-tooltip {
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    transform: translate(-50%, -100%);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.45rem;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-bg), transparent 20%);
+    color: var(--color-text-strong);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 12px 24px var(--shadow-2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-glyph {
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .nav-glyph:hover,
+    .nav-glyph:focus-within {
+      transform: translateY(-1px) rotateX(2deg);
+      border-color: color-mix(in oklab, var(--color-accent), transparent 56%);
+      box-shadow:
+        0 22px 38px var(--shadow-2),
+        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+        inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+        0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
+    }
+
+    .nav-glyph:hover .nav-glyph-tooltip,
+    .nav-glyph:focus-within .nav-glyph-tooltip {
+      opacity: 1;
+    }
+
+    .nav-glyph[data-current='true'] {
+      border-color: color-mix(in oklab, var(--color-accent), transparent 40%);
+      box-shadow:
+        0 22px 38px var(--shadow-2),
+        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+        inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+        0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 70%);
+    }
+
+    .nav-glyph:hover .nav-glyph-path,
+    .nav-glyph:focus-within .nav-glyph-path,
+    .nav-glyph[data-current='true'] .nav-glyph-path {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 0;
+      animation: nav-glyph-draw 760ms var(--ease-standard) 1 both;
+    }
+
+    .nav-glyph[data-current='true'] .nav-glyph-path {
+      animation-duration: 620ms;
+    }
+  }
+
+  @keyframes nav-glyph-draw {
+    from {
+      stroke-dashoffset: 100;
+      opacity: 0.35;
+    }
+    to {
+      stroke-dashoffset: 0;
+      opacity: 0.92;
+    }
+  }
+</style>
