@@ -102,80 +102,83 @@ const initOne = (root: HTMLElement) => {
   bindHit(prevHit, -1);
   bindHit(nextHit, 1);
 
-  if (knobCore) {
-    const reduceMotion =
-      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
-        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        : false;
+  const jump = (targetIdx: number) => {
+    let diff = targetIdx - previewIdx;
+    if (diff > links.length / 2) diff -= links.length;
+    if (diff < -links.length / 2) diff += links.length;
 
+    if (diff !== 0) {
+      previewIdx = (targetIdx + links.length) % links.length;
+      rotationSteps += diff;
+      render();
+      emitSfx('key');
+    }
+  };
+
+  if (knobCore) {
     let dragging = false;
     let moved = false;
-    let lastY = 0;
-    let lastT = 0;
-    let lastV = 0;
-    let acc = 0;
-    const pxPerStep = 18;
+    let lastAngle = 0;
+    let accAngle = 0;
+
+    const getAngle = (clientX: number, clientY: number) => {
+      const rect = knobCore.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      // atan2 returns angle in radians. Convert to degrees.
+      let angle = (Math.atan2(clientY - centerY, clientX - centerX) * 180) / Math.PI;
+      angle += 90; // Offset so 0 is at the top (12 o'clock)
+      if (angle < 0) angle += 360;
+      return angle % 360;
+    };
 
     knobCore.addEventListener('pointerdown', (e) => {
       dragging = true;
       moved = false;
-      lastY = e.clientY;
-      lastT = performance.now();
-      lastV = 0;
-      acc = 0;
+      const startAngle = getAngle(e.clientX, e.clientY);
+      lastAngle = startAngle;
+      accAngle = 0;
+
+      // Selection: Jump to the nearest language slice immediately
+      const targetIdx = Math.round(startAngle / stepDeg) % links.length;
+      if (targetIdx !== previewIdx) {
+        jump(targetIdx);
+        moved = true;
+      }
+
       knobCore.setPointerCapture(e.pointerId);
       press();
     });
 
     knobCore.addEventListener('pointermove', (e) => {
       if (!dragging) return;
-      const now = performance.now();
-      const dy = e.clientY - lastY;
-      const dt = Math.max(1, now - lastT);
-      lastV = dy / dt;
-      lastY = e.clientY;
-      lastT = now;
+      const currentAngle = getAngle(e.clientX, e.clientY);
+      let diff = currentAngle - lastAngle;
 
-      acc += dy;
-      if (Math.abs(acc) < pxPerStep) return;
+      // Handle wrap-around
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
 
-      const steps = Math.trunc(acc / pxPerStep);
-      acc -= steps * pxPerStep;
-      const dir = steps > 0 ? 1 : -1;
-      for (let i = 0; i < Math.abs(steps); i++) cycle(dir);
-      moved = true;
+      accAngle += diff;
+      lastAngle = currentAngle;
+
+      if (Math.abs(accAngle) >= stepDeg) {
+        const steps = Math.trunc(accAngle / stepDeg);
+        accAngle -= steps * stepDeg;
+        const dir = steps > 0 ? 1 : -1;
+        for (let i = 0; i < Math.abs(steps); i++) cycle(dir);
+        moved = true;
+      }
     });
 
     const end = () => {
       if (!dragging) return;
       dragging = false;
       release();
-      if (!moved) return;
-
-      if (reduceMotion) {
+      // If we interacted (clicked a different lang or dragged), commit the change.
+      if (moved) {
         commit();
-        return;
       }
-
-      const speed = Math.min(0.9, Math.abs(lastV));
-      const extra = Math.max(0, Math.min(6, Math.round(speed * 10)));
-      if (extra === 0) {
-        commit();
-        return;
-      }
-
-      const dir = lastV > 0 ? 1 : -1;
-      let remaining = extra;
-      const tick = () => {
-        if (remaining <= 0) {
-          commit();
-          return;
-        }
-        remaining -= 1;
-        cycle(dir);
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
     };
 
     knobCore.addEventListener('pointerup', end);
