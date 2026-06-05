@@ -26,7 +26,7 @@ export type Props = {
 const { lang, links, label = 'Language selector' } = Astro.props as Props;
 
 const languageMeta: Record<Lang, { name: string; region: string }> = {
-  en: { name: 'English', region: 'gb' },
+  en: { name: 'English', region: 'us' },
   es: { name: 'Español', region: 'es' },
   fr: { name: 'Français', region: 'fr' },
   de: { name: 'Deutsch', region: 'de' },
@@ -79,11 +79,10 @@ const linkData = JSON.stringify(
       data-dir="next"
       aria-label={`Next language (${languageMeta[nextLang].name})`}
     ></a>
-    <button type="button" class="lang-dial-knob-core" aria-label="Rotate knob to change language" data-knob-core>
-      <span class="lang-dial-knob-mark" aria-hidden="true"></span>
-      <span class="lang-dial-led" aria-hidden="true"></span>
-      <span class="lang-dial-knob-gloss" aria-hidden="true"></span>
-    </button>
+
+    <div class="lang-dial-canvas-container">
+      <canvas class="lang-dial-canvas" aria-hidden="true" data-lang-knob-canvas></canvas>
+    </div>
   </div>
 </div>
 
@@ -214,87 +213,19 @@ const linkData = JSON.stringify(
     transform: rotate(var(--lang-knob-rot, 0deg));
   }
 
-  .lang-dial-knob-core {
-    width: 78px;
-    height: 78px;
-    border-radius: 50%;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), #000 18%);
-    background:
-      radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 58%),
-      radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--color-surface-2), #000 28%), var(--color-surface-3) 62%),
-      conic-gradient(
-        from 0deg,
-        color-mix(in oklab, var(--color-border-strong), #000 22%),
-        color-mix(in oklab, var(--color-surface-2), #000 10%),
-        color-mix(in oklab, var(--color-border-strong), #000 22%)
-      );
-    box-shadow:
-      0 18px 30px var(--shadow-2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      inset 0 -10px 18px rgba(0, 0, 0, 0.55);
-    cursor: grab;
-    text-decoration: none;
-    padding: 0;
-    position: relative;
-    display: grid;
-    place-items: center;
-  }
-
-  .lang-dial-knob-core:active {
-    cursor: grabbing;
-  }
-
-  .lang-dial-knob-core::after {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border-radius: 50%;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 28%);
-    background: radial-gradient(circle at 50% 45%, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.55));
-    pointer-events: none;
-  }
-
-  .lang-dial-knob-mark {
-    position: absolute;
-    top: 7px;
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    background: color-mix(in oklab, var(--color-accent), #fff 12%);
-    box-shadow: 0 0 16px color-mix(in oklab, var(--color-accent), transparent 72%);
-  }
-
-  .lang-dial-led {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: color-mix(in oklab, var(--color-accent), #fff 18%);
-    box-shadow:
-      0 0 10px color-mix(in oklab, var(--color-accent), transparent 65%),
-      0 0 22px color-mix(in oklab, var(--color-accent), transparent 78%);
-    opacity: 0.9;
-  }
-
-  .lang-dial-knob-gloss {
+  .lang-dial-canvas-container {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background:
-      radial-gradient(100% 90% at 30% 15%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
-      repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.05) 0px,
-        rgba(255, 255, 255, 0.02) 1px,
-        rgba(255, 255, 255, 0) 4px
-      );
-    opacity: 0.25;
-    mix-blend-mode: soft-light;
-    pointer-events: none;
+    pointer-events: none; /* Let hits and wrapper handle pointer events */
+    overflow: hidden;
+  }
+
+  .lang-dial-canvas {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    display: block;
   }
 
   .lang-dial-knob-hit {
@@ -318,7 +249,7 @@ const linkData = JSON.stringify(
     outline-offset: 2px;
   }
 
-  .lang-dial-knob[data-pressed='true'] .lang-dial-knob-core {
+  .lang-dial-knob[data-pressed='true'] .lang-dial-canvas-container {
     transform: translateY(2px);
     box-shadow:
       0 12px 18px var(--shadow-2),
@@ -327,26 +258,15 @@ const linkData = JSON.stringify(
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .lang-dial-knob {
-      transition: transform var(--motion-fast) var(--ease-standard);
-    }
-
-    .lang-dial-knob-core {
+    .lang-dial-canvas-container {
       transition:
         transform var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard);
     }
 
-    .lang-dial-knob-core:hover {
-      border-color: color-mix(in oklab, var(--color-accent), transparent 55%);
-    }
     .lang-dial-lcd::after {
       animation: lang-dial-phosphor 6.4s ease-in-out infinite alternate;
-    }
-
-    .lang-dial-led {
-      animation: lang-dial-led-flicker 3.6s ease-in-out infinite;
     }
   }
 

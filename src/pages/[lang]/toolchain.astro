@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TaxonomyPills from '../../components/content/TaxonomyPills.astro';
-import ContentCard from '../../components/content/ContentCard.astro';
 import ToolchainFilter from '../../components/content/ToolchainFilter.astro';
+import UiBadge from '../../components/ui/UiBadge.astro';
+import LazyBarChart from '../../components/charts/LazyBarChart.astro';
+import LazyRadarChart from '../../components/charts/LazyRadarChart.astro';
 
 import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../lib/i18n';
@@ -13,16 +14,17 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-if (!lang || !isLang(lang)) {
-  throw new Error('Invalid language');
-}
+if (!lang || !isLang(lang)) throw new Error('Invalid language');
 
 const title = 'Toolchain';
 const description = 'Tools and platforms referenced across the portfolio.';
 
-const toolsAll = await getCollection('tools');
-const categoriesAll = await getCollection('categories');
-const tagsAll = await getCollection('tags');
+// ── Collections ─────────────────────────────────────────────────────────────
+const [toolsAll, categoriesAll, tagsAll] = await Promise.all([
+  getCollection('tools'),
+  getCollection('categories'),
+  getCollection('tags'),
+]);
 
 const tools = toolsAll.filter((t) => t.data.lang === lang);
 const toolsFallback = tools.length > 0 ? tools : toolsAll.filter((t) => t.data.lang === 'en');
@@ -33,7 +35,13 @@ const categoryDimensionById = new Map(
 );
 const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
 
+// ── Content graph for evidence links ────────────────────────────────────────
 const graph = await buildContentGraph();
+const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
+
+const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
+const isNonEmptyString = (value: string | undefined): value is string =>
+  typeof value === 'string' && value.length > 0;
 
 const getEvidence = (toolId: string) => {
   const toolKey = getNodeKey('tools', toolId);
@@ -46,18 +54,71 @@ const getEvidence = (toolId: string) => {
   };
 };
 
-const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
+// ── Look-up maps ────────────────────────────────────────────────────────────
+const catById = new Map(
+  categoriesAll.filter((c) => c.data.lang === lang || c.data.lang === 'en')
+    .map((c) => [c.data.categoryId, c.data] as const),
+);
 
-const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
-const isNonEmptyString = (value: string | undefined): value is string =>
-  typeof value === 'string' && value.length > 0;
+// ── Stats for the hero ribbon ───────────────────────────────────────────────
+const totalTools = toolsFallback.length;
+const allToolCategoryIds = toolsFallback.flatMap((t) => t.data.categoryIds ?? []);
+const uniqueDomainDimensions = new Set(
+  allToolCategoryIds.map((id) => categoryDimensionById.get(id)).filter(Boolean),
+);
+const uniqueCategoryIds = new Set(allToolCategoryIds);
+const uniqueTagIds = new Set(toolsFallback.flatMap((t) => t.data.tagIds ?? []));
+const vendorCount = new Set(toolsFallback.map((t) => t.data.vendor).filter(Boolean)).size;
 
+// ── Tool distribution bar chart (by domain dimension) ───────────────────────
+const catDomainOrder = ['securityDomain', 'controlRoomStation', 'operations', 'development', 'toolchainDimension', 'general'];
+const toolsByDim = new Map<string, number>();
+for (const tool of toolsFallback) {
+  const cats = (tool.data.categoryIds ?? []).map((id) => catById.get(id)).filter(Boolean);
+  const dim = catDomainOrder.find((d) => cats.some((c) => c!.dimension === d)) ?? 'general';
+  toolsByDim.set(dim, (toolsByDim.get(dim) ?? 0) + 1);
+}
+const dimLabels: Record<string, string> = {
+  securityDomain: 'Security',
+  controlRoomStation: 'Platform',
+  operations: 'Operations',
+  development: 'Development',
+  toolchainDimension: 'Toolchain',
+  general: 'General',
+};
+const distLabels = [...toolsByDim.keys()].map((k) => dimLabels[k] ?? k);
+const distValues = [...toolsByDim.values()];
+
+// ── Category coverage radar ─────────────────────────────────────────────────
+const topCategories = [...uniqueCategoryIds]
+  .map((id) => {
+    const count = allToolCategoryIds.filter((c) => c === id).length;
+    return { id, count, label: categoryTitleById.get(id) ?? id };
+  })
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8);
+const radarRows = topCategories.map((c) => ({
+  label: c.label,
+  score: Math.round((c.count / totalTools) * 100),
+  confidence: c.count >= 8 ? 'deep' : c.count >= 4 ? 'moderate' : 'emerging',
+}));
+
+// ── Domain badge variant ────────────────────────────────────────────────────
+const domainVariant = (catId: string): string => {
+  const dim = catById.get(catId)?.dimension ?? 'general';
+  return dim === 'securityDomain' ? 'security'
+    : dim === 'controlRoomStation' ? 'infra'
+    : dim === 'operations' ? 'cloud'
+    : dim === 'development' ? 'accent'
+    : 'neutral';
+};
+
+// ── Filter options (unchanged logic) ────────────────────────────────────────
 const uniq = (values: string[]) => Array.from(new Set(values));
 
 const getToolTypeIds = (toolCategoryIds: string[]) =>
   toolCategoryIds.filter((id) => categoryDimensionById.get(id) === 'toolchainDimension');
 
-const allToolCategoryIds = toolsFallback.flatMap((t) => t.data.categoryIds ?? []);
 const toolchainTypeIds = uniq(getToolTypeIds(allToolCategoryIds)).sort((a, b) =>
   (categoryTitleById.get(a) ?? a).localeCompare(categoryTitleById.get(b) ?? b),
 );
@@ -79,71 +140,482 @@ const tagOptionIds = uniq(toolsFallback.flatMap((t) => t.data.tagIds ?? [])).sor
 const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?? id }));
 ---
 
-<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
-  <section class="card pad">
-    <h1>Toolchain</h1>
-    {tools.length === 0 && lang !== 'en' ? (
-      <p class="topology-subtitle">Showing English tool entries while {lang.toUpperCase()} content is being authored.</p>
-    ) : null}
-    <p class="topology-subtitle">Seed dataset. Links and coverage will grow as content is added.</p>
+<BaseLayout {title} {description} lang={lang} useLangPrefix>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       HERO HEADER
+  ═══════════════════════════════════════════════════════════════ -->
+  <header class="tc-hero" data-tc-hero>
+    <div class="tc-hero__inner">
+      <div class="tc-hero__eyebrow ds-eyebrow">
+        <span class="i-solar-server-bold-duotone align-middle mr-2" aria-hidden="true"></span>
+        Arsenal Overview
+      </div>
+      <h1 class="tc-hero__title">Toolchain</h1>
+      <p class="tc-hero__sub">{description}</p>
+
+      {tools.length === 0 && lang !== 'en' ? (
+        <p class="tc-hero__fallback ds-label">
+          Showing English tool entries while {lang.toUpperCase()} content is being authored.
+        </p>
+      ) : null}
+
+      <!-- Stats ribbon -->
+      <div class="tc-stats" role="list">
+        {[
+          { icon: 'i-ph-wrench-duotone',       label: 'Tools',      value: totalTools },
+          { icon: 'i-ph-shield-check-duotone',  label: 'Domains',    value: uniqueDomainDimensions.size },
+          { icon: 'i-ph-squares-four-duotone',  label: 'Categories', value: uniqueCategoryIds.size },
+          { icon: 'i-ph-tag-duotone',           label: 'Tags',       value: uniqueTagIds.size },
+          { icon: 'i-ph-buildings-duotone',     label: 'Vendors',    value: vendorCount },
+        ].map(({ icon, label, value }) => (
+          <div class="tc-stat" role="listitem">
+            <span class={`${icon} tc-stat__icon`} aria-hidden="true"></span>
+            <span class="tc-stat__value">{value}</span>
+            <span class="tc-stat__label ds-label">{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="tc-hero__grid ds-control-grid" aria-hidden="true"></div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       OVERVIEW DASHBOARD — distribution bar + category radar
+  ═══════════════════════════════════════════════════════════════ -->
+  <section class="tc-dashboard" aria-label="Toolchain overview" data-tc-section>
+    <!-- Tool distribution by domain -->
+    <div class="tc-dash-panel">
+      <header class="tc-panel-header">
+        <span class="i-solar-code-bold-duotone tc-panel-icon text-accent" aria-hidden="true"></span>
+        <div>
+          <h2 class="tc-panel-title">Distribution by Domain</h2>
+          <p class="tc-panel-sub ds-label">{totalTools} tools · categorised</p>
+        </div>
+      </header>
+      {distLabels.length > 0 ? (
+        <LazyBarChart
+          labels={distLabels}
+          values={distValues}
+          title="Tools per domain"
+          series="Tool count"
+          horizontal
+          height={distLabels.length * 38 + 24}
+          class="tc-bar"
+        />
+      ) : (
+        <p class="tc-empty">Tool data loading…</p>
+      )}
+    </div>
+
+    <!-- Category coverage radar -->
+    <div class="tc-dash-panel">
+      <header class="tc-panel-header">
+        <span class="i-solar-shield-bold-duotone tc-panel-icon text-[var(--ds-color-security)]" aria-hidden="true"></span>
+        <div>
+          <h2 class="tc-panel-title">Category Coverage</h2>
+          <p class="tc-panel-sub ds-label">Top {radarRows.length} categories · relative density</p>
+        </div>
+      </header>
+      {radarRows.length > 0 ? (
+        <LazyRadarChart
+          rows={radarRows}
+          title="Category coverage radar"
+          class="tc-radar"
+        />
+      ) : (
+        <p class="tc-empty">Category data loading…</p>
+      )}
+    </div>
   </section>
 
-  <ToolchainFilter
-    targetSelector="#toolchain-items"
-    typeOptions={typeOptions}
-    tagOptions={tagOptions}
-    categoryOptions={categoryOptions}
-    totalCount={toolsFallback.length}
-  />
+  <!-- ══════════════════════════════════════════════════════════════
+       FILTER + TOOL GRID
+  ═══════════════════════════════════════════════════════════════ -->
+  <section class="tc-tools-section" data-tc-section>
+    <h2 class="tc-section-title">
+      <span class="i-ph-list-magnifying-glass-duotone align-middle mr-2" aria-hidden="true"></span>
+      Tool Catalogue
+    </h2>
 
-  <section class="grid" id="toolchain-items" aria-label="Tools">
-    {toolsFallback
-      .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
-      .map((tool) => {
-        const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
-        const evidence = getEvidence(tool.data.toolId);
-        const projectLinks = evidence.projects
-          .map((k) => nodeByKey.get(k))
-          .filter(isGraphNode)
-          .map((n) => ({ label: n.title, href: `/${lang}/portfolio/${n.slug}` }));
-        const caseStudyLinks = evidence.caseStudies
-          .map((k) => nodeByKey.get(k))
-          .filter(isGraphNode)
-          .map((n) => ({ label: n.title, href: `/${lang}/case-studies/${n.slug}` }));
+    <ToolchainFilter
+      targetSelector="#toolchain-items"
+      typeOptions={typeOptions}
+      tagOptions={tagOptions}
+      categoryOptions={categoryOptions}
+      totalCount={toolsFallback.length}
+    />
 
-        const categories = (tool.data.categoryIds ?? [])
-          .map((id) => categoryTitleById.get(id))
-          .filter(isNonEmptyString)
-          .map((label) => ({ label }));
-        const tags = (tool.data.tagIds ?? [])
-          .map((id) => tagTitleById.get(id))
-          .filter(isNonEmptyString)
-          .map((label) => ({ label }));
+    <div class="tc-grid" id="toolchain-items" aria-label="Tools">
+      {toolsFallback
+        .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
+        .map((tool, i) => {
+          const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
+          const evidence = getEvidence(tool.data.toolId);
+          const projectLinks = evidence.projects
+            .map((k) => nodeByKey.get(k))
+            .filter(isGraphNode)
+            .map((n) => ({ label: n.title, href: `/${lang}/portfolio/${n.slug}` }));
+          const caseStudyLinks = evidence.caseStudies
+            .map((k) => nodeByKey.get(k))
+            .filter(isGraphNode)
+            .map((n) => ({ label: n.title, href: `/${lang}/case-studies/${n.slug}` }));
 
-        return (
-          <div
-            data-tool-item
-            data-type-ids={typeIds.join(' ')}
-            data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
-            data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
-          >
-            <ContentCard title={tool.data.name} summary={tool.data.vendor ? `Vendor: ${tool.data.vendor}` : undefined}>
-              {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
-              {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
-              {projectLinks.length > 0 ? <TaxonomyPills label="Evidence projects" items={projectLinks} /> : null}
-              {caseStudyLinks.length > 0 ? (
-                <TaxonomyPills label="Evidence case studies" items={caseStudyLinks} />
+          const categories = (tool.data.categoryIds ?? [])
+            .map((id) => ({ id, label: categoryTitleById.get(id) }))
+            .filter((c): c is { id: string; label: string } => isNonEmptyString(c.label));
+          const tags = (tool.data.tagIds ?? [])
+            .map((id) => tagTitleById.get(id))
+            .filter(isNonEmptyString);
+
+          const hasEvidence = projectLinks.length > 0 || caseStudyLinks.length > 0;
+
+          return (
+            <article
+              class="tc-card"
+              data-tool-item
+              data-tc-card
+              data-type-ids={typeIds.join(' ')}
+              data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
+              data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
+              style={`--card-index:${i}`}
+            >
+              <header class="tc-card__header">
+                <h3 class="tc-card__name">{tool.data.name}</h3>
+                {tool.data.vendor ? (
+                  <span class="tc-card__vendor ds-label">{tool.data.vendor}</span>
+                ) : null}
+              </header>
+
+              <!-- Categories -->
+              {categories.length > 0 ? (
+                <div class="tc-card__badges">
+                  {categories.map((c) => (
+                    <UiBadge variant={domainVariant(c.id) as any} size="sm" depth="flat">
+                      {c.label}
+                    </UiBadge>
+                  ))}
+                </div>
               ) : null}
+
+              <!-- Tags -->
+              {tags.length > 0 ? (
+                <div class="tc-card__tags">
+                  {tags.map((tag) => (
+                    <span class="ds-badge">{tag}</span>
+                  ))}
+                </div>
+              ) : null}
+
+              <!-- Evidence links -->
+              {hasEvidence ? (
+                <div class="tc-card__evidence">
+                  {projectLinks.length > 0 ? (
+                    <div class="tc-evidence-group">
+                      <span class="i-ph-folder-notch-open-duotone tc-evidence-icon" aria-hidden="true"></span>
+                      {projectLinks.map((link, li) => (
+                        <Fragment>
+                          <a class="tc-evidence-link" href={link.href}>{link.label}</a>
+                          {li < projectLinks.length - 1 ? <span class="tc-evidence-sep">·</span> : null}
+                        </Fragment>
+                      ))}
+                    </div>
+                  ) : null}
+                  {caseStudyLinks.length > 0 ? (
+                    <div class="tc-evidence-group">
+                      <span class="i-ph-article-duotone tc-evidence-icon" aria-hidden="true"></span>
+                      {caseStudyLinks.map((link, li) => (
+                        <Fragment>
+                          <a class="tc-evidence-link" href={link.href}>{link.label}</a>
+                          {li < caseStudyLinks.length - 1 ? <span class="tc-evidence-sep">·</span> : null}
+                        </Fragment>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              <!-- Website link -->
               {tool.data.website ? (
-                <p>
-                  <a href={tool.data.website} rel="noopener noreferrer" target="_blank">
+                <div class="tc-card__footer">
+                  <a class="tc-card__link" href={tool.data.website} rel="noopener noreferrer" target="_blank">
+                    <span class="i-ph-arrow-square-out-duotone align-middle mr-1" aria-hidden="true"></span>
                     Website
                   </a>
-                </p>
+                </div>
               ) : null}
-            </ContentCard>
-          </div>
-        );
-      })}
+            </article>
+          );
+        })}
+    </div>
   </section>
+
 </BaseLayout>
+
+<!-- ══════════════════════════════════════════════════════════════
+     GSAP scroll animations — follows experience page pattern
+═══════════════════════════════════════════════════════════════ -->
+<script>
+  import { prefersReducedMotion } from '../../design-system/motion/reduced-motion';
+
+  if (!prefersReducedMotion()) {
+    const { gsap } = await import('../../lib/gsap-plugins');
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    const hero = document.querySelector('[data-tc-hero]');
+    if (hero) {
+      gsap.from(hero.querySelector('.tc-hero__inner'), {
+        y: 28,
+        opacity: 0,
+        duration: 0.9,
+        ease: 'ds.cinematicReveal',
+      });
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-tc-section]').forEach((section) => {
+      gsap.from(section, {
+        scrollTrigger: { trigger: section, start: 'top 88%', once: true },
+        y: 24,
+        opacity: 0,
+        duration: 0.65,
+        ease: 'ds.softOut',
+      });
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-tc-card]').forEach((card) => {
+      const idx = Number(card.style.getPropertyValue('--card-index') || 0);
+      gsap.from(card, {
+        scrollTrigger: { trigger: card, start: 'top 94%', once: true },
+        y: 20,
+        opacity: 0,
+        duration: 0.45,
+        delay: 0.03 * (idx % 6),
+        ease: 'power2.out',
+      });
+    });
+  }
+</script>
+
+<style>
+  /* ── Hero ─────────────────────────────────────────────────────── */
+  .tc-hero {
+    position: relative;
+    padding: var(--space-8) var(--space-6) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+  .tc-hero__grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .tc-hero__inner { position: relative; z-index: 1; max-width: 860px; }
+  .tc-hero__eyebrow { margin-bottom: var(--space-2); }
+  .tc-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: var(--color-text-strong);
+    margin: 0 0 var(--space-3);
+  }
+  .tc-hero__sub {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-1);
+    color: var(--color-text-muted);
+    max-width: 62ch;
+    margin: 0 0 var(--space-5);
+    line-height: 1.6;
+  }
+  .tc-hero__fallback { margin: 0 0 var(--space-3); }
+
+  /* ── Stats ribbon ─────────────────────────────────────────────── */
+  .tc-stats {
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+  }
+  .tc-stat {
+    @apply ds-surface;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    min-width: 80px;
+    text-align: center;
+  }
+  .tc-stat__icon {
+    font-size: 1.5rem;
+    color: var(--color-cta);
+    margin-bottom: 2px;
+  }
+  .tc-stat__value {
+    font-family: var(--font-techno);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-strong);
+    line-height: 1;
+  }
+  .tc-stat__label { margin-top: 2px; }
+
+  /* ── Dashboard grid ───────────────────────────────────────────── */
+  .tc-dashboard {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (max-width: 700px) { .tc-dashboard { grid-template-columns: 1fr; } }
+
+  /* ── Panel (shared by dashboard cards) ───────────────────────── */
+  .tc-dash-panel {
+    @apply ds-panel;
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .tc-panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-3);
+  }
+  .tc-panel-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+  .tc-panel-title {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-1);
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin: 0 0 2px;
+  }
+  .tc-panel-sub { margin: 0; }
+
+  /* ── Section wrapper ──────────────────────────────────────────── */
+  .tc-tools-section {
+    padding: var(--space-5) var(--space-6) var(--space-6);
+  }
+  .tc-section-title {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-2);
+    font-weight: 600;
+    color: var(--color-text-strong);
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-5);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ── Tool card grid ──────────────────────────────────────────── */
+  .tc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  /* ── Tool card ───────────────────────────────────────────────── */
+  .tc-card {
+    @apply ds-panel;
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tc-card:hover {
+    border-color: color-mix(in oklab, var(--color-cta), transparent 50%);
+    box-shadow: 0 2px 12px color-mix(in oklab, var(--color-cta), transparent 85%);
+  }
+
+  .tc-card__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+  .tc-card__name {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-2);
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .tc-card__vendor {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .tc-card__badges,
+  .tc-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  /* ── Evidence links ──────────────────────────────────────────── */
+  .tc-card__evidence {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+  .tc-evidence-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+    font-size: var(--font-size-0);
+  }
+  .tc-evidence-icon {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+  .tc-evidence-link {
+    color: var(--color-cta);
+    text-decoration: none;
+    font-size: var(--font-size-0);
+    line-height: 1.4;
+  }
+  .tc-evidence-link:hover { text-decoration: underline; }
+  .tc-evidence-sep {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-00);
+  }
+
+  /* ── Card footer ─────────────────────────────────────────────── */
+  .tc-card__footer {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+  .tc-card__link {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-cta);
+    text-decoration: none;
+  }
+  .tc-card__link:hover { text-decoration: underline; }
+
+  /* ── Chart sizing ────────────────────────────────────────────── */
+  .tc-radar { height: 260px; }
+
+  /* ── Empty state ─────────────────────────────────────────────── */
+  .tc-empty {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    padding: var(--space-4);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,1097 @@
+{
+  "neurons": [
+    {
+      "id": "development",
+      "label": "Development",
+      "color": "#4cc9f0",
+      "description": "Frontend architecture, static sites, creative engineering"
+    },
+    {
+      "id": "infra",
+      "label": "Infrastructure",
+      "color": "#7b5ea7",
+      "description": "Kubernetes platforms, cloud infrastructure, edge computing"
+    },
+    {
+      "id": "network",
+      "label": "Network",
+      "color": "#00b4d8",
+      "description": "Service mesh, eBPF networking, observability"
+    },
+    {
+      "id": "cicd",
+      "label": "CI/CD",
+      "color": "#ff6b35",
+      "description": "GitOps delivery, pipeline automation, build tooling"
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "color": "#e63946",
+      "description": "Cloud security, runtime protection, supply chain integrity"
+    },
+    {
+      "id": "ai",
+      "label": "AI",
+      "color": "#9b5de5",
+      "description": "AI security, model safety, intelligent automation"
+    }
+  ],
+  "axons": [
+    {
+      "id": "cat:creative-frontend",
+      "label": "Creative Frontend",
+      "neuronId": "development",
+      "type": "category"
+    },
+    {
+      "id": "skill:interactive-frontend-architecture",
+      "label": "Interactive Frontend Architecture",
+      "neuronId": "development",
+      "type": "skill"
+    },
+    {
+      "id": "cat:kubernetes-platform",
+      "label": "Kubernetes Platform",
+      "neuronId": "infra",
+      "type": "category"
+    },
+    {
+      "id": "cat:platform-engineering",
+      "label": "Platform Engineering",
+      "neuronId": "infra",
+      "type": "category"
+    },
+    {
+      "id": "cat:hybrid-edge",
+      "label": "Hybrid / Edge",
+      "neuronId": "infra",
+      "type": "category"
+    },
+    {
+      "id": "skill:kubernetes-platform-engineering",
+      "label": "Kubernetes Platform Engineering",
+      "neuronId": "infra",
+      "type": "skill"
+    },
+    {
+      "id": "tool-group:network",
+      "label": "Network",
+      "neuronId": "network",
+      "type": "category"
+    },
+    {
+      "id": "cat:gitops-delivery",
+      "label": "GitOps & Delivery",
+      "neuronId": "cicd",
+      "type": "category"
+    },
+    {
+      "id": "skill:devsecops",
+      "label": "DevSecOps",
+      "neuronId": "cicd",
+      "type": "skill"
+    },
+    {
+      "id": "cat:cloud-security",
+      "label": "Cloud Security",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:kubernetes-security",
+      "label": "Kubernetes Security",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:runtime-security",
+      "label": "Runtime Security",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:supply-chain-security",
+      "label": "Supply Chain Security",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:ai-security",
+      "label": "AI Security",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:secops",
+      "label": "Security Operations",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:supply-chain",
+      "label": "Supply Chain",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "cat:devsecops",
+      "label": "DevSecOps",
+      "neuronId": "security",
+      "type": "category"
+    },
+    {
+      "id": "skill:software-supply-chain-security",
+      "label": "Software Supply Chain Security",
+      "neuronId": "security",
+      "type": "skill"
+    },
+    {
+      "id": "skill:detection-engineering",
+      "label": "Detection Engineering",
+      "neuronId": "security",
+      "type": "skill"
+    },
+    {
+      "id": "tool-group:ai",
+      "label": "AI",
+      "neuronId": "ai",
+      "type": "category"
+    }
+  ],
+  "dendrites": [
+    {
+      "id": "tool:astro",
+      "label": "Astro",
+      "axonId": "cat:creative-frontend",
+      "neuronId": "development",
+      "usageCount": 0,
+      "website": "https://astro.build",
+      "tagIds": [
+        "astro"
+      ]
+    },
+    {
+      "id": "tool:nanostores",
+      "label": "Nanostores",
+      "axonId": "cat:creative-frontend",
+      "neuronId": "development",
+      "usageCount": 0,
+      "website": "https://nanostores.github.io/nanostores/",
+      "tagIds": []
+    },
+    {
+      "id": "tool:threejs",
+      "label": "Three.js",
+      "axonId": "cat:creative-frontend",
+      "neuronId": "development",
+      "usageCount": 0,
+      "website": "https://threejs.org",
+      "tagIds": [
+        "threejs"
+      ]
+    },
+    {
+      "id": "tool:typescript",
+      "label": "TypeScript",
+      "axonId": "cat:creative-frontend",
+      "neuronId": "development",
+      "usageCount": 0,
+      "website": "https://www.typescriptlang.org",
+      "tagIds": []
+    },
+    {
+      "id": "tool:argocd",
+      "label": "Argo CD",
+      "axonId": "cat:kubernetes-platform",
+      "neuronId": "infra",
+      "usageCount": 4,
+      "website": "https://argo-cd.readthedocs.io",
+      "tagIds": [
+        "ci-cd",
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:helm",
+      "label": "Helm",
+      "axonId": "cat:kubernetes-platform",
+      "neuronId": "infra",
+      "usageCount": 6,
+      "website": "https://helm.sh",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:istio",
+      "label": "Istio",
+      "axonId": "cat:kubernetes-platform",
+      "neuronId": "infra",
+      "usageCount": 3,
+      "website": "https://istio.io",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:karpenter",
+      "label": "Karpenter",
+      "axonId": "cat:kubernetes-platform",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://karpenter.sh",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:kustomize",
+      "label": "Kustomize",
+      "axonId": "cat:kubernetes-platform",
+      "neuronId": "infra",
+      "usageCount": 3,
+      "website": "https://kustomize.io",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:azure",
+      "label": "Microsoft Azure",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://azure.microsoft.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:betterstack",
+      "label": "BetterStack",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://betterstack.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:datadog",
+      "label": "Datadog",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://datadoghq.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:external-secrets",
+      "label": "External Secrets Operator",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://external-secrets.io",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:fermyon",
+      "label": "Fermyon",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 0,
+      "website": "https://www.fermyon.com",
+      "tagIds": [
+        "fermyon",
+        "wasm"
+      ]
+    },
+    {
+      "id": "tool:gcp",
+      "label": "Google Cloud",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 0,
+      "website": "https://cloud.google.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:grafana",
+      "label": "Grafana",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 8,
+      "website": "https://grafana.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:kubernetes",
+      "label": "Kubernetes",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 9,
+      "website": "https://kubernetes.io",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:opentelemetry",
+      "label": "OpenTelemetry",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 0,
+      "website": "https://opentelemetry.io",
+      "tagIds": []
+    },
+    {
+      "id": "tool:prometheus",
+      "label": "Prometheus",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 8,
+      "website": "https://prometheus.io",
+      "tagIds": []
+    },
+    {
+      "id": "tool:pulumi",
+      "label": "Pulumi",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 2,
+      "website": "https://pulumi.com",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:spacelift",
+      "label": "Spacelift",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://spacelift.io",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:spin",
+      "label": "Spin",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 0,
+      "website": "https://developer.fermyon.com/spin",
+      "tagIds": [
+        "spin",
+        "wasm"
+      ]
+    },
+    {
+      "id": "tool:terraform",
+      "label": "Terraform",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 7,
+      "website": "https://developer.hashicorp.com/terraform",
+      "tagIds": []
+    },
+    {
+      "id": "tool:terramate",
+      "label": "Terramate",
+      "axonId": "cat:platform-engineering",
+      "neuronId": "infra",
+      "usageCount": 1,
+      "website": "https://terramate.io",
+      "tagIds": []
+    },
+    {
+      "id": "tool:cilium",
+      "label": "Cilium",
+      "axonId": "tool-group:network",
+      "neuronId": "network",
+      "usageCount": 0,
+      "website": "https://cilium.io",
+      "tagIds": []
+    },
+    {
+      "id": "tool:gitlab-ci",
+      "label": "GitLab CI",
+      "axonId": "cat:gitops-delivery",
+      "neuronId": "cicd",
+      "usageCount": 5,
+      "website": "https://gitlab.com",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:jenkins",
+      "label": "Jenkins",
+      "axonId": "cat:gitops-delivery",
+      "neuronId": "cicd",
+      "usageCount": 9,
+      "website": "https://www.jenkins.io",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:github-actions",
+      "label": "GitHub Actions",
+      "axonId": "skill:devsecops",
+      "neuronId": "cicd",
+      "usageCount": 2,
+      "website": "https://github.com/features/actions",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:trivy",
+      "label": "Trivy",
+      "axonId": "skill:devsecops",
+      "neuronId": "cicd",
+      "usageCount": 4,
+      "website": "https://aquasecurity.github.io/trivy/",
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "id": "tool:syft",
+      "label": "Syft",
+      "axonId": "skill:devsecops",
+      "neuronId": "cicd",
+      "usageCount": 3,
+      "website": "https://github.com/anchore/syft",
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "id": "tool:grype",
+      "label": "Grype",
+      "axonId": "skill:devsecops",
+      "neuronId": "cicd",
+      "usageCount": 3,
+      "website": "https://github.com/anchore/grype",
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "id": "tool:aws",
+      "label": "AWS",
+      "axonId": "cat:cloud-security",
+      "neuronId": "security",
+      "usageCount": 5,
+      "website": "https://aws.amazon.com",
+      "tagIds": [
+        "aws"
+      ]
+    },
+    {
+      "id": "tool:drata",
+      "label": "Drata",
+      "axonId": "cat:cloud-security",
+      "neuronId": "security",
+      "usageCount": 1,
+      "website": "https://drata.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:teleport",
+      "label": "Teleport",
+      "axonId": "cat:cloud-security",
+      "neuronId": "security",
+      "usageCount": 2,
+      "website": "https://goteleport.com",
+      "tagIds": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "tool:twingate",
+      "label": "Twingate",
+      "axonId": "cat:cloud-security",
+      "neuronId": "security",
+      "usageCount": 1,
+      "website": "https://twingate.com",
+      "tagIds": []
+    },
+    {
+      "id": "tool:kubescape",
+      "label": "Kubescape",
+      "axonId": "cat:kubernetes-security",
+      "neuronId": "security",
+      "usageCount": 1,
+      "website": "https://kubescape.io",
+      "tagIds": [
+        "kubernetes",
+        "sbom"
+      ]
+    },
+    {
+      "id": "tool:opa",
+      "label": "Open Policy Agent",
+      "axonId": "cat:kubernetes-security",
+      "neuronId": "security",
+      "usageCount": 2,
+      "website": "https://www.openpolicyagent.org",
+      "tagIds": []
+    },
+    {
+      "id": "tool:falco",
+      "label": "Falco",
+      "axonId": "cat:runtime-security",
+      "neuronId": "security",
+      "usageCount": 2,
+      "website": "https://falco.org",
+      "tagIds": [
+        "threat-detection"
+      ]
+    },
+    {
+      "id": "tool:hunters-siem",
+      "label": "Hunters SIEM",
+      "axonId": "cat:runtime-security",
+      "neuronId": "security",
+      "usageCount": 1,
+      "website": "https://hunters.ai",
+      "tagIds": [
+        "threat-detection"
+      ]
+    },
+    {
+      "id": "tool:aikido",
+      "label": "Aikido Security",
+      "axonId": "cat:supply-chain-security",
+      "neuronId": "security",
+      "usageCount": 1,
+      "website": "https://aikido.dev",
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "id": "tool:checkov",
+      "label": "Checkov",
+      "axonId": "cat:supply-chain-security",
+      "neuronId": "security",
+      "usageCount": 2,
+      "website": "https://www.checkov.io",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:cosign",
+      "label": "Cosign",
+      "axonId": "cat:supply-chain-security",
+      "neuronId": "security",
+      "usageCount": 3,
+      "website": "https://docs.sigstore.dev/cosign/overview",
+      "tagIds": [
+        "sbom"
+      ]
+    },
+    {
+      "id": "tool:semgrep",
+      "label": "Semgrep",
+      "axonId": "cat:supply-chain-security",
+      "neuronId": "security",
+      "usageCount": 2,
+      "website": "https://semgrep.dev",
+      "tagIds": [
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:snyk",
+      "label": "Snyk",
+      "axonId": "cat:supply-chain-security",
+      "neuronId": "security",
+      "usageCount": 2,
+      "website": "https://snyk.io",
+      "tagIds": [
+        "sbom",
+        "ci-cd"
+      ]
+    },
+    {
+      "id": "tool:sonarqube",
+      "label": "SonarQube",
+      "axonId": "cat:supply-chain-security",
+      "neuronId": "security",
+      "usageCount": 6,
+      "website": "https://sonarqube.org",
+      "tagIds": [
+        "ci-cd"
+      ]
+    }
+  ],
+  "synapses": [
+    {
+      "from": "cat:creative-frontend",
+      "to": "tool:astro",
+      "type": "uses"
+    },
+    {
+      "from": "cat:creative-frontend",
+      "to": "tool:nanostores",
+      "type": "uses"
+    },
+    {
+      "from": "cat:creative-frontend",
+      "to": "tool:threejs",
+      "type": "uses"
+    },
+    {
+      "from": "cat:creative-frontend",
+      "to": "tool:typescript",
+      "type": "uses"
+    },
+    {
+      "from": "skill:interactive-frontend-architecture",
+      "to": "tool:typescript",
+      "type": "implements"
+    },
+    {
+      "from": "skill:interactive-frontend-architecture",
+      "to": "tool:threejs",
+      "type": "implements"
+    },
+    {
+      "from": "skill:interactive-frontend-architecture",
+      "to": "tool:astro",
+      "type": "implements"
+    },
+    {
+      "from": "cat:kubernetes-platform",
+      "to": "tool:argocd",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-platform",
+      "to": "tool:helm",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-platform",
+      "to": "tool:istio",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-platform",
+      "to": "tool:karpenter",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-platform",
+      "to": "tool:kustomize",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:azure",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:betterstack",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:datadog",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:external-secrets",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:fermyon",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:gcp",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:grafana",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:kubernetes",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:opentelemetry",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:prometheus",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:pulumi",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:spacelift",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:spin",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:terraform",
+      "type": "uses"
+    },
+    {
+      "from": "cat:platform-engineering",
+      "to": "tool:terramate",
+      "type": "uses"
+    },
+    {
+      "from": "skill:kubernetes-platform-engineering",
+      "to": "tool:kubernetes",
+      "type": "implements"
+    },
+    {
+      "from": "tool-group:network",
+      "to": "tool:istio",
+      "type": "uses"
+    },
+    {
+      "from": "tool-group:network",
+      "to": "tool:cilium",
+      "type": "uses"
+    },
+    {
+      "from": "tool-group:network",
+      "to": "tool:prometheus",
+      "type": "uses"
+    },
+    {
+      "from": "tool-group:network",
+      "to": "tool:grafana",
+      "type": "uses"
+    },
+    {
+      "from": "tool-group:network",
+      "to": "tool:opentelemetry",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:argocd",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:gitlab-ci",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:helm",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:jenkins",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:kustomize",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:pulumi",
+      "type": "uses"
+    },
+    {
+      "from": "cat:gitops-delivery",
+      "to": "tool:spacelift",
+      "type": "uses"
+    },
+    {
+      "from": "skill:devsecops",
+      "to": "tool:github-actions",
+      "type": "implements"
+    },
+    {
+      "from": "skill:devsecops",
+      "to": "tool:trivy",
+      "type": "implements"
+    },
+    {
+      "from": "skill:devsecops",
+      "to": "tool:syft",
+      "type": "implements"
+    },
+    {
+      "from": "skill:devsecops",
+      "to": "tool:grype",
+      "type": "implements"
+    },
+    {
+      "from": "cat:cloud-security",
+      "to": "tool:aws",
+      "type": "uses"
+    },
+    {
+      "from": "cat:cloud-security",
+      "to": "tool:azure",
+      "type": "uses"
+    },
+    {
+      "from": "cat:cloud-security",
+      "to": "tool:drata",
+      "type": "uses"
+    },
+    {
+      "from": "cat:cloud-security",
+      "to": "tool:gcp",
+      "type": "uses"
+    },
+    {
+      "from": "cat:cloud-security",
+      "to": "tool:teleport",
+      "type": "uses"
+    },
+    {
+      "from": "cat:cloud-security",
+      "to": "tool:twingate",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:cilium",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:external-secrets",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:istio",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:kubernetes",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:kubescape",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:opa",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:teleport",
+      "type": "uses"
+    },
+    {
+      "from": "cat:kubernetes-security",
+      "to": "tool:twingate",
+      "type": "uses"
+    },
+    {
+      "from": "cat:runtime-security",
+      "to": "tool:falco",
+      "type": "uses"
+    },
+    {
+      "from": "cat:runtime-security",
+      "to": "tool:hunters-siem",
+      "type": "uses"
+    },
+    {
+      "from": "cat:runtime-security",
+      "to": "tool:opa",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:aikido",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:checkov",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:cosign",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:grype",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:kubescape",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:semgrep",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:snyk",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:sonarqube",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:syft",
+      "type": "uses"
+    },
+    {
+      "from": "cat:supply-chain-security",
+      "to": "tool:trivy",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:betterstack",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:datadog",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:drata",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:falco",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:grafana",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:hunters-siem",
+      "type": "uses"
+    },
+    {
+      "from": "cat:secops",
+      "to": "tool:prometheus",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:aikido",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:checkov",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:github-actions",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:gitlab-ci",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:jenkins",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:semgrep",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:snyk",
+      "type": "uses"
+    },
+    {
+      "from": "cat:devsecops",
+      "to": "tool:sonarqube",
+      "type": "uses"
+    },
+    {
+      "from": "skill:software-supply-chain-security",
+      "to": "tool:syft",
+      "type": "implements"
+    },
+    {
+      "from": "skill:software-supply-chain-security",
+      "to": "tool:grype",
+      "type": "implements"
+    },
+    {
+      "from": "skill:software-supply-chain-security",
+      "to": "tool:trivy",
+      "type": "implements"
+    },
+    {
+      "from": "tool-group:ai",
+      "to": "tool:opa",
+      "type": "uses"
+    },
+    {
+      "from": "tool-group:ai",
+      "to": "tool:falco",
+      "type": "uses"
+    },
+    {
+      "from": "tool-group:ai",
+      "to": "tool:cosign",
+      "type": "uses"
+    }
+  ],
+  "generatedAt": "2026-06-05T16:05:41.126Z"
+}

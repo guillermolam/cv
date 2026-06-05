@@ -5,6 +5,12 @@
  * scrolls into view, THEN dynamically imports Chart.js (deferred chunk) and
  * builds the radar. The instance is destroyed on pagehide / Astro swap to
  * release the canvas + GPU resources.
+ *
+ * Visual improvements over the original:
+ *  - Larger pointLabel font so labels are never clipped
+ *  - Accent-coloured fill with a subtle glow borderColor
+ *  - maintainAspectRatio: false so the canvas fills its CSS container
+ *  - padding added so labels have breathing room inside the canvas
  */
 import { createChart, createChartCleanup } from '../design-system/charts/chart-lifecycle';
 import { createChartDatasetDefaults, getChartTheme } from '../design-system/charts/chart-theme';
@@ -23,40 +29,50 @@ const buildOne = async (root: HTMLElement) => {
     return null;
   }
 
-  const theme = getChartTheme(document.documentElement);
-  const datasetDefaults = createChartDatasetDefaults(document.documentElement);
+  const theme  = getChartTheme(document.documentElement);
   const reduced = prefersReducedMotion();
+  const data    = scores.map((v) => (typeof v === 'number' ? v : 0));
 
-  const data = scores.map((v) => (typeof v === 'number' ? v : 0));
+  // Accent colour from CSS variable — same teal used throughout the site
+  const accent = getComputedStyle(document.documentElement)
+    .getPropertyValue('--color-cta').trim() || '#4cc9f0';
 
   const built = await createChart(canvas, {
     type: 'radar',
     data: {
       labels,
-      datasets: [
-        {
-          label: 'Operator index',
-          data,
-          borderColor: theme.series[0],
-          backgroundColor: 'rgba(100, 255, 212, 0.16)',
-          ...datasetDefaults,
-        },
-      ],
+      datasets: [{
+        label: 'Proficiency',
+        data,
+        borderColor:            accent,
+        backgroundColor:        `color-mix(in oklab, ${accent}, transparent 80%)`,
+        borderWidth:            1.5,
+        pointRadius:            3,
+        pointHoverRadius:       5,
+        pointBackgroundColor:   accent,
+        pointBorderColor:       'transparent',
+      }],
     },
     options: {
-      responsive: true,
-      animation: reduced ? false : { duration: 700 },
+      responsive:          true,
+      maintainAspectRatio: false,   // fills the CSS-sized container
+      animation: reduced ? false : { duration: 800, easing: 'easeOutQuart' },
+      layout: {
+        // padding keeps point-labels inside the canvas on all sides
+        padding: { top: 18, right: 24, bottom: 18, left: 24 },
+      },
       plugins: { legend: { display: false } },
       scales: {
         r: {
           min: 0,
           max: 100,
           ticks: { display: false, stepSize: 25 },
-          grid: { color: theme.grid },
+          grid:       { color: theme.grid },
           angleLines: { color: theme.grid },
           pointLabels: {
-            color: theme.axis,
-            font: { family: 'var(--ds-font-mono)', size: 9 },
+            color:  theme.axis,
+            font:   { family: 'var(--ds-font-mono, monospace)', size: 10, weight: '400' },
+            padding: 8,
           },
         },
       },
@@ -88,11 +104,8 @@ export async function initLazyRadars(): Promise<void> {
     );
     io.observe(root);
 
-    const dispose = () => {
-      io.disconnect();
-      cleanup.run();
-    };
-    window.addEventListener('pagehide', dispose, { once: true });
+    const dispose = () => { io.disconnect(); cleanup.run(); };
+    window.addEventListener('pagehide',            dispose, { once: true });
     document.addEventListener('astro:before-swap', dispose, { once: true });
   });
 }

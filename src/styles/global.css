@@ -81,15 +81,103 @@ a:hover {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-glyph {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 16%);
+  background:
+    radial-gradient(100% 90% at 30% 12%, color-mix(in oklab, var(--color-accent), transparent 88%), transparent 60%),
+    linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+  box-shadow:
+    0 6px 14px var(--shadow-2),
+    inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%);
+  color: color-mix(in oklab, var(--color-text-strong), var(--color-accent) 22%);
+}
+
+.brand-glyph svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand-text {
+  display: grid;
+  gap: 0;
+  line-height: 1;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-1);
   font-weight: 700;
   letter-spacing: -0.02em;
-  text-decoration: none;
+  color: var(--color-text-strong);
+}
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.header-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-digital, var(--font-mono));
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+}
+
+.header-node-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .header-node-dot {
+    animation: header-led 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes header-led {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (max-width: 760px) {
+  .brand-sub { display: none; }
+  .header-node { display: none; }
 }
 
 .nav {
   display: flex;
-  gap: 0.25rem;
+  gap: 0.45rem;
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -108,16 +196,67 @@ a:hover {
 }
 
 .nav a.nav-icon-link {
-  padding: 0.35rem 0.4rem;
-  border-radius: 18px;
+  --nav-key-glow: 0;
+
+  padding: 0.4rem 0.45rem;
+  border-radius: 14px;
   display: grid;
   justify-items: center;
   gap: 0.25rem;
   min-width: 58px;
+  border-color: color-mix(in oklab, var(--color-border-strong), transparent 25%);
+  background:
+    radial-gradient(
+      120% 140% at 35% 12%,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0) 56%
+    ),
+    linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+  box-shadow:
+    0 14px 24px var(--shadow-2),
+    inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+    inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+  position: relative;
+  transform-style: preserve-3d;
 }
 
 .nav a.nav-icon-link:hover {
-  background: color-mix(in oklab, var(--color-surface-2), transparent 65%);
+  --nav-key-glow: 0.65;
+  border-color: color-mix(in oklab, var(--color-accent), transparent 55%);
+  background:
+    radial-gradient(
+      120% 140% at 35% 12%,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0) 56%
+    ),
+    radial-gradient(
+      140% 120% at 50% 0%,
+      color-mix(in oklab, var(--color-accent), transparent 75%),
+      transparent 55%
+    ),
+    linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+  transform: translate3d(0, -1px, 0) rotateX(2deg);
+  box-shadow:
+    0 18px 32px var(--shadow-2),
+    inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+    inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+    0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
+}
+
+.nav a.nav-icon-link::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      120% 120% at 50% 12%,
+      color-mix(in oklab, var(--color-accent), transparent 60%),
+      transparent 58%
+    );
+  opacity: var(--nav-key-glow);
+  pointer-events: none;
+  transition: opacity var(--motion-fast) var(--ease-standard);
 }
 
 .nav .nav-icon-label {
@@ -153,8 +292,19 @@ a:hover {
 
 .nav a[aria-current='page'] {
   color: var(--color-text-strong);
-  background: color-mix(in oklab, var(--color-surface-2), transparent 18%);
-  border-color: var(--color-border);
+  border-color: color-mix(in oklab, var(--color-success), transparent 55%);
+  background:
+    radial-gradient(
+      120% 140% at 35% 12%,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0) 56%
+    ),
+    radial-gradient(
+      140% 120% at 50% 0%,
+      color-mix(in oklab, var(--color-success), transparent 82%),
+      transparent 55%
+    ),
+    linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
 }
 
 .lang-nav {
@@ -345,6 +495,167 @@ button:focus-visible,
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
   border-radius: 10px;
+}
+
+body ul.whoami-badge-row.whoami-badge-row {
+  --whoami-badge-size: clamp(152px, 18vw, 190px);
+  --badge-count: 4;
+  --carousel-rotation: 0deg;
+  --carousel-radius: clamp(200px, 24vw, 240px);
+
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 30%;
+  padding: 0.5rem 0.6rem 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+body ul.whoami-badge-row.whoami-badge-row > li.whoami-badge-item {
+  margin: 0;
+  min-width: 0;
+  width: var(--whoami-badge-size);
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+}
+
+body ul.whoami-badge-row.whoami-badge-row.whoami-badge-carousel--3d {
+  position: relative;
+  display: block;
+  width: min(100%, 560px);
+  margin-inline: auto;
+  height: calc(var(--whoami-badge-size) + 132px);
+  overflow: hidden;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: pan-y;
+  padding: 0;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+body ul.whoami-badge-row.whoami-badge-row.whoami-badge-carousel--3d:active {
+  cursor: grabbing;
+}
+
+body ul.whoami-badge-row.whoami-badge-row.whoami-badge-carousel--3d > li.whoami-badge-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--whoami-badge-size);
+  transform: translate3d(-50%, -50%, 0);
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+  scroll-snap-align: unset;
+}
+
+body ul.whoami-badge-row.whoami-badge-row .graphic-badge.graphic-badge {
+  width: 100%;
+}
+
+body ul.whoami-badge-row.whoami-badge-row .graphic-badge.graphic-badge::after {
+  content: attr(aria-label);
+  display: block;
+  margin-top: 0.6rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-strong);
+  opacity: 0.82;
+}
+
+body ul.whoami-badge-row.whoami-badge-row .badge-wrapper.badge-wrapper {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 12%);
+  background:
+    radial-gradient(140% 120% at 35% 14%, rgba(255, 255, 255, 0.12), transparent 62%),
+    radial-gradient(
+      120% 120% at 50% 0%,
+      color-mix(in oklab, var(--color-accent), transparent 86%),
+      transparent 55%
+    ),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-surface-2), transparent 0%), var(--color-surface-3));
+  box-shadow:
+    0 18px 38px var(--shadow-2),
+    inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+    inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+  padding: 0.9rem;
+  position: relative;
+}
+
+body ul.whoami-badge-row.whoami-badge-row .badge-wrapper.badge-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0) 45%,
+      rgba(0, 0, 0, 0.22)
+    );
+  opacity: 0.15;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
+
+body ul.whoami-badge-row.whoami-badge-row .badge-container.badge-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  animation: none !important;
+}
+
+body ul.whoami-badge-row.whoami-badge-row .badge-image.badge-image {
+  width: 100%;
+  height: auto;
+  max-width: 190px;
+  filter:
+    drop-shadow(0 14px 22px color-mix(in oklab, var(--color-bg), transparent 65%))
+    saturate(0.98)
+    contrast(1.05);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body ul.whoami-badge-row.whoami-badge-row .badge-wrapper.badge-wrapper {
+    transition:
+      transform var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard),
+      box-shadow var(--motion-fast) var(--ease-standard);
+  }
+
+  body ul.whoami-badge-row.whoami-badge-row > li.whoami-badge-item:hover .badge-wrapper.badge-wrapper,
+  body ul.whoami-badge-row.whoami-badge-row > li.whoami-badge-item:focus-within .badge-wrapper.badge-wrapper {
+    transform: translate3d(0, -3px, 0) scale(1.03);
+    border-color: color-mix(in oklab, var(--color-accent), transparent 55%);
+    box-shadow:
+      0 24px 46px var(--shadow-2),
+      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+      0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body ul.whoami-badge-row.whoami-badge-row {
+    scroll-snap-type: x mandatory;
+    animation: none;
+  }
+
+  body ul.whoami-badge-row.whoami-badge-row > li.whoami-badge-item {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

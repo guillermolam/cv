@@ -2,47 +2,51 @@
 export type Props = {
   id?: string;
   class?: string;
+  enabled?: boolean;
 };
 
-const { id = 'trace', class: className } = Astro.props as Props;
+const { id = 'trace', class: className, enabled = false } = Astro.props as Props;
 const uid = id.replace(/[^a-zA-Z0-9\-_]/g, '');
 ---
 
-<svg
-  class={className}
-  viewBox="0 0 1000 560"
-  preserveAspectRatio="none"
-  aria-hidden="true"
-  focusable="false"
-  data-whoami-trace
->
-  <defs>
-    <linearGradient id={`${uid}-trace`} x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="var(--color-accent)" stop-opacity="0.0" />
-      <stop offset="0.2" stop-color="var(--color-accent)" stop-opacity="0.18" />
-      <stop offset="0.8" stop-color="var(--color-accent)" stop-opacity="0.12" />
-      <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0.0" />
-    </linearGradient>
-  </defs>
+{
+  enabled && (
+    <svg
+      class={className}
+      viewBox="0 0 1000 560"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+      data-whoami-trace
+    >
+      <defs>
+        <linearGradient id={`${uid}-trace`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="var(--color-accent)" stop-opacity="0.0" />
+          <stop offset="0.2" stop-color="var(--color-accent)" stop-opacity="0.18" />
+          <stop offset="0.8" stop-color="var(--color-accent)" stop-opacity="0.12" />
+          <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0.0" />
+        </linearGradient>
+      </defs>
 
-  <g stroke={`url(#${uid}-trace)`} stroke-width="1" fill="none" opacity="0.9" stroke-linecap="round">
-    <path d="M120 90 H320 L360 130 H520" />
-    <path d="M520 130 H650 L700 180 H880" />
-    <path d="M140 470 H360 L410 420 H520" />
-    <path d="M520 420 H670 L720 370 H900" />
-    <path d="M260 290 H420 L470 240 H620" />
-    <path d="M380 330 H520 L560 370 H740" />
-  </g>
+      <g stroke={`url(#${uid}-trace)`} stroke-width="1" fill="none" opacity="0.9" stroke-linecap="round">
+        <path d="M120 90 H320 L360 130 H520" />
+        <path d="M520 130 H650 L700 180 H880" />
+        <path d="M140 470 H360 L410 420 H520" />
+        <path d="M520 420 H670 L720 370 H900" />
+        <path d="M260 290 H420 L470 240 H620" />
+        <path d="M380 330 H520 L560 370 H740" />
+      </g>
 
-  <g opacity="0.75">
-    <circle cx="120" cy="90" r="3" fill="var(--color-border-strong)" />
-    <circle cx="520" cy="130" r="3" fill="var(--color-border-strong)" />
-    <circle cx="880" cy="180" r="3" fill="var(--color-border-strong)" />
-    <circle cx="140" cy="470" r="3" fill="var(--color-border-strong)" />
-    <circle cx="520" cy="420" r="3" fill="var(--color-border-strong)" />
-    <circle cx="900" cy="370" r="3" fill="var(--color-border-strong)" />
-    <circle cx="260" cy="290" r="2.5" fill="var(--color-border-strong)" />
-    <circle cx="740" cy="370" r="2.5" fill="var(--color-border-strong)" />
-  </g>
-</svg>
-
+      <g opacity="0.75">
+        <circle cx="120" cy="90" r="3" fill="var(--color-border-strong)" />
+        <circle cx="520" cy="130" r="3" fill="var(--color-border-strong)" />
+        <circle cx="880" cy="180" r="3" fill="var(--color-border-strong)" />
+        <circle cx="140" cy="470" r="3" fill="var(--color-border-strong)" />
+        <circle cx="520" cy="420" r="3" fill="var(--color-border-strong)" />
+        <circle cx="900" cy="370" r="3" fill="var(--color-border-strong)" />
+        <circle cx="260" cy="290" r="2.5" fill="var(--color-border-strong)" />
+        <circle cx="740" cy="370" r="2.5" fill="var(--color-border-strong)" />
+      </g>
+    </svg>
+  )
+}

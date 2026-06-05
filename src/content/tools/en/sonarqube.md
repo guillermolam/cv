@@ -2,8 +2,9 @@
 lang: en
 toolId: sonarqube
 name: SonarQube
-website: https://www.sonarsource.com
-tagIds: []
-categoryIds: [devsecops]
+website: https://sonarqube.org
+vendor: Sonar
+categoryIds: [devsecops, supply-chain-security]
+tagIds: [ci-cd]
 visibility: public
 ---

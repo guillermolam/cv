@@ -7,7 +7,7 @@ import UiGrid from '../layout/UiGrid.astro';
 import UiStack from '../layout/UiStack.astro';
 import OperatorModuleNav from './OperatorModuleNav.astro';
 
-export type Badge = { label: string };
+export type Badge = { label: string; domainId?: string };
 
 export type Props = {
   name: string;
@@ -33,65 +33,53 @@ const {
   nationality,
   dob,
   birthPlace,
-  zodiac,
-  height,
-  weight,
   badges,
 } = Astro.props as Props;
 
-/* Section nav items — mirrors the RetroKeyboardNav key set */
 const sectionItems = [
-  {
-    id: 'bio',
-    label: 'Bio',
-    iconHref: '/images/svg/id-card-svgrepo-com.svg',
-  },
-  {
-    id: 'skills',
-    label: 'Skills',
-    iconHref: '/images/svg/chart-line-svgrepo-com.svg',
-  },
-  {
-    id: 'certifications',
-    label: 'Certs',
-    iconHref: '/images/svg/thumb-up-svgrepo-com.svg',
-  },
-  {
-    id: 'education',
-    label: 'Education',
-    iconHref: '/images/svg/building-svgrepo-com.svg',
-  },
-  {
-    id: 'languages',
-    label: 'Languages',
-    iconHref: '/images/svg/globe-1-svgrepo-com.svg',
-  },
-  {
-    id: 'experience',
-    label: 'Experience',
-    iconHref: '/images/svg/briefcase-svgrepo-com.svg',
-  },
+  { id: 'bio', label: 'Bio', iconHref: '/images/svg/id-card-svgrepo-com.svg' },
+  { id: 'skills', label: 'Skills', iconHref: '/images/svg/chart-line-svgrepo-com.svg' },
+  { id: 'certifications', label: 'Certs', iconHref: '/images/svg/thumb-up-svgrepo-com.svg' },
+  { id: 'education', label: 'Education', iconHref: '/images/svg/building-svgrepo-com.svg' },
+  { id: 'languages', label: 'Languages', iconHref: '/images/svg/globe-1-svgrepo-com.svg' },
+  { id: 'experience', label: 'Experience', iconHref: '/images/svg/briefcase-svgrepo-com.svg' },
 ] as const;
+
+type BioField = { icon: string; label: string; value: string; variant?: 'status' };
+const bioFields: BioField[] = [
+  role ? { icon: 'i-solar-briefcase-bold-duotone', label: 'Role', value: role } : null,
+  focus ? { icon: 'i-solar-target-bold-duotone', label: 'Focus', value: focus } : null,
+  { icon: 'i-solar-map-point-bold-duotone', label: 'Location', value: locationMode },
+  { icon: 'i-solar-letter-bold-duotone', label: 'Status', value: availability, variant: 'status' as const },
+  { icon: 'i-solar-flag-bold-duotone', label: 'Nationality', value: nationality },
+  { icon: 'i-solar-calendar-date-bold-duotone', label: 'Born', value: dob },
+  { icon: 'i-solar-map-point-bold-duotone', label: 'Origin', value: birthPlace },
+].filter((f): f is BioField => f !== null);
 ---
 
 <section class="op-identity card pad" aria-label="Operator identity">
 
-  <!-- ── Header: eyebrow + name (left) + social links (right) ──────────── -->
+  <!-- Header: identity + status + social -->
   <header class="op-header">
-    <div class="op-header-identity">
+    <div class="op-header-left">
       <p class="op-eyebrow">
         <span class="ui-icon i-solar-programming-bold-duotone" aria-hidden="true"></span>
         Operator identity
       </p>
-      <h1 class="whoami-name op-name">{name}</h1>
+      <h1 class="op-name">{name}</h1>
+      {role && <p class="op-role">{role}</p>}
     </div>
-    <div class="op-header-links">
+    <div class="op-header-right">
+      <span class="op-status-chip">
+        <span class="op-status-dot" aria-hidden="true"></span>
+        {availability}
+      </span>
       <SocialLinks ariaLabel="Operator links" />
     </div>
   </header>
 
-  <!-- ── Body: left stack (avatar + module keys + badges) | details ───── -->
-  <UiGrid class="op-body" minItemWidth="360px" gap="1rem" align="start">
+  <!-- Body: portrait + module nav + badges | bio details -->
+  <UiGrid class="op-body" minItemWidth="320px" gap="1rem" align="start">
 
     <UiStack class="op-left" aria-label="Operator modules" gap="0.75rem">
       <div class="op-portrait-frame" aria-label={`Avatar of ${name}`}>
@@ -137,95 +125,46 @@ const sectionItems = [
 
       <OperatorModuleNav items={sectionItems} />
 
-      <div class="op-badges-wrap" role="group" aria-label="Badges">
-        <BadgeRack label="Badges" badges={badges} />
-      </div>
+      <BadgeRack label="Specializations" badges={badges} />
     </UiStack>
 
-    <!-- Bio details column -->
+    <!-- Bio details — compact data table -->
     <div class="op-right" aria-label="Operator details">
-      <dl class="op-details" aria-label="Personal bio details">
-        {role && (
-          <div class="op-detail-row">
-            <dt class="op-detail-term">
-              <span class="ui-icon i-solar-briefcase-bold-duotone" aria-hidden="true"></span>
-              Role
-            </dt>
-            <dd class="op-detail-value">{role}</dd>
+      <div class="op-bio-panel">
+        <header class="op-bio-header">
+          <span class="i-solar-document-text-bold-duotone op-bio-header-icon" aria-hidden="true"></span>
+          <div>
+            <h2 class="op-bio-title">Operator Data</h2>
+            <p class="op-bio-sub">{bioFields.length} fields · verified</p>
           </div>
-        )}
-        {focus && (
-          <div class="op-detail-row">
-            <dt class="op-detail-term">
-              <span class="ui-icon i-solar-target-bold-duotone" aria-hidden="true"></span>
-              Focus
-            </dt>
-            <dd class="op-detail-value">{focus}</dd>
-          </div>
-        )}
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-map-point-bold-duotone" aria-hidden="true"></span>
-            Location
-          </dt>
-          <dd class="op-detail-value">{locationMode}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-letter-bold-duotone" aria-hidden="true"></span>
-            Status
-          </dt>
-          <dd class="op-detail-value">{availability}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-flag-bold-duotone" aria-hidden="true"></span>
-            Nationality
-          </dt>
-          <dd class="op-detail-value">{nationality}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-calendar-date-bold-duotone" aria-hidden="true"></span>
-            Born
-          </dt>
-          <dd class="op-detail-value">{dob}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-map-point-bold-duotone" aria-hidden="true"></span>
-            From
-          </dt>
-          <dd class="op-detail-value">{birthPlace}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-stars-bold-duotone" aria-hidden="true"></span>
-            Zodiac
-          </dt>
-          <dd class="op-detail-value">{zodiac}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-ruler-pen-bold-duotone" aria-hidden="true"></span>
-            Height
-          </dt>
-          <dd class="op-detail-value">{height}</dd>
-        </div>
-        <div class="op-detail-row">
-          <dt class="op-detail-term">
-            <span class="ui-icon i-solar-dumbbell-large-minimalistic-bold-duotone" aria-hidden="true"></span>
-            Weight
-          </dt>
-          <dd class="op-detail-value">{weight}</dd>
-        </div>
-      </dl>
+        </header>
+
+        <dl class="op-details">
+          {bioFields.map((f) => (
+            <div class:list={['op-detail-row', f.variant === 'status' && 'op-detail-row--status']}>
+              <dt class="op-detail-term">
+                <span class={`ui-icon ${f.icon}`} aria-hidden="true"></span>
+                {f.label}
+              </dt>
+              <dd class="op-detail-value">
+                {f.variant === 'status' && <span class="op-detail-status-dot" aria-hidden="true"></span>}
+                {f.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <p class="op-bio-footnote">
+          <span class="i-solar-info-circle-bold-duotone op-bio-footnote-icon" aria-hidden="true"></span>
+          Data sourced from CV · content graph
+        </p>
+      </div>
     </div>
   </UiGrid>
 </section>
 
 <style>
-  /* ── Outer card — center grid area ──────────────────────────────────── */
+  /* ── Outer card ──────────────────────────────────────────────────── */
   .op-identity {
     grid-area: center;
     display: grid;
@@ -239,18 +178,20 @@ const sectionItems = [
       inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
   }
 
-  /* ── Header ──────────────────────────────────────────────────────────── */
+  /* ── Header ──────────────────────────────────────────────────────── */
   .op-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
   }
 
-  .op-header-identity {
+  .op-header-left {
     display: grid;
-    gap: 0.2rem;
+    gap: 0.15rem;
   }
 
   .op-eyebrow {
@@ -272,30 +213,63 @@ const sectionItems = [
 
   .op-name {
     margin: 0;
-    font-size: var(--font-size-6);
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.5vw, var(--font-size-6));
+    font-weight: 700;
+    letter-spacing: -0.03em;
     line-height: 1.05;
+    color: var(--color-text-strong);
   }
 
-  /* override global .social-links top-margin inside this header */
-  .op-header-links :global(.social-links) {
+  .op-role {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .op-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .op-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--color-success), transparent 55%);
+    background: color-mix(in oklab, var(--color-success), transparent 88%);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-00);
+    letter-spacing: 0.04em;
+    color: var(--color-success);
+    white-space: nowrap;
+  }
+
+  .op-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 8px var(--color-success);
+  }
+
+  .op-header-right :global(.social-links) {
     margin-top: 0;
     justify-content: flex-end;
   }
 
-  /* ── Body: layout primitive container ────────────────────────────────── */
-  .op-body {
-    min-width: 0;
-  }
+  /* ── Body ────────────────────────────────────────────────────────── */
+  .op-body { min-width: 0; }
+  .op-left { min-width: 0; }
+  .op-right { min-width: 0; }
 
-  .op-left {
-    min-width: 0;
-  }
-
-  .op-right {
-    min-width: 0;
-  }
-
+  /* ── Portrait frame ──────────────────────────────────────────────── */
   .op-portrait-frame {
     display: grid;
     place-items: center;
@@ -304,11 +278,7 @@ const sectionItems = [
     border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 18%);
     position: relative;
     background:
-      radial-gradient(
-        90% 110% at 50% 5%,
-        color-mix(in oklab, var(--color-accent), transparent 86%),
-        transparent 55%
-      ),
+      radial-gradient(90% 110% at 50% 5%, color-mix(in oklab, var(--color-accent), transparent 86%), transparent 55%),
       color-mix(in oklab, var(--color-surface-2), transparent 4%);
     box-shadow:
       0 22px 44px var(--shadow-2),
@@ -321,12 +291,7 @@ const sectionItems = [
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.04) 0px,
-      rgba(255, 255, 255, 0.02) 1px,
-      rgba(255, 255, 255, 0) 3px
-    );
+    background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.02) 1px, rgba(255, 255, 255, 0) 3px);
     opacity: 0.25;
     pointer-events: none;
     mix-blend-mode: soft-light;
@@ -373,15 +338,6 @@ const sectionItems = [
       inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%);
   }
 
-  .op-chip-icon {
-    width: 22px;
-    height: 22px;
-    background: color-mix(in oklab, var(--color-text-strong), var(--color-accent) 18%);
-    -webkit-mask: var(--op-icon-url) center / contain no-repeat;
-    mask: var(--op-icon-url) center / contain no-repeat;
-    opacity: 0.92;
-  }
-
   .op-gender-symbol {
     font-family: var(--font-mono);
     font-size: 1.05rem;
@@ -394,9 +350,7 @@ const sectionItems = [
     width: 22px;
     height: auto;
     border-radius: 6px;
-    box-shadow:
-      0 8px 14px var(--shadow-2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    box-shadow: 0 8px 14px var(--shadow-2), inset 0 1px 0 rgba(255, 255, 255, 0.16);
   }
 
   .op-chip-label {
@@ -406,25 +360,73 @@ const sectionItems = [
     color: var(--color-text-strong);
   }
 
-  /* ── Bio details column ──────────────────────────────────────────────── */
+  /* ── Bio panel ───────────────────────────────────────────────────── */
+  .op-bio-panel {
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: color-mix(in oklab, var(--color-surface-2), transparent 14%);
+    box-shadow: 0 8px 24px var(--shadow-2);
+    padding: 0.85rem 1rem;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .op-bio-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .op-bio-header-icon {
+    font-size: 1.4rem;
+    color: var(--color-cta);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .op-bio-title {
+    margin: 0 0 1px;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-1);
+    font-weight: 600;
+    color: var(--color-text-strong);
+  }
+
+  .op-bio-sub {
+    margin: 0;
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  /* ── Detail rows ─────────────────────────────────────────────────── */
   .op-details {
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.4rem;
+    gap: 1px;
     min-width: 0;
   }
 
   .op-detail-row {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 7.5rem 1fr;
     align-items: baseline;
     gap: 0.5rem;
-    padding: 0.4rem 0.6rem;
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
+    padding: 0.38rem 0.5rem;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+  }
+
+  .op-detail-row:hover {
     background: color-mix(in oklab, var(--color-surface-3), transparent 45%);
-    min-width: 0;
+  }
+
+  .op-detail-row--status {
+    background: color-mix(in oklab, var(--color-success), transparent 92%);
   }
 
   .op-detail-term {
@@ -432,7 +434,7 @@ const sectionItems = [
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: var(--font-size-0);
+    font-size: var(--font-size-00);
     color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -441,9 +443,9 @@ const sectionItems = [
   }
 
   .op-detail-term .ui-icon {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--color-cta);
-    opacity: 0.8;
+    opacity: 0.7;
     flex-shrink: 0;
   }
 
@@ -456,35 +458,54 @@ const sectionItems = [
     text-align: right;
     min-width: 0;
     word-break: break-word;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem;
   }
 
-  /* ── Badges: full width ──────────────────────────────────────────────── */
-  .op-badges-wrap {
-    min-width: 0;
+  .op-detail-status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 6px var(--color-success);
+    flex-shrink: 0;
   }
 
-  .op-badges-wrap :global(.whoami-badge) {
-    clip-path: polygon(
-      10px 0,
-      calc(100% - 12px) 0,
-      100% 12px,
-      100% calc(100% - 12px),
-      calc(100% - 12px) 100%,
-      12px 100%,
-      0 calc(100% - 12px),
-      0 12px
-    );
+  .op-bio-footnote {
+    margin: 0;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-00);
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    opacity: 0.65;
   }
 
-  /* ── Responsive ──────────────────────────────────────────────────────── */
+  .op-bio-footnote-icon {
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
   @media (max-width: 640px) {
-    .op-name {
-      font-size: var(--font-size-5);
-    }
+    .op-name { font-size: var(--font-size-5); }
+    .op-header { flex-direction: column; gap: 0.5rem; }
+    .op-header-right { align-items: flex-start; }
+    .op-detail-row { grid-template-columns: 6rem 1fr; }
+  }
 
-    .op-header {
-      flex-direction: column;
-      gap: 0.5rem;
+  @media (prefers-reduced-motion: no-preference) {
+    .op-status-dot {
+      animation: op-led 2.4s ease-in-out infinite;
     }
+  }
+
+  @keyframes op-led {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
   }
 </style>

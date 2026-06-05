@@ -72,11 +72,29 @@ const navRailItems: NavRailItem[] = nav.map((item) => ({
 
     <header class="site-header">
       <div class="container site-header-inner">
-        <a class="brand" href={`${prefix}/`}>{siteName}</a>
+        <a class="brand" href={`${prefix}/`}>
+          <span class="brand-glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8h12l-2 8H8L6 8Z" />
+              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+              <circle cx="12" cy="12" r="1.2" />
+            </svg>
+          </span>
+          <span class="brand-text">
+            <span class="brand-name">{siteName}</span>
+            <span class="brand-sub">Cloud Security · DevSecOps</span>
+          </span>
+        </a>
 
         <SectionNavRail items={navRailItems} label="Primary" />
 
-        <LanguageDial lang={lang} links={langLinks} />
+        <div class="header-right">
+          <span class="header-node">
+            <span class="header-node-dot" aria-hidden="true"></span>
+            GLM-01
+          </span>
+          <LanguageDial lang={lang} links={langLinks} />
+        </div>
       </div>
     </header>
 

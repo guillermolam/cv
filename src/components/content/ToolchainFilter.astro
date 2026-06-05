@@ -17,15 +17,18 @@ const idTag = `${uid}-tag`;
 const idCategory = `${uid}-category`;
 ---
 
-<section class="card pad filter-shell" data-toolchain-filter data-target={targetSelector}>
-  <form class="filter-form">
-    <fieldset class="filter-fieldset">
-      <legend class="filter-legend">Filter</legend>
+<div class="tc-filter-panel" data-toolchain-filter data-target={targetSelector}>
+  <form class="tc-filter-form">
+    <fieldset class="tc-filter-fieldset">
+      <legend class="tc-filter-legend ds-label">
+        <span class="i-ph-funnel-duotone align-middle mr-1" aria-hidden="true"></span>
+        Filter
+      </legend>
 
-      <div class="filter-grid">
-        <div class="filter-control">
-          <label for={idType}>Type</label>
-          <select id={idType} data-filter-type>
+      <div class="tc-filter-grid">
+        <div class="tc-filter-control">
+          <label class="ds-label" for={idType}>Type</label>
+          <select id={idType} class="tc-filter-select" data-filter-type>
             <option value="">All</option>
             {typeOptions.map((o) => (
               <option value={o.id}>{o.label}</option>
@@ -33,9 +36,9 @@ const idCategory = `${uid}-category`;
           </select>
         </div>
 
-        <div class="filter-control">
-          <label for={idCategory}>Category</label>
-          <select id={idCategory} data-filter-category>
+        <div class="tc-filter-control">
+          <label class="ds-label" for={idCategory}>Category</label>
+          <select id={idCategory} class="tc-filter-select" data-filter-category>
             <option value="">All</option>
             {categoryOptions.map((o) => (
               <option value={o.id}>{o.label}</option>
@@ -43,9 +46,9 @@ const idCategory = `${uid}-category`;
           </select>
         </div>
 
-        <div class="filter-control">
-          <label for={idTag}>Tag</label>
-          <select id={idTag} data-filter-tag>
+        <div class="tc-filter-control">
+          <label class="ds-label" for={idTag}>Tag</label>
+          <select id={idTag} class="tc-filter-select" data-filter-tag>
             <option value="">All</option>
             {tagOptions.map((o) => (
               <option value={o.id}>{o.label}</option>
@@ -54,17 +57,19 @@ const idCategory = `${uid}-category`;
         </div>
       </div>
 
-      <div class="filter-actions">
-        <p class="filter-count" data-filter-count aria-live="polite">
+      <div class="tc-filter-actions">
+        <p class="tc-filter-count ds-telemetry" data-filter-count aria-live="polite">
+          <span class="i-ph-database-duotone align-middle mr-1" aria-hidden="true"></span>
           Showing {totalCount} of {totalCount}
         </p>
-        <button class="button" type="button" data-filter-reset>
+        <button class="ds-btn-ghost" type="button" data-filter-reset>
+          <span class="i-ph-arrow-counter-clockwise-duotone align-middle mr-1" aria-hidden="true"></span>
           Reset
         </button>
       </div>
     </fieldset>
   </form>
-</section>
+</div>
 
 <script>
   import { initToolchainFilters } from '../../scripts/content-filters';
@@ -72,50 +77,70 @@ const idCategory = `${uid}-category`;
 </script>
 
 <style>
-  .filter-grid {
+  .tc-filter-panel {
+    @apply ds-panel;
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-1);
+  }
+
+  .tc-filter-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tc-filter-legend {
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    width: 100%;
+    display: block;
+  }
+
+  .tc-filter-grid {
     display: grid;
-    gap: 0.75rem;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     align-items: end;
   }
 
-  .filter-control {
+  .tc-filter-control {
     display: grid;
-    gap: 0.35rem;
+    gap: var(--space-1);
   }
 
-  .filter-control label {
-    font-size: var(--font-size-0);
-    color: var(--color-text-muted);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .filter-control select {
+  .tc-filter-select {
     width: 100%;
     border: 1px solid var(--color-border);
-    border-radius: 10px;
-    padding: 0.55rem 0.65rem;
+    border-radius: 8px;
+    padding: 0.5rem 0.65rem;
     background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
     color: var(--color-text-strong);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    transition: border-color 0.15s ease;
+  }
+  .tc-filter-select:focus {
+    border-color: var(--color-cta);
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-cta), transparent 75%);
   }
 
-  .filter-actions {
-    margin-top: 0.9rem;
+  .tc-filter-actions {
+    margin-top: var(--space-3);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     flex-wrap: wrap;
   }
 
-  .filter-count {
+  .tc-filter-count {
     margin: 0;
-    color: var(--color-text-muted);
     display: none;
   }
 
-  .filter-shell[data-filter-enhanced='true'] .filter-count {
-    display: block;
+  .tc-filter-panel[data-filter-enhanced='true'] .tc-filter-count {
+    display: flex;
   }
 </style>

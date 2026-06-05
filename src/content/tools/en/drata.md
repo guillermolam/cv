@@ -2,8 +2,9 @@
 lang: en
 toolId: drata
 name: Drata
-website: https://drata.com/
+website: https://drata.com
 vendor: Drata
-categoryIds: [security-architecture]
+categoryIds: [secops, cloud-security]
+tagIds: []
 visibility: public
 ---

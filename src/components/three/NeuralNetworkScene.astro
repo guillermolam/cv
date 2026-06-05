@@ -1,0 +1,310 @@
+---
+/**
+ * NeuralNetworkScene — interactive 3D neural knowledge graph.
+ *
+ * Styling philosophy (per project conventions):
+ *   - All layout / colour / typography classes come from UnoCSS utilities and
+ *     the `neural-*` + `ds-*` shortcuts defined in uno.config.ts.
+ *   - Complex stateful CSS (transforms, animations, media queries) that the
+ *     UnoCSS scanner cannot reliably extract from Alpine expressions is written
+ *     as a minimal <style> block using @apply to consume the shortcut tokens.
+ *   - Icons use i-solar-* and i-ph-* presets (all three collections are now
+ *     registered in uno.config.ts: ph, tabler, solar).
+ *
+ * Layer separation:
+ *   <script>   — Three.js canvas lifecycle (IntersectionObserver, start/pause,
+ *                dispose). Dispatches CustomEvents to Alpine.
+ *   x-data     — neuralPanel Alpine component. UI state only: tooltip, panel,
+ *                ApexCharts. Issues neural:focus-neuron/axon back to <script>.
+ */
+export type Props = { class?: string };
+const { class: className } = Astro.props;
+---
+
+<div
+  class:list={['neural-scene', className]}
+  data-neural-scene
+  x-data="neuralPanel"
+>
+  <!-- ── WebGL canvas ─────────────────────────────────────────────────────── -->
+  <canvas
+    class="neural-canvas"
+    data-neural-canvas
+    aria-label="Interactive neural knowledge graph — drag to rotate, scroll to zoom, click nodes to explore"
+  ></canvas>
+
+  <!-- ── Loading state ───────────────────────────────────────────────────── -->
+  <div class="neural-status" x-show="!ready && !error" x-cloak aria-live="polite">
+    <span class="neural-loader" aria-hidden="true"></span>
+    <span class="font-mono text-0 text-muted">Initialising neural graph…</span>
+  </div>
+
+  <!-- ── Error / no-WebGL fallback ───────────────────────────────────────── -->
+  <div class="neural-status-error" x-show="error" x-cloak aria-live="assertive">
+    <span class="i-ph-warning-circle-duotone text-[1.4rem]" aria-hidden="true"></span>
+    <span class="font-mono text-0">WebGL unavailable — try a modern desktop browser.</span>
+  </div>
+
+  <!-- ── Hover tooltip ────────────────────────────────────────────────────── -->
+  <div
+    class="neural-tooltip"
+    role="tooltip"
+    aria-live="polite"
+    x-show="tooltip.visible"
+    x-cloak
+    x-bind:style="`left:${tooltip.x}px;top:${tooltip.y}px`"
+  >
+    <!-- Neuron -->
+    <template x-if="tooltip.node?.kind === 'neuron'">
+      <div>
+        <span class="neural-kind-neuron">
+          <span class="i-solar-cpu-bolt-bold-duotone mr-1 align-middle" aria-hidden="true"></span>
+          Neuron
+        </span>
+        <strong class="block text-strong font-mono text-0" x-text="tooltip.node.data.label"></strong>
+        <p class="m-0 mt-1 font-mono text-[0.72rem] text-muted leading-relaxed" x-text="tooltip.node.data.description ?? ''"></p>
+      </div>
+    </template>
+
+    <!-- Axon -->
+    <template x-if="tooltip.node?.kind === 'axon'">
+      <div>
+        <span class="neural-kind-axon">
+          <span class="i-tabler-circuit-cell mr-1 align-middle" aria-hidden="true"></span>
+          Axon · <span x-text="tooltip.node.data.type"></span>
+        </span>
+        <strong class="block text-strong font-mono text-0" x-text="tooltip.node.data.label"></strong>
+      </div>
+    </template>
+
+    <!-- Dendrite -->
+    <template x-if="tooltip.node?.kind === 'dendrite'">
+      <div>
+        <span class="neural-kind-dendrite">
+          <span class="i-ph-tree-structure-duotone mr-1 align-middle" aria-hidden="true"></span>
+          Dendrite
+        </span>
+        <strong class="block text-strong font-mono text-0" x-text="tooltip.node.data.label"></strong>
+        <small class="block font-mono text-[0.72rem] text-muted mt-1">
+          Used in
+          <span class="font-semibold text-strong" x-text="tooltip.node.data.usageCount"></span>
+          role(s)
+        </small>
+        <template x-if="tooltip.node.data.website">
+          <span class="neural-tooltip-link">
+            <span class="i-ph-arrow-square-out mr-1 align-middle" aria-hidden="true"></span>
+            open docs
+          </span>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  <!-- ── ApexCharts side panel ────────────────────────────────────────────── -->
+  <aside
+    id="neural-apex-panel"
+    class="neural-panel-shell"
+    x-show="panelOpen"
+    x-cloak
+    aria-label="Skill detail panel"
+  >
+    <!-- Header -->
+    <header class="neural-panel-header">
+      <div class="neural-panel-title">
+        <span
+          class="neural-panel-dot"
+          x-bind:style="`background:${activeNeuron?.color ?? 'var(--neural-neuron-development)'};color:${activeNeuron?.color ?? 'var(--neural-neuron-development)'}`"
+        ></span>
+        <span x-text="activeAxon?.label ?? activeNeuron?.label ?? ''"></span>
+      </div>
+      <button class="neural-panel-close ds-focus" x-on:click="closePanel()" aria-label="Close panel">
+        <span class="i-ph-x text-base" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <!-- Neuron description -->
+    <p class="neural-panel-desc" x-text="activeNeuron?.description ?? ''"></p>
+
+    <!-- Domain badge -->
+    <div class="px-5 pt-3 flex gap-2 items-center flex-shrink-0">
+      <template x-if="activeNeuron">
+        <span
+          x-bind:class="`neural-badge-${activeNeuron?.id ?? 'development'}`"
+          class="font-mono"
+        >
+          <span class="i-solar-cpu-bolt-bold-duotone" aria-hidden="true"></span>
+          <span x-text="activeNeuron?.label"></span>
+        </span>
+      </template>
+      <template x-if="activeAxon">
+        <span class="ds-badge">
+          <span class="i-tabler-circuit-cell" aria-hidden="true"></span>
+          <span x-text="activeAxon?.type"></span>
+        </span>
+      </template>
+    </div>
+
+    <!-- ApexCharts mount point -->
+    <div id="neural-apex-chart" class="neural-panel-chart"></div>
+
+    <!-- Axon quick-pick (when no axon is active) -->
+    <nav class="neural-axon-nav" x-show="activeNeuron && !activeAxon">
+      <p class="neural-axon-hint">
+        <span class="i-ph-cursor-click-duotone mr-1 align-middle" aria-hidden="true"></span>
+        Click an axon in the 3D view — or pick one:
+      </p>
+      <template
+        x-for="axon in (graph?.axons ?? []).filter(a => a.neuronId === activeNeuron?.id)"
+        :key="axon.id"
+      >
+        <button class="neural-axon-btn ds-focus" x-on:click="selectAxon(axon)">
+          <span class="i-tabler-circuit-cell align-middle" aria-hidden="true"></span>
+          <span x-text="axon.label"></span>
+        </button>
+      </template>
+    </nav>
+
+    <!-- Back button (when axon is active) -->
+    <footer class="neural-panel-footer" x-show="activeAxon">
+      <button class="neural-panel-back ds-focus" x-on:click="backToNeuron()">
+        <span class="i-ph-arrow-left align-middle mr-1" aria-hidden="true"></span>
+        Back to <span class="font-semibold" x-text="activeNeuron?.label ?? ''"></span>
+      </button>
+    </footer>
+  </aside>
+
+  <!-- ── Keyboard controls hint ───────────────────────────────────────────── -->
+  <div class="neural-controls" x-show="ready" x-cloak aria-hidden="true">
+    <kbd class="neural-controls-kbd">drag</kbd> rotate &ensp;·&ensp;
+    <kbd class="neural-controls-kbd">scroll</kbd> zoom &ensp;·&ensp;
+    <kbd class="neural-controls-kbd">click</kbd> explore &ensp;·&ensp;
+    <kbd class="neural-controls-kbd">esc</kbd> reset
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────────────
+     Three.js canvas lifecycle  (mirrors HeroParticleField.astro pattern)
+     Communicates with Alpine via CustomEvents on [data-neural-scene].
+────────────────────────────────────────────────────────────────────────── -->
+<script>
+  import { hasWebGL, prefersReducedMotion } from '../../design-system/three/capability';
+
+  const root   = document.querySelector<HTMLElement>('[data-neural-scene]');
+  const canvas = root?.querySelector<HTMLCanvasElement>('[data-neural-canvas]');
+
+  if (root && canvas) {
+    if (!hasWebGL() || prefersReducedMotion()) {
+      root.dispatchEvent(new CustomEvent('neural:error', { bubbles: false }));
+    } else {
+      type Controller = import('../../design-system/three/neural-network').NeuralNetworkController;
+      let controller: Controller | null = null;
+      let inited = false;
+
+      const io = new IntersectionObserver(
+        async (entries) => {
+          const visible = entries.some((e) => e.isIntersecting);
+
+          if (visible && !inited) {
+            inited = true;
+
+            const [{ createNeuralNetwork }, graph] = await Promise.all([
+              import('../../design-system/three/neural-network'),
+              fetch('/data/neural-graph.json').then((r) => r.json()),
+            ]);
+
+            controller = createNeuralNetwork(canvas, graph);
+
+            controller.onHover((node) =>
+              root.dispatchEvent(new CustomEvent('neural:hover', { detail: { node }, bubbles: false })),
+            );
+            controller.onClick((node) =>
+              root.dispatchEvent(new CustomEvent('neural:click', { detail: { node }, bubbles: false })),
+            );
+
+            controller.start();
+            controller.startEntrance();
+
+            root.dispatchEvent(new CustomEvent('neural:ready', { detail: { graph }, bubbles: false }));
+          } else if (controller) {
+            visible ? controller.start() : controller.pause();
+          }
+        },
+        { threshold: 0.05 },
+      );
+
+      io.observe(root);
+
+      const onResize = () => controller?.resize();
+      window.addEventListener('resize', onResize, { passive: true });
+
+      // Alpine → Three.js camera commands
+      root.addEventListener('neural:focus-neuron', (e) =>
+        controller?.focusNeuron((e as CustomEvent<{ id: string | null }>).detail.id),
+      );
+      root.addEventListener('neural:focus-axon', (e) =>
+        controller?.focusAxon((e as CustomEvent<{ id: string | null }>).detail.id),
+      );
+
+      const dispose = () => {
+        io.disconnect();
+        window.removeEventListener('resize', onResize);
+        controller?.dispose();
+        controller = null;
+      };
+      window.addEventListener('pagehide',            dispose, { once: true });
+      document.addEventListener('astro:before-swap', dispose, { once: true });
+    }
+  }
+</script>
+
+<style>
+  /*
+   * These rules cannot be expressed as pure UnoCSS utility classes because they
+   * either: (a) require CSS pseudo-selectors on elements owned by third-party
+   * libs (ApexCharts), (b) reference CSS vars in ways the static scanner cannot
+   * resolve, or (c) are animation @keyframes. Everything else uses the neural-*
+   * and ds-* shortcuts from uno.config.ts.
+   */
+
+  /* Alpine x-cloak suppression */
+  [x-cloak] { display: none !important; }
+
+  /*
+   * Panel slide-in state: x-show makes it display:block; GSAP then tweens the
+   * translateX. The initial translateX(100%) is set via the neural-panel-shell
+   * shortcut above so it starts off-screen.
+   */
+
+  /* ApexCharts dark-mode overrides — the library injects its own styles */
+  #neural-apex-chart .apexcharts-tooltip {
+    background: var(--neural-panel-bg) !important;
+    border: 1px solid var(--neural-panel-border) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.78rem !important;
+  }
+  #neural-apex-chart .apexcharts-legend-text {
+    font-family: var(--font-mono) !important;
+    font-size: 0.75rem !important;
+    color: var(--color-text-muted) !important;
+  }
+  #neural-apex-chart .apexcharts-xaxis-label,
+  #neural-apex-chart .apexcharts-yaxis-label {
+    fill: var(--color-text-muted) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 10px !important;
+  }
+  #neural-apex-chart .apexcharts-gridline {
+    stroke: rgba(76, 201, 240, 0.08) !important;
+  }
+
+  /* Mobile: panel slides up from bottom instead of right */
+  @media (max-width: 640px) {
+    .neural-panel-shell {
+      width: 100% !important;
+      top: auto;
+      height: 58vh;
+      border-left: none;
+      border-top: 1px solid var(--neural-panel-border);
+    }
+  }
+</style>

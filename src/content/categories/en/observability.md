@@ -1,9 +1,8 @@
 ---
 lang: en
 categoryId: observability
-dimension: operations
-title: Observability & Monitoring
+dimension: toolchainDimension
+title: Observability
 slug: observability
-description: Full-stack monitoring, logging, and tracing.
 visibility: public
 ---

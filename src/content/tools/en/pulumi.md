@@ -2,8 +2,9 @@
 lang: en
 toolId: pulumi
 name: Pulumi
-website: https://www.pulumi.com
+website: https://pulumi.com
+vendor: Pulumi Corp
+categoryIds: [platform-engineering, gitops-delivery]
 tagIds: [ci-cd]
-categoryIds: [platform-engineering,gitops-delivery]
 visibility: public
 ---

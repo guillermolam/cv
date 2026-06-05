@@ -1,8 +1,6 @@
 import { setLang } from '../stores/control-room';
 import type { Lang } from '../lib/i18n';
 import { emitSfx } from '../lib/audio/events';
-import { Engine } from './three/Engine';
-import { BrushedMetalEffect } from './three/effects/BrushedMetalEffect';
 
 type DialLink = { code: Lang; href: string; name: string };
 
@@ -20,27 +18,11 @@ const initOne = (root: HTMLElement) => {
 
   const items = Array.from(root.querySelectorAll<HTMLElement>('[data-lcd-item]'));
   const knob = root.querySelector<HTMLElement>('[data-lang-knob]');
-  const knobCore = root.querySelector<HTMLElement>('[data-knob-core]');
-  const bgMount = root.querySelector<HTMLElement>('[data-bg-mount]');
   const prevHit = root.querySelector<HTMLAnchorElement>('[data-dir="prev"]');
   const nextHit = root.querySelector<HTMLAnchorElement>('[data-dir="next"]');
   const stepDeg = links.length > 0 ? 360 / links.length : 90;
 
   let rotationSteps = 0;
-
-  if (bgMount && !bgMount.dataset.initialized) {
-    const engine = new Engine(bgMount);
-    const scene = engine.getScene();
-    
-    // Setup camera so it looks directly at the plane
-    const camera = engine.getCamera();
-    camera.position.z = 1;
-
-    const metalEffect = new BrushedMetalEffect(scene);
-    engine.addEffect(metalEffect);
-    
-    bgMount.dataset.initialized = 'true';
-  }
 
   const render = () => {
     const active = links[previewIdx]!;
@@ -57,8 +39,10 @@ const initOne = (root: HTMLElement) => {
       nextHit.href = next.href;
       nextHit.setAttribute('aria-label', `Next language (${next.name})`);
     }
+
+    const targetRot = rotationSteps * stepDeg;
     if (knob) {
-      knob.style.setProperty('--lang-knob-rot', `${rotationSteps * stepDeg}deg`);
+      knob.style.setProperty('--lang-knob-rot', `${targetRot}deg`);
       knob.dataset['pressed'] = knob.dataset['pressed'] ?? '';
     }
     setLang(active.code);
@@ -115,14 +99,14 @@ const initOne = (root: HTMLElement) => {
     }
   };
 
-  if (knobCore) {
+  if (knob) {
     let dragging = false;
     let moved = false;
     let lastAngle = 0;
     let accAngle = 0;
 
     const getAngle = (clientX: number, clientY: number) => {
-      const rect = knobCore.getBoundingClientRect();
+      const rect = knob.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       // atan2 returns angle in radians. Convert to degrees.
@@ -132,7 +116,7 @@ const initOne = (root: HTMLElement) => {
       return angle % 360;
     };
 
-    knobCore.addEventListener('pointerdown', (e) => {
+    knob.addEventListener('pointerdown', (e) => {
       dragging = true;
       moved = false;
       const startAngle = getAngle(e.clientX, e.clientY);
@@ -146,11 +130,11 @@ const initOne = (root: HTMLElement) => {
         moved = true;
       }
 
-      knobCore.setPointerCapture(e.pointerId);
+      knob.setPointerCapture(e.pointerId);
       press();
     });
 
-    knobCore.addEventListener('pointermove', (e) => {
+    knob.addEventListener('pointermove', (e) => {
       if (!dragging) return;
       const currentAngle = getAngle(e.clientX, e.clientY);
       let diff = currentAngle - lastAngle;
@@ -181,8 +165,8 @@ const initOne = (root: HTMLElement) => {
       }
     };
 
-    knobCore.addEventListener('pointerup', end);
-    knobCore.addEventListener('pointercancel', end);
+    knob.addEventListener('pointerup', end);
+    knob.addEventListener('pointercancel', end);
   }
 
   // Keyboard: arrows switch immediately (no OK button).

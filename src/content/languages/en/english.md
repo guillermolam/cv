@@ -4,7 +4,7 @@ languageId: english
 name: English
 nativeName: English
 level: C2
-flagRegion: gb
+flagRegion: us
 summary: Full professional proficiency.
 visibility: public
 ---

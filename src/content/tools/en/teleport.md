@@ -2,8 +2,9 @@
 lang: en
 toolId: teleport
 name: Teleport
-website: https://goteleport.com/
+website: https://goteleport.com
 vendor: Gravitational
-categoryIds: [security-architecture]
+categoryIds: [kubernetes-security, cloud-security]
+tagIds: [kubernetes]
 visibility: public
 ---

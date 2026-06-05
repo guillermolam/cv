@@ -155,7 +155,7 @@ const hasCategoryEvidence = (categoryId: string) => {
 
 const badges = badgeCandidates
   .filter((b) => hasCategoryEvidence(b.id))
-  .map((b) => ({ label: b.label }));
+  .map((b) => ({ label: b.label, domainId: b.id }));
 
 ---
 

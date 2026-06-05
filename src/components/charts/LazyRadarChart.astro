@@ -1,11 +1,13 @@
 ---
 /**
- * LazyRadarChart — reusable radar chart that hydrates Just-In-Time.
+ * LazyRadarChart — radar chart hydrated Just-In-Time on scroll.
  *
- * Pattern proof for the project: the Chart.js bundle is dynamically imported
- * ONLY when the chart scrolls into view (IntersectionObserver). The instance is
- * owned by this component and destroyed on teardown. An accessible <table>
- * fallback is always present (canvas is never the only source of the data).
+ * Visual design notes:
+ *  - Canvas fills its CSS parent via width:100%/height:100% and
+ *    maintainAspectRatio:false in the Chart.js options (lazy-radar.ts).
+ *    Callers control size by setting a height on the wrapper or via class.
+ *  - No border on the canvas itself — the parent panel provides the frame.
+ *  - Accent colour is inherited from --color-cta (same token as the whole site).
  */
 export type RadarRow = { label: string; score: number | null; confidence?: string };
 
@@ -15,20 +17,25 @@ export type Props = {
   class?: string;
 };
 
-const { rows, title = 'Operator radar', class: className } = Astro.props as Props;
+const { rows, title = 'Skill radar', class: className } = Astro.props as Props;
 
 const labels = JSON.stringify(rows.map((r) => r.label));
-const scores = JSON.stringify(rows.map((r) => r.score ?? 0));
+const scores = JSON.stringify(rows.map((r) => r.score ?? null));
 ---
 
-<div class:list={['lazy-radar', className]} data-lazy-radar data-labels={labels} data-scores={scores}>
-  {/* Accessible fallback — always present */}
+<div
+  class:list={['lazy-radar', className]}
+  data-lazy-radar
+  data-labels={labels}
+  data-scores={scores}
+>
+  {/* Accessible fallback — always present, visually hidden */}
   <table class="sr-only" aria-label={`${title} data`}>
     <thead>
       <tr>
         <th scope="col">Domain</th>
         <th scope="col">Score</th>
-        {rows.some((r) => r.confidence) && <th scope="col">Confidence</th>}
+        {rows.some((r) => r.confidence) && <th scope="col">Level</th>}
       </tr>
     </thead>
     <tbody>
@@ -37,35 +44,35 @@ const scores = JSON.stringify(rows.map((r) => r.score ?? 0));
           <th scope="row">{r.label}</th>
           <td>{r.score === null ? 'N/A' : `${r.score}/100`}</td>
           {rows.some((x) => x.confidence) && (
-            <td style="text-transform: capitalize">{r.confidence ?? '—'}</td>
+            <td style="text-transform:capitalize">{r.confidence ?? '—'}</td>
           )}
         </tr>
       ))}
     </tbody>
   </table>
 
-  {/* Canvas — progressive enhancement, hydrated on scroll */}
-  <canvas class="lazy-radar-canvas" data-lazy-radar-canvas width="280" height="280" aria-hidden="true"></canvas>
+  {/* Canvas — progressive enhancement; fills .lazy-radar via CSS below */}
+  <canvas
+    class="lazy-radar-canvas"
+    data-lazy-radar-canvas
+    aria-hidden="true"
+  ></canvas>
 </div>
 
 <style>
   .lazy-radar {
     position: relative;
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    /* Default height — caller can override with a class or inline style */
+    height: 260px;
   }
 
   .lazy-radar-canvas {
-    width: 100%;
-    max-width: 240px;
-    height: auto;
-    border-radius: 16px;
-    border: 1px solid var(--color-border);
-    background: radial-gradient(
-      circle at 35% 25%,
-      color-mix(in oklab, var(--color-cta), transparent 86%),
-      color-mix(in oklab, var(--color-surface-3), transparent 4%)
-    );
+    /* Fill the container so Chart.js can use maintainAspectRatio:false */
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .sr-only {

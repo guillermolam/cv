@@ -1,0 +1,57 @@
+/**
+ * Neural Knowledge Graph — design tokens.
+ *
+ * Integrates with the ds-* token namespace (theme.css) and the UnoCSS theme
+ * (uno.config.ts). Every colour is referenced by both the Three.js scene
+ * (via JS getComputedStyle) and the Alpine panel (via UnoCSS utilities).
+ *
+ * Neuron accent colours intentionally echo the existing domain palette in
+ * theme.css (--ds-color-security, --ds-color-infra, etc.) while adding the
+ * missing CI/CD, Network, and AI hues.
+ */
+
+:root {
+  /* ── Neuron domain colours ─────────────────────────────────────────────── */
+  /* Mapped to the ds-* namespace so UnoCSS theme.colors can reference them  */
+  --neural-neuron-development: #4cc9f0;   /* mirrors --color-cta / ds-cloud   */
+  --neural-neuron-infra:       #7b5ea7;   /* mirrors --ds-color-infra (violet) */
+  --neural-neuron-network:     #00b4d8;   /* new: teal — service mesh / eBPF  */
+  --neural-neuron-cicd:        #ff6b35;   /* new: orange — pipelines           */
+  --neural-neuron-security:    #e63946;   /* mirrors --ds-color-security (red) */
+  --neural-neuron-ai:          #9b5de5;   /* new: purple — AI/ML               */
+
+  /* ── Edge colours ──────────────────────────────────────────────────────── */
+  --neural-axon-color:      rgba(138, 180, 212, 0.7);
+  --neural-dendrite-color:  rgba(90,  190, 220, 0.5);
+  --neural-synapse-color:   rgba(76,  201, 240, 0.28);
+  --neural-synapse-pulse:   rgba(76,  201, 240, 0.72);
+
+  /* ── Scene background ───────────────────────────────────────────────────── */
+  --neural-bg: #050a14;
+
+  /* ── Side panel ─────────────────────────────────────────────────────────── */
+  --neural-panel-width:  380px;
+  --neural-panel-bg:     rgba(8, 14, 26, 0.96);
+  --neural-panel-border: rgba(76, 201, 240, 0.16);
+
+  /* ── Tooltip ────────────────────────────────────────────────────────────── */
+  --neural-tooltip-bg:     rgba(8, 14, 26, 0.94);
+  --neural-tooltip-border: rgba(76, 201, 240, 0.26);
+
+  /* ── Glow effect params (used by Three.js PointLight intensity calc) ────── */
+  --neural-glow-intensity: 0.6;
+  --neural-glow-radius-px: 24;
+
+  /* ── ds-* aliases so domain tints work with existing semantic shortcuts ─── */
+  /* Overrides the generic ds-color-security etc. on the neural page only if   */
+  /* these vars are scoped via [data-neural-page] in the future.               */
+}
+
+/* ── Domain icon mapping — consumed by Alpine x-bind:class templates ─────── */
+/* These are CSS custom properties, not classes, so the scanner won't strip them */
+[data-neural-neuron-id="development"] { --neural-icon: "i-solar-code-bold-duotone"; }
+[data-neural-neuron-id="infra"]       { --neural-icon: "i-solar-server-bold-duotone"; }
+[data-neural-neuron-id="network"]     { --neural-icon: "i-solar-wi-fi-router-bold-duotone"; }
+[data-neural-neuron-id="cicd"]        { --neural-icon: "i-ph-git-branch-duotone"; }
+[data-neural-neuron-id="security"]    { --neural-icon: "i-solar-shield-bold-duotone"; }
+[data-neural-neuron-id="ai"]          { --neural-icon: "i-solar-cpu-bolt-bold-duotone"; }

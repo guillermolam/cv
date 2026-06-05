@@ -1,7 +1,7 @@
 ---
 /**
  * CountryFlag — minimal inline SVG flags for the language dial.
- * region: ISO 3166-1 alpha-2 (gb | es | fr | de). Decorative (aria-hidden);
+ * region: ISO 3166-1 alpha-2 (us | gb | es | fr | de). Decorative (aria-hidden);
  * the dial provides the accessible language name.
  */
 export type Props = {
@@ -12,6 +12,34 @@ export type Props = {
 
 const { region, class: className, title } = Astro.props as Props;
 const r = region.toLowerCase();
+
+type Point = { x: number; y: number; r: number };
+
+const usStripeH = 16 / 13;
+const usRedStripeYs = Array.from({ length: 7 }, (_, i) => i * 2 * usStripeH);
+
+const usCantonW = 10.5;
+const usCantonH = usStripeH * 7;
+const usStarRows = [6, 5, 6, 5, 6, 5, 6, 5, 6] as const;
+const usStars: Point[] = (() => {
+  const padX = 0.85;
+  const padY = 0.75;
+  const columnGap = (usCantonW - padX * 2) / 6;
+  const rowGap = (usCantonH - padY * 2) / usStarRows.length;
+
+  const points: Point[] = [];
+  for (let rowIdx = 0; rowIdx < usStarRows.length; rowIdx += 1) {
+    const count = usStarRows[rowIdx] ?? 0;
+    const y = padY + (rowIdx + 0.5) * rowGap;
+    for (let colIdx = 0; colIdx < count; colIdx += 1) {
+      const x = padX + (count === 6 ? colIdx * columnGap : (colIdx + 0.5) * columnGap);
+      points.push({ x, y, r: 0.33 });
+    }
+  }
+  return points;
+})();
+
+const isKnownRegion = r === 'us' || r === 'gb' || r === 'es' || r === 'fr' || r === 'de';
 ---
 
 <span class:list={['country-flag', className]} role="img" aria-label={title ?? region}>
@@ -22,6 +50,8 @@ const r = region.toLowerCase();
       </clipPath>
     </defs>
     <g clip-path={`url(#flag-clip-${r})`}>
+      {/* baseline fill so the flag never renders blank */}
+      <rect width="24" height="16" fill="#fff" />
       {r === 'gb' && (
         <>
           <rect width="24" height="16" fill="#012169" />
@@ -29,6 +59,17 @@ const r = region.toLowerCase();
           <path d="M0 0l24 16M24 0L0 16" stroke="#C8102E" stroke-width="1.8" />
           <path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="5.2" />
           <path d="M12 0v16M0 8h24" stroke="#C8102E" stroke-width="3" />
+        </>
+      )}
+      {r === 'us' && (
+        <>
+          {usRedStripeYs.map((y) => (
+            <rect y={y} width="24" height={usStripeH} fill="#B22234" />
+          ))}
+          <rect width={usCantonW} height={usCantonH} fill="#3C3B6E" />
+          {usStars.map((p) => (
+            <circle cx={p.x} cy={p.y} r={p.r} fill="#fff" />
+          ))}
         </>
       )}
       {r === 'es' && (
@@ -49,6 +90,12 @@ const r = region.toLowerCase();
           <rect width="24" height="5.33" fill="#000" />
           <rect y="5.33" width="24" height="5.33" fill="#DD0000" />
           <rect y="10.66" width="24" height="5.34" fill="#FFCE00" />
+        </>
+      )}
+      {!isKnownRegion && (
+        <>
+          <rect width="24" height="16" fill="#0f172a" />
+          <path d="M0 0l24 16M24 0L0 16" stroke="rgba(255,255,255,0.22)" stroke-width="2" />
         </>
       )}
       <rect x="0.5" y="0.5" width="23" height="15" rx="1.6" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="1" />

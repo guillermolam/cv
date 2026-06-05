@@ -4,9 +4,11 @@ import { z } from 'astro/zod'
 
 const base = (collection: string) => new URL(`./content/${collection}/`, import.meta.url)
 
-const markdownLoader = (collection: string) =>
+const markdownLoader = (collection: string, excludePattern?: string) =>
   glob({
-    pattern: '**/*.{md,mdx}',
+    pattern: excludePattern
+      ? ['**/*.{md,mdx}', excludePattern]
+      : '**/*.{md,mdx}',
     base: base(collection),
   })
 
@@ -244,7 +246,7 @@ const blog = defineCollection({
 })
 
 const knowledgeResources = defineCollection({
-  loader: markdownLoader('knowledgeResources'),
+  loader: markdownLoader('knowledgeResources', '!**/_MOC*.md'),
   schema: z.object({
     lang: langSchema,
     canonicalId: canonicalIdSchema.optional(),

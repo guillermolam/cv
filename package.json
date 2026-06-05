@@ -7,8 +7,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev --host 0.0.0.0",
-    "dev:4324": "astro dev --host 0.0.0.0 --port 4324",
+    "dev": "node scripts/run-dev-singleton.mjs --host 0.0.0.0 --port 4321",
+    "dev:4324": "node scripts/run-dev-singleton.mjs --host 0.0.0.0 --port 4324",
     "build": "astro build",
     "preview": "astro preview --host 0.0.0.0",
     "preview:4324": "astro preview --host 0.0.0.0 --port 4324",
@@ -21,6 +21,8 @@
     "charts:validate": "node scripts/validate-charts.mjs",
     "content:validate": "node scripts/validate-content-graph.mjs",
     "content:graph": "node scripts/generate-content-graph.mjs",
+    "neural:graph": "node scripts/generate-neural-graph.mjs",
+    "vault:import": "node scripts/import-bookmarks-to-vault.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "format": "prettier . --write",

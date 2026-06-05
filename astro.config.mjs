@@ -4,10 +4,17 @@ import UnoCSS from 'unocss/astro';
 
 import alpinejs from '@astrojs/alpinejs';
 import heerich from './integrations/heerich/index.ts';
+import apexcharts from './integrations/apexcharts/index.ts';
 
 export default defineConfig({
   output: 'static',
-  integrations: [mdx(), UnoCSS(), alpinejs({ entrypoint: '/src/alpine/index' }), heerich()],
+  integrations: [
+    mdx(),
+    UnoCSS(),
+    alpinejs({ entrypoint: '/src/alpine/index' }),
+    heerich(),
+    apexcharts(),
+  ],
   devToolbar: {
     enabled: false,
   },
@@ -17,7 +24,13 @@ export default defineConfig({
     // a mid-session Vite dep re-optimization that ABORTS in-flight dynamic
     // imports → "Failed to fetch dynamically imported module" for three/chart.js.
     optimizeDeps: {
-      include: ['three', 'chart.js', 'chart.js/auto', 'gsap'],
+      include: [
+        'three',
+        'three/addons/controls/OrbitControls.js', // neural network OrbitControls
+        'chart.js',
+        'chart.js/auto',
+        'gsap',
+      ],
     },
   },
 });

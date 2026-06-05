@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NeuralNetworkScene from '../components/three/NeuralNetworkScene.astro';
+---
+
+<BaseLayout
+  title="Neural Knowledge Graph"
+  description="Interactive 3D skill graph: neurons, axons, and dendrites mapping cloud security and DevSecOps expertise."
+>
+  <div class="neural-page">
+    <header class="neural-page__header">
+      <h1 class="neural-page__title">Neural Knowledge Graph</h1>
+      <p class="neural-page__subtitle">
+        Explore skills as a living network — neurons, axons, dendrites.
+      </p>
+    </header>
+    <div class="neural-page__scene">
+      <NeuralNetworkScene />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .neural-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: #050a14;
+  }
+
+  .neural-page__header {
+    flex-shrink: 0;
+    padding: 1rem 1.5rem 0.75rem;
+    border-bottom: 1px solid rgba(76, 201, 240, 0.1);
+  }
+
+  .neural-page__title {
+    font-family: var(--font-mono, monospace);
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    color: var(--color-text-strong, #e2eaf4);
+    margin: 0 0 0.2rem;
+    letter-spacing: 0.02em;
+  }
+
+  .neural-page__subtitle {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.78rem;
+    color: var(--color-text-muted, #8fa3b8);
+    margin: 0;
+  }
+
+  .neural-page__scene {
+    flex: 1;
+    min-height: 0;
+  }
+</style>

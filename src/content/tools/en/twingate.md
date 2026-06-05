@@ -2,8 +2,9 @@
 lang: en
 toolId: twingate
 name: Twingate
-website: https://www.twingate.com/
+website: https://twingate.com
 vendor: Twingate
-categoryIds: [security-architecture]
+categoryIds: [cloud-security, kubernetes-security]
+tagIds: []
 visibility: public
 ---

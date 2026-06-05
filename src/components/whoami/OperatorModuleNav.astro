@@ -21,9 +21,12 @@ const { label = 'Operator modules', items } = Astro.props as Props;
           type="button"
           class="op-section-btn"
           data-key={item.id}
+          data-whoami-key
           x-on:click={`setActive('${item.id}')`}
           x-bind:data-active={`is('${item.id}') ? 'true' : null`}
+          x-bind:class={`is('${item.id}') ? 'active' : ''`}
           x-bind:aria-current={`is('${item.id}') ? 'true' : null`}
+          x-bind:aria-pressed={`is('${item.id}') ? 'true' : 'false'`}
           aria-label={item.label}
         >
           <span
@@ -44,27 +47,43 @@ const { label = 'Operator modules', items } = Astro.props as Props;
   }
 
   .op-section-nav-row {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
     padding: 0;
     margin: 0;
     list-style: none;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
+  }
+
+  @media (min-width: 760px) {
+    .op-section-nav-row {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
   }
 
   .op-section-btn {
     --op-press: 0px;
+    --op-glow: 0;
+    --op-keylit: 0;
 
     display: grid;
     grid-template-rows: 1fr auto;
     place-items: center;
-    width: 112px;
-    height: 56px;
-    border-radius: 14px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 16%);
+    width: 100%;
+    min-width: 92px;
+    height: 58px;
+    border-radius: 12px;
+    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
     background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 0px,
+        rgba(255, 255, 255, 0.03) 2px,
+        rgba(255, 255, 255, 0) 6px,
+        rgba(255, 255, 255, 0) 12px
+      ),
       radial-gradient(
         100% 90% at 30% 12%,
         color-mix(in oklab, var(--color-accent), transparent 90%),
@@ -74,7 +93,8 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     box-shadow:
       0 18px 30px var(--shadow-2),
       inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
-      inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
+      inset 0 -4px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
+      inset 0 -14px 24px rgba(0, 0, 0, 0.22);
     cursor: pointer;
     font: inherit;
     color: var(--color-text-muted);
@@ -101,6 +121,27 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     mix-blend-mode: soft-light;
   }
 
+  .op-section-btn::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background:
+      radial-gradient(
+        120% 120% at 50% 10%,
+        color-mix(in oklab, var(--color-accent), transparent 55%),
+        transparent 58%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-accent), transparent 82%),
+        transparent 60%
+      );
+    opacity: max(var(--op-glow), var(--op-keylit));
+    pointer-events: none;
+    transition: opacity var(--motion-fast) var(--ease-standard);
+  }
+
   .op-section-btn:focus-visible {
     outline: 2px solid var(--color-focus);
     outline-offset: 3px;
@@ -108,6 +149,7 @@ const { label = 'Operator modules', items } = Astro.props as Props;
 
   .op-section-btn:active {
     --op-press: 2px;
+    --op-glow: 0.9;
     box-shadow:
       0 12px 18px var(--shadow-2),
       inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
@@ -138,15 +180,30 @@ const { label = 'Operator modules', items } = Astro.props as Props;
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .op-section-icon {
+      transition:
+        background var(--motion-fast) var(--ease-standard),
+        filter var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
+    }
+
+    .op-section-label {
+      transition:
+        color var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
+    }
+
     .op-section-btn {
       transition:
         transform var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
-        border-color var(--motion-fast) var(--ease-standard);
+        border-color var(--motion-fast) var(--ease-standard),
+        filter var(--motion-fast) var(--ease-standard);
     }
 
     .op-section-btn:hover,
     .op-section-btn:focus-visible {
+      --op-glow: 0.6;
       transform: translate3d(0, -1px, 0) rotateX(2deg);
       border-color: color-mix(in oklab, var(--color-accent), transparent 56%);
       box-shadow:
@@ -157,6 +214,8 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     }
 
     .op-section-btn[data-active='true'] {
+      --op-glow: 0.8;
+      --op-keylit: 0.85;
       border-color: color-mix(in oklab, var(--color-accent), transparent 40%);
       box-shadow:
         0 22px 38px var(--shadow-2),
@@ -171,4 +230,3 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     }
   }
 </style>
-
