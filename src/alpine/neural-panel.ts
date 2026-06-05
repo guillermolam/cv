@@ -191,8 +191,8 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
           animations: { enabled: true, speed: 380 },
           events: {
             // clicking a treemap cell selects the matching axon
-            dataPointSelection: (_e: Event, _ctx: unknown, cfg: { dataPointIndex: number }) => {
-              const axon = axons[cfg.dataPointIndex];
+            dataPointSelection: (_e: MouseEvent, _ctx?: unknown, cfg?: any) => {
+              const axon = axons[cfg?.dataPointIndex ?? -1];
               if (axon) this.selectAxon(axon);
             },
           },

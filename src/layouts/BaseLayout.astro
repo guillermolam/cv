@@ -7,10 +7,9 @@ type Props = {
   description?: string;
   lang?: Lang;
   useLangPrefix?: boolean;
-  showBackground?: boolean;
 };
 
-const { title, description, lang, useLangPrefix, showBackground } = Astro.props;
+const { title, description, lang, useLangPrefix } = Astro.props;
 ---
 
 <PageLayout 
@@ -18,7 +17,6 @@ const { title, description, lang, useLangPrefix, showBackground } = Astro.props;
   description={description} 
   lang={lang} 
   useLangPrefix={useLangPrefix}
-  showBackground={showBackground}
 >
   <slot />
 </PageLayout>
