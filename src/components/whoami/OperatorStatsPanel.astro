@@ -53,11 +53,6 @@ const skillBarValues = [...skillCatCounts.values()];
 const langBarLabels = sections.languages.map((l) => l.name);
 const langBarValues = sections.languages.map((l) => l.pct);
 
-// Certifications → status doughnut-ish counts (rendered as a bar for simplicity).
-const certStatusCounts = new Map<string, number>();
-for (const c of sections.certifications) certStatusCounts.set(c.status, (certStatusCounts.get(c.status) ?? 0) + 1);
-const certBarLabels = [...certStatusCounts.keys()];
-const certBarValues = [...certStatusCounts.values()];
 ---
 
 <section

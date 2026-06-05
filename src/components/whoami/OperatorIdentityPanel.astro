@@ -47,7 +47,7 @@ const sectionItems = [
 
 type BioField = { icon: string; label: string; value: string; variant?: 'status' };
 const bioFields: BioField[] = [
-  role ? { icon: 'i-solar-briefcase-bold-duotone', label: 'Role', value: role } : null,
+  role ? { icon: 'i-solar-case-bold-duotone', label: 'Role', value: role } : null,
   focus ? { icon: 'i-solar-target-bold-duotone', label: 'Focus', value: focus } : null,
   { icon: 'i-solar-map-point-bold-duotone', label: 'Location', value: locationMode },
   { icon: 'i-solar-letter-bold-duotone', label: 'Status', value: availability, variant: 'status' as const },

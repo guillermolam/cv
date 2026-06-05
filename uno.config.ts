@@ -167,7 +167,7 @@ export default defineConfig({
     // Orbitron (badges/control labels), Share Tech Mono (CRT/LCD digital readouts).
     // These complement the --font-* CSS variables defined in tokens.css
     presetWebFonts({
-      provider: 'google',
+      provider: 'none',
       fonts: {
         sans: [
           { name: 'Inter', weights: ['400', '500', '600', '700'], italic: true },
@@ -270,15 +270,15 @@ export default defineConfig({
       pill: '999px',
     },
     fontSize: {
-      '00': ['var(--font-size-00)', { lineHeight: '1.4' }],
-      '0':  ['var(--font-size-0)',  { lineHeight: '1.5' }],
-      '1':  ['var(--font-size-1)',  { lineHeight: '1.6' }],
-      '2':  ['var(--font-size-2)',  { lineHeight: '1.55' }],
-      '3':  ['var(--font-size-3)',  { lineHeight: '1.4' }],
-      '4':  ['var(--font-size-4)',  { lineHeight: '1.3' }],
-      '5':  ['var(--font-size-5)',  { lineHeight: '1.2' }],
-      '6':  ['var(--font-size-6)',  { lineHeight: '1.1' }],
-      '7':  ['var(--font-size-7)',  { lineHeight: '1.05' }],
+      '00': ['var(--font-size-00)', { 'line-height': '1.4' }],
+      '0':  ['var(--font-size-0)',  { 'line-height': '1.5' }],
+      '1':  ['var(--font-size-1)',  { 'line-height': '1.6' }],
+      '2':  ['var(--font-size-2)',  { 'line-height': '1.55' }],
+      '3':  ['var(--font-size-3)',  { 'line-height': '1.4' }],
+      '4':  ['var(--font-size-4)',  { 'line-height': '1.3' }],
+      '5':  ['var(--font-size-5)',  { 'line-height': '1.2' }],
+      '6':  ['var(--font-size-6)',  { 'line-height': '1.1' }],
+      '7':  ['var(--font-size-7)',  { 'line-height': '1.05' }],
     },
     zIndex: {
       base:          'var(--z-base)',
@@ -336,13 +336,13 @@ export default defineConfig({
     ['ds-badge-danger',  'ds-badge border-[color-mix(in_oklab,var(--color-danger),transparent_55%)]  bg-[color-mix(in_oklab,var(--color-danger),transparent_88%)]  text-[var(--color-danger)]'],
 
     // ── Buttons ──────────────────────────────────────────────────────────────
-    ['ds-btn',         'inline-flex items-center justify-center gap-[var(--ds-space-2)] border border-[var(--color-border)] rounded-pill px-[var(--ds-space-4)] h-[2.5rem] text-1 text-[var(--color-text)] bg-[color-mix(in_oklab,var(--color-surface-2),transparent_12%)] no-underline cursor-pointer transition-all duration-fast ease-standard'],
+    ['ds-btn',         'inline-flex items-center justify-center gap-[var(--ds-space-2)] border border-[var(--color-border)] rounded-pill px-[var(--ds-space-4)] h-[2.5rem] text-1 text-[var(--color-text)] bg-[color-mix(in_oklab,var(--color-surface-2),transparent_12%)] no-underline cursor-pointer transition-all duration-[var(--motion-fast)] ease-[var(--ease-standard)]'],
     ['ds-btn-primary', 'ds-btn border-[color-mix(in_oklab,var(--color-cta),transparent_40%)] bg-[var(--color-cta)] text-[var(--color-bg)] font-semibold'],
     ['ds-btn-ghost',   'ds-btn border-transparent bg-transparent hover:bg-[color-mix(in_oklab,var(--color-surface-2),transparent_35%)] hover:border-[var(--color-border)]'],
 
     // ── Typography helpers ───────────────────────────────────────────────────
-    ['ds-label',   'text-00 tracking-[0.06em] uppercase text-[var(--color-text-muted)] leading-[1.4]'],
-    ['ds-eyebrow', 'text-00 tracking-[0.08em] uppercase text-[var(--color-text-muted)] mb-[var(--ds-space-2)]'],
+    ['ds-label',   'text-00 tracking-[0.06em] [text-transform:uppercase] text-[var(--color-text-muted)] leading-[1.4]'],
+    ['ds-eyebrow', 'text-00 tracking-[0.08em] [text-transform:uppercase] text-[var(--color-text-muted)] mb-[var(--ds-space-2)]'],
     ['ds-heading', 'font-display text-[var(--color-text-strong)] tracking-[-0.03em] leading-[1.15]'],
 
     // ── Focus ────────────────────────────────────────────────────────────────
@@ -384,7 +384,7 @@ export default defineConfig({
     ['neural-status-error', 'neural-status text-neural-security'],
 
     // Spinning loader ring
-    ['neural-loader', 'inline-block w-4 h-4 rounded-full border-2 border-[rgba(76,201,240,0.2)] border-t-neural-development animate-[neural-spin_0.8s_linear_infinite]'],
+    ['neural-loader', 'inline-block w-4 h-4 rounded-full border-2 border-[rgba(76,201,240,0.2)] border-t-neural-development [animation:neural-spin_0.8s_linear_infinite]'],
 
     // Hover tooltip box
     ['neural-tooltip',      'absolute pointer-events-none z-[30] bg-neural-panel-bg border border-neural-panel-border rounded-md px-3 py-2 font-mono text-00 text-strong min-w-[140px] max-w-[220px] leading-[1.55]'],
@@ -392,11 +392,11 @@ export default defineConfig({
     ['neural-tooltip-link', 'block mt-1 text-neural-development text-[0.7rem]'],
 
     // Side panel container
-    ['neural-panel-shell',  'absolute top-0 right-0 bottom-0 w-[var(--neural-panel-width,380px)] bg-neural-panel-bg border-l border-neural-panel-border backdrop-blur-[12px] flex flex-col z-[20] overflow-y-auto [transform:translateX(100%)]'],
+    ['neural-panel-shell',  'absolute top-0 right-0 bottom-0 w-[var(--neural-panel-width,380px)] bg-neural-panel-bg border-l border-neural-panel-border [backdrop-filter:blur(12px)] flex flex-col z-[20] overflow-y-auto [transform:translateX(100%)]'],
     ['neural-panel-header', 'flex items-center justify-between px-5 pt-4 pb-3 border-b border-neural-panel-border flex-shrink-0'],
     ['neural-panel-title',  'flex items-center gap-2 font-mono text-0 font-semibold text-strong'],
     ['neural-panel-dot',    'w-[10px] h-[10px] rounded-full flex-shrink-0 shadow-[0_0_6px_currentColor]'],
-    ['neural-panel-close',  'bg-transparent border-0 text-muted cursor-pointer text-base p-1 leading-none transition-colors duration-fast hover:text-strong'],
+    ['neural-panel-close',  'bg-transparent border-0 text-muted cursor-pointer text-base p-1 leading-none transition-colors duration-[var(--motion-fast)] hover:text-strong'],
     ['neural-panel-desc',   'px-5 pt-2 pb-0 font-mono text-00 text-muted leading-relaxed m-0 flex-shrink-0'],
     ['neural-panel-chart',  'flex-1 min-h-[260px] px-2 pt-2'],
     ['neural-panel-footer', 'px-5 py-3 border-t border-neural-panel-border flex-shrink-0'],
@@ -405,7 +405,7 @@ export default defineConfig({
     // Axon quick-pick nav inside panel
     ['neural-axon-nav',  'px-5 py-3 flex flex-wrap gap-[0.4rem] flex-shrink-0'],
     ['neural-axon-hint', 'w-full font-mono text-[0.7rem] text-muted m-0 mb-[0.4rem]'],
-    ['neural-axon-btn',  'bg-[rgba(76,201,240,0.07)] border border-[rgba(76,201,240,0.2)] rounded-sm px-[0.6rem] py-1 font-mono text-00 text-strong cursor-pointer transition-colors duration-fast hover:bg-[rgba(76,201,240,0.18)]'],
+    ['neural-axon-btn',  'bg-[rgba(76,201,240,0.07)] border border-[rgba(76,201,240,0.2)] rounded-sm px-[0.6rem] py-1 font-mono text-00 text-strong cursor-pointer transition-colors duration-[var(--motion-fast)] hover:bg-[rgba(76,201,240,0.18)]'],
 
     // Keyboard controls hint bar
     ['neural-controls', 'absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[0.7rem] text-[rgba(143,163,184,0.55)] pointer-events-none whitespace-nowrap select-none'],

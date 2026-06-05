@@ -498,83 +498,28 @@ button:focus-visible,
 }
 
 body ul.whoami-badge-row.whoami-badge-row {
-  --whoami-badge-size: clamp(152px, 18vw, 190px);
+  --whoami-badge-size: clamp(76px, 8vw, 96px);
   --badge-count: 4;
   --carousel-rotation: 0deg;
-  --carousel-radius: clamp(200px, 24vw, 240px);
 
   padding-left: 0;
   margin: 0;
   list-style: none;
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding: 30%;
-  padding: 0.5rem 0.6rem 1rem;
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
 }
 
 body ul.whoami-badge-row.whoami-badge-row > li.whoami-badge-item {
   margin: 0;
   min-width: 0;
-  width: var(--whoami-badge-size);
-  flex: 0 0 auto;
-  scroll-snap-align: center;
-}
-
-body ul.whoami-badge-row.whoami-badge-row.whoami-badge-carousel--3d {
-  position: relative;
-  display: block;
-  width: min(100%, 560px);
-  margin-inline: auto;
-  height: calc(var(--whoami-badge-size) + 132px);
-  overflow: hidden;
-  perspective: 1100px;
-  transform-style: preserve-3d;
-  cursor: grab;
-  touch-action: pan-y;
-  padding: 0;
-  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-}
-
-body ul.whoami-badge-row.whoami-badge-row.whoami-badge-carousel--3d:active {
-  cursor: grabbing;
-}
-
-body ul.whoami-badge-row.whoami-badge-row.whoami-badge-carousel--3d > li.whoami-badge-item {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--whoami-badge-size);
-  transform: translate3d(-50%, -50%, 0);
-  transform-style: preserve-3d;
-  will-change: transform, opacity, filter;
-  scroll-snap-align: unset;
 }
 
 body ul.whoami-badge-row.whoami-badge-row .graphic-badge.graphic-badge {
   width: 100%;
 }
 
-body ul.whoami-badge-row.whoami-badge-row .graphic-badge.graphic-badge::after {
-  content: attr(aria-label);
-  display: block;
-  margin-top: 0.6rem;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-text-strong);
-  opacity: 0.82;
-}
-
 body ul.whoami-badge-row.whoami-badge-row .badge-wrapper.badge-wrapper {
   width: 100%;
-  border-radius: 18px;
+  border-radius: 12px;
   border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 12%);
   background:
     radial-gradient(140% 120% at 35% 14%, rgba(255, 255, 255, 0.12), transparent 62%),
@@ -588,8 +533,9 @@ body ul.whoami-badge-row.whoami-badge-row .badge-wrapper.badge-wrapper {
     0 18px 38px var(--shadow-2),
     inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
     inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
-  padding: 0.9rem;
+  padding: 0.45rem;
   position: relative;
+  transform-style: preserve-3d;
 }
 
 body ul.whoami-badge-row.whoami-badge-row .badge-wrapper.badge-wrapper::after {
@@ -615,16 +561,18 @@ body ul.whoami-badge-row.whoami-badge-row .badge-container.badge-container {
   display: grid;
   place-items: center;
   animation: none !important;
+  transform: translateZ(18px);
 }
 
 body ul.whoami-badge-row.whoami-badge-row .badge-image.badge-image {
   width: 100%;
   height: auto;
-  max-width: 190px;
+  max-width: 58px;
   filter:
     drop-shadow(0 14px 22px color-mix(in oklab, var(--color-bg), transparent 65%))
     saturate(0.98)
     contrast(1.05);
+  transform: translateZ(10px);
 }
 
 @media (prefers-reduced-motion: no-preference) {

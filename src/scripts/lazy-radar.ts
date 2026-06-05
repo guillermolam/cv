@@ -13,7 +13,7 @@
  *  - padding added so labels have breathing room inside the canvas
  */
 import { createChart, createChartCleanup } from '../design-system/charts/chart-lifecycle';
-import { createChartDatasetDefaults, getChartTheme } from '../design-system/charts/chart-theme';
+import { getChartTheme } from '../design-system/charts/chart-theme';
 import { prefersReducedMotion } from '../design-system/motion/reduced-motion';
 
 const buildOne = async (root: HTMLElement) => {

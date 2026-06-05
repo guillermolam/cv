@@ -14,7 +14,7 @@ export class Engine {
   private renderer: THREE.WebGLRenderer;
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
-  private clock: THREE.Clock;
+  private startTime: number;
   private effects: SceneEffect[] = [];
   private animationFrameId: number | null = null;
   private resizeObserver: ResizeObserver;
@@ -29,7 +29,7 @@ export class Engine {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(this.renderer.domElement);
 
-    this.clock = new THREE.Clock();
+    this.startTime = performance.now();
 
     this.resizeObserver = new ResizeObserver(() => this.onResize(container));
     this.resizeObserver.observe(container);
@@ -56,8 +56,8 @@ export class Engine {
   }
 
   private animate() {
-    const delta = this.clock.getElapsedTime();
-    this.effects.forEach(effect => effect.update(delta));
+    const elapsedSeconds = (performance.now() - this.startTime) / 1000;
+    this.effects.forEach(effect => effect.update(elapsedSeconds));
     this.renderer.render(this.scene, this.camera);
     this.animationFrameId = requestAnimationFrame(() => this.animate());
   }

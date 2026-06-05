@@ -51,18 +51,65 @@ export default async function initWhoamiMotion(): Promise<void> {
       });
     }
 
-    // ─── Badge rack items ─────────────────────────────────────────────────────
-    const badges = document.querySelectorAll<HTMLElement>('.whoami-badge');
-    if (badges.length) {
-      gsap.from(badges, {
-        opacity: 0,
-        scale: 0.88,
-        stagger: 0.06,
-        duration: 0.32,
-        ease: 'back.out(1.4)',
-        delay: 0.72,
-      });
-    }
+    // ─── Badge gallery: CSS 3D stage + GSAP multi-step reveal ───────────────
+    const badgeGalleries = document.querySelectorAll<HTMLElement>('[data-badge-gallery]');
+    badgeGalleries.forEach((gallery) => {
+      const animateActiveBadge = () => {
+        const slide = gallery.querySelector<HTMLElement>('[data-badge-slide].is-active');
+        if (!slide) return;
+
+        const orbit = slide.querySelector<HTMLElement>('.whoami-badge-orbit');
+        const badgeArt = slide.querySelector<HTMLElement>('.whoami-badge-art');
+        const badgeImage = slide.querySelector<HTMLElement>('.whoami-badge-image');
+        const copy = slide.querySelector<HTMLElement>('.whoami-badge-copy');
+        const kicker = slide.querySelector<HTMLElement>('.whoami-badge-kicker');
+        const title = slide.querySelector<HTMLElement>('.whoami-badge-copy h3');
+        const detail = slide.querySelector<HTMLElement>('[data-badge-detail]');
+        const detailText = detail?.dataset.text ?? detail?.textContent ?? '';
+
+        if (detail) detail.textContent = '';
+
+        gsap.killTweensOf([orbit, badgeArt, badgeImage, copy, kicker, title, detail].filter(Boolean));
+        gsap.timeline({ defaults: { ease: 'ds.cinematicReveal' } })
+          .fromTo(orbit, { opacity: 0, rotateX: 72, scale: 0.72 }, { opacity: 1, rotateX: 62, scale: 1, duration: 0.42 }, 0)
+          .fromTo(badgeArt, { opacity: 0, y: 16, rotateY: -18, rotateX: 12, scale: 0.82 }, {
+            opacity: 1,
+            y: 0,
+            rotateY: 0,
+            rotateX: 0,
+            scale: 1,
+            duration: 0.66,
+          }, 0.06)
+          .fromTo(badgeImage, { filter: 'brightness(1.25) saturate(1.25)' }, {
+            filter: 'brightness(1) saturate(1)',
+            duration: 0.5,
+          }, 0.28)
+          .fromTo(copy, { opacity: 0, y: 12, filter: 'blur(8px)' }, {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 0.28,
+          }, 0.5)
+          .fromTo([kicker, title].filter(Boolean), { opacity: 0, y: 8 }, {
+            opacity: 1,
+            y: 0,
+            duration: 0.22,
+            stagger: 0.055,
+          }, 0.58);
+
+        if (detail && detailText) {
+          gsap.to(detail, {
+            text: { value: detailText },
+            duration: Math.min(1.7, Math.max(0.65, detailText.length * 0.014)),
+            ease: 'none',
+            delay: 0.72,
+          });
+        }
+      };
+
+      animateActiveBadge();
+      gallery.addEventListener('badge-gallery:change', animateActiveBadge);
+    });
 
     // ─── Stat rows (right panel) — scroll-aware entrance ─────────────────────
     const statRows = document.querySelectorAll<HTMLElement>('.stat-row');
@@ -169,273 +216,6 @@ export default async function initWhoamiMotion(): Promise<void> {
           });
         });
       });
-    }
-
-    document.querySelectorAll<HTMLElement>('[data-badge-carousel]').forEach((carousel) => {
-      const items = Array.from(carousel.querySelectorAll<HTMLElement>('[data-badge-card]'));
-      if (items.length < 3) return;
-
-      carousel.classList.add('badge-rack__grid--carousel');
-      carousel.setAttribute('tabindex', '0');
-
-      let radius = 220;
-      let rotation = 0;
-      let isDragging = false;
-      let startX = 0;
-      let startRotation = 0;
-      let lastX = 0;
-      let lastT = 0;
-      let v = 0;
-      let rafId = 0;
-      let inertiaRaf = 0;
-
-      const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
-
-      const render = () => {
-        rafId = 0;
-        const step = 360 / items.length;
-        for (let i = 0; i < items.length; i += 1) {
-          const angle = rotation + step * i;
-          const rad = (angle * Math.PI) / 180;
-          const x = Math.sin(rad) * radius;
-          const z = Math.cos(rad) * radius;
-          const depth = clamp01((z + radius) / (radius * 2));
-          const scale = 0.72 + depth * 0.42;
-          const opacity = 0.18 + depth * 0.82;
-          items[i].style.setProperty('--depth', depth.toFixed(3));
-          items[i].style.transform = `translate3d(-50%, -50%, 0) translate3d(${x.toFixed(2)}px, 0, ${z.toFixed(2)}px) rotateY(${-angle.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-          items[i].style.opacity = opacity.toFixed(3);
-          items[i].style.filter = `brightness(${(0.72 + depth * 0.42).toFixed(3)}) saturate(${(0.9 + depth * 0.18).toFixed(3)})`;
-          items[i].style.zIndex = String(Math.round(depth * 1000));
-          items[i].style.pointerEvents = depth > 0.56 ? 'auto' : 'none';
-        }
-      };
-
-      const requestRender = () => {
-        if (rafId) return;
-        rafId = window.requestAnimationFrame(render);
-      };
-
-      const updateRadius = () => {
-        const cardW = items[0]?.getBoundingClientRect().width ?? 180;
-        const w = carousel.clientWidth;
-        const peek = Math.min(44, cardW * 0.25);
-        radius = Math.max(190, Math.round((w + cardW) / 2 - peek));
-        requestRender();
-      };
-
-      window.addEventListener('resize', updateRadius, { passive: true });
-      updateRadius();
-
-      const stopInertia = () => {
-        if (inertiaRaf) cancelAnimationFrame(inertiaRaf);
-        inertiaRaf = 0;
-      };
-
-      const snapToNearest = () => {
-        const step = 360 / items.length;
-        const target = Math.round(rotation / step) * step;
-        const state = { v: rotation };
-        gsap.to(state, {
-          v: target,
-          duration: 0.6,
-          ease: 'power3.out',
-          overwrite: true,
-          onUpdate: () => {
-            rotation = state.v;
-            requestRender();
-          },
-        });
-      };
-
-      const startInertia = () => {
-        stopInertia();
-        const friction = 0.92;
-        const minV = 0.002;
-        const tick = () => {
-          rotation += v * 16;
-          v *= friction;
-          requestRender();
-          if (Math.abs(v) < minV) {
-            stopInertia();
-            snapToNearest();
-            return;
-          }
-          inertiaRaf = window.requestAnimationFrame(tick);
-        };
-        inertiaRaf = window.requestAnimationFrame(tick);
-      };
-
-      carousel.addEventListener('pointerdown', (e) => {
-        if (!(e instanceof PointerEvent)) return;
-        stopInertia();
-        isDragging = true;
-        startX = e.clientX;
-        startRotation = rotation;
-        lastX = e.clientX;
-        lastT = performance.now();
-        v = 0;
-        carousel.setPointerCapture(e.pointerId);
-      });
-
-      carousel.addEventListener('pointermove', (e) => {
-        if (!isDragging || !(e instanceof PointerEvent)) return;
-        const dx = e.clientX - startX;
-        const now = performance.now();
-        const dt = Math.max(16, now - lastT);
-        const sensitivity = 190 / Math.max(320, carousel.clientWidth);
-        v = ((e.clientX - lastX) / dt) * sensitivity;
-        lastX = e.clientX;
-        lastT = now;
-        rotation = startRotation + dx * sensitivity;
-        requestRender();
-      });
-
-      const endDrag = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        startInertia();
-      };
-
-      carousel.addEventListener('pointerup', endDrag);
-      carousel.addEventListener('pointercancel', endDrag);
-      carousel.addEventListener('lostpointercapture', endDrag);
-
-      carousel.addEventListener('keydown', (e) => {
-        if (!(e instanceof KeyboardEvent)) return;
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-        e.preventDefault();
-        stopInertia();
-        const step = 360 / items.length;
-        rotation += e.key === 'ArrowLeft' ? step : -step;
-        snapToNearest();
-      });
-    });
-  }
-
-  if (!prefersReduced) {
-    const badgeCarousel = document.querySelector<HTMLElement>('ul.whoami-badge-row');
-    if (badgeCarousel) {
-      const items = Array.from(badgeCarousel.querySelectorAll<HTMLElement>('li.whoami-badge-item'));
-      if (items.length >= 3) {
-        badgeCarousel.classList.add('whoami-badge-carousel--3d');
-        badgeCarousel.setAttribute('tabindex', '0');
-        badgeCarousel.style.setProperty('--badge-count', String(items.length));
-        let radius = Math.max(220, Math.round(items[0]?.getBoundingClientRect().width * 1.35));
-        badgeCarousel.style.setProperty('--carousel-radius', `${radius}px`);
-
-      let rotation = 0;
-      let isDragging = false;
-      let startX = 0;
-      let startRotation = 0;
-      let lastX = 0;
-      let lastT = 0;
-      let velocity = 0;
-      let rafId = 0;
-
-      const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
-
-      const render = () => {
-        rafId = 0;
-        const step = 360 / items.length;
-        for (let i = 0; i < items.length; i += 1) {
-          const angle = rotation + step * i;
-          const rad = (angle * Math.PI) / 180;
-          const x = Math.sin(rad) * radius;
-          const z = Math.cos(rad) * radius;
-          const depth = clamp01((z + radius) / (radius * 2));
-          const scale = 0.82 + depth * 0.26;
-          const opacity = 0.2 + depth * 0.8;
-          items[i].style.transform = `translate3d(-50%, -50%, 0) translate3d(${x.toFixed(2)}px, 0, ${z.toFixed(2)}px) rotateY(${-angle.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-          items[i].style.opacity = opacity.toFixed(3);
-          items[i].style.filter = `brightness(${(0.78 + depth * 0.34).toFixed(3)}) saturate(${(0.9 + depth * 0.18).toFixed(3)})`;
-          items[i].style.zIndex = String(Math.round(depth * 1000));
-          items[i].style.pointerEvents = depth > 0.48 ? 'auto' : 'none';
-        }
-      };
-
-      const requestRender = () => {
-        if (rafId) return;
-        rafId = window.requestAnimationFrame(render);
-      };
-
-      render();
-
-      const updateRadius = () => {
-        radius = Math.max(220, Math.round(items[0]?.getBoundingClientRect().width * 1.35));
-        badgeCarousel.style.setProperty('--carousel-radius', `${radius}px`);
-        requestRender();
-      };
-
-      window.addEventListener('resize', updateRadius, { passive: true });
-
-      const snapToNearest = () => {
-        const step = 360 / items.length;
-        const target = Math.round(rotation / step) * step;
-        if (prefersReduced) {
-          rotation = target;
-          requestRender();
-          return;
-        }
-        const state = { v: rotation };
-        gsap.to(state, {
-          v: target,
-          duration: 0.6,
-          ease: 'power3.out',
-          overwrite: true,
-          onUpdate: () => {
-            rotation = state.v;
-            requestRender();
-          },
-        });
-      };
-
-      badgeCarousel.addEventListener('pointerdown', (e) => {
-        if (!(e instanceof PointerEvent)) return;
-        isDragging = true;
-        startX = e.clientX;
-        startRotation = rotation;
-        lastX = e.clientX;
-        lastT = performance.now();
-        velocity = 0;
-        badgeCarousel.setPointerCapture(e.pointerId);
-      });
-
-      badgeCarousel.addEventListener('pointermove', (e) => {
-        if (!isDragging || !(e instanceof PointerEvent)) return;
-        const dx = e.clientX - startX;
-        const now = performance.now();
-        const dt = Math.max(16, now - lastT);
-        velocity = (e.clientX - lastX) / dt;
-        lastX = e.clientX;
-        lastT = now;
-        const sensitivity = 180 / Math.max(320, badgeCarousel.clientWidth);
-        rotation = startRotation + dx * sensitivity;
-        requestRender();
-      });
-
-      const endDrag = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        if (!prefersReduced) {
-          rotation += velocity * 240;
-        }
-        snapToNearest();
-      };
-
-      badgeCarousel.addEventListener('pointerup', endDrag);
-      badgeCarousel.addEventListener('pointercancel', endDrag);
-      badgeCarousel.addEventListener('lostpointercapture', endDrag);
-
-        badgeCarousel.addEventListener('keydown', (e) => {
-          if (!(e instanceof KeyboardEvent)) return;
-          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-          e.preventDefault();
-          const step = 360 / items.length;
-          rotation += e.key === 'ArrowLeft' ? step : -step;
-          snapToNearest();
-        });
-      }
     }
   }
 }

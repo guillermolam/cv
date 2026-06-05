@@ -19,6 +19,9 @@ export default defineConfig({
     enabled: false,
   },
   vite: {
+    build: {
+      chunkSizeWarningLimit: 1600,
+    },
     // Pre-bundle the heavy libraries that are loaded via dynamic import()
     // (WebGL hero, lazy charts, motion). Without this, adding new deps triggers
     // a mid-session Vite dep re-optimization that ABORTS in-flight dynamic

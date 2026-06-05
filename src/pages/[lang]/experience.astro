@@ -24,10 +24,9 @@ const { lang } = Astro.params;
 if (!lang || !isLang(lang)) throw new Error('Invalid language');
 
 // ── Collections ─────────────────────────────────────────────────────────────
-const [expAll, toolsAll, skillsAll, catsAll] = await Promise.all([
+const [expAll, toolsAll, catsAll] = await Promise.all([
   getCollection('experience'),
   getCollection('tools'),
-  getCollection('skills'),
   getCollection('categories'),
 ]);
 
@@ -40,7 +39,6 @@ const experiences = expAll
   });
 
 const tools     = toolsAll.filter((t) => t.data.lang === lang);
-const skills    = skillsAll.filter((s) => s.data.lang === lang);
 const cats      = catsAll.filter((c) => c.data.lang === lang);
 
 // ── Look-up maps ─────────────────────────────────────────────────────────────

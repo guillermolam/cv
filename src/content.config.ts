@@ -4,13 +4,21 @@ import { z } from 'astro/zod'
 
 const base = (collection: string) => new URL(`./content/${collection}/`, import.meta.url)
 
-const markdownLoader = (collection: string, excludePattern?: string) =>
+const markdownLoader = (collection: string, excludePattern?: string | string[]) => {
+  const excludePatterns = Array.isArray(excludePattern)
+    ? excludePattern
+    : excludePattern
+      ? [excludePattern]
+      : []
+  return (
   glob({
-    pattern: excludePattern
-      ? ['**/*.{md,mdx}', excludePattern]
+    pattern: excludePatterns.length > 0
+      ? ['**/*.{md,mdx}', ...excludePatterns]
       : '**/*.{md,mdx}',
     base: base(collection),
   })
+  )
+}
 
 const langSchema = z.enum(['en', 'es'])
 
@@ -246,7 +254,10 @@ const blog = defineCollection({
 })
 
 const knowledgeResources = defineCollection({
-  loader: markdownLoader('knowledgeResources', '!**/_MOC*.md'),
+  loader: markdownLoader('knowledgeResources', [
+    '!**/_MOC*.md',
+    '!vault/**/*#*.md',
+  ]),
   schema: z.object({
     lang: langSchema,
     canonicalId: canonicalIdSchema.optional(),
