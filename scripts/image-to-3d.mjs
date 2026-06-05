@@ -142,17 +142,26 @@ await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 await writeFile(notesPath, `${notes.join('\n')}\n`, 'utf8');
 
 if (previewRequested && hasCommand('sips')) {
-  await new Promise((resolvePromise, rejectPromise) => {
-    const child = spawn('sips', ['-Z', '1024', copiedInputPath, '--out', previewPath], {
-      stdio: 'inherit',
-      env: process.env,
+  try {
+    await new Promise((resolvePromise, rejectPromise) => {
+      let stderr = '';
+      const child = spawn('sips', ['-Z', '1024', copiedInputPath, '--out', previewPath], {
+        stdio: ['ignore', 'ignore', 'pipe'],
+        env: process.env,
+      });
+      child.stderr?.on('data', (chunk) => {
+        stderr += chunk.toString();
+      });
+      child.on('error', rejectPromise);
+      child.on('exit', (code) => {
+        if (code === 0) resolvePromise();
+        else rejectPromise(new Error((stderr.trim() || `sips exited with code ${code}`).trim()));
+      });
     });
-    child.on('error', rejectPromise);
-    child.on('exit', (code) => {
-      if (code === 0) resolvePromise();
-      else rejectPromise(new Error(`sips exited with code ${code}`));
-    });
-  });
+  } catch (error) {
+    await copyFile(copiedInputPath, previewPath);
+    console.warn('Preview generation fell back to a direct copy.');
+  }
 }
 
 if (backendCommand) {
