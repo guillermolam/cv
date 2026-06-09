@@ -110,5 +110,20 @@ const navRailItems: NavRailItem[] = nav.map((item) => ({
         </div>
       </div>
     </footer>
+
+    {import.meta.env.DEV ? (
+      <script>
+        const boot = async () => {
+          const mod = await import('../scripts/devtools');
+          await mod.initDevtoolsSuite();
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => void boot(), { once: true });
+        } else {
+          void boot();
+        }
+      </script>
+    ) : null}
   </body>
 </html>

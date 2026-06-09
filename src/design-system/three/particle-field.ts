@@ -57,7 +57,9 @@ const fragmentShader = /* glsl */ `
 
 const cssColor = (name: string, fallback: string): THREE.Color => {
   if (typeof window === 'undefined') return new THREE.Color(fallback);
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const v = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
   try {
     return new THREE.Color(v || fallback);
   } catch {
@@ -65,7 +67,9 @@ const cssColor = (name: string, fallback: string): THREE.Color => {
   }
 };
 
-export function createHeroField(canvas: HTMLCanvasElement): HeroFieldController {
+export function createHeroField(
+  canvas: HTMLCanvasElement,
+): HeroFieldController {
   const core = createRenderCore(canvas);
   const { renderer, scene, camera } = core;
 
@@ -111,7 +115,6 @@ export function createHeroField(canvas: HTMLCanvasElement): HeroFieldController 
 
   let raf = 0;
   let running = false;
-  let startTimeMs = 0;
   let lastTimeMs = 0;
   let elapsedSeconds = 0;
 
@@ -132,8 +135,7 @@ export function createHeroField(canvas: HTMLCanvasElement): HeroFieldController 
     start() {
       if (running) return;
       running = true;
-      startTimeMs = performance.now();
-      lastTimeMs = startTimeMs;
+      lastTimeMs = performance.now();
       elapsedSeconds = 0;
       tick();
     },

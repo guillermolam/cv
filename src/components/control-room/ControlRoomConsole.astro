@@ -34,7 +34,7 @@ const { lang = 'en', prefix = '' } = Astro.props as Props;
     {/* ── Topbar ─────────────────────────────────────────────────────── */}
     <header class="console-topbar">
       <p class="console-title">
-        <span class="ui-icon i-solar-soundwave-bold-duotone" aria-hidden="true"></span>
+        <span class="ui-icon i-ph-broadcast-duotone" aria-hidden="true"></span>
         Hybrid Cloud Control Room
       </p>
       <div class="console-topbar-meta">
@@ -50,14 +50,18 @@ const { lang = 'en', prefix = '' } = Astro.props as Props;
     </header>
 
     {/* ── Hero backdrop + intro ──────────────────────────────────────── */}
-    <section class="console-hero" aria-label={`${site.name} — operator console`}>
+    <section
+      class="console-hero"
+      aria-label={`${site.name} — operator console`}
+    >
       <HeroParticleField />
       <FxScanlines intensity="subtle" />
       <FxGrain intensity="subtle" />
       <div class="console-hero-overlay">
         <p class="console-hero-eyebrow">Operator console online</p>
         <p class="console-hero-sub">
-          Cloud Security &amp; DevSecOps · secure delivery, platforms, guardrails
+          Cloud Security &amp; DevSecOps · secure delivery, platforms,
+          guardrails
         </p>
       </div>
     </section>
@@ -100,7 +104,8 @@ const { lang = 'en', prefix = '' } = Astro.props as Props;
     gap: 0.75rem;
     flex-wrap: wrap;
     padding-bottom: 0.6rem;
-    border-bottom: 1px solid color-mix(in oklab, var(--color-border), transparent 10%);
+    border-bottom: 1px solid
+      color-mix(in oklab, var(--color-border), transparent 10%);
   }
 
   .console-title {
@@ -153,8 +158,13 @@ const { lang = 'en', prefix = '' } = Astro.props as Props;
   }
 
   @keyframes console-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
   }
 
   /* ── Hero ─────────────────────────────────────────────────────────── */

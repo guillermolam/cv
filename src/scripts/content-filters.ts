@@ -1,6 +1,11 @@
 const tokenize = (value: string | undefined): Set<string> => {
   if (!value) return new Set();
-  return new Set(value.split(/\s+/).map((v) => v.trim()).filter(Boolean));
+  return new Set(
+    value
+      .split(/\s+/)
+      .map((v) => v.trim())
+      .filter(Boolean),
+  );
 };
 
 const setHidden = (element: HTMLElement, hidden: boolean) => {
@@ -19,9 +24,13 @@ const setEnhanced = (root: HTMLElement) => {
 
 type SelectMap = Record<string, HTMLSelectElement | null>;
 
-const getSelectValue = (select: HTMLSelectElement | null) => (select ? select.value : '');
+const getSelectValue = (select: HTMLSelectElement | null) =>
+  select ? select.value : '';
 
-const enhanceFilter = (root: HTMLElement, options: { onApply: () => void; onReset: () => void }) => {
+const enhanceFilter = (
+  root: HTMLElement,
+  options: { onApply: () => void; onReset: () => void },
+) => {
   if (root.getAttribute('data-filter-enhanced') === 'true') return;
   setEnhanced(root);
 
@@ -32,7 +41,9 @@ const enhanceFilter = (root: HTMLElement, options: { onApply: () => void; onRese
     });
   }
 
-  const resetButton = root.querySelector<HTMLButtonElement>('[data-filter-reset]');
+  const resetButton = root.querySelector<HTMLButtonElement>(
+    '[data-filter-reset]',
+  );
   if (resetButton) {
     resetButton.addEventListener('click', (event) => {
       event.preventDefault();
@@ -52,7 +63,9 @@ const enhanceFilter = (root: HTMLElement, options: { onApply: () => void; onRese
 };
 
 export const initToolchainFilters = () => {
-  const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-toolchain-filter]'));
+  const roots = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-toolchain-filter]'),
+  );
   for (const root of roots) {
     const targetSelector = root.getAttribute('data-target');
     if (!targetSelector) continue;
@@ -60,7 +73,9 @@ export const initToolchainFilters = () => {
     const container = document.querySelector<HTMLElement>(targetSelector);
     if (!container) continue;
 
-    const items = Array.from(container.querySelectorAll<HTMLElement>('[data-tool-item]'));
+    const items = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-tool-item]'),
+    );
     const total = items.length;
 
     const selects: SelectMap = {
@@ -84,9 +99,12 @@ export const initToolchainFilters = () => {
 
         const matchesType =
           !selectedType ||
-          (selectedType === '__none__' ? typeIds.size === 0 : typeIds.has(selectedType));
+          (selectedType === '__none__'
+            ? typeIds.size === 0
+            : typeIds.has(selectedType));
         const matchesTag = !selectedTag || tagIds.has(selectedTag);
-        const matchesCategory = !selectedCategory || categoryIds.has(selectedCategory);
+        const matchesCategory =
+          !selectedCategory || categoryIds.has(selectedCategory);
 
         const matches = matchesType && matchesTag && matchesCategory;
         setHidden(item, !matches);
@@ -109,7 +127,9 @@ export const initToolchainFilters = () => {
 };
 
 export const initKnowledgeFilters = () => {
-  const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-knowledge-filter]'));
+  const roots = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-knowledge-filter]'),
+  );
   for (const root of roots) {
     const targetSelector = root.getAttribute('data-target');
     if (!targetSelector) continue;
@@ -117,11 +137,16 @@ export const initKnowledgeFilters = () => {
     const container = document.querySelector<HTMLElement>(targetSelector);
     if (!container) continue;
 
-    const groups = Array.from(container.querySelectorAll<HTMLElement>('[data-knowledge-group]'));
-    const items = Array.from(container.querySelectorAll<HTMLElement>('[data-knowledge-item]'));
+    const groups = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-knowledge-group]'),
+    );
+    const items = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-knowledge-item]'),
+    );
     const total = items.length;
 
     const selects: SelectMap = {
+      audience: root.querySelector<HTMLSelectElement>('[data-filter-audience]'),
       type: root.querySelector<HTMLSelectElement>('[data-filter-type]'),
       level: root.querySelector<HTMLSelectElement>('[data-filter-level]'),
       status: root.querySelector<HTMLSelectElement>('[data-filter-status]'),
@@ -133,6 +158,7 @@ export const initKnowledgeFilters = () => {
     const countEl = root.querySelector<HTMLElement>('[data-filter-count]');
 
     const apply = () => {
+      const selectedAudience = getSelectValue(selects.audience);
       const selectedType = getSelectValue(selects.type);
       const selectedLevel = getSelectValue(selects.level);
       const selectedStatus = getSelectValue(selects.status);
@@ -142,6 +168,7 @@ export const initKnowledgeFilters = () => {
 
       let shown = 0;
       for (const item of items) {
+        const audience = item.dataset.audience ?? '';
         const type = item.dataset.type ?? '';
         const level = item.dataset.level ?? '';
         const status = item.dataset.status ?? '';
@@ -149,20 +176,32 @@ export const initKnowledgeFilters = () => {
         const toolIds = tokenize(item.dataset.toolIds);
         const categoryIds = tokenize(item.dataset.categoryIds);
 
+        const matchesAudience =
+          !selectedAudience || audience === selectedAudience;
         const matchesType = !selectedType || type === selectedType;
         const matchesLevel = !selectedLevel || level === selectedLevel;
         const matchesStatus = !selectedStatus || status === selectedStatus;
         const matchesTag = !selectedTag || tagIds.has(selectedTag);
         const matchesTool = !selectedTool || toolIds.has(selectedTool);
-        const matchesCategory = !selectedCategory || categoryIds.has(selectedCategory);
+        const matchesCategory =
+          !selectedCategory || categoryIds.has(selectedCategory);
 
-        const matches = matchesType && matchesLevel && matchesStatus && matchesTag && matchesTool && matchesCategory;
+        const matches =
+          matchesAudience &&
+          matchesType &&
+          matchesLevel &&
+          matchesStatus &&
+          matchesTag &&
+          matchesTool &&
+          matchesCategory;
         setHidden(item, !matches);
         if (matches) shown += 1;
       }
 
       for (const group of groups) {
-        const visible = Array.from(group.querySelectorAll<HTMLElement>('[data-knowledge-item]')).some((el) => !el.hidden);
+        const visible = Array.from(
+          group.querySelectorAll<HTMLElement>('[data-knowledge-item]'),
+        ).some((el) => !el.hidden);
         setHidden(group, !visible);
       }
 
@@ -178,11 +217,16 @@ export const initKnowledgeFilters = () => {
     };
 
     enhanceFilter(root, { onApply: apply, onReset: reset });
+
+    // Expose apply() so external callers (e.g. pagination) can re-run it
+    (root as HTMLElement & { _kcApply?: () => void })._kcApply = apply;
   }
 };
 
 export const initPortfolioFilters = () => {
-  const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-portfolio-filter]'));
+  const roots = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-portfolio-filter]'),
+  );
   for (const root of roots) {
     const targetSelector = root.getAttribute('data-target');
     if (!targetSelector) continue;
@@ -190,7 +234,9 @@ export const initPortfolioFilters = () => {
     const container = document.querySelector<HTMLElement>(targetSelector);
     if (!container) continue;
 
-    const items = Array.from(container.querySelectorAll<HTMLElement>('[data-project-item]'));
+    const items = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-project-item]'),
+    );
     const total = items.length;
 
     const selects: SelectMap = {
@@ -221,10 +267,16 @@ export const initPortfolioFilters = () => {
         const matchesStatus = !selectedStatus || status === selectedStatus;
         const matchesTool = !selectedTool || toolIds.has(selectedTool);
         const matchesSkill = !selectedSkill || skillIds.has(selectedSkill);
-        const matchesCategory = !selectedCategory || categoryIds.has(selectedCategory);
+        const matchesCategory =
+          !selectedCategory || categoryIds.has(selectedCategory);
         const matchesTag = !selectedTag || tagIds.has(selectedTag);
 
-        const matches = matchesStatus && matchesTool && matchesSkill && matchesCategory && matchesTag;
+        const matches =
+          matchesStatus &&
+          matchesTool &&
+          matchesSkill &&
+          matchesCategory &&
+          matchesTag;
         setHidden(item, !matches);
         if (matches) shown += 1;
       }

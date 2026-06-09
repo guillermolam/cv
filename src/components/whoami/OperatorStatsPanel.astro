@@ -2,7 +2,6 @@
 import type { WhoamiAxisResult } from '../../lib/content/whoami-stats';
 import CircuitTraceSvg from './CircuitTraceSvg.astro';
 import LazyRadarChart from '../charts/LazyRadarChart.astro';
-import LazyBarChart from '../charts/LazyBarChart.astro';
 import CountryFlag from '../i18n/CountryFlag.astro';
 
 export type SectionData = {
@@ -22,37 +21,25 @@ const { axes, sections } = Astro.props as Props;
 
 // Icon per axis label — Phosphor duotone
 const iconMap: Record<string, string> = {
-  cloud:        'i-solar-cloud-bold-duotone',
-  security:     'i-solar-shield-check-bold-duotone',
-  devsecops:    'i-solar-code-circle-bold-duotone',
-  kubernetes:   'i-solar-box-bold-duotone',
-  architecture: 'i-solar-structure-bold-duotone',
-  leadership:   'i-solar-users-group-rounded-bold-duotone',
-  automation:   'i-solar-settings-bold-duotone',
-  ai:           'i-solar-atom-bold-duotone',
+  cloud: 'i-ph-cloud-duotone',
+  security: 'i-ph-shield-check-duotone',
+  devsecops: 'i-ph-git-branch-duotone',
+  kubernetes: 'i-ph-cube-duotone',
+  architecture: 'i-ph-flow-arrow-duotone',
+  sre: 'i-ph-gauge-duotone',
+  automation: 'i-ph-robot-duotone',
+  ai: 'i-ph-brain-duotone',
 };
 
 const confidenceDot: Record<string, { color: string; label: string }> = {
-  high:   { color: 'var(--color-success)',  label: 'High'   },
-  medium: { color: 'var(--color-warning)',  label: 'Medium' },
-  low:    { color: 'var(--color-danger)',   label: 'Low'    },
+  high: { color: 'var(--color-success)', label: 'High' },
+  medium: { color: 'var(--color-warning)', label: 'Medium' },
+  low: { color: 'var(--color-danger)', label: 'Low' },
 };
 
 const getIcon = (label: string) =>
-  iconMap[label.toLowerCase().replace(/[^a-z]/g, '')] ?? 'i-solar-chart-2-bold-duotone';
-
-// Skills aggregated by category → bar chart data (Chart.js, lazy).
-const skillCatCounts = new Map<string, number>();
-for (const s of sections.skills) {
-  for (const c of s.categories) skillCatCounts.set(c, (skillCatCounts.get(c) ?? 0) + 1);
-}
-const skillBarLabels = [...skillCatCounts.keys()];
-const skillBarValues = [...skillCatCounts.values()];
-
-// Languages → proficiency bar chart data.
-const langBarLabels = sections.languages.map((l) => l.name);
-const langBarValues = sections.languages.map((l) => l.pct);
-
+  iconMap[label.toLowerCase().replace(/[^a-z]/g, '')] ??
+  'i-ph-chart-bar-duotone';
 ---
 
 <section
@@ -65,7 +52,7 @@ const langBarValues = sections.languages.map((l) => l.pct);
   <!-- Header — title reflects the active keyboard section ───────────────── -->
   <header class="whoami-stats-header">
     <p class="whoami-stats-eyebrow">
-      <span class="ui-icon i-solar-target-bold-duotone" aria-hidden="true"></span>
+      <span class="ui-icon i-ph-crosshair-duotone" aria-hidden="true"></span>
       Core profile
     </p>
     <h2 class="whoami-stats-title" x-text="title()">Operator stats</h2>
@@ -86,175 +73,201 @@ const langBarValues = sections.languages.map((l) => l.pct);
     </div>
 
     <ul class="stat-list" role="list" aria-label="Competency index">
-      {axes.map((axis) => {
-        const icon = getIcon(axis.label);
-        const dot  = confidenceDot[axis.confidence] ?? confidenceDot['low']!;
-        const pct  = axis.score ?? 0;
-        const rowId = `stat-${axis.label.toLowerCase().replace(/\s+/g, '-')}`;
-        return (
-          <li class="stat-row" data-axis-id={rowId}>
-            <button
-              class="stat-row-btn"
-              type="button"
-              aria-expanded="false"
-              aria-controls={`${rowId}-evidence`}
-              x-on:click={`toggle('${rowId}')`}
-              x-bind:aria-expanded={`isOpen('${rowId}').toString()`}
-            >
-              <span class={`stat-icon ui-icon ${icon}`} aria-hidden="true"></span>
-              <span class="stat-label">{axis.label}</span>
-              <span class="stat-track" aria-hidden="true">
-                <span class="stat-fill" style={`--pct: ${pct}%`}></span>
-              </span>
-              <span class="stat-score">{axis.score === null ? 'N/A' : `${axis.score}`}</span>
-              <span class="stat-confidence" style={`--dot-color: ${dot.color}`} aria-label={`Confidence: ${dot.label}`}></span>
-              <span class="stat-chevron ui-icon i-ph-caret-right" aria-hidden="true" x-bind:class={`{ 'stat-chevron-open': isOpen('${rowId}') }`}></span>
-            </button>
+      {
+        axes.map((axis) => {
+          const icon = getIcon(axis.label);
+          const dot = confidenceDot[axis.confidence] ?? confidenceDot['low']!;
+          const pct = axis.score ?? 0;
+          const rowId = `stat-${axis.label.toLowerCase().replace(/\s+/g, '-')}`;
+          return (
+            <li class="stat-row" data-axis-id={rowId}>
+              <button
+                class="stat-row-btn"
+                type="button"
+                aria-expanded="false"
+                aria-controls={`${rowId}-evidence`}
+                x-on:click={`toggle('${rowId}')`}
+                x-bind:aria-expanded={`isOpen('${rowId}').toString()`}
+              >
+                <span class={`stat-icon ui-icon ${icon}`} aria-hidden="true" />
+                <span class="stat-label">{axis.label}</span>
+                <span class="stat-track" aria-hidden="true">
+                  <span class="stat-fill" style={`--pct: ${pct}%`} />
+                </span>
+                <span class="stat-score">
+                  {axis.score === null ? 'N/A' : `${axis.score}`}
+                </span>
+                <span
+                  class="stat-confidence"
+                  style={`--dot-color: ${dot.color}`}
+                  aria-label={`Confidence: ${dot.label}`}
+                />
+                <span
+                  class="stat-chevron ui-icon i-ph-caret-right"
+                  aria-hidden="true"
+                  x-bind:class={`{ 'stat-chevron-open': isOpen('${rowId}') }`}
+                />
+              </button>
 
-            <div
-              id={`${rowId}-evidence`}
-              class="stat-evidence"
-              x-show={`isOpen('${rowId}')`}
-              x-transition:enter="stat-evidence-enter"
-              x-transition:enter-start="stat-evidence-enter-start"
-              x-transition:enter-end="stat-evidence-enter-end"
-              x-transition:leave="stat-evidence-leave"
-              x-transition:leave-start="stat-evidence-leave-start"
-              x-transition:leave-end="stat-evidence-leave-end"
-            >
-              <p class="stat-evidence-summary">{axis.evidenceSummary}</p>
-              {axis.evidenceSources.length > 0 && (
-                <ul class="stat-evidence-sources">
-                  {axis.evidenceSources.map((s) => (
-                    <li><span class="ui-icon i-solar-link-circle-bold-duotone" aria-hidden="true"></span>{s}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </li>
-        );
-      })}
+              <div
+                id={`${rowId}-evidence`}
+                class="stat-evidence"
+                x-show={`isOpen('${rowId}')`}
+                x-transition:enter="stat-evidence-enter"
+                x-transition:enter-start="stat-evidence-enter-start"
+                x-transition:enter-end="stat-evidence-enter-end"
+                x-transition:leave="stat-evidence-leave"
+                x-transition:leave-start="stat-evidence-leave-start"
+                x-transition:leave-end="stat-evidence-leave-end"
+              >
+                <p class="stat-evidence-summary">{axis.evidenceSummary}</p>
+                {axis.evidenceSources.length > 0 && (
+                  <ul class="stat-evidence-sources">
+                    {axis.evidenceSources.map((s) => (
+                      <li>
+                        <span
+                          class="ui-icon i-ph-link-simple-duotone"
+                          aria-hidden="true"
+                        />
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
     </ul>
 
     <p class="stat-footnote">
-      <span class="ui-icon i-solar-info-circle-bold-duotone" aria-hidden="true"></span>
+      <span class="ui-icon i-ph-info-duotone" aria-hidden="true"></span>
       Scores are a portfolio evidence index — not ratings.
     </p>
   </div>
 
-  {/* ════════ SKILLS — skills-per-category bar chart (Chart.js) + list ════════ */}
+  {/* ════════ SKILLS ════════ */}
   <div class="core-view" x-show="is('skills')" style="display:none">
-    {sections.skills.length === 0 ? (
-      <p class="core-empty">No skills modeled yet.</p>
-    ) : (
-      <>
-        {skillBarLabels.length > 0 && (
-          <LazyBarChart
-            labels={skillBarLabels}
-            values={skillBarValues}
-            series="Skills"
-            title="Skills by category"
-            horizontal
-            height={Math.max(140, skillBarLabels.length * 30)}
-          />
-        )}
+    {
+      sections.skills.length === 0 ? (
+        <p class="core-empty">No skills modeled yet.</p>
+      ) : (
         <ul class="core-list" role="list">
           {sections.skills.map((s) => (
             <li class="core-item">
-              <span class="core-item-icon ui-icon i-solar-cpu-bold-duotone" aria-hidden="true"></span>
+              <span
+                class="core-item-icon ui-icon i-ph-cpu-duotone"
+                aria-hidden="true"
+              />
               <span class="core-item-name">{s.name}</span>
               {s.categories.length > 0 && (
-                <span class="core-pills">{s.categories.map((c) => <span class="core-pill">{c}</span>)}</span>
+                <span class="core-pills">
+                  {s.categories.map((c) => (
+                    <span class="core-pill">{c}</span>
+                  ))}
+                </span>
               )}
             </li>
           ))}
         </ul>
-      </>
-    )}
+      )
+    }
   </div>
 
   {/* ════════ CERTIFICATIONS ════════ */}
   <div class="core-view" x-show="is('certifications')" style="display:none">
-    {sections.certifications.length === 0 ? (
-      <p class="core-empty">No certifications modeled yet.</p>
-    ) : (
-      <ul class="core-list" role="list">
-        {sections.certifications.map((c) => (
-          <li class="core-item">
-            <span class="core-item-icon ui-icon i-solar-diploma-verified-bold-duotone" aria-hidden="true"></span>
-            <span class="core-item-name">{c.name}</span>
-            <span class="core-item-meta">{c.issuer} · {c.status}</span>
-          </li>
-        ))}
-      </ul>
-    )}
+    {
+      sections.certifications.length === 0 ? (
+        <p class="core-empty">No certifications modeled yet.</p>
+      ) : (
+        <ul class="core-list" role="list">
+          {sections.certifications.map((c) => (
+            <li class="core-item">
+              <span
+                class="core-item-icon ui-icon i-ph-seal-check-duotone"
+                aria-hidden="true"
+              />
+              <span class="core-item-name">{c.name}</span>
+              <span class="core-item-meta">
+                {c.issuer} · {c.status}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 
   {/* ════════ EDUCATION ════════ */}
   <div class="core-view" x-show="is('education')" style="display:none">
-    {sections.education.length === 0 ? (
-      <p class="core-empty">No education modeled yet.</p>
-    ) : (
-      <ul class="core-list" role="list">
-        {sections.education.map((e) => (
-          <li class="core-item">
-            <span class="core-item-icon ui-icon i-solar-square-academic-cap-bold-duotone" aria-hidden="true"></span>
-            <span class="core-item-name">{e.degree}</span>
-            <span class="core-item-meta">{e.institution}{e.field ? ` · ${e.field}` : ''}</span>
-          </li>
-        ))}
-      </ul>
-    )}
+    {
+      sections.education.length === 0 ? (
+        <p class="core-empty">No education modeled yet.</p>
+      ) : (
+        <ul class="core-list" role="list">
+          {sections.education.map((e) => (
+            <li class="core-item">
+              <span
+                class="core-item-icon ui-icon i-ph-graduation-cap-duotone"
+                aria-hidden="true"
+              />
+              <span class="core-item-name">{e.degree}</span>
+              <span class="core-item-meta">
+                {e.institution}
+                {e.field ? ` · ${e.field}` : ''}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 
-  {/* ════════ LANGUAGES — proficiency chart (Chart.js) + flag bars ════════ */}
+  {/* ════════ LANGUAGES — proficiency bars + flags ════════ */}
   <div class="core-view" x-show="is('languages')" style="display:none">
-    {sections.languages.length === 0 ? (
-      <p class="core-empty">No languages modeled yet.</p>
-    ) : (
-      <>
-      <LazyBarChart
-        labels={langBarLabels}
-        values={langBarValues}
-        series="Proficiency"
-        title="Language proficiency"
-        horizontal
-        max={100}
-        height={Math.max(140, langBarLabels.length * 34)}
-      />
-      <ul class="core-bars" role="list">
-        {sections.languages.map((l) => (
-          <li class="core-bar-row">
-            <CountryFlag region={l.flagRegion} class="core-bar-flag" />
-            <span class="core-bar-label">{l.name}</span>
-            <span class="core-bar-track" aria-hidden="true">
-              <span class="core-bar-fill" style={`--pct: ${l.pct}%`}></span>
-            </span>
-            <span class="core-bar-val">{l.level}</span>
-          </li>
-        ))}
-      </ul>
-      </>
-    )}
+    {
+      sections.languages.length === 0 ? (
+        <p class="core-empty">No languages modeled yet.</p>
+      ) : (
+        <ul class="core-bars" role="list">
+          {sections.languages.map((l) => (
+            <li class="core-bar-row">
+              <CountryFlag region={l.flagRegion} class="core-bar-flag" />
+              <span class="core-bar-label">{l.name}</span>
+              <span class="core-bar-track" aria-hidden="true">
+                <span class="core-bar-fill" style={`--pct: ${l.pct}%`} />
+              </span>
+              <span class="core-bar-val">{l.level}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 
   {/* ════════ EXPERIENCE — timeline ════════ */}
   <div class="core-view" x-show="is('experience')" style="display:none">
-    {sections.experience.length === 0 ? (
-      <p class="core-empty">No experience modeled yet.</p>
-    ) : (
-      <ul class="core-timeline" role="list">
-        {sections.experience.map((e) => (
-          <li class="core-tl-item">
-            <span class="core-tl-dot" aria-hidden="true"></span>
-            <div class="core-tl-body">
-              <p class="core-tl-role">{e.role}</p>
-              <p class="core-tl-meta">{e.company} · {e.start}{e.end ? ` — ${e.end}` : ''}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
+    {
+      sections.experience.length === 0 ? (
+        <p class="core-empty">No experience modeled yet.</p>
+      ) : (
+        <ul class="core-timeline" role="list">
+          {sections.experience.map((e) => (
+            <li class="core-tl-item">
+              <span class="core-tl-dot" aria-hidden="true" />
+              <div class="core-tl-body">
+                <p class="core-tl-role">{e.role}</p>
+                <p class="core-tl-meta">
+                  {e.company} · {e.start}
+                  {e.end ? ` — ${e.end}` : ''}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 </section>
 
@@ -266,7 +279,8 @@ const langBarValues = sections.languages.map((l) => l.pct);
     border-color: color-mix(in oklab, var(--color-border), transparent 5%);
     box-shadow:
       0 18px 44px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%),
       inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
     display: grid;
     gap: 1rem;
@@ -294,7 +308,7 @@ const langBarValues = sections.languages.map((l) => l.pct);
     mix-blend-mode: soft-light;
   }
 
-  :global(.whoami-stats-trace) {
+  .whoami-stats-trace {
     position: absolute;
     inset: -24px;
     pointer-events: none;
@@ -448,12 +462,28 @@ const langBarValues = sections.languages.map((l) => l.pct);
     background: color-mix(in oklab, var(--color-bg), transparent 28%);
   }
 
-  .stat-evidence-enter { transition: all 0.22s var(--ease-standard); }
-  .stat-evidence-enter-start { opacity: 0; transform: translateY(-4px); }
-  .stat-evidence-enter-end   { opacity: 1; transform: translateY(0); }
-  .stat-evidence-leave { transition: all 0.16s var(--ease-standard); }
-  .stat-evidence-leave-start { opacity: 1; transform: translateY(0); }
-  .stat-evidence-leave-end   { opacity: 0; transform: translateY(-4px); }
+  .stat-evidence-enter {
+    transition: all 0.22s var(--ease-standard);
+  }
+  .stat-evidence-enter-start {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  .stat-evidence-enter-end {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .stat-evidence-leave {
+    transition: all 0.16s var(--ease-standard);
+  }
+  .stat-evidence-leave-start {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .stat-evidence-leave-end {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 
   .stat-evidence-summary {
     margin: 0 0 0.4rem 0;
@@ -592,7 +622,11 @@ const langBarValues = sections.languages.map((l) => l.pct);
     height: 100%;
     width: var(--pct, 0%);
     border-radius: 999px;
-    background: linear-gradient(to right, var(--color-cta), color-mix(in oklab, var(--color-cta), var(--color-link-hover) 45%));
+    background: linear-gradient(
+      to right,
+      var(--color-cta),
+      color-mix(in oklab, var(--color-cta), var(--color-link-hover) 45%)
+    );
     transition: width 0.9s var(--ease-emphasis);
   }
 

@@ -26,7 +26,7 @@ export type Props = {
 const { lang, links, label = 'Language selector' } = Astro.props as Props;
 
 const languageMeta: Record<Lang, { name: string; region: string }> = {
-  en: { name: 'English', region: 'us' },
+  en: { name: 'English', region: 'gb' },
   es: { name: 'Español', region: 'es' },
   fr: { name: 'Français', region: 'fr' },
   de: { name: 'Deutsch', region: 'de' },
@@ -35,12 +35,18 @@ const languageMeta: Record<Lang, { name: string; region: string }> = {
 const hrefByCode = new Map(links.map((l) => [l.code, l.href] as const));
 const orderedLangs = SUPPORTED_LANGS.filter((l) => hrefByCode.has(l));
 const currentIdx = Math.max(0, orderedLangs.indexOf(lang));
-const prevLang = orderedLangs[(currentIdx - 1 + orderedLangs.length) % orderedLangs.length] as Lang;
+const prevLang = orderedLangs[
+  (currentIdx - 1 + orderedLangs.length) % orderedLangs.length
+] as Lang;
 const nextLang = orderedLangs[(currentIdx + 1) % orderedLangs.length] as Lang;
 
 // serialize the lang→href map for the client script
 const linkData = JSON.stringify(
-  orderedLangs.map((code) => ({ code, href: hrefByCode.get(code), name: languageMeta[code].name })),
+  orderedLangs.map((code) => ({
+    code,
+    href: hrefByCode.get(code),
+    name: languageMeta[code].name,
+  })),
 );
 ---
 
@@ -51,38 +57,76 @@ const linkData = JSON.stringify(
   data-current={lang}
   data-links={linkData}
 >
-  <div class="lang-dial-bg" data-bg-mount aria-hidden="true"></div>
   {/* ── LCD screen ─────────────────────────────────────────────────────── */}
   <div class="lang-dial-lcd" aria-hidden="true">
     <span class="lang-dial-lcd-tag">LANG</span>
     <span class="lang-dial-lcd-readout">
-      {orderedLangs.map((code) => (
-        <span class="lang-dial-lcd-item" data-lcd-item={code} data-active={code === lang ? 'true' : undefined}>
-          <CountryFlag region={languageMeta[code].region} class="lang-dial-flag" />
-          <span class="lang-dial-code">{code.toUpperCase()}</span>
-          <span class="lang-dial-name">{languageMeta[code].name}</span>
-        </span>
-      ))}
+      {
+        orderedLangs.map((code) => (
+          <span
+            class="lang-dial-lcd-item"
+            data-lcd-item={code}
+            data-active={code === lang ? 'true' : undefined}
+          >
+            <CountryFlag
+              region={languageMeta[code].region}
+              class="lang-dial-flag"
+            />
+            <span class="lang-dial-code">{code.toUpperCase()}</span>
+            <span class="lang-dial-name">{languageMeta[code].name}</span>
+          </span>
+        ))
+      }
     </span>
   </div>
 
-  <div class="lang-dial-knob" role="group" aria-label="Language knob" data-lang-knob>
+  {/* ── D-pad wheel ────────────────────────────────────────────────────── */}
+  <div class="lang-dial-pad" role="group" aria-label="Language wheel">
     <a
-      class="lang-dial-knob-hit lang-dial-knob-hit--prev"
+      class="lang-dial-btn lang-dial-btn--up"
       href={hrefByCode.get(prevLang)}
       data-dir="prev"
       aria-label={`Previous language (${languageMeta[prevLang].name})`}
-    ></a>
+    >
+      <span class="ui-icon i-ph-caret-up-bold" aria-hidden="true"></span>
+    </a>
     <a
-      class="lang-dial-knob-hit lang-dial-knob-hit--next"
+      class="lang-dial-btn lang-dial-btn--left"
+      href={hrefByCode.get(prevLang)}
+      data-dir="prev"
+      aria-label={`Previous language (${languageMeta[prevLang].name})`}
+      tabindex="-1"
+    >
+      <span class="ui-icon i-ph-caret-left-bold" aria-hidden="true"></span>
+    </a>
+
+    <a
+      class="lang-dial-btn lang-dial-btn--select"
+      href={hrefByCode.get(lang)}
+      data-dir="select"
+      aria-label="Apply selected language"
+    >
+      <span class="lang-dial-select-ring" aria-hidden="true"></span>
+      <span class="lang-dial-select-label">OK</span>
+    </a>
+
+    <a
+      class="lang-dial-btn lang-dial-btn--right"
       href={hrefByCode.get(nextLang)}
       data-dir="next"
       aria-label={`Next language (${languageMeta[nextLang].name})`}
-    ></a>
-
-    <div class="lang-dial-canvas-container">
-      <canvas class="lang-dial-canvas" aria-hidden="true" data-lang-knob-canvas></canvas>
-    </div>
+      tabindex="-1"
+    >
+      <span class="ui-icon i-ph-caret-right-bold" aria-hidden="true"></span>
+    </a>
+    <a
+      class="lang-dial-btn lang-dial-btn--down"
+      href={hrefByCode.get(nextLang)}
+      data-dir="next"
+      aria-label={`Next language (${languageMeta[nextLang].name})`}
+    >
+      <span class="ui-icon i-ph-caret-down-bold" aria-hidden="true"></span>
+    </a>
   </div>
 </div>
 
@@ -90,39 +134,27 @@ const linkData = JSON.stringify(
   .lang-dial {
     display: inline-grid;
     grid-template-columns: auto auto;
-    gap: 0.35rem;
+    gap: 0.6rem;
     align-items: center;
     padding: 0.5rem 0.6rem;
     border-radius: 18px;
-    border: 1px solid var(--fx-metal-edge, color-mix(in oklab, var(--color-border-strong), #000 30%));
-    background: linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
+    border: 1px solid
+      var(
+        --fx-metal-edge,
+        color-mix(in oklab, var(--color-border-strong), #000 30%)
+      );
+    background:
+      radial-gradient(
+        120% 140% at 30% 0%,
+        color-mix(in oklab, var(--color-accent), transparent 92%),
+        transparent 60%
+      ),
+      linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
     box-shadow:
       0 18px 30px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%),
       inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .lang-dial-bg {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    mix-blend-mode: overlay;
-    opacity: 0.6;
-  }
-
-  .lang-dial-bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(120% 140% at 30% 0%, color-mix(in oklab, var(--color-accent), transparent 92%), transparent 60%);
-  }
-
-  /* Ensure interactive elements stay above the background */
-  .lang-dial-lcd, .lang-dial-knob {
-    z-index: 1;
   }
 
   /* ── LCD ──────────────────────────────────────────────────────────────── */
@@ -135,7 +167,11 @@ const linkData = JSON.stringify(
     border-radius: 12px;
     border: 1px solid color-mix(in oklab, var(--color-border), transparent 6%);
     background:
-      radial-gradient(120% 140% at 30% 10%, rgba(55, 214, 194, 0.16), rgba(55, 214, 194, 0.02) 60%),
+      radial-gradient(
+        120% 140% at 30% 10%,
+        rgba(55, 214, 194, 0.16),
+        rgba(55, 214, 194, 0.02) 60%
+      ),
       color-mix(in oklab, var(--color-bg), transparent 16%);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -163,7 +199,11 @@ const linkData = JSON.stringify(
     font-size: 9px;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: color-mix(in oklab, var(--color-text-muted), var(--color-accent) 30%);
+    color: color-mix(
+      in oklab,
+      var(--color-text-muted),
+      var(--color-accent) 30%
+    );
   }
 
   .lang-dial-lcd-readout {
@@ -203,83 +243,132 @@ const linkData = JSON.stringify(
     white-space: nowrap;
   }
 
-  .lang-dial-knob {
+  /* ── D-pad ────────────────────────────────────────────────────────────── */
+  .lang-dial-pad {
     position: relative;
     width: 78px;
     height: 78px;
-    border-radius: 50%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    place-items: center;
+  }
+
+  .lang-dial-btn {
     display: grid;
     place-items: center;
-    transform: rotate(var(--lang-knob-rot, 0deg));
-  }
-
-  .lang-dial-canvas-container {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    pointer-events: none; /* Let hits and wrapper handle pointer events */
-    overflow: hidden;
-  }
-
-  .lang-dial-canvas {
-    width: 100%;
-    height: 100%;
-    outline: none;
-    display: block;
-  }
-
-  .lang-dial-knob-hit {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    z-index: 2;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    background: linear-gradient(
+      180deg,
+      var(--color-surface-2),
+      var(--color-surface-3)
+    );
+    color: var(--color-text-muted);
     text-decoration: none;
+    box-shadow:
+      0 4px 0 color-mix(in oklab, var(--color-bg), #000 30%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 25%);
+    transform: translateZ(0);
   }
 
-  .lang-dial-knob-hit--prev {
-    clip-path: polygon(0 0, 52% 0, 52% 100%, 0 100%);
+  .lang-dial-btn .ui-icon {
+    font-size: 14px;
   }
 
-  .lang-dial-knob-hit--next {
-    clip-path: polygon(48% 0, 100% 0, 100% 100%, 48% 100%);
+  .lang-dial-btn--up {
+    grid-area: 1 / 2;
+  }
+  .lang-dial-btn--left {
+    grid-area: 2 / 1;
+  }
+  .lang-dial-btn--right {
+    grid-area: 2 / 3;
+  }
+  .lang-dial-btn--down {
+    grid-area: 3 / 2;
   }
 
-  .lang-dial-knob-hit:focus-visible {
+  .lang-dial-btn--select {
+    grid-area: 2 / 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: var(--color-text-strong);
+    background:
+      radial-gradient(
+        circle at 38% 30%,
+        color-mix(in oklab, #fff, transparent 80%),
+        transparent 55%
+      ),
+      linear-gradient(
+        180deg,
+        var(--color-accent),
+        color-mix(in oklab, var(--color-accent), #000 35%)
+      );
+    border-color: color-mix(in oklab, var(--color-accent), #000 30%);
+    box-shadow:
+      0 5px 0 color-mix(in oklab, var(--color-accent), #000 55%),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  .lang-dial-select-label {
+    font-family: var(--font-techno, var(--font-display));
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-bg);
+  }
+
+  .lang-dial-select-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--color-accent), transparent 60%);
+    pointer-events: none;
+  }
+
+  .lang-dial-btn:focus-visible {
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
 
-  .lang-dial-knob[data-pressed='true'] .lang-dial-canvas-container {
-    transform: translateY(2px);
+  /* pressed / active state (set by JS or :active) */
+  .lang-dial-btn:active,
+  .lang-dial-btn[data-pressed='true'] {
+    transform: translateY(3px);
     box-shadow:
-      0 12px 18px var(--shadow-2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      inset 0 -10px 18px rgba(0, 0, 0, 0.65);
+      0 1px 0 color-mix(in oklab, var(--color-bg), #000 30%),
+      inset 0 2px 6px rgba(0, 0, 0, 0.5);
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .lang-dial-canvas-container {
+    .lang-dial-btn {
       transition:
         transform var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard);
     }
-
+    .lang-dial-btn:hover {
+      border-color: color-mix(in oklab, var(--color-accent), transparent 55%);
+      color: var(--color-text-strong);
+    }
     .lang-dial-lcd::after {
       animation: lang-dial-phosphor 6.4s ease-in-out infinite alternate;
     }
   }
 
   @keyframes lang-dial-phosphor {
-    0% { opacity: 0.18; }
-    100% { opacity: 0.28; }
-  }
-
-  @keyframes lang-dial-led-flicker {
-    0% { opacity: 0.75; }
-    30% { opacity: 0.92; }
-    62% { opacity: 0.82; }
-    100% { opacity: 0.95; }
+    0% {
+      opacity: 0.18;
+    }
+    100% {
+      opacity: 0.28;
+    }
   }
 
   @media (max-width: 520px) {

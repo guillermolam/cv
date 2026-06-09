@@ -1,0 +1,12 @@
+# Pre-push: heavier checks — type-check + unit tests
+# Runs before code reaches the remote; still fast enough for push.
+
+echo "▶ husky pre-push"
+
+# 1. Astro type-check
+echo "▶ astro check"
+pnpm run check
+
+# 2. Unit tests
+echo "▶ vitest"
+pnpm run test

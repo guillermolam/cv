@@ -1,8 +1,20 @@
 ---
+/**
+ * /[lang]/knowledge — Knowledge Center
+ *
+ * Design: ops-dashboard aesthetic matching experience.astro.
+ *  - Hero + stats ribbon
+ *  - View toggle: Dashboard (card grid + charts) ↔ Graph (Three.js force-directed)
+ *  - 2-level taxonomy: Human audience vs Agent audience
+ *  - Faceted filter: audience | type | level | status | category | tool | tag
+ *  - Pagination: 50 items per page, resets on filter change
+ *  - Charts: LazyBarChart for Human resource breakdown + Agent resource breakdown
+ */
+
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ContentCard from '../../../components/content/ContentCard.astro';
 import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
-import KnowledgeFilter from '../../../components/content/KnowledgeFilter.astro';
+import LazyBarChart from '../../../components/charts/LazyBarChart.astro';
 
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../../lib/i18n';
@@ -12,13 +24,13 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-if (!lang || !isLang(lang)) {
-  throw new Error('Invalid language');
-}
+if (!lang || !isLang(lang)) throw new Error('Invalid language');
 
 const title = 'Knowledge Center';
-const description = 'Curated references that support the portfolio’s architecture and implementation choices.';
+const description =
+  'Curated resources across security engineering, operations, architecture, and AI tooling — organised by audience and domain.';
 
+// ── Collections ──────────────────────────────────────────────────────────────
 const resourcesAll = await getCollection('knowledgeResources');
 const categoriesAll = await getCollection('categories');
 const tagsAll = await getCollection('tags');
@@ -29,179 +41,1494 @@ const caseStudiesAll = await getCollection('caseStudies');
 const blogAll = await getCollection('blog');
 
 const resources = resourcesAll.filter((r) => r.data.lang === lang);
-const resourcesFallback = resources.length > 0 ? resources : resourcesAll.filter((r) => r.data.lang === 'en');
+const resourcesFallback =
+  resources.length > 0
+    ? resources
+    : resourcesAll.filter((r) => r.data.lang === 'en');
 
-const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
-const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
-const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
-const skillTitleById = new Map(skillsAll.map((s) => [s.data.skillId, s.data.name] as const));
-const projectTitleById = new Map(projectsAll.map((p) => [p.data.projectId, p.data.title] as const));
-const caseStudyMetaById = new Map(caseStudiesAll.map((c) => [c.data.caseStudyId, { title: c.data.title, slug: c.data.slug }] as const));
+// ── Look-up maps ─────────────────────────────────────────────────────────────
+const categoryTitleById = new Map(
+  categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const),
+);
+const tagTitleById = new Map(
+  tagsAll.map((t) => [t.data.tagId, t.data.title] as const),
+);
+const toolTitleById = new Map(
+  toolsAll.map((t) => [t.data.toolId, t.data.name] as const),
+);
+const skillTitleById = new Map(
+  skillsAll.map((s) => [s.data.skillId, s.data.name] as const),
+);
+const projectTitleById = new Map(
+  projectsAll.map((p) => [p.data.projectId, p.data.title] as const),
+);
+const caseStudyMetaById = new Map(
+  caseStudiesAll.map(
+    (c) =>
+      [c.data.caseStudyId, { title: c.data.title, slug: c.data.slug }] as const,
+  ),
+);
 
-const isDraftBlog = (entry: CollectionEntry<'blog'>) =>
-  Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
-const publishedBlogSlugs = new Set(blogAll.filter((b) => !isDraftBlog(b)).map((b) => b.data.blogSlug));
+const isDraftBlog = (e: CollectionEntry<'blog'>) =>
+  Boolean(e.data?.draft) || e.data?.visibility === 'draft';
+const publishedBlogSlugs = new Set(
+  blogAll.filter((b) => !isDraftBlog(b)).map((b) => b.data.blogSlug),
+);
 
-const isNonEmptyString = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
+// ── Audience taxonomy ────────────────────────────────────────────────────────
+const HUMAN_TYPES = new Set([
+  'book',
+  'article',
+  'paper',
+  'video',
+  'course',
+  'repo',
+  'github-repo',
+  'documentation',
+  'talk',
+  'documentary',
+  'playlist',
+  'podcast',
+  'workshop',
+]);
+const AGENT_TYPES = new Set([
+  'mcp',
+  'skill',
+  'plugin',
+  'tool',
+  'platform',
+  'llm-model',
+  'example',
+  'cli',
+  'md-doc',
+]);
 
-const uniq = (values: string[]) => Array.from(new Set(values));
+const deriveAudience = (type: string): 'human' | 'agent' | 'other' => {
+  if (HUMAN_TYPES.has(type)) return 'human';
+  if (AGENT_TYPES.has(type)) return 'agent';
+  return 'other';
+};
 
-const typeOptions = uniq(resourcesFallback.map((r) => r.data.type))
-  .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
+const TYPE_LABELS: Record<string, string> = {
+  book: 'Book',
+  article: 'Article',
+  paper: 'Paper',
+  video: 'Video',
+  course: 'Course',
+  repo: 'Repo',
+  'github-repo': 'GitHub Repo',
+  documentation: 'Documentation',
+  talk: 'Talk',
+  documentary: 'Documentary',
+  playlist: 'Playlist',
+  podcast: 'Podcast',
+  workshop: 'Workshop',
+  mcp: 'MCP Server',
+  skill: 'Skill',
+  plugin: 'Plugin',
+  tool: 'Tool',
+  platform: 'Platform',
+  'llm-model': 'LLM Model',
+  example: 'Example',
+  cli: 'CLI',
+  'md-doc': 'MD Doc',
+  other: 'Other',
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const isNonEmptyString = (v: unknown): v is string =>
+  typeof v === 'string' && v.length > 0;
+const uniq = (vals: string[]) => Array.from(new Set(vals));
+
+// ── Filter options ────────────────────────────────────────────────────────────
+const humanResources = resourcesFallback.filter((r) =>
+  HUMAN_TYPES.has(r.data.type),
+);
+const agentResources = resourcesFallback.filter((r) =>
+  AGENT_TYPES.has(r.data.type),
+);
+
+const humanTypeOptions = uniq(humanResources.map((r) => r.data.type))
+  .map((id) => ({ id, label: TYPE_LABELS[id] ?? id }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const agentTypeOptions = uniq(agentResources.map((r) => r.data.type))
+  .map((id) => ({ id, label: TYPE_LABELS[id] ?? id }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const allTypeOptions = uniq(resourcesFallback.map((r) => r.data.type))
+  .map((id) => ({ id, label: TYPE_LABELS[id] ?? id }))
   .sort((a, b) => a.label.localeCompare(b.label));
 
 type ResourceLevel = 'intro' | 'intermediate' | 'advanced' | 'reference';
-type ResourceStatus = 'planned' | 'reading' | 'completed' | 'reference' | 'archived';
+type ResourceStatus =
+  | 'planned'
+  | 'reading'
+  | 'completed'
+  | 'reference'
+  | 'archived';
 
-const levelValues = resourcesFallback
-  .map((r) => r.data.level)
-  .filter((value): value is ResourceLevel => typeof value === 'string' && value.length > 0);
-const levelOptions = uniq(levelValues)
+const levelOptions = uniq(
+  resourcesFallback
+    .map((r) => r.data.level)
+    .filter((v): v is ResourceLevel => typeof v === 'string'),
+)
   .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
   .sort((a, b) => a.label.localeCompare(b.label));
 
-const statusValues = resourcesFallback
-  .map((r) => r.data.status)
-  .filter((value): value is ResourceStatus => typeof value === 'string' && value.length > 0);
-const statusOptions = uniq(statusValues)
+const statusOptions = uniq(
+  resourcesFallback
+    .map((r) => r.data.status)
+    .filter((v): v is ResourceStatus => typeof v === 'string'),
+)
   .map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
   .sort((a, b) => a.label.localeCompare(b.label));
 
 const tagOptions = uniq(resourcesFallback.flatMap((r) => r.data.tagIds ?? []))
   .map((id) => ({ id, label: tagTitleById.get(id) }))
-  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .filter(
+    (o): o is { id: string; label: string } => typeof o.label === 'string',
+  )
   .sort((a, b) => a.label.localeCompare(b.label));
 
 const toolOptions = uniq(resourcesFallback.flatMap((r) => r.data.toolIds ?? []))
   .map((id) => ({ id, label: toolTitleById.get(id) }))
-  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .filter(
+    (o): o is { id: string; label: string } => typeof o.label === 'string',
+  )
   .sort((a, b) => a.label.localeCompare(b.label));
 
-const categoryOptions = uniq(resourcesFallback.flatMap((r) => r.data.categoryIds ?? []))
+const categoryOptions = uniq(
+  resourcesFallback.flatMap((r) => r.data.categoryIds ?? []),
+)
   .map((id) => ({ id, label: categoryTitleById.get(id) }))
-  .filter((o): o is { id: string; label: string } => typeof o.label === 'string')
+  .filter(
+    (o): o is { id: string; label: string } => typeof o.label === 'string',
+  )
   .sort((a, b) => a.label.localeCompare(b.label));
 
-const groups = new Map<string, Array<CollectionEntry<'knowledgeResources'>>>();
-for (const r of resourcesFallback) {
-  const key = r.data.type;
-  groups.set(key, [...(groups.get(key) ?? []), r]);
+// ── Hero stats ────────────────────────────────────────────────────────────────
+const totalResources = resourcesFallback.length;
+const completedCount = resourcesFallback.filter(
+  (r) => r.data.status === 'completed',
+).length;
+
+// ── Dashboard charts ──────────────────────────────────────────────────────────
+const humanTypeCounts = new Map<string, number>();
+for (const r of humanResources) {
+  humanTypeCounts.set(r.data.type, (humanTypeCounts.get(r.data.type) ?? 0) + 1);
 }
-const groupEntries = Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
+const humanChartLabels = [...humanTypeCounts.keys()].map(
+  (k) => TYPE_LABELS[k] ?? k,
+);
+const humanChartValues = [...humanTypeCounts.values()];
+
+const agentTypeCounts = new Map<string, number>();
+for (const r of agentResources) {
+  agentTypeCounts.set(r.data.type, (agentTypeCounts.get(r.data.type) ?? 0) + 1);
+}
+const agentChartLabels = [...agentTypeCounts.keys()].map(
+  (k) => TYPE_LABELS[k] ?? k,
+);
+const agentChartValues = [...agentTypeCounts.values()];
+
+const progressLabels = [
+  'Completed',
+  'Reading',
+  'Planned',
+  'Reference',
+  'Archived',
+];
+const progressValues = progressLabels.map(
+  (label) =>
+    resourcesFallback.filter((r) => r.data.status === label.toLowerCase())
+      .length,
+);
+
+// ── Card list (sorted alphabetically for stable pagination) ──────────────────
+const humanSorted = humanResources
+  .slice()
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+const agentSorted = agentResources
+  .slice()
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+const allSorted = [...humanSorted, ...agentSorted];
+
+// ── Graph nodes (minimal payload, capped for GPU budget) ─────────────────────
+const graphNodes = allSorted.slice(0, 500).map((r) => ({
+  id: r.data.resourceId,
+  title: r.data.title.slice(0, 50),
+  type: r.data.type,
+  audience: deriveAudience(r.data.type),
+  cats: r.data.categoryIds ?? [],
+}));
+const graphNodesJson = JSON.stringify(graphNodes);
+
+// ── Per-card helper (builds taxonomy pill arrays) ────────────────────────────
+const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
+  const tags = (resource.data.tagIds ?? [])
+    .map((id) => tagTitleById.get(id))
+    .filter(isNonEmptyString)
+    .map((label) => ({ label }));
+  const categories = (resource.data.categoryIds ?? [])
+    .map((id) => categoryTitleById.get(id))
+    .filter(isNonEmptyString)
+    .map((label) => ({ label }));
+  const tools = (resource.data.toolIds ?? [])
+    .map((id) => toolTitleById.get(id))
+    .filter(isNonEmptyString)
+    .map((label) => ({ label }));
+  const skills = (resource.data.skillIds ?? [])
+    .map((id) => skillTitleById.get(id))
+    .filter(isNonEmptyString)
+    .map((label) => ({ label }));
+  const projects = (resource.data.projectIds ?? [])
+    .map((id) => ({ id, title: projectTitleById.get(id) }))
+    .filter(
+      (p): p is { id: string; title: string } => typeof p.title === 'string',
+    )
+    .map((p) => ({ label: p.title, href: `/${lang}/portfolio/${p.id}` }));
+  const caseStudies = (resource.data.caseStudyIds ?? [])
+    .map((id) => caseStudyMetaById.get(id))
+    .filter((m): m is { title: string; slug: string } =>
+      Boolean(m?.title && m?.slug),
+    )
+    .map((m) => ({ label: m.title, href: `/${lang}/case-studies/${m.slug}` }));
+  const blogLinks = (resource.data.blogSlugs ?? [])
+    .filter((slug) => publishedBlogSlugs.has(slug))
+    .map((slug) => ({ label: `Blog: ${slug}`, href: `/${lang}/blog/${slug}` }));
+  const metaParts = [
+    TYPE_LABELS[resource.data.type] ?? resource.data.type,
+    resource.data.level
+      ? resource.data.level.charAt(0).toUpperCase() +
+        resource.data.level.slice(1)
+      : undefined,
+    resource.data.status
+      ? resource.data.status.charAt(0).toUpperCase() +
+        resource.data.status.slice(1)
+      : undefined,
+  ].filter(isNonEmptyString);
+  return {
+    tags,
+    categories,
+    tools,
+    skills,
+    projects,
+    caseStudies,
+    blogLinks,
+    meta: metaParts.join(' · '),
+  };
+};
 ---
 
-<BaseLayout title={title} description={description} lang={lang} useLangPrefix>
-  <section class="card pad">
-    <h1>Knowledge Center</h1>
-    {resources.length === 0 && lang !== 'en' ? (
-      <p class="topology-subtitle">Showing English resources while {lang.toUpperCase()} content is being authored.</p>
-    ) : null}
-    <p class="topology-subtitle">Curated references used to justify and extend the portfolio’s content graph and control-room architecture.</p>
+<BaseLayout {title} {description} lang={lang} useLangPrefix>
+  <!-- ══════════════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════════════ -->
+  <header class="kc-hero" data-kc-hero>
+    <div class="kc-hero__inner">
+      <div class="kc-hero__eyebrow ds-eyebrow">
+        <span
+          class="i-solar-notebook-bold-duotone align-middle mr-2"
+          aria-hidden="true"></span>
+        Knowledge Intelligence
+      </div>
+      <h1 class="kc-hero__title">Knowledge&nbsp;Center</h1>
+      <p class="kc-hero__sub">{description}</p>
+
+      {
+        resources.length === 0 && lang !== 'en' ? (
+          <p class="kc-fallback-note ds-label">
+            Showing English resources while {lang.toUpperCase()} content is
+            being authored.
+          </p>
+        ) : null
+      }
+
+      <!-- Stats ribbon -->
+      <div class="kc-stats" role="list">
+        {
+          (
+            [
+              {
+                icon: 'i-ph-books-duotone',
+                label: 'Total',
+                value: totalResources || '1k+',
+              },
+              {
+                icon: 'i-ph-user-duotone',
+                label: 'Human',
+                value: humanResources.length || '—',
+              },
+              {
+                icon: 'i-ph-robot-duotone',
+                label: 'Agent',
+                value: agentResources.length || '—',
+              },
+              {
+                icon: 'i-ph-check-circle-duotone',
+                label: 'Completed',
+                value: completedCount || '—',
+              },
+            ] as const
+          ).map(({ icon, label, value }) => (
+            <div class="kc-stat" role="listitem">
+              <span class={`${icon} kc-stat__icon`} aria-hidden="true" />
+              <span class="kc-stat__value">{value}</span>
+              <span class="kc-stat__label ds-label">{label}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- View toggle -->
+      <div class="kc-view-toggle" role="group" aria-label="View mode">
+        <button
+          class="kc-view-btn"
+          data-kc-view="dashboard"
+          aria-pressed="true"
+        >
+          <span class="i-ph-squares-four-duotone" aria-hidden="true"></span>
+          Dashboard
+        </button>
+        <button class="kc-view-btn" data-kc-view="graph" aria-pressed="false">
+          <span class="i-ph-graph-duotone" aria-hidden="true"></span>
+          Graph
+        </button>
+      </div>
+    </div>
+
+    <div class="kc-hero__grid ds-control-grid" aria-hidden="true"></div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       OVERVIEW CHARTS (dashboard)
+  ══════════════════════════════════════════════════════ -->
+  <section
+    class="kc-charts"
+    aria-label="Resource overview"
+    data-kc-section
+    data-kc-panel="dashboard"
+  >
+    <!-- Human resources breakdown -->
+    <div class="kc-dash-panel">
+      <header class="kc-panel-header">
+        <span
+          class="i-ph-user-duotone kc-panel-icon text-[var(--color-cta)]"
+          aria-hidden="true"></span>
+        <div>
+          <h2 class="kc-panel-title">Human Resources</h2>
+          <p class="kc-panel-sub ds-label">
+            {humanResources.length} resources · books, articles, courses…
+          </p>
+        </div>
+      </header>
+      {
+        humanChartLabels.length > 0 ? (
+          <LazyBarChart
+            labels={humanChartLabels}
+            values={humanChartValues}
+            title="Human resource types"
+            series="Resources"
+            horizontal
+            height={Math.max(120, humanChartLabels.length * 34 + 24)}
+            class="kc-chart"
+          />
+        ) : (
+          <p class="kc-empty">No human resources yet.</p>
+        )
+      }
+    </div>
+
+    <!-- Agent resources breakdown -->
+    <div class="kc-dash-panel">
+      <header class="kc-panel-header">
+        <span
+          class="i-ph-robot-duotone kc-panel-icon text-[var(--ds-color-security)]"
+          aria-hidden="true"></span>
+        <div>
+          <h2 class="kc-panel-title">Agent Resources</h2>
+          <p class="kc-panel-sub ds-label">
+            {agentResources.length} resources · MCPs, skills, tools…
+          </p>
+        </div>
+      </header>
+      {
+        agentChartLabels.length > 0 ? (
+          <LazyBarChart
+            labels={agentChartLabels}
+            values={agentChartValues}
+            title="Agent resource types"
+            series="Resources"
+            horizontal
+            height={Math.max(120, agentChartLabels.length * 34 + 24)}
+            class="kc-chart"
+          />
+        ) : (
+          <p class="kc-empty">No agent resources yet.</p>
+        )
+      }
+    </div>
+
+    <!-- Reading progress -->
+    <div class="kc-dash-panel kc-dash-panel--wide">
+      <header class="kc-panel-header">
+        <span
+          class="i-solar-book-2-bold-duotone kc-panel-icon text-accent"
+          aria-hidden="true"></span>
+        <div>
+          <h2 class="kc-panel-title">Reading Progress</h2>
+          <p class="kc-panel-sub ds-label">
+            {completedCount} completed of {totalResources}
+          </p>
+        </div>
+      </header>
+      <LazyBarChart
+        labels={progressLabels}
+        values={progressValues}
+        title="Reading progress by status"
+        series="Resources"
+        horizontal
+        height={progressLabels.length * 38 + 24}
+        class="kc-chart"
+      />
+    </div>
   </section>
 
-  {resourcesFallback.length === 0 ? (
-    <section class="card pad">
-      <h2>No resources yet</h2>
-      <p>This section will grow as the portfolio’s knowledge base expands.</p>
-    </section>
-  ) : (
-    <>
-      <KnowledgeFilter
-        targetSelector="#knowledge-items"
-        typeOptions={typeOptions}
-        levelOptions={levelOptions}
-        statusOptions={statusOptions}
-        tagOptions={tagOptions}
-        toolOptions={toolOptions}
-        categoryOptions={categoryOptions}
-        totalCount={resourcesFallback.length}
-      />
+  <!-- ══════════════════════════════════════════════════════
+       FILTER BAR (dashboard)
+  ══════════════════════════════════════════════════════ -->
+  <section
+    class="kc-filter-section"
+    data-kc-section
+    data-kc-panel="dashboard"
+    data-knowledge-filter
+    data-target="#kc-items"
+  >
+    <form class="kc-filter-form">
+      <fieldset class="kc-filter-fieldset">
+        <legend class="kc-filter-legend">
+          <span class="i-ph-funnel-duotone align-middle mr-1" aria-hidden="true"
+          ></span>
+          Filter
+        </legend>
+        <div class="kc-filter-grid">
+          <div class="kc-filter-control">
+            <label for="kc-f-audience">Audience</label>
+            <select
+              id="kc-f-audience"
+              data-filter-audience
+              data-kc-audience-sel
+            >
+              <option value="">All audiences</option>
+              <option value="human">Human</option>
+              <option value="agent">Agent</option>
+            </select>
+          </div>
 
-      <div id="knowledge-items">
-        {groupEntries.map(([type, entries]) => (
-          <section class="card pad" aria-label={`Resources: ${type}`} data-knowledge-group>
-            <h2 style="text-transform: capitalize">{type}</h2>
-            <div class="grid cols-2" style="margin-top: 0.75rem">
-              {entries
-                .slice()
-                .sort((a, b) => a.data.title.localeCompare(b.data.title))
-                .map((resource) => {
-                  const href = `/${lang}/knowledge/${resource.data.resourceId}`;
-                  const metaParts = [
-                    `Type: ${resource.data.type}`,
-                    resource.data.level ? `Level: ${resource.data.level}` : undefined,
-                    resource.data.status ? `Status: ${resource.data.status}` : undefined,
-                  ].filter(isNonEmptyString);
+          <div class="kc-filter-control">
+            <label for="kc-f-type">Type</label>
+            <select id="kc-f-type" data-filter-type>
+              <option value="">All types</option>
+              <optgroup label="Human" data-kc-optgroup="human">
+                {
+                  humanTypeOptions.map((o) => (
+                    <option value={o.id}>{o.label}</option>
+                  ))
+                }
+              </optgroup>
+              <optgroup label="Agent" data-kc-optgroup="agent">
+                {
+                  agentTypeOptions.map((o) => (
+                    <option value={o.id}>{o.label}</option>
+                  ))
+                }
+              </optgroup>
+            </select>
+          </div>
 
-                  const tags = (resource.data.tagIds ?? [])
-                    .map((id) => tagTitleById.get(id))
-                    .filter(isNonEmptyString)
-                    .map((label) => ({ label }));
-                  const categories = (resource.data.categoryIds ?? [])
-                    .map((id) => categoryTitleById.get(id))
-                    .filter(isNonEmptyString)
-                    .map((label) => ({ label }));
-                  const tools = (resource.data.toolIds ?? [])
-                    .map((id) => toolTitleById.get(id))
-                    .filter(isNonEmptyString)
-                    .map((label) => ({ label }));
-                  const skills = (resource.data.skillIds ?? [])
-                    .map((id) => skillTitleById.get(id))
-                    .filter(isNonEmptyString)
-                    .map((label) => ({ label }));
+          <div class="kc-filter-control">
+            <label for="kc-f-status">Status</label>
+            <select id="kc-f-status" data-filter-status>
+              <option value="">All statuses</option>
+              {
+                statusOptions.map((o) => (
+                  <option value={o.id}>{o.label}</option>
+                ))
+              }
+            </select>
+          </div>
 
-                  const projects = (resource.data.projectIds ?? [])
-                    .map((id) => ({ id, title: projectTitleById.get(id) }))
-                    .filter((p): p is { id: string; title: string } => typeof p.title === 'string')
-                    .map((p) => ({ label: p.title, href: `/${lang}/portfolio/${p.id}` }));
+          <div class="kc-filter-control">
+            <label for="kc-f-level">Level</label>
+            <select id="kc-f-level" data-filter-level>
+              <option value="">All levels</option>
+              {levelOptions.map((o) => <option value={o.id}>{o.label}</option>)}
+            </select>
+          </div>
 
-                  const caseStudies = (resource.data.caseStudyIds ?? [])
-                    .map((id) => caseStudyMetaById.get(id))
-                    .filter((m): m is { title: string; slug: string } => Boolean(m?.title && m?.slug))
-                    .map((m) => ({ label: m.title, href: `/${lang}/case-studies/${m.slug}` }));
+          {
+            categoryOptions.length > 0 && (
+              <div class="kc-filter-control">
+                <label for="kc-f-category">Domain</label>
+                <select id="kc-f-category" data-filter-category>
+                  <option value="">All domains</option>
+                  {categoryOptions.map((o) => (
+                    <option value={o.id}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+            )
+          }
 
-                  const blogLinks = (resource.data.blogSlugs ?? [])
-                    .filter((slug) => publishedBlogSlugs.has(slug))
-                    .map((slug) => ({ label: `Blog: ${slug}`, href: `/${lang}/blog/${slug}` }));
+          {
+            toolOptions.length > 0 && (
+              <div class="kc-filter-control">
+                <label for="kc-f-tool">Tool</label>
+                <select id="kc-f-tool" data-filter-tool>
+                  <option value="">All tools</option>
+                  {toolOptions.map((o) => (
+                    <option value={o.id}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+            )
+          }
 
-                  return (
-                    <div
-                      data-knowledge-item
-                      data-type={resource.data.type}
-                      data-level={resource.data.level ?? ''}
-                      data-status={resource.data.status ?? ''}
-                      data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
-                      data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
-                      data-category-ids={(resource.data.categoryIds ?? []).join(' ')}
-                    >
-                      <ContentCard
-                        title={resource.data.title}
-                        href={href}
-                        summary={resource.data.summary}
-                        meta={metaParts.join(' · ')}
-                      >
-                        {resource.data.url ? (
-                          <p>
-                            <a href={resource.data.url} target="_blank" rel="noopener noreferrer">
-                              Open external resource
-                            </a>
-                          </p>
-                        ) : null}
-                        {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
-                        {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
-                        {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
-                        {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
-                        {projects.length > 0 ? <TaxonomyPills label="Related projects" items={projects} /> : null}
-                        {caseStudies.length > 0 ? <TaxonomyPills label="Related case studies" items={caseStudies} /> : null}
-                        {blogLinks.length > 0 ? <TaxonomyPills label="Related blog" items={blogLinks} /> : null}
-                      </ContentCard>
-                    </div>
-                  );
-                })}
-            </div>
-          </section>
-        ))}
+          {
+            tagOptions.length > 0 && (
+              <div class="kc-filter-control">
+                <label for="kc-f-tag">Tag</label>
+                <select id="kc-f-tag" data-filter-tag>
+                  <option value="">All tags</option>
+                  {tagOptions.map((o) => (
+                    <option value={o.id}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+            )
+          }
+        </div>
+
+        <div class="kc-filter-actions">
+          <p class="kc-filter-count" data-filter-count aria-live="polite">
+            {totalResources} resources
+          </p>
+          <div style="display:flex;gap:var(--space-2);align-items:center">
+            <span class="kc-search-wrap">
+              <span
+                class="i-ph-magnifying-glass-duotone kc-search-icon"
+                aria-hidden="true"></span>
+              <input
+                id="kc-search"
+                type="search"
+                placeholder="Search titles…"
+                data-kc-search
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </span>
+            <button class="button" type="button" data-filter-reset>Reset</button
+            >
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CARD GRID (dashboard)
+  ══════════════════════════════════════════════════════ -->
+  <section class="kc-grid-section" data-kc-section data-kc-panel="dashboard">
+    <!-- Pagination top -->
+    <div class="kc-pagination" data-kc-pagination>
+      <button
+        class="kc-page-btn"
+        data-kc-prev
+        disabled
+        aria-label="Previous page"
+      >
+        <span class="i-ph-caret-left-duotone" aria-hidden="true"></span>
+        Prev
+      </button>
+      <span class="kc-page-info" data-kc-page-info aria-live="polite">
+        Page 1 · {totalResources} resources
+      </span>
+      <button class="kc-page-btn" data-kc-next aria-label="Next page">
+        Next
+        <span class="i-ph-caret-right-duotone" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Items container -->
+    <div id="kc-items">
+      <!-- ── Human resources ───────────────────────────────── -->
+      <div
+        class="kc-audience-section"
+        data-knowledge-group
+        data-audience-section="human"
+      >
+        <h2 class="kc-audience-title">
+          <span class="i-ph-user-duotone kc-audience-icon" aria-hidden="true"
+          ></span>
+          Human Resources
+          <span class="kc-audience-count ds-label">({humanSorted.length})</span>
+        </h2>
+        <div class="kc-cards">
+          {
+            humanSorted.map((resource) => {
+              const href = `/${lang}/knowledge/${resource.data.resourceId}`;
+              const {
+                tags,
+                categories,
+                tools,
+                skills,
+                projects,
+                caseStudies,
+                blogLinks,
+                meta,
+              } = buildCardMeta(resource);
+              return (
+                <div
+                  data-knowledge-item
+                  data-audience="human"
+                  data-type={resource.data.type}
+                  data-level={resource.data.level ?? ''}
+                  data-status={resource.data.status ?? ''}
+                  data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
+                  data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
+                  data-category-ids={(resource.data.categoryIds ?? []).join(
+                    ' ',
+                  )}
+                >
+                  <ContentCard
+                    title={resource.data.title}
+                    href={href}
+                    summary={resource.data.summary}
+                    meta={meta}
+                  >
+                    {resource.data.url ? (
+                      <p>
+                        <a
+                          href={resource.data.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Open resource ↗
+                        </a>
+                      </p>
+                    ) : null}
+                    {tools.length > 0 ? (
+                      <TaxonomyPills label="Tools" items={tools} />
+                    ) : null}
+                    {skills.length > 0 ? (
+                      <TaxonomyPills label="Skills" items={skills} />
+                    ) : null}
+                    {categories.length > 0 ? (
+                      <TaxonomyPills label="Domains" items={categories} />
+                    ) : null}
+                    {tags.length > 0 ? (
+                      <TaxonomyPills label="Tags" items={tags} />
+                    ) : null}
+                    {projects.length > 0 ? (
+                      <TaxonomyPills
+                        label="Related projects"
+                        items={projects}
+                      />
+                    ) : null}
+                    {caseStudies.length > 0 ? (
+                      <TaxonomyPills label="Case studies" items={caseStudies} />
+                    ) : null}
+                    {blogLinks.length > 0 ? (
+                      <TaxonomyPills label="Blog posts" items={blogLinks} />
+                    ) : null}
+                  </ContentCard>
+                </div>
+              );
+            })
+          }
+        </div>
       </div>
-    </>
-  )}
+
+      <!-- ── Agent resources ───────────────────────────────── -->
+      <div
+        class="kc-audience-section"
+        data-knowledge-group
+        data-audience-section="agent"
+      >
+        <h2 class="kc-audience-title">
+          <span class="i-ph-robot-duotone kc-audience-icon" aria-hidden="true"
+          ></span>
+          Agent Resources
+          <span class="kc-audience-count ds-label">({agentSorted.length})</span>
+        </h2>
+        <div class="kc-cards">
+          {
+            agentSorted.map((resource) => {
+              const href = `/${lang}/knowledge/${resource.data.resourceId}`;
+              const {
+                tags,
+                categories,
+                tools,
+                skills,
+                projects,
+                caseStudies,
+                blogLinks,
+                meta,
+              } = buildCardMeta(resource);
+              return (
+                <div
+                  data-knowledge-item
+                  data-audience="agent"
+                  data-type={resource.data.type}
+                  data-level={resource.data.level ?? ''}
+                  data-status={resource.data.status ?? ''}
+                  data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
+                  data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
+                  data-category-ids={(resource.data.categoryIds ?? []).join(
+                    ' ',
+                  )}
+                >
+                  <ContentCard
+                    title={resource.data.title}
+                    href={href}
+                    summary={resource.data.summary}
+                    meta={meta}
+                  >
+                    {resource.data.url ? (
+                      <p>
+                        <a
+                          href={resource.data.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Open resource ↗
+                        </a>
+                      </p>
+                    ) : null}
+                    {tools.length > 0 ? (
+                      <TaxonomyPills label="Tools" items={tools} />
+                    ) : null}
+                    {skills.length > 0 ? (
+                      <TaxonomyPills label="Skills" items={skills} />
+                    ) : null}
+                    {categories.length > 0 ? (
+                      <TaxonomyPills label="Domains" items={categories} />
+                    ) : null}
+                    {tags.length > 0 ? (
+                      <TaxonomyPills label="Tags" items={tags} />
+                    ) : null}
+                    {projects.length > 0 ? (
+                      <TaxonomyPills
+                        label="Related projects"
+                        items={projects}
+                      />
+                    ) : null}
+                    {caseStudies.length > 0 ? (
+                      <TaxonomyPills label="Case studies" items={caseStudies} />
+                    ) : null}
+                    {blogLinks.length > 0 ? (
+                      <TaxonomyPills label="Blog posts" items={blogLinks} />
+                    ) : null}
+                  </ContentCard>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div><!-- /#kc-items -->
+
+    <!-- Pagination bottom -->
+    <div class="kc-pagination kc-pagination--bottom">
+      <button
+        class="kc-page-btn"
+        data-kc-prev-b
+        disabled
+        aria-label="Previous page"
+      >
+        <span class="i-ph-caret-left-duotone" aria-hidden="true"></span>
+        Prev
+      </button>
+      <span class="kc-page-info" data-kc-page-info-b aria-live="polite"></span>
+      <button class="kc-page-btn" data-kc-next-b aria-label="Next page">
+        Next
+        <span class="i-ph-caret-right-duotone" aria-hidden="true"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       GRAPH VIEW
+  ══════════════════════════════════════════════════════ -->
+  <section class="kc-graph-section" data-kc-panel="graph" hidden>
+    <div class="kc-graph-wrap">
+      <canvas
+        id="kc-graph-canvas"
+        class="kc-graph-canvas"
+        aria-label="Knowledge resource relationship graph"></canvas>
+      <div class="kc-graph-tooltip" data-kc-tooltip hidden></div>
+      <div class="kc-graph-legend" aria-label="Graph legend">
+        {
+          (
+            [
+              { label: 'Article', color: '#29b6f6' },
+              { label: 'Course', color: '#66bb6a' },
+              { label: 'Docs', color: '#5c6bc0' },
+              { label: 'Video', color: '#ef5350' },
+              { label: 'Repo', color: '#8d6e63' },
+              { label: 'MCP', color: '#ce93d8' },
+              { label: 'Skill', color: '#b39ddb' },
+              { label: 'Tool', color: '#ff8a65' },
+              { label: 'Platform', color: '#ffd54f' },
+            ] as const
+          ).map(({ label, color }) => (
+            <span class="kc-legend-item">
+              <span class="kc-legend-dot" style={`background:${color}`} />
+              {label}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+    <p class="kc-graph-hint ds-label">
+      <span class="i-ph-info-duotone align-middle mr-1" aria-hidden="true"
+      ></span>
+      Nodes linked by shared domain category. Drag to rotate · scroll to zoom · click
+      to open resource.
+    </p>
+  </section>
+
+  <!-- Graph data — parsed by client script -->
+  <script
+    type="application/json"
+    id="kc-graph-nodes"
+    set:html={graphNodesJson}
+  />
 </BaseLayout>
+
+<!-- ══════════════════════════════════════════════════════
+     CLIENT SCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+  import { initKnowledgeFilters } from '../../../scripts/content-filters';
+
+  const PAGE_SIZE = 50;
+  let currentPage = 0;
+
+  // ── View toggle ─────────────────────────────────────────────────────────────
+  const allPanels = document.querySelectorAll<HTMLElement>('[data-kc-panel]');
+  const viewBtns =
+    document.querySelectorAll<HTMLButtonElement>('[data-kc-view]');
+
+  const switchView = (view: string) => {
+    allPanels.forEach((p) => {
+      const isMatch = p.dataset.kcPanel === view;
+      p.hidden = !isMatch;
+      p.toggleAttribute('hidden', !isMatch);
+    });
+    viewBtns.forEach((b) =>
+      b.setAttribute('aria-pressed', String(b.dataset.kcView === view)),
+    );
+    if (view === 'graph') void lazyInitGraph();
+  };
+
+  viewBtns.forEach((b) =>
+    b.addEventListener('click', () =>
+      switchView(b.dataset.kcView ?? 'dashboard'),
+    ),
+  );
+
+  // Initial state — ensure dashboard panels are visible
+  allPanels.forEach((p) => {
+    if (p.dataset.kcPanel === 'graph') p.hidden = true;
+    else p.hidden = false;
+  });
+
+  // ── Audience-aware type optgroup filter ──────────────────────────────────────
+  // When audience select changes, grey out optgroups that don't belong
+  const audienceSel = document.querySelector<HTMLSelectElement>(
+    '[data-kc-audience-sel]',
+  );
+  const typeSel =
+    document.querySelector<HTMLSelectElement>('[data-filter-type]');
+
+  audienceSel?.addEventListener('change', () => {
+    const aud = audienceSel.value;
+    if (!typeSel) return;
+    // Reset type if current selection is in wrong audience
+    const selectedOpt = typeSel.querySelector<HTMLOptionElement>(
+      `option[value="${typeSel.value}"]`,
+    );
+    const optGroup = selectedOpt?.closest<HTMLOptGroupElement>('optgroup');
+    if (aud && optGroup && optGroup.dataset.kcOptgroup !== aud) {
+      typeSel.value = '';
+    }
+  });
+
+  // ── Filter + search integration ─────────────────────────────────────────────
+  initKnowledgeFilters();
+
+  const filterRoot = document.querySelector<HTMLElement>(
+    '[data-knowledge-filter]',
+  );
+  const searchInput =
+    document.querySelector<HTMLInputElement>('[data-kc-search]');
+  const allItems = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-knowledge-item]'),
+  );
+  const groupEls = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-knowledge-group]'),
+  );
+
+  // Search: hide items whose title doesn't match query
+  const applySearch = (query: string) => {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      allItems.forEach((el) => el.removeAttribute('data-kc-search-hide'));
+      return;
+    }
+    allItems.forEach((el) => {
+      const title =
+        el
+          .querySelector<HTMLElement>('[class*="card"]')
+          ?.textContent?.toLowerCase() ?? '';
+      el.toggleAttribute('data-kc-search-hide', !title.includes(q));
+    });
+  };
+
+  // Pagination: runs AFTER filter + search are applied
+  const applyPagination = () => {
+    // Visible = passes filter (not hidden by initKnowledgeFilters) AND passes search
+    const visible = allItems.filter(
+      (el) => !el.hidden && !el.hasAttribute('data-kc-search-hide'),
+    );
+    const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+    currentPage = Math.min(currentPage, totalPages - 1);
+
+    const start = currentPage * PAGE_SIZE;
+    const pageSet = new Set(visible.slice(start, start + PAGE_SIZE));
+
+    // Show only page items; respect existing filter state for others
+    visible.forEach((el) => {
+      el.hidden = !pageSet.has(el);
+    });
+
+    // Sync pagination controls
+    const label = `Page ${currentPage + 1} of ${totalPages} · ${visible.length} resources`;
+    document
+      .querySelectorAll('[data-kc-page-info],[data-kc-page-info-b]')
+      .forEach((el) => {
+        el.textContent = label;
+      });
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-kc-prev],[data-kc-prev-b]')
+      .forEach((b) => {
+        b.disabled = currentPage === 0;
+      });
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-kc-next],[data-kc-next-b]')
+      .forEach((b) => {
+        b.disabled = currentPage >= totalPages - 1;
+      });
+
+    // Hide audience section headers if no visible items within them
+    groupEls.forEach((g) => {
+      const hasVisible = allItems.some(
+        (el) => el.closest('[data-audience-section]') === g && !el.hidden,
+      );
+      g.hidden = !hasVisible;
+    });
+  };
+
+  // Wire up: after filter changes, reset page and re-paginate
+  const onFilterChange = () => {
+    currentPage = 0;
+    // Let initKnowledgeFilters apply first (it runs synchronously via change events)
+    requestAnimationFrame(applyPagination);
+  };
+
+  document.querySelectorAll('[data-knowledge-filter] select').forEach((sel) => {
+    sel.addEventListener('change', onFilterChange);
+  });
+  document
+    .querySelector('[data-filter-reset]')
+    ?.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      allItems.forEach((el) => el.removeAttribute('data-kc-search-hide'));
+      currentPage = 0;
+      requestAnimationFrame(applyPagination);
+    });
+
+  searchInput?.addEventListener('input', () => {
+    applySearch(searchInput.value);
+    currentPage = 0;
+    requestAnimationFrame(applyPagination);
+  });
+
+  // Pagination button handlers
+  const goToPage = (delta: number) => {
+    currentPage += delta;
+    applyPagination();
+    document
+      .querySelector('[data-kc-pagination]')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  document
+    .querySelectorAll('[data-kc-prev],[data-kc-prev-b]')
+    .forEach((b) => b.addEventListener('click', () => goToPage(-1)));
+  document
+    .querySelectorAll('[data-kc-next],[data-kc-next-b]')
+    .forEach((b) => b.addEventListener('click', () => goToPage(+1)));
+
+  // Initial paginate
+  requestAnimationFrame(applyPagination);
+
+  // ── Graph lazy-init ──────────────────────────────────────────────────────────
+  let graphDispose: (() => void) | null = null;
+  let graphInited = false;
+
+  async function lazyInitGraph() {
+    if (graphInited) return;
+    graphInited = true;
+    const { initKnowledgeGraph } =
+      await import('../../../scripts/knowledge-graph');
+    const canvas = document.getElementById(
+      'kc-graph-canvas',
+    ) as HTMLCanvasElement | null;
+    const tooltip = document.querySelector<HTMLElement>('[data-kc-tooltip]');
+    const nodesEl = document.getElementById('kc-graph-nodes');
+    const nodes = nodesEl ? JSON.parse(nodesEl.textContent ?? '[]') : [];
+    if (canvas) graphDispose = initKnowledgeGraph(canvas, nodes, tooltip);
+  }
+
+  // Dispose graph on page navigation
+  document.addEventListener(
+    'astro:before-swap',
+    () => {
+      graphDispose?.();
+      graphDispose = null;
+      graphInited = false;
+    },
+    { once: true },
+  );
+
+  // ── GSAP scroll animations ────────────────────────────────────────────────────
+  import { prefersReducedMotion } from '../../../design-system/motion/reduced-motion';
+
+  if (!prefersReducedMotion()) {
+    const { gsap } = await import('../../../lib/gsap-plugins');
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    const hero = document.querySelector('[data-kc-hero] .kc-hero__inner');
+    if (hero)
+      gsap.from(hero, {
+        y: 28,
+        opacity: 0,
+        duration: 0.9,
+        ease: 'ds.cinematicReveal',
+      });
+
+    document
+      .querySelectorAll<HTMLElement>('[data-kc-section]')
+      .forEach((section) => {
+        gsap.from(section, {
+          scrollTrigger: { trigger: section, start: 'top 88%', once: true },
+          y: 24,
+          opacity: 0,
+          duration: 0.65,
+          ease: 'ds.softOut',
+        });
+      });
+  }
+</script>
+
+<style>
+  /* ── Hero ─────────────────────────────────────────────── */
+  .kc-hero {
+    position: relative;
+    padding: var(--space-8) var(--space-6) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+  .kc-hero__grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .kc-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+  }
+  .kc-hero__eyebrow {
+    margin-bottom: var(--space-2);
+  }
+  .kc-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: var(--color-text-strong);
+    margin: 0 0 var(--space-3);
+  }
+  .kc-hero__sub {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-1);
+    color: var(--color-text-muted);
+    max-width: 68ch;
+    margin: 0 0 var(--space-5);
+    line-height: 1.6;
+  }
+  .kc-fallback-note {
+    margin: calc(-1 * var(--space-3)) 0 var(--space-4);
+  }
+
+  /* ── Stats ribbon ─────────────────────────────────────── */
+  .kc-stats {
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-4);
+  }
+  .kc-stat {
+    @apply ds-surface;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    min-width: 80px;
+    text-align: center;
+  }
+  .kc-stat__icon {
+    font-size: 1.5rem;
+    color: var(--color-cta);
+    margin-bottom: 2px;
+  }
+  .kc-stat__value {
+    font-family: var(--font-techno);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-strong);
+    line-height: 1;
+  }
+  .kc-stat__label {
+    margin-top: 2px;
+  }
+
+  /* ── View toggle ─────────────────────────────────────── */
+  .kc-view-toggle {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .kc-view-btn {
+    @apply ds-surface;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    cursor: pointer;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    transition:
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .kc-view-btn[aria-pressed='true'] {
+    border-color: var(--color-cta);
+    color: var(--color-cta);
+  }
+
+  /* ── Charts section ──────────────────────────────────── */
+  .kc-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (max-width: 760px) {
+    .kc-charts {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Dashboard panel ─────────────────────────────────── */
+  .kc-dash-panel {
+    @apply ds-panel;
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .kc-dash-panel--wide {
+    grid-column: 1 / -1;
+  }
+
+  .kc-panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-3);
+  }
+  .kc-panel-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .kc-panel-title {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-1);
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin: 0 0 2px;
+  }
+  .kc-panel-sub {
+    margin: 0;
+  }
+
+  /* ── Filter section ──────────────────────────────────── */
+  .kc-filter-section {
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 40%);
+  }
+  .kc-filter-legend {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin-bottom: var(--space-3);
+    display: block;
+  }
+  .kc-filter-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  .kc-filter-grid {
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    align-items: end;
+  }
+  .kc-filter-control {
+    display: grid;
+    gap: 4px;
+  }
+  .kc-filter-control label {
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .kc-filter-control select {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.45rem 0.6rem;
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+    color: var(--color-text-strong);
+    font-size: var(--font-size-0);
+    font-family: var(--font-mono);
+  }
+  .kc-filter-actions {
+    margin-top: var(--space-3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .kc-filter-count {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+  }
+  .kc-search-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .kc-search-icon {
+    position: absolute;
+    left: 0.55rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+  #kc-search {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem 0.4rem 1.9rem;
+    background: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+    color: var(--color-text-strong);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    width: 200px;
+  }
+  #kc-search:focus {
+    outline: 2px solid var(--color-cta);
+    outline-offset: 2px;
+  }
+
+  /* ── Grid section ────────────────────────────────────── */
+  .kc-grid-section {
+    padding: var(--space-4) var(--space-6) var(--space-8);
+  }
+
+  /* ── Audience sections ───────────────────────────────── */
+  .kc-audience-section {
+    margin-bottom: var(--space-6);
+  }
+  .kc-audience-title {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-2);
+    font-weight: 600;
+    color: var(--color-text-strong);
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .kc-audience-icon {
+    font-size: 1.4rem;
+    color: var(--color-cta);
+    flex-shrink: 0;
+  }
+  .kc-audience-count {
+    margin-left: auto;
+  }
+
+  /* ── Card grid ───────────────────────────────────────── */
+  .kc-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-3);
+  }
+  @media (max-width: 500px) {
+    .kc-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Pagination ──────────────────────────────────────── */
+  .kc-pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-5);
+  }
+  .kc-pagination--bottom {
+    border-bottom: none;
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-6);
+    margin-bottom: 0;
+  }
+  .kc-page-btn {
+    @apply ds-surface;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    cursor: pointer;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  .kc-page-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .kc-page-btn:not(:disabled):hover {
+    border-color: var(--color-cta);
+    color: var(--color-cta);
+  }
+  .kc-page-info {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    flex: 1;
+    text-align: center;
+  }
+
+  /* ── Graph section ───────────────────────────────────── */
+  .kc-graph-section {
+    padding: var(--space-4) var(--space-6) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .kc-graph-wrap {
+    position: relative;
+  }
+  .kc-graph-canvas {
+    display: block;
+    width: 100%;
+    height: 560px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 25%);
+  }
+  .kc-graph-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-strong);
+    max-width: 260px;
+    z-index: 10;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+  .kc-graph-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding: var(--space-2) 0;
+  }
+  .kc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+  }
+  .kc-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .kc-graph-hint {
+    margin: var(--space-2) 0 0;
+    padding-left: 0;
+  }
+
+  /* ── Empty / misc ────────────────────────────────────── */
+  .kc-empty {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    padding: var(--space-4);
+    text-align: center;
+  }
+</style>

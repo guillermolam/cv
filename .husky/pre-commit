@@ -1,0 +1,14 @@
+# Pre-commit: fast checks only — format + lint-staged
+# Keeps feedback under ~30s so commits don't feel blocked.
+
+echo "▶ husky pre-commit"
+
+# 1. Format check (prettier) — staged files only via lint-staged
+pnpm exec lint-staged
+
+# 2. Static analysis on any changed workflow files
+changed_workflows=$(git diff --cached --name-only | grep -E '\.github/workflows/.*\.ya?ml$' || true)
+if [ -n "$changed_workflows" ]; then
+  echo "▶ zizmor: checking changed workflows"
+  echo "$changed_workflows" | xargs zizmor
+fi

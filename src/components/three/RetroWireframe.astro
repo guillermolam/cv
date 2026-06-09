@@ -5,14 +5,20 @@ type Props = {
   class?: string;
 };
 
-const { 
-  modelUrl = '/3d/models/meshy_2_1780590664152.glb', 
+const {
+  modelUrl = import.meta.env.BASE_URL.replace(/\/$/, '') +
+    '/3d/models/meshy_2_1780590664152.glb',
   color = '#00ffcc',
-  class: className 
+  class: className,
 } = Astro.props;
 ---
 
-<div class:list={['retro-wireframe-container', className]} data-retro-wireframe data-model={modelUrl} data-color={color}>
+<div
+  class:list={['retro-wireframe-container', className]}
+  data-retro-wireframe
+  data-model={modelUrl}
+  data-color={color}
+>
   <div class="canvas-mount" data-mount></div>
 </div>
 
@@ -24,11 +30,11 @@ const {
 
   async function initWireframe() {
     const containers = document.querySelectorAll('[data-retro-wireframe]');
-    
+
     for (const container of containers) {
       if (!(container instanceof HTMLElement)) continue;
       if (container.dataset.initialized === 'true') continue;
-      
+
       const mount = container.querySelector('[data-mount]');
       if (!(mount instanceof HTMLElement)) continue;
 
@@ -61,13 +67,13 @@ const {
           model.scale.set(1.2, 1.2, 1.2);
           model.position.y = 1.5;
           scene.add(model);
-          
+
           engine.addEffect({
             update: (time) => {
               model.rotation.y = -time * 0.15;
               model.position.y = 1.5 + Math.cos(time * 0.8) * 0.15;
             },
-            destroy: () => {}
+            destroy: () => {},
           });
         } catch (err) {
           console.error('Failed to load wireframe model:', err);

@@ -1,41 +1,32 @@
-import { defineCollection } from 'astro:content'
-import { glob } from 'astro/loaders'
-import { z } from 'astro/zod'
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
-const base = (collection: string) => new URL(`./content/${collection}/`, import.meta.url)
+const base = (collection: string) =>
+  new URL(`./content/${collection}/`, import.meta.url);
 
-const markdownLoader = (collection: string, excludePattern?: string | string[]) => {
-  const excludePatterns = Array.isArray(excludePattern)
-    ? excludePattern
-    : excludePattern
-      ? [excludePattern]
-      : []
-  return (
+const markdownLoader = (collection: string) =>
   glob({
-    pattern: excludePatterns.length > 0
-      ? ['**/*.{md,mdx}', ...excludePatterns]
-      : '**/*.{md,mdx}',
+    pattern: '{en,es}/**/*.{md,mdx}',
     base: base(collection),
-  })
-  )
-}
+  });
 
-const langSchema = z.enum(['en', 'es'])
+const langSchema = z.enum(['en', 'es']);
 
-const canonicalIdSchema = z.string().min(1)
+const canonicalIdSchema = z.string().min(1);
 
-const visibilitySchema = z.enum(['public', 'unlisted', 'draft'])
+const visibilitySchema = z.enum(['public', 'unlisted', 'draft']);
 
 const urlSchema = z.string().refine((value) => {
   try {
-    const url = new URL(value)
-    return url.protocol === 'https:' || url.protocol === 'http:'
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:';
   } catch {
-    return false
+    return false;
   }
-})
+});
 
-const isoDateLikeSchema = z.string().min(4)
+const isoDateLikeSchema = z.string().min(4);
 
 const linkEdgeTypeSchema = z.enum([
   'evidence_of',
@@ -60,7 +51,7 @@ const linkEdgeTypeSchema = z.enum([
   'belongs_to_category',
   'tagged_with',
   'classified_as',
-])
+]);
 
 const linkEdgeTargetCollectionSchema = z.enum([
   'profile',
@@ -76,7 +67,7 @@ const linkEdgeTargetCollectionSchema = z.enum([
   'skills',
   'contactChannels',
   'socialLinks',
-])
+]);
 
 const linkEdgeSchema = z.object({
   type: linkEdgeTypeSchema,
@@ -84,7 +75,7 @@ const linkEdgeSchema = z.object({
   targetId: z.string().min(1),
   weight: z.number().refine(Number.isFinite).optional(),
   context: z.string().min(1).optional(),
-})
+});
 
 const securityFacetSchema = z.object({
   domainIds: z.array(z.string().min(1)).optional(),
@@ -99,7 +90,7 @@ const securityFacetSchema = z.object({
   frameworkIds: z.array(z.string().min(1)).optional(),
   businessCapabilityIds: z.array(z.string().min(1)).optional(),
   skillLevelIds: z.array(z.string().min(1)).optional(),
-})
+});
 
 const categoryDimensionSchema = z.enum([
   'general',
@@ -121,7 +112,7 @@ const categoryDimensionSchema = z.enum([
   'securitySkillLevel',
   'aiDomain',
   'architecturePattern',
-])
+]);
 
 const profile = defineCollection({
   loader: markdownLoader('profile'),
@@ -136,7 +127,16 @@ const profile = defineCollection({
     summary: z.string().min(1),
     focusAreas: z.array(z.string().min(1)).optional(),
     cvFormatIds: z
-      .array(z.enum(['europass', 'modern', 'recruiter', 'ats', 'one-page', 'full-technical']))
+      .array(
+        z.enum([
+          'europass',
+          'modern',
+          'recruiter',
+          'ats',
+          'one-page',
+          'full-technical',
+        ]),
+      )
       .optional(),
     featured: z
       .object({
@@ -148,7 +148,7 @@ const profile = defineCollection({
     links: z.array(linkEdgeSchema).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const experience = defineCollection({
   loader: markdownLoader('experience'),
@@ -170,12 +170,14 @@ const experience = defineCollection({
     toolIds: z.array(z.string().min(1)).optional(),
     skillIds: z.array(z.string().min(1)).optional(),
     security: securityFacetSchema.optional(),
-    proofLinks: z.array(z.object({ label: z.string().min(1), url: urlSchema })).optional(),
+    proofLinks: z
+      .array(z.object({ label: z.string().min(1), url: urlSchema }))
+      .optional(),
     links: z.array(linkEdgeSchema).optional(),
     needsConfirmation: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const projects = defineCollection({
   loader: markdownLoader('projects'),
@@ -198,7 +200,7 @@ const projects = defineCollection({
     links: z.array(linkEdgeSchema).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const caseStudies = defineCollection({
   loader: markdownLoader('caseStudies'),
@@ -224,7 +226,7 @@ const caseStudies = defineCollection({
     needsConfirmation: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const blog = defineCollection({
   loader: markdownLoader('blog'),
@@ -251,38 +253,53 @@ const blog = defineCollection({
     draft: z.boolean().optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const knowledgeResources = defineCollection({
-  loader: markdownLoader('knowledgeResources', [
-    '!**/_MOC*.md',
-    '!vault/**/*#*.md',
-  ]),
+  loader: markdownLoader('knowledgeResources'),
   schema: z.object({
     lang: langSchema,
     canonicalId: canonicalIdSchema.optional(),
     resourceId: z.string().min(1),
     title: z.string().min(1),
     type: z.enum([
+      // ── Human audience ────────────────────────────────────────────
       'book',
       'article',
       'paper',
       'video',
       'course',
-      'repo',
+      'repo', // legacy; prefer github-repo for new entries
+      'github-repo',
       'documentation',
       'talk',
       'documentary',
       'playlist',
+      'podcast',
+      'workshop',
+      // ── Agent audience ────────────────────────────────────────────
+      'mcp',
+      'skill',
+      'plugin',
       'tool',
+      'platform',
+      'llm-model',
+      'example',
+      'cli',
+      'md-doc',
+      // ── Fallback ──────────────────────────────────────────────────
       'other',
     ]),
     url: urlSchema.optional(),
     author: z.string().min(1).optional(),
     publisher: z.string().min(1).optional(),
     summary: z.string().min(1),
-    level: z.enum(['intro', 'intermediate', 'advanced', 'reference']).optional(),
-    status: z.enum(['planned', 'reading', 'completed', 'reference', 'archived']).optional(),
+    level: z
+      .enum(['intro', 'intermediate', 'advanced', 'reference'])
+      .optional(),
+    status: z
+      .enum(['planned', 'reading', 'completed', 'reference', 'archived'])
+      .optional(),
     tagIds: z.array(z.string().min(1)).optional(),
     categoryIds: z.array(z.string().min(1)).optional(),
     toolIds: z.array(z.string().min(1)).optional(),
@@ -294,7 +311,7 @@ const knowledgeResources = defineCollection({
     needsConfirmation: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const certifications = defineCollection({
   loader: markdownLoader('certifications'),
@@ -318,7 +335,7 @@ const certifications = defineCollection({
     needsConfirmation: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const cvFormats = defineCollection({
   loader: markdownLoader('cvFormats'),
@@ -326,7 +343,14 @@ const cvFormats = defineCollection({
     .object({
       lang: langSchema,
       canonicalId: canonicalIdSchema.optional(),
-      cvFormatId: z.enum(['europass', 'modern', 'recruiter', 'ats', 'one-page', 'full-technical']),
+      cvFormatId: z.enum([
+        'europass',
+        'modern',
+        'recruiter',
+        'ats',
+        'one-page',
+        'full-technical',
+      ]),
       title: z.string().min(1),
       description: z.string().min(1),
       useCase: z.string().min(1),
@@ -336,10 +360,13 @@ const cvFormats = defineCollection({
     })
     .superRefine((value, ctx) => {
       if (value.availability === 'available' && !value.downloadPath) {
-        ctx.addIssue({ code: 'custom', message: 'downloadPath required when availability=available' })
+        ctx.addIssue({
+          code: 'custom',
+          message: 'downloadPath required when availability=available',
+        });
       }
     }),
-})
+});
 
 const categories = defineCollection({
   loader: markdownLoader('categories'),
@@ -355,7 +382,7 @@ const categories = defineCollection({
     aliases: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const tags = defineCollection({
   loader: markdownLoader('tags'),
@@ -369,7 +396,7 @@ const tags = defineCollection({
     aliases: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const tools = defineCollection({
   loader: markdownLoader('tools'),
@@ -387,7 +414,7 @@ const tools = defineCollection({
     links: z.array(linkEdgeSchema).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const skills = defineCollection({
   loader: markdownLoader('skills'),
@@ -396,7 +423,9 @@ const skills = defineCollection({
     canonicalId: canonicalIdSchema.optional(),
     skillId: z.string().min(1),
     name: z.string().min(1),
-    level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional(),
+    level: z
+      .enum(['beginner', 'intermediate', 'advanced', 'expert'])
+      .optional(),
     tagIds: z.array(z.string().min(1)).optional(),
     categoryIds: z.array(z.string().min(1)).optional(),
     toolIds: z.array(z.string().min(1)).optional(),
@@ -404,7 +433,7 @@ const skills = defineCollection({
     links: z.array(linkEdgeSchema).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const education = defineCollection({
   loader: markdownLoader('education'),
@@ -429,7 +458,7 @@ const education = defineCollection({
     needsConfirmation: z.array(z.string().min(1)).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const languages = defineCollection({
   loader: markdownLoader('languages'),
@@ -446,7 +475,7 @@ const languages = defineCollection({
     summary: z.string().min(1).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const companies = defineCollection({
   loader: markdownLoader('companies'),
@@ -463,7 +492,7 @@ const companies = defineCollection({
     summary: z.string().min(1).optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const contactChannels = defineCollection({
   loader: markdownLoader('contactChannels'),
@@ -473,7 +502,15 @@ const contactChannels = defineCollection({
     channels: z.array(
       z.object({
         channelId: z.string().min(1),
-        type: z.enum(['email', 'telegram', 'slack', 'github', 'linkedin', 'website', 'other']),
+        type: z.enum([
+          'email',
+          'telegram',
+          'slack',
+          'github',
+          'linkedin',
+          'website',
+          'other',
+        ]),
         label: z.string().min(1),
         value: z.string().min(1),
         url: urlSchema.optional(),
@@ -489,7 +526,7 @@ const contactChannels = defineCollection({
       .optional(),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 const socialLinks = defineCollection({
   loader: markdownLoader('socialLinks'),
@@ -501,12 +538,22 @@ const socialLinks = defineCollection({
         socialId: z.string().min(1),
         label: z.string().min(1),
         url: urlSchema,
-        kind: z.enum(['github', 'linkedin', 'telegram', 'slack', 'twitter', 'mastodon', 'blog', 'website', 'other']),
+        kind: z.enum([
+          'github',
+          'linkedin',
+          'telegram',
+          'slack',
+          'twitter',
+          'mastodon',
+          'blog',
+          'website',
+          'other',
+        ]),
       }),
     ),
     visibility: visibilitySchema.optional(),
   }),
-})
+});
 
 export const collections = {
   profile,
@@ -526,4 +573,4 @@ export const collections = {
   companies,
   contactChannels,
   socialLinks,
-}
+};

@@ -3,3 +3,5 @@ dist
 node_modules
 playwright-report
 test-results
+# prettier-plugin-astro 0.14 cannot parse await import() inside inline <script> tags
+src/layouts/PageLayout.astro

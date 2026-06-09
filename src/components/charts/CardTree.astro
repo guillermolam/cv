@@ -1,0 +1,334 @@
+---
+import type { CardTreeNode, CardTreeOptionsInput } from '../../lib/card-tree';
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'> & {
+  data?: CardTreeNode;
+  options?: CardTreeOptionsInput;
+  bindStore?: boolean;
+  ariaLabel?: string;
+  unstyled?: boolean;
+};
+
+const {
+  data,
+  options = {},
+  bindStore = false,
+  class: className,
+  style,
+  ariaLabel = 'Toolchain CardTree',
+  unstyled = false,
+  ...htmlProps
+} = Astro.props as Props;
+
+const dataJson = data ? JSON.stringify(data) : '';
+const optionsJson = JSON.stringify(options);
+---
+
+<div
+  class:list={[
+    'card-tree-root',
+    !unstyled && 'card-tree-root--base',
+    className,
+  ]}
+  style={style}
+  data-card-tree
+  data-tree-data={dataJson}
+  data-tree-options={optionsJson}
+  data-bind-store={bindStore ? 'true' : 'false'}
+  role="img"
+  aria-label={ariaLabel}
+  {...htmlProps}
+>
+</div>
+
+<style is:global>
+  :where(.card-tree-root--base) {
+    width: 100%;
+    min-height: 380px;
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2);
+    background:
+      radial-gradient(
+        circle at 12% 10%,
+        color-mix(in oklab, var(--color-cta), transparent 90%),
+        transparent 35%
+      ),
+      var(--color-surface-1);
+    overflow: hidden;
+  }
+
+  :where(.card-tree-root)[data-card-tree-status='loading']::before {
+    content: 'Loading CardTree...';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0, 0.875rem);
+    background: color-mix(in oklab, var(--color-surface-1), transparent 10%);
+    z-index: 1;
+  }
+
+  :where([data-card-tree-error], [data-card-tree-hint]) {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0, 0.875rem);
+  }
+
+  :where([data-card-tree-error]) {
+    color: var(--color-danger);
+  }
+
+  :where([data-card-tree-hint]) {
+    color: var(--color-text-muted);
+  }
+
+  :where(.card-tree-controls) {
+    position: absolute;
+    left: 12px;
+    top: 58px;
+    display: inline-flex;
+    gap: 6px;
+    z-index: 120;
+    padding: 6px;
+    border: 1px solid color-mix(in oklab, var(--color-cta), transparent 70%);
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--color-surface-1), transparent 10%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  :where(.card-tree-controls__btn) {
+    appearance: none;
+    border: 1px solid color-mix(in oklab, var(--color-cta), transparent 65%);
+    background: color-mix(in oklab, var(--color-surface-2), transparent 8%);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    padding: 6px 8px;
+    cursor: pointer;
+  }
+
+  :where(.card-tree-controls__btn[data-active='true']) {
+    color: var(--color-bg);
+    background: var(--color-cta);
+    border-color: color-mix(in oklab, var(--color-cta), black 20%);
+  }
+
+  :where(.card-tree-modal) {
+    width: min(1020px, calc(100vw - 3rem));
+    max-height: calc(100vh - 4rem);
+    border: 1px solid var(--ds-color-border);
+    border-radius: 16px;
+    background: var(--ds-color-surface-raised);
+    color: var(--color-text);
+    padding: 0;
+  }
+
+  :where(.card-tree-modal::backdrop) {
+    background: color-mix(in oklab, black, transparent 45%);
+    backdrop-filter: blur(4px);
+  }
+
+  :where(.card-tree-modal__frame) {
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  :where(.card-tree-modal__header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 12px;
+    border-bottom: 1px solid var(--ds-color-border);
+    padding-bottom: 10px;
+  }
+
+  :where(.card-tree-modal__title) {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--color-text-strong);
+  }
+
+  :where(.card-tree-modal__subtitle) {
+    margin: 4px 0 0;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  :where(.card-tree-modal__close) {
+    border: 1px solid var(--ds-color-border);
+    border-radius: 8px;
+    padding: 6px 9px;
+    background: color-mix(in oklab, var(--color-surface-2), transparent 15%);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  :where(.card-tree-modal__section h4) {
+    margin: 0 0 8px;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+  }
+
+  :where(.card-tree-modal__table-wrap) {
+    overflow: auto;
+    border: 1px solid var(--ds-color-border);
+    border-radius: 10px;
+  }
+
+  :where(.card-tree-modal__table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  :where(.card-tree-modal__table th),
+  :where(.card-tree-modal__table td) {
+    border-bottom: 1px solid var(--ds-color-border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  :where(.card-tree-modal__table th) {
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    letter-spacing: 0.03em;
+    color: var(--color-text-muted);
+  }
+
+  :where(.card-tree-modal__resources) {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+    font-size: 0.85rem;
+  }
+
+  :where(.card-tree-modal__resources a) {
+    color: var(--color-cta);
+  }
+
+  :where(.card-tree-modal__resource-groups) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  :where(.card-tree-modal__resource-group) {
+    border: 1px solid var(--ds-color-border);
+    border-radius: 10px;
+    padding: 10px;
+    background: color-mix(in oklab, var(--color-surface-1), transparent 5%);
+  }
+
+  :where(.card-tree-modal__resource-group--direct) {
+    border-color: color-mix(
+      in oklab,
+      var(--color-cta),
+      var(--ds-color-border) 55%
+    );
+    background: color-mix(in oklab, var(--color-cta), transparent 95%);
+  }
+
+  :where(.card-tree-modal__resource-group--indirect) {
+    border-color: color-mix(
+      in oklab,
+      var(--fx-metal-bronze, #6b4f2e),
+      var(--ds-color-border) 45%
+    );
+    background: color-mix(
+      in oklab,
+      var(--fx-metal-bronze, #6b4f2e),
+      transparent 93%
+    );
+  }
+
+  :where(.card-tree-modal__resource-title) {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-strong);
+  }
+
+  :where(.card-tree-modal__resource-subtitle) {
+    margin: 4px 0 8px;
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+  }
+
+  :where(.card-tree-modal__resource-item) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  :where(.card-tree-modal__resource-item--empty) {
+    opacity: 0.75;
+  }
+
+  :where(.card-tree-modal__resource-type) {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--ds-color-border);
+    font-size: 0.67rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-muted);
+  }
+
+  :where(.card-tree-modal__relevance) {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 7px;
+    border-radius: 999px;
+    border: 1px solid
+      color-mix(
+        in oklab,
+        var(--fx-metal-bronze, #6b4f2e),
+        var(--ds-color-border) 35%
+      );
+    color: var(--fx-metal-bronze, #6b4f2e);
+    font-family: var(--font-mono);
+    font-size: 0.67rem;
+    letter-spacing: 0.03em;
+    background: color-mix(
+      in oklab,
+      var(--fx-metal-bronze, #6b4f2e),
+      transparent 90%
+    );
+  }
+
+  @media (max-width: 840px) {
+    :where(.card-tree-modal__resource-groups) {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { initCardTrees } from '../../scripts/card-tree';
+  void initCardTrees();
+</script>

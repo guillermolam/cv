@@ -6,7 +6,7 @@ export type WhoamiAxisId =
   | 'devsecops'
   | 'kubernetes'
   | 'architecture'
-  | 'leadership'
+  | 'sre'
   | 'automation'
   | 'ai';
 
@@ -58,14 +58,18 @@ const matchesAxis = (carrier: TaxonomyCarrier, refs: AxisRefs) =>
   intersect(carrier.toolIds, refs.toolIds) ||
   intersect(carrier.skillIds, refs.skillIds);
 
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
 
 const scoreFromEvidenceCount = (evidenceCount: number) => {
   const score = Math.round(20 * Math.log2(1 + evidenceCount));
   return clamp(score, 0, 100);
 };
 
-const confidenceFromEvidence = (evidenceCount: number, needsConfirmationCount: number): WhoamiConfidence => {
+const confidenceFromEvidence = (
+  evidenceCount: number,
+  needsConfirmationCount: number,
+): WhoamiConfidence => {
   if (evidenceCount >= 6 && needsConfirmationCount === 0) return 'high';
   if (evidenceCount >= 3) return 'medium';
   return 'low';
@@ -81,28 +85,54 @@ const summarizeEvidence = (counts: {
   certifications: number;
 }) => {
   const parts: string[] = [];
-  if (counts.projects) parts.push(`${counts.projects} project${counts.projects === 1 ? '' : 's'}`);
-  if (counts.caseStudies) parts.push(`${counts.caseStudies} case stud${counts.caseStudies === 1 ? 'y' : 'ies'}`);
-  if (counts.experience) parts.push(`${counts.experience} role${counts.experience === 1 ? '' : 's'}`);
-  if (counts.blog) parts.push(`${counts.blog} tutorial${counts.blog === 1 ? '' : 's'}`);
+  if (counts.projects)
+    parts.push(`${counts.projects} project${counts.projects === 1 ? '' : 's'}`);
+  if (counts.caseStudies)
+    parts.push(
+      `${counts.caseStudies} case stud${counts.caseStudies === 1 ? 'y' : 'ies'}`,
+    );
+  if (counts.experience)
+    parts.push(
+      `${counts.experience} role${counts.experience === 1 ? '' : 's'}`,
+    );
+  if (counts.blog)
+    parts.push(`${counts.blog} tutorial${counts.blog === 1 ? '' : 's'}`);
   const proof = parts.length === 0 ? 'No evidence yet' : parts.join(' · ');
 
   const supportParts: string[] = [];
-  if (counts.skills) supportParts.push(`${counts.skills} skill${counts.skills === 1 ? '' : 's'}`);
-  if (counts.tools) supportParts.push(`${counts.tools} tool${counts.tools === 1 ? '' : 's'}`);
+  if (counts.skills)
+    supportParts.push(
+      `${counts.skills} skill${counts.skills === 1 ? '' : 's'}`,
+    );
+  if (counts.tools)
+    supportParts.push(`${counts.tools} tool${counts.tools === 1 ? '' : 's'}`);
   if (counts.certifications)
-    supportParts.push(`${counts.certifications} certification${counts.certifications === 1 ? '' : 's'}`);
+    supportParts.push(
+      `${counts.certifications} certification${counts.certifications === 1 ? '' : 's'}`,
+    );
 
   if (supportParts.length === 0) return proof;
   return `${proof} · +${supportParts.join(' · +')}`;
 };
 
-export const WHOAMI_AXES: Array<{ id: WhoamiAxisId; label: string; refs: AxisRefs; sources: string[] }> = [
+export const WHOAMI_AXES: Array<{
+  id: WhoamiAxisId;
+  label: string;
+  refs: AxisRefs;
+  sources: string[];
+}> = [
   {
     id: 'cloud',
     label: 'Cloud',
-    refs: { categoryIds: ['cloud-security', 'hybrid-edge'], toolIds: ['aws', 'azure', 'gcp'] },
-    sources: ['categories:cloud-security', 'categories:hybrid-edge', 'tools:aws|azure|gcp'],
+    refs: {
+      categoryIds: ['cloud-security', 'hybrid-edge'],
+      toolIds: ['aws', 'azure', 'gcp'],
+    },
+    sources: [
+      'categories:cloud-security',
+      'categories:hybrid-edge',
+      'tools:aws|azure|gcp',
+    ],
   },
   {
     id: 'security',
@@ -126,14 +156,25 @@ export const WHOAMI_AXES: Array<{ id: WhoamiAxisId; label: string; refs: AxisRef
   {
     id: 'devsecops',
     label: 'DevSecOps',
-    refs: { categoryIds: ['devsecops', 'gitops-delivery'], tagIds: ['ci-cd', 'sbom'] },
+    refs: {
+      categoryIds: ['devsecops', 'gitops-delivery'],
+      tagIds: ['ci-cd', 'sbom'],
+    },
     sources: ['categories:devsecops|gitops-delivery', 'tags:ci-cd|sbom'],
   },
   {
     id: 'kubernetes',
     label: 'Kubernetes',
-    refs: { categoryIds: ['kubernetes-platform', 'kubernetes-security'], tagIds: ['kubernetes'], toolIds: ['kubernetes'] },
-    sources: ['categories:kubernetes-platform|kubernetes-security', 'tags:kubernetes', 'tools:kubernetes'],
+    refs: {
+      categoryIds: ['kubernetes-platform', 'kubernetes-security'],
+      tagIds: ['kubernetes'],
+      toolIds: ['kubernetes'],
+    },
+    sources: [
+      'categories:kubernetes-platform|kubernetes-security',
+      'tags:kubernetes',
+      'tools:kubernetes',
+    ],
   },
   {
     id: 'architecture',
@@ -142,10 +183,16 @@ export const WHOAMI_AXES: Array<{ id: WhoamiAxisId; label: string; refs: AxisRef
     sources: ['categories:platform-engineering', 'tags:wasm'],
   },
   {
-    id: 'leadership',
-    label: 'Leadership',
-    refs: { tagIds: [] },
-    sources: ['No leadership taxonomy modeled yet'],
+    id: 'sre',
+    label: 'SRE',
+    refs: {
+      categoryIds: ['observability', 'platform-engineering'],
+      toolIds: ['prometheus', 'grafana'],
+    },
+    sources: [
+      'categories:observability|platform-engineering',
+      'tools:prometheus|grafana',
+    ],
   },
   {
     id: 'automation',
@@ -175,18 +222,35 @@ const countNeedsConfirmation = (data: unknown) => {
   if (!data || typeof data !== 'object') return 0;
   const value = (data as { needsConfirmation?: unknown }).needsConfirmation;
   if (!Array.isArray(value)) return 0;
-  return value.filter((v) => typeof v === 'string' && v.trim().length > 0).length;
+  return value.filter((v) => typeof v === 'string' && v.trim().length > 0)
+    .length;
 };
 
-export const computeWhoamiStats = (input: ComputeWhoamiStatsInput): WhoamiAxisResult[] => {
+export const computeWhoamiStats = (
+  input: ComputeWhoamiStatsInput,
+): WhoamiAxisResult[] => {
   return WHOAMI_AXES.map((axis) => {
-    const projectsMatched = input.projects.filter((e) => matchesAxis(e.data, axis.refs));
-    const caseStudiesMatched = input.caseStudies.filter((e) => matchesAxis(e.data, axis.refs));
-    const experienceMatched = input.experience.filter((e) => matchesAxis(e.data, axis.refs));
-    const blogMatched = input.publishedBlog.filter((e) => matchesAxis(e.data, axis.refs));
-    const skillsMatched = input.skills.filter((e) => matchesAxis(e.data, axis.refs));
-    const toolsMatched = input.tools.filter((e) => matchesAxis(e.data, axis.refs));
-    const certificationsMatched = input.certifications.filter((e) => matchesAxis(e.data, axis.refs));
+    const projectsMatched = input.projects.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
+    const caseStudiesMatched = input.caseStudies.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
+    const experienceMatched = input.experience.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
+    const blogMatched = input.publishedBlog.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
+    const skillsMatched = input.skills.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
+    const toolsMatched = input.tools.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
+    const certificationsMatched = input.certifications.filter((e) =>
+      matchesAxis(e.data, axis.refs),
+    );
 
     const projectMatches = projectsMatched.map((e) => e.data.projectId);
     const caseStudyMatches = caseStudiesMatched.map((e) => e.data.caseStudyId);
@@ -194,7 +258,9 @@ export const computeWhoamiStats = (input: ComputeWhoamiStatsInput): WhoamiAxisRe
     const blogMatches = blogMatched.map((e) => e.data.blogSlug);
     const skillMatches = skillsMatched.map((e) => e.data.skillId);
     const toolMatches = toolsMatched.map((e) => e.data.toolId);
-    const certificationMatches = certificationsMatched.map((e) => e.data.certificationId);
+    const certificationMatches = certificationsMatched.map(
+      (e) => e.data.certificationId,
+    );
 
     const counts = {
       projects: new Set(projectMatches).size,
@@ -206,15 +272,32 @@ export const computeWhoamiStats = (input: ComputeWhoamiStatsInput): WhoamiAxisRe
       certifications: new Set(certificationMatches).size,
     };
 
-    const evidenceCount = counts.projects + counts.caseStudies + counts.experience + counts.blog;
-    const score = evidenceCount === 0 ? null : scoreFromEvidenceCount(evidenceCount);
+    const evidenceCount =
+      counts.projects + counts.caseStudies + counts.experience + counts.blog;
+    const score =
+      evidenceCount === 0 ? null : scoreFromEvidenceCount(evidenceCount);
     const needsConfirmationCount =
-      projectsMatched.reduce((acc, e) => acc + countNeedsConfirmation(e.data), 0) +
-      caseStudiesMatched.reduce((acc, e) => acc + countNeedsConfirmation(e.data), 0) +
-      experienceMatched.reduce((acc, e) => acc + countNeedsConfirmation(e.data), 0) +
+      projectsMatched.reduce(
+        (acc, e) => acc + countNeedsConfirmation(e.data),
+        0,
+      ) +
+      caseStudiesMatched.reduce(
+        (acc, e) => acc + countNeedsConfirmation(e.data),
+        0,
+      ) +
+      experienceMatched.reduce(
+        (acc, e) => acc + countNeedsConfirmation(e.data),
+        0,
+      ) +
       blogMatched.reduce((acc, e) => acc + countNeedsConfirmation(e.data), 0) +
-      certificationsMatched.reduce((acc, e) => acc + countNeedsConfirmation(e.data), 0);
-    const confidence = confidenceFromEvidence(evidenceCount, needsConfirmationCount);
+      certificationsMatched.reduce(
+        (acc, e) => acc + countNeedsConfirmation(e.data),
+        0,
+      );
+    const confidence = confidenceFromEvidence(
+      evidenceCount,
+      needsConfirmationCount,
+    );
 
     return {
       id: axis.id,

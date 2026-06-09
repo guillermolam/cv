@@ -4,10 +4,16 @@ import ToolchainFilter from '../../components/content/ToolchainFilter.astro';
 import UiBadge from '../../components/ui/UiBadge.astro';
 import LazyBarChart from '../../components/charts/LazyBarChart.astro';
 import LazyRadarChart from '../../components/charts/LazyRadarChart.astro';
+import CardTree from '../../components/charts/CardTree.astro';
 
 import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../lib/i18n';
-import { buildContentGraph, getNodeKey, type ContentGraphNode } from '../../lib/content/graph';
+import {
+  buildContentGraph,
+  getNodeKey,
+  type ContentGraphNode,
+} from '../../lib/content/graph';
+import type { CardTreeNode } from '../../lib/card-tree';
 
 export function getStaticPaths() {
   return getLangStaticPaths();
@@ -20,34 +26,70 @@ const title = 'Toolchain';
 const description = 'Tools and platforms referenced across the portfolio.';
 
 // ── Collections ─────────────────────────────────────────────────────────────
-const [toolsAll, categoriesAll, tagsAll] = await Promise.all([
+const [
+  toolsAll,
+  categoriesAll,
+  tagsAll,
+  experienceAll,
+  projectsAll,
+  knowledgeAll,
+] = await Promise.all([
   getCollection('tools'),
   getCollection('categories'),
   getCollection('tags'),
+  getCollection('experience'),
+  getCollection('projects'),
+  getCollection('knowledgeResources'),
 ]);
 
 const tools = toolsAll.filter((t) => t.data.lang === lang);
-const toolsFallback = tools.length > 0 ? tools : toolsAll.filter((t) => t.data.lang === 'en');
+const toolsFallback =
+  tools.length > 0 ? tools : toolsAll.filter((t) => t.data.lang === 'en');
+const experience = experienceAll.filter((e) => e.data.lang === lang);
+const experienceFallback =
+  experience.length > 0
+    ? experience
+    : experienceAll.filter((e) => e.data.lang === 'en');
+const projects = projectsAll.filter((p) => p.data.lang === lang);
+const projectsFallback =
+  projects.length > 0
+    ? projects
+    : projectsAll.filter((p) => p.data.lang === 'en');
+const knowledgeResources = knowledgeAll.filter((k) => k.data.lang === lang);
+const knowledgeFallback =
+  knowledgeResources.length > 0
+    ? knowledgeResources
+    : knowledgeAll.filter((k) => k.data.lang === 'en');
 
-const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+const categoryTitleById = new Map(
+  categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const),
+);
 const categoryDimensionById = new Map(
   categoriesAll.map((c) => [c.data.categoryId, c.data.dimension] as const),
 );
-const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
+const tagTitleById = new Map(
+  tagsAll.map((t) => [t.data.tagId, t.data.title] as const),
+);
 
 // ── Content graph for evidence links ────────────────────────────────────────
 const graph = await buildContentGraph();
 const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
 
-const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
+const isGraphNode = (
+  value: ContentGraphNode | undefined,
+): value is ContentGraphNode => Boolean(value);
 const isNonEmptyString = (value: string | undefined): value is string =>
   typeof value === 'string' && value.length > 0;
 
 const getEvidence = (toolId: string) => {
   const toolKey = getNodeKey('tools', toolId);
   const incoming = graph.edges.filter((e) => e.to === toolKey);
-  const projects = incoming.filter((e) => e.from.startsWith('projects:')).map((e) => e.from);
-  const caseStudies = incoming.filter((e) => e.from.startsWith('caseStudies:')).map((e) => e.from);
+  const projects = incoming
+    .filter((e) => e.from.startsWith('projects:'))
+    .map((e) => e.from);
+  const caseStudies = incoming
+    .filter((e) => e.from.startsWith('caseStudies:'))
+    .map((e) => e.from);
   return {
     projects: Array.from(new Set(projects)),
     caseStudies: Array.from(new Set(caseStudies)),
@@ -56,26 +98,42 @@ const getEvidence = (toolId: string) => {
 
 // ── Look-up maps ────────────────────────────────────────────────────────────
 const catById = new Map(
-  categoriesAll.filter((c) => c.data.lang === lang || c.data.lang === 'en')
+  categoriesAll
+    .filter((c) => c.data.lang === lang || c.data.lang === 'en')
     .map((c) => [c.data.categoryId, c.data] as const),
 );
 
 // ── Stats for the hero ribbon ───────────────────────────────────────────────
 const totalTools = toolsFallback.length;
-const allToolCategoryIds = toolsFallback.flatMap((t) => t.data.categoryIds ?? []);
+const allToolCategoryIds = toolsFallback.flatMap(
+  (t) => t.data.categoryIds ?? [],
+);
 const uniqueDomainDimensions = new Set(
   allToolCategoryIds.map((id) => categoryDimensionById.get(id)).filter(Boolean),
 );
 const uniqueCategoryIds = new Set(allToolCategoryIds);
 const uniqueTagIds = new Set(toolsFallback.flatMap((t) => t.data.tagIds ?? []));
-const vendorCount = new Set(toolsFallback.map((t) => t.data.vendor).filter(Boolean)).size;
+const vendorCount = new Set(
+  toolsFallback.map((t) => t.data.vendor).filter(Boolean),
+).size;
 
 // ── Tool distribution bar chart (by domain dimension) ───────────────────────
-const catDomainOrder = ['securityDomain', 'controlRoomStation', 'operations', 'development', 'toolchainDimension', 'general'];
+const catDomainOrder = [
+  'securityDomain',
+  'controlRoomStation',
+  'operations',
+  'development',
+  'toolchainDimension',
+  'general',
+];
 const toolsByDim = new Map<string, number>();
 for (const tool of toolsFallback) {
-  const cats = (tool.data.categoryIds ?? []).map((id) => catById.get(id)).filter(Boolean);
-  const dim = catDomainOrder.find((d) => cats.some((c) => c!.dimension === d)) ?? 'general';
+  const cats = (tool.data.categoryIds ?? [])
+    .map((id) => catById.get(id))
+    .filter(Boolean);
+  const dim =
+    catDomainOrder.find((d) => cats.some((c) => c!.dimension === d)) ??
+    'general';
   toolsByDim.set(dim, (toolsByDim.get(dim) ?? 0) + 1);
 }
 const dimLabels: Record<string, string> = {
@@ -103,78 +161,680 @@ const radarRows = topCategories.map((c) => ({
   confidence: c.count >= 8 ? 'deep' : c.count >= 4 ? 'moderate' : 'emerging',
 }));
 
+const toDate = (raw?: string) => {
+  if (!raw) return null;
+  const parsed = new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const monthsBetween = (start?: string, end?: string, isCurrent?: boolean) => {
+  const startDate = toDate(start);
+  if (!startDate) return 0;
+  const endDate = isCurrent ? new Date() : (toDate(end) ?? new Date());
+  const months =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth()) +
+    1;
+  return Math.max(0, months);
+};
+
+const normalizePeriod = (start?: string, end?: string, isCurrent?: boolean) => {
+  const startLabel = start ? start.slice(0, 7) : 'unknown';
+  const endLabel = isCurrent ? 'present' : end ? end.slice(0, 7) : 'present';
+  return `${startLabel} → ${endLabel}`;
+};
+
+const normalizeBucket = (categoryIds: string[]) => {
+  const dims = new Set(
+    categoryIds.map((id) => categoryDimensionById.get(id)).filter(Boolean),
+  );
+
+  if (
+    dims.has('securityDomain') ||
+    dims.has('securitySubdomain') ||
+    dims.has('securityLayer') ||
+    dims.has('securityOperationalFunction') ||
+    dims.has('securityPosture') ||
+    dims.has('securityLifecycleStage') ||
+    dims.has('securityControlType') ||
+    dims.has('securityThreatFocus') ||
+    dims.has('securityTechnologyScope') ||
+    dims.has('securityFramework') ||
+    dims.has('securityBusinessCapability') ||
+    dims.has('securitySkillLevel')
+  )
+    return 'SEC';
+
+  if (dims.has('operations') || dims.has('controlRoomStation')) return 'OPS';
+  if (dims.has('development')) return 'DEV';
+  if (dims.has('aiDomain')) return 'IA';
+
+  const categoryTitles = categoryIds
+    .map((id) => (categoryTitleById.get(id) ?? id).toLowerCase())
+    .join(' ');
+
+  if (/network|netsec|vpn|gateway|edge/.test(categoryTitles)) return 'NET';
+  if (/data|analytics|siem|telemetry|observability/.test(categoryTitles))
+    return 'DATA';
+  return 'OPS';
+};
+
+const toLogoUrl = (website?: string) => {
+  if (!website) return '';
+  return `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(website)}`;
+};
+
+const computeIndirectRelevance = (
+  toolCategoryIds: string[],
+  toolTagIds: string[],
+  resourceCategoryIds: string[],
+  resourceTagIds: string[],
+) => {
+  const categoryHits = resourceCategoryIds.filter((id) =>
+    toolCategoryIds.includes(id),
+  ).length;
+  const tagHits = resourceTagIds.filter((id) => toolTagIds.includes(id)).length;
+  const categoryDen = Math.max(1, toolCategoryIds.length);
+  const tagDen = Math.max(1, toolTagIds.length);
+  const categoryScore = categoryHits / categoryDen;
+  const tagScore = tagHits / tagDen;
+  const blended = categoryScore * 0.65 + tagScore * 0.35;
+  return Number(Math.min(1, blended).toFixed(3));
+};
+
+type ToolchainGraphKind = 'root' | 'category' | 'tool';
+
+type ToolchainGraphNode = {
+  nodeId: string;
+  kind: ToolchainGraphKind;
+  name: string;
+  title?: string;
+  bucket?: string;
+  website?: string;
+  logoUrl?: string;
+  categoryLabels?: string[];
+  tags?: string[];
+  metrics?: {
+    jobs: number;
+    years: number;
+    activeProjects: number;
+  };
+  jobs?: Array<Record<string, unknown>>;
+  projects?: Array<Record<string, unknown>>;
+  resources?: {
+    direct: Array<Record<string, unknown>>;
+    indirect: Array<Record<string, unknown>>;
+  };
+  strongParentIds: string[];
+  strongChildIds: string[];
+  weakRelationIds: string[];
+  locked?: boolean;
+  isLanguage?: boolean;
+};
+
+type ToolchainGraphPayload = {
+  rootId: string;
+  nodes: ToolchainGraphNode[];
+};
+
+const ROOT_NODE_ID = 'toolchain-root';
+const DEVELOPMENT_NODE_ID = 'cat-development';
+const OPERATIONS_NODE_ID = 'cat-operations';
+const SECURITY_NODE_ID = 'cat-security';
+const AI_NODE_ID = 'cat-artificial-intelligence';
+const OPS_INFRA_NODE_ID = 'cat-ops-infrastructure';
+const OPS_CICD_NODE_ID = 'cat-ops-cicd';
+const OPS_NETWORKING_NODE_ID = 'cat-ops-networking';
+const OPS_OBSERVABILITY_NODE_ID = 'cat-ops-observability';
+const AI_BOOTSTRAP_TOOL_ID = 'tool-ai-bootstrap';
+
+const LANGUAGE_TOOL_IDS = new Set([
+  'typescript',
+  'javascript',
+  'python',
+  'rust',
+  'java',
+  'sql',
+  'go',
+]);
+
+const graphNodeById = new Map<string, ToolchainGraphNode>();
+
+const ensureGraphNode = (node: ToolchainGraphNode) => {
+  if (!graphNodeById.has(node.nodeId)) {
+    graphNodeById.set(node.nodeId, node);
+  }
+  return graphNodeById.get(node.nodeId)!;
+};
+
+const linkStrong = (parentId: string, childId: string) => {
+  const parent = graphNodeById.get(parentId);
+  const child = graphNodeById.get(childId);
+  if (!parent || !child) return;
+  if (!parent.strongChildIds.includes(childId))
+    parent.strongChildIds.push(childId);
+  if (!child.strongParentIds.includes(parentId))
+    child.strongParentIds.push(parentId);
+};
+
+const linkWeak = (fromId: string, toId: string) => {
+  const source = graphNodeById.get(fromId);
+  if (!source || fromId === toId) return;
+  if (!source.weakRelationIds.includes(toId)) source.weakRelationIds.push(toId);
+};
+
+const mandatoryCategories = [
+  {
+    nodeId: DEVELOPMENT_NODE_ID,
+    name: 'Development',
+    bucket: 'DEV',
+    parentId: ROOT_NODE_ID,
+  },
+  {
+    nodeId: OPERATIONS_NODE_ID,
+    name: 'Operations',
+    bucket: 'OPS',
+    parentId: ROOT_NODE_ID,
+  },
+  {
+    nodeId: SECURITY_NODE_ID,
+    name: 'Security',
+    bucket: 'SEC',
+    parentId: ROOT_NODE_ID,
+  },
+  {
+    nodeId: AI_NODE_ID,
+    name: 'Artificial Intelligence',
+    bucket: 'IA',
+    parentId: ROOT_NODE_ID,
+  },
+  {
+    nodeId: OPS_INFRA_NODE_ID,
+    name: 'Infrastructure',
+    bucket: 'INFRA',
+    parentId: OPERATIONS_NODE_ID,
+  },
+  {
+    nodeId: OPS_CICD_NODE_ID,
+    name: 'CI/CD',
+    bucket: 'CICD',
+    parentId: OPERATIONS_NODE_ID,
+  },
+  {
+    nodeId: OPS_NETWORKING_NODE_ID,
+    name: 'Networking',
+    bucket: 'NET',
+    parentId: OPERATIONS_NODE_ID,
+  },
+  {
+    nodeId: OPS_OBSERVABILITY_NODE_ID,
+    name: 'Monitoring/Observability',
+    bucket: 'DATA',
+    parentId: OPERATIONS_NODE_ID,
+  },
+] as const;
+
+ensureGraphNode({
+  nodeId: ROOT_NODE_ID,
+  kind: 'root',
+  name: 'Toolchain',
+  title: `${totalTools} tools`,
+  bucket: 'L0',
+  strongParentIds: [],
+  strongChildIds: [],
+  weakRelationIds: [],
+  locked: true,
+});
+
+for (const category of mandatoryCategories) {
+  ensureGraphNode({
+    nodeId: category.nodeId,
+    kind: 'category',
+    name: category.name,
+    title: 'Mandatory category',
+    bucket: category.bucket,
+    strongParentIds: [],
+    strongChildIds: [],
+    weakRelationIds: [],
+    locked: true,
+  });
+  linkStrong(category.parentId, category.nodeId);
+}
+
+const editableCategoryParentIdByCategoryId: Record<string, string> = {
+  'creative-frontend': DEVELOPMENT_NODE_ID,
+  'platform-engineering': OPS_INFRA_NODE_ID,
+  'kubernetes-platform': OPS_INFRA_NODE_ID,
+  'gitops-delivery': OPS_CICD_NODE_ID,
+  'cloud-security': SECURITY_NODE_ID,
+  devsecops: SECURITY_NODE_ID,
+  'kubernetes-security': SECURITY_NODE_ID,
+  'runtime-security': SECURITY_NODE_ID,
+  'security-operations': SECURITY_NODE_ID,
+  'supply-chain-security': SECURITY_NODE_ID,
+};
+
+const usedCategoryIds = new Set(
+  toolsFallback.flatMap((tool) => tool.data.categoryIds ?? []),
+);
+const editableCategoryNodeIdByCategoryId = new Map<string, string>();
+
+for (const categoryId of Object.keys(editableCategoryParentIdByCategoryId)) {
+  if (!usedCategoryIds.has(categoryId)) continue;
+  const nodeId = `cat-tax-${categoryId}`;
+  editableCategoryNodeIdByCategoryId.set(categoryId, nodeId);
+  ensureGraphNode({
+    nodeId,
+    kind: 'category',
+    name: categoryTitleById.get(categoryId) ?? categoryId,
+    title: 'Editable category',
+    bucket: normalizeBucket([categoryId]),
+    strongParentIds: [],
+    strongChildIds: [],
+    weakRelationIds: [],
+    locked: false,
+  });
+  linkStrong(editableCategoryParentIdByCategoryId[categoryId], nodeId);
+}
+
+const directOperationsParentForTool = (
+  toolId: string,
+  toolCategoryIds: string[],
+  toolTagIds: string[],
+) => {
+  const categoryTitles = toolCategoryIds
+    .map((id) => categoryTitleById.get(id) ?? id)
+    .join(' ')
+    .toLowerCase();
+  const tagTitles = toolTagIds
+    .map((id) => tagTitleById.get(id) ?? id)
+    .join(' ')
+    .toLowerCase();
+  const joined = `${toolId} ${categoryTitles} ${tagTitles}`;
+  if (
+    /grafana|opentelemetry|telemetry|observability|monitor|hunters-siem|betterstack|siem/.test(
+      joined,
+    )
+  ) {
+    return OPS_OBSERVABILITY_NODE_ID;
+  }
+  if (/teleport|twingate|cilium|network|mesh|gateway|vpn/.test(joined)) {
+    return OPS_NETWORKING_NODE_ID;
+  }
+  if (
+    /github-actions|gitlab-ci|jenkins|sonarqube|checkov|semgrep|snyk|ci-cd/.test(
+      joined,
+    )
+  ) {
+    return OPS_CICD_NODE_ID;
+  }
+  return OPS_INFRA_NODE_ID;
+};
+
+const toolPrimaryCategoryNodeId = (
+  toolId: string,
+  toolCategoryIds: string[],
+  toolTagIds: string[],
+) => {
+  const preferredCategoryOrder = [
+    'creative-frontend',
+    'platform-engineering',
+    'kubernetes-platform',
+    'gitops-delivery',
+    'cloud-security',
+    'devsecops',
+    'kubernetes-security',
+    'runtime-security',
+    'security-operations',
+    'supply-chain-security',
+  ];
+  const preferred = preferredCategoryOrder.find((categoryId) =>
+    toolCategoryIds.includes(categoryId),
+  );
+  if (preferred && editableCategoryNodeIdByCategoryId.has(preferred)) {
+    return editableCategoryNodeIdByCategoryId.get(preferred)!;
+  }
+  return directOperationsParentForTool(toolId, toolCategoryIds, toolTagIds);
+};
+
+for (const tool of toolsFallback) {
+  const toolId = tool.data.toolId;
+  const nodeId = `tool-${toolId}`;
+  const toolCategoryIds = tool.data.categoryIds ?? [];
+  const toolTagIds = tool.data.tagIds ?? [];
+  const relatedJobs = experienceFallback
+    .filter((job) => (job.data.toolIds ?? []).includes(toolId))
+    .sort((a, b) =>
+      (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''),
+    );
+  const yearsTotal =
+    relatedJobs.reduce(
+      (sum, job) =>
+        sum +
+        monthsBetween(job.data.startDate, job.data.endDate, job.data.isCurrent),
+      0,
+    ) / 12;
+  const relatedProjects = projectsFallback
+    .filter((project) => (project.data.toolIds ?? []).includes(toolId))
+    .sort((a, b) => (a.data.title ?? '').localeCompare(b.data.title ?? ''));
+  const currentProjects = relatedProjects.filter((project) =>
+    ['active', 'maintained'].includes(project.data.status),
+  );
+  const directKnowledge = knowledgeFallback
+    .filter((resource) => (resource.data.toolIds ?? []).includes(toolId))
+    .slice(0, 8)
+    .map((resource) => ({
+      title: resource.data.title,
+      type: resource.data.type,
+      url: resource.data.url,
+      resourceId: resource.data.resourceId,
+    }));
+  const indirectKnowledge = knowledgeFallback
+    .filter((resource) => {
+      if ((resource.data.toolIds ?? []).includes(toolId)) return false;
+      const resourceCategories = resource.data.categoryIds ?? [];
+      const resourceTags = resource.data.tagIds ?? [];
+      return (
+        resourceCategories.some((id) => toolCategoryIds.includes(id)) ||
+        resourceTags.some((tagId) => toolTagIds.includes(tagId))
+      );
+    })
+    .map((resource) => {
+      const resourceCategories = resource.data.categoryIds ?? [];
+      const resourceTags = resource.data.tagIds ?? [];
+      return {
+        title: resource.data.title,
+        type: resource.data.type,
+        url: resource.data.url,
+        resourceId: resource.data.resourceId,
+        relevance: computeIndirectRelevance(
+          toolCategoryIds,
+          toolTagIds,
+          resourceCategories,
+          resourceTags,
+        ),
+      };
+    })
+    .sort((a, b) => b.relevance - a.relevance)
+    .slice(0, 10);
+
+  ensureGraphNode({
+    nodeId,
+    kind: 'tool',
+    name: tool.data.name,
+    title: tool.data.vendor ?? 'No vendor',
+    bucket: normalizeBucket(toolCategoryIds),
+    website: tool.data.website,
+    logoUrl: toLogoUrl(tool.data.website),
+    categoryLabels: toolCategoryIds.map(
+      (id) => categoryTitleById.get(id) ?? id,
+    ),
+    tags: toolTagIds.map((id) => tagTitleById.get(id) ?? id),
+    metrics: {
+      jobs: relatedJobs.length,
+      years: Number(yearsTotal.toFixed(1)),
+      activeProjects: currentProjects.length,
+    },
+    jobs: relatedJobs.map((job) => ({
+      company: job.data.companyName,
+      role: job.data.roleTitle,
+      period: normalizePeriod(
+        job.data.startDate,
+        job.data.endDate,
+        job.data.isCurrent,
+      ),
+      location: job.data.location ?? 'n/a',
+    })),
+    projects: relatedProjects.map((project) => ({
+      title: project.data.title,
+      status: project.data.status,
+      repoUrl: project.data.repoUrl,
+      demoUrl: project.data.demoUrl ?? project.data.deploymentUrl,
+    })),
+    resources: {
+      direct: directKnowledge,
+      indirect: indirectKnowledge,
+    },
+    strongParentIds: [],
+    strongChildIds: [],
+    weakRelationIds: [],
+    locked: false,
+    isLanguage: LANGUAGE_TOOL_IDS.has(toolId),
+  });
+
+  const primaryParentId = toolPrimaryCategoryNodeId(
+    toolId,
+    toolCategoryIds,
+    toolTagIds,
+  );
+  linkStrong(primaryParentId, nodeId);
+
+  const extraCategoryNodeIds = toolCategoryIds
+    .map((categoryId) => editableCategoryNodeIdByCategoryId.get(categoryId))
+    .filter(
+      (candidate): candidate is string =>
+        Boolean(candidate) && candidate !== primaryParentId,
+    );
+
+  for (const weakNodeId of extraCategoryNodeIds) {
+    linkWeak(nodeId, weakNodeId);
+  }
+}
+
+ensureGraphNode({
+  nodeId: AI_BOOTSTRAP_TOOL_ID,
+  kind: 'tool',
+  name: 'AI Stack (planned)',
+  title: 'Bootstrap node',
+  bucket: 'IA',
+  categoryLabels: ['Artificial Intelligence'],
+  tags: ['roadmap'],
+  metrics: {
+    jobs: 0,
+    years: 0,
+    activeProjects: 0,
+  },
+  jobs: [],
+  projects: [],
+  resources: {
+    direct: [],
+    indirect: [],
+  },
+  strongParentIds: [],
+  strongChildIds: [],
+  weakRelationIds: [],
+  locked: false,
+  isLanguage: false,
+});
+linkStrong(AI_NODE_ID, AI_BOOTSTRAP_TOOL_ID);
+
+const toolchainGraphData: ToolchainGraphPayload = {
+  rootId: ROOT_NODE_ID,
+  nodes: Array.from(graphNodeById.values()),
+};
+
+const toolchainGraphNodeMap = new Map(
+  toolchainGraphData.nodes.map((node) => [node.nodeId, node] as const),
+);
+
+const buildToolchainTreeNode = (
+  nodeId: string,
+  path: string[] = [],
+): CardTreeNode => {
+  const graphNode = toolchainGraphNodeMap.get(nodeId);
+  if (!graphNode) {
+    return {
+      id: `${nodeId}@@${path.join('>')}`,
+      name: nodeId,
+      content: nodeId,
+      children: [],
+    };
+  }
+
+  const children = graphNode.strongChildIds.map((childId) =>
+    buildToolchainTreeNode(childId, [...path, graphNode.nodeId]),
+  );
+
+  return {
+    id: graphNode.nodeId,
+    name: graphNode.name,
+    content: {
+      ...graphNode,
+      nodeId: graphNode.nodeId,
+      parentCount: graphNode.strongParentIds.length,
+      childCount: graphNode.strongChildIds.length,
+      weakCount: graphNode.weakRelationIds.length,
+    },
+    children,
+    options:
+      graphNode.kind === 'tool'
+        ? {
+            nodeWidth: 360,
+            nodeHeight: 220,
+            nodeBGColor: 'transparent',
+            borderWidth: 0,
+            nodeShadow: 'none',
+            nodeStyle: 'padding:0;background:transparent;border:0;',
+          }
+        : graphNode.kind === 'category'
+          ? {
+              nodeWidth: 300,
+              nodeHeight: 140,
+              nodeBGColor: 'transparent',
+              borderWidth: 0,
+              nodeShadow: 'none',
+              nodeStyle: 'padding:0;background:transparent;border:0;',
+            }
+          : {
+              nodeWidth: 240,
+              nodeHeight: 110,
+              nodeBGColor: 'transparent',
+              borderWidth: 0,
+              nodeShadow: 'none',
+              nodeStyle: 'padding:0;background:transparent;border:0;',
+            },
+  };
+};
+
+const toolchainTreeData = buildToolchainTreeNode(ROOT_NODE_ID);
+
 // ── Domain badge variant ────────────────────────────────────────────────────
 const domainVariant = (catId: string): string => {
   const dim = catById.get(catId)?.dimension ?? 'general';
-  return dim === 'securityDomain' ? 'security'
-    : dim === 'controlRoomStation' ? 'infra'
-    : dim === 'operations' ? 'cloud'
-    : dim === 'development' ? 'accent'
-    : 'neutral';
+  return dim === 'securityDomain'
+    ? 'security'
+    : dim === 'controlRoomStation'
+      ? 'infra'
+      : dim === 'operations'
+        ? 'cloud'
+        : dim === 'development'
+          ? 'accent'
+          : 'neutral';
 };
 
 // ── Filter options (unchanged logic) ────────────────────────────────────────
 const uniq = (values: string[]) => Array.from(new Set(values));
 
 const getToolTypeIds = (toolCategoryIds: string[]) =>
-  toolCategoryIds.filter((id) => categoryDimensionById.get(id) === 'toolchainDimension');
+  toolCategoryIds.filter(
+    (id) => categoryDimensionById.get(id) === 'toolchainDimension',
+  );
 
 const toolchainTypeIds = uniq(getToolTypeIds(allToolCategoryIds)).sort((a, b) =>
   (categoryTitleById.get(a) ?? a).localeCompare(categoryTitleById.get(b) ?? b),
 );
-const hasUnclassifiedType = toolsFallback.some((t) => getToolTypeIds(t.data.categoryIds ?? []).length === 0);
+const hasUnclassifiedType = toolsFallback.some(
+  (t) => getToolTypeIds(t.data.categoryIds ?? []).length === 0,
+);
 
 const typeOptions = [
   ...(hasUnclassifiedType ? [{ id: '__none__', label: 'Unclassified' }] : []),
-  ...toolchainTypeIds.map((id) => ({ id, label: categoryTitleById.get(id) ?? id })),
+  ...toolchainTypeIds.map((id) => ({
+    id,
+    label: categoryTitleById.get(id) ?? id,
+  })),
 ];
 
 const categoryOptionIds = uniq(
-  allToolCategoryIds.filter((id) => categoryDimensionById.get(id) !== 'toolchainDimension'),
-).sort((a, b) => (categoryTitleById.get(a) ?? a).localeCompare(categoryTitleById.get(b) ?? b));
-const categoryOptions = categoryOptionIds.map((id) => ({ id, label: categoryTitleById.get(id) ?? id }));
+  allToolCategoryIds.filter(
+    (id) => categoryDimensionById.get(id) !== 'toolchainDimension',
+  ),
+).sort((a, b) =>
+  (categoryTitleById.get(a) ?? a).localeCompare(categoryTitleById.get(b) ?? b),
+);
+const categoryOptions = categoryOptionIds.map((id) => ({
+  id,
+  label: categoryTitleById.get(id) ?? id,
+}));
 
-const tagOptionIds = uniq(toolsFallback.flatMap((t) => t.data.tagIds ?? [])).sort((a, b) =>
+const tagOptionIds = uniq(
+  toolsFallback.flatMap((t) => t.data.tagIds ?? []),
+).sort((a, b) =>
   (tagTitleById.get(a) ?? a).localeCompare(tagTitleById.get(b) ?? b),
 );
-const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?? id }));
+const tagOptions = tagOptionIds.map((id) => ({
+  id,
+  label: tagTitleById.get(id) ?? id,
+}));
 ---
 
 <BaseLayout {title} {description} lang={lang} useLangPrefix>
-
   <!-- ══════════════════════════════════════════════════════════════
        HERO HEADER
   ═══════════════════════════════════════════════════════════════ -->
   <header class="tc-hero" data-tc-hero>
     <div class="tc-hero__inner">
       <div class="tc-hero__eyebrow ds-eyebrow">
-        <span class="i-solar-server-bold-duotone align-middle mr-2" aria-hidden="true"></span>
+        <span
+          class="i-solar-server-bold-duotone align-middle mr-2"
+          aria-hidden="true"></span>
         Arsenal Overview
       </div>
       <h1 class="tc-hero__title">Toolchain</h1>
       <p class="tc-hero__sub">{description}</p>
 
-      {tools.length === 0 && lang !== 'en' ? (
-        <p class="tc-hero__fallback ds-label">
-          Showing English tool entries while {lang.toUpperCase()} content is being authored.
-        </p>
-      ) : null}
+      {
+        tools.length === 0 && lang !== 'en' ? (
+          <p class="tc-hero__fallback ds-label">
+            Showing English tool entries while {lang.toUpperCase()} content is
+            being authored.
+          </p>
+        ) : null
+      }
 
       <!-- Stats ribbon -->
       <div class="tc-stats" role="list">
-        {[
-          { icon: 'i-ph-wrench-duotone',       label: 'Tools',      value: totalTools },
-          { icon: 'i-ph-shield-check-duotone',  label: 'Domains',    value: uniqueDomainDimensions.size },
-          { icon: 'i-ph-squares-four-duotone',  label: 'Categories', value: uniqueCategoryIds.size },
-          { icon: 'i-ph-tag-duotone',           label: 'Tags',       value: uniqueTagIds.size },
-          { icon: 'i-ph-buildings-duotone',     label: 'Vendors',    value: vendorCount },
-        ].map(({ icon, label, value }) => (
-          <div class="tc-stat" role="listitem">
-            <span class={`${icon} tc-stat__icon`} aria-hidden="true"></span>
-            <span class="tc-stat__value">{value}</span>
-            <span class="tc-stat__label ds-label">{label}</span>
-          </div>
-        ))}
+        {
+          [
+            { icon: 'i-ph-wrench-duotone', label: 'Tools', value: totalTools },
+            {
+              icon: 'i-ph-shield-check-duotone',
+              label: 'Domains',
+              value: uniqueDomainDimensions.size,
+            },
+            {
+              icon: 'i-ph-squares-four-duotone',
+              label: 'Categories',
+              value: uniqueCategoryIds.size,
+            },
+            {
+              icon: 'i-ph-tag-duotone',
+              label: 'Tags',
+              value: uniqueTagIds.size,
+            },
+            {
+              icon: 'i-ph-buildings-duotone',
+              label: 'Vendors',
+              value: vendorCount,
+            },
+          ].map(({ icon, label, value }) => (
+            <div class="tc-stat" role="listitem">
+              <span class={`${icon} tc-stat__icon`} aria-hidden="true" />
+              <span class="tc-stat__value">{value}</span>
+              <span class="tc-stat__label ds-label">{label}</span>
+            </div>
+          ))
+        }
       </div>
     </div>
 
@@ -188,54 +848,106 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     <!-- Tool distribution by domain -->
     <div class="tc-dash-panel">
       <header class="tc-panel-header">
-        <span class="i-solar-code-bold-duotone tc-panel-icon text-accent" aria-hidden="true"></span>
+        <span
+          class="i-solar-code-bold-duotone tc-panel-icon text-accent"
+          aria-hidden="true"></span>
         <div>
           <h2 class="tc-panel-title">Distribution by Domain</h2>
           <p class="tc-panel-sub ds-label">{totalTools} tools · categorised</p>
         </div>
       </header>
-      {distLabels.length > 0 ? (
-        <LazyBarChart
-          labels={distLabels}
-          values={distValues}
-          title="Tools per domain"
-          series="Tool count"
-          horizontal
-          height={distLabels.length * 38 + 24}
-          class="tc-bar"
-        />
-      ) : (
-        <p class="tc-empty">Tool data loading…</p>
-      )}
+      {
+        distLabels.length > 0 ? (
+          <LazyBarChart
+            labels={distLabels}
+            values={distValues}
+            title="Tools per domain"
+            series="Tool count"
+            horizontal
+            height={distLabels.length * 38 + 24}
+            class="tc-bar"
+          />
+        ) : (
+          <p class="tc-empty">Tool data loading…</p>
+        )
+      }
     </div>
 
     <!-- Category coverage radar -->
     <div class="tc-dash-panel">
       <header class="tc-panel-header">
-        <span class="i-solar-shield-bold-duotone tc-panel-icon text-[var(--ds-color-security)]" aria-hidden="true"></span>
+        <span
+          class="i-solar-shield-bold-duotone tc-panel-icon text-[var(--ds-color-security)]"
+          aria-hidden="true"></span>
         <div>
           <h2 class="tc-panel-title">Category Coverage</h2>
-          <p class="tc-panel-sub ds-label">Top {radarRows.length} categories · relative density</p>
+          <p class="tc-panel-sub ds-label">
+            Top {radarRows.length} categories · relative density
+          </p>
         </div>
       </header>
-      {radarRows.length > 0 ? (
-        <LazyRadarChart
-          rows={radarRows}
-          title="Category coverage radar"
-          class="tc-radar"
-        />
-      ) : (
-        <p class="tc-empty">Category data loading…</p>
-      )}
+      {
+        radarRows.length > 0 ? (
+          <LazyRadarChart
+            rows={radarRows}
+            title="Category coverage radar"
+            class="tc-radar"
+          />
+        ) : (
+          <p class="tc-empty">Category data loading…</p>
+        )
+      }
     </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       TOOLCHAIN TREE
+  ═══════════════════════════════════════════════════════════════ -->
+  <section
+    class="tc-tree-section"
+    data-tc-section
+    aria-label="Toolchain relationships"
+  >
+    <header class="tc-panel-header tc-tree-header">
+      <span
+        class="i-ph-share-network-duotone tc-panel-icon text-accent"
+        aria-hidden="true"></span>
+      <div>
+        <h2 class="tc-panel-title">CardTree View</h2>
+        <p class="tc-panel-sub ds-label">
+          Interactive map by category and tool
+        </p>
+      </div>
+    </header>
+
+    <CardTree
+      data={toolchainTreeData}
+      data-toolchain-graph={JSON.stringify(toolchainGraphData)}
+      options={{
+        width: '100%',
+        height: 'auto',
+        nodeWidth: 220,
+        nodeHeight: 78,
+        direction: 'left',
+        contentKey: 'content',
+        enableToolbar: true,
+        enableSearch: true,
+        enableBreadcrumb: true,
+      }}
+      ariaLabel="Toolchain tree chart"
+      data-card-tree-preset="toolchain"
+      class="tc-tree"
+    />
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════
        FILTER + TOOL GRID
   ═══════════════════════════════════════════════════════════════ -->
-  <section class="tc-tools-section" data-tc-section>
+  <section class="tc-tools-section" data-tc-section hidden>
     <h2 class="tc-section-title">
-      <span class="i-ph-list-magnifying-glass-duotone align-middle mr-2" aria-hidden="true"></span>
+      <span
+        class="i-ph-list-magnifying-glass-duotone align-middle mr-2"
+        aria-hidden="true"></span>
       Tool Catalogue
     </h2>
 
@@ -248,109 +960,147 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     />
 
     <div class="tc-grid" id="toolchain-items" aria-label="Tools">
-      {toolsFallback
-        .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
-        .map((tool, i) => {
-          const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
-          const evidence = getEvidence(tool.data.toolId);
-          const projectLinks = evidence.projects
-            .map((k) => nodeByKey.get(k))
-            .filter(isGraphNode)
-            .map((n) => ({ label: n.title, href: `/${lang}/portfolio/${n.slug}` }));
-          const caseStudyLinks = evidence.caseStudies
-            .map((k) => nodeByKey.get(k))
-            .filter(isGraphNode)
-            .map((n) => ({ label: n.title, href: `/${lang}/case-studies/${n.slug}` }));
+      {
+        toolsFallback
+          .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
+          .map((tool, i) => {
+            const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
+            const evidence = getEvidence(tool.data.toolId);
+            const projectLinks = evidence.projects
+              .map((k) => nodeByKey.get(k))
+              .filter(isGraphNode)
+              .map((n) => ({
+                label: n.title,
+                href: `/${lang}/portfolio/${n.slug}`,
+              }));
+            const caseStudyLinks = evidence.caseStudies
+              .map((k) => nodeByKey.get(k))
+              .filter(isGraphNode)
+              .map((n) => ({
+                label: n.title,
+                href: `/${lang}/case-studies/${n.slug}`,
+              }));
 
-          const categories = (tool.data.categoryIds ?? [])
-            .map((id) => ({ id, label: categoryTitleById.get(id) }))
-            .filter((c): c is { id: string; label: string } => isNonEmptyString(c.label));
-          const tags = (tool.data.tagIds ?? [])
-            .map((id) => tagTitleById.get(id))
-            .filter(isNonEmptyString);
+            const categories = (tool.data.categoryIds ?? [])
+              .map((id) => ({ id, label: categoryTitleById.get(id) }))
+              .filter((c): c is { id: string; label: string } =>
+                isNonEmptyString(c.label),
+              );
+            const tags = (tool.data.tagIds ?? [])
+              .map((id) => tagTitleById.get(id))
+              .filter(isNonEmptyString);
 
-          const hasEvidence = projectLinks.length > 0 || caseStudyLinks.length > 0;
+            const hasEvidence =
+              projectLinks.length > 0 || caseStudyLinks.length > 0;
 
-          return (
-            <article
-              class="tc-card"
-              data-tool-item
-              data-tc-card
-              data-type-ids={typeIds.join(' ')}
-              data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
-              data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
-              style={`--card-index:${i}`}
-            >
-              <header class="tc-card__header">
-                <h3 class="tc-card__name">{tool.data.name}</h3>
-                {tool.data.vendor ? (
-                  <span class="tc-card__vendor ds-label">{tool.data.vendor}</span>
+            return (
+              <article
+                class="tc-card"
+                data-tool-item
+                data-tc-card
+                data-type-ids={typeIds.join(' ')}
+                data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
+                data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
+                style={`--card-index:${i}`}
+              >
+                <header class="tc-card__header">
+                  <h3 class="tc-card__name">{tool.data.name}</h3>
+                  {tool.data.vendor ? (
+                    <span class="tc-card__vendor ds-label">
+                      {tool.data.vendor}
+                    </span>
+                  ) : null}
+                </header>
+
+                {/* Categories */}
+                {categories.length > 0 ? (
+                  <div class="tc-card__badges">
+                    {categories.map((c) => (
+                      <UiBadge
+                        variant={domainVariant(c.id) as any}
+                        size="sm"
+                        depth="flat"
+                      >
+                        {c.label}
+                      </UiBadge>
+                    ))}
+                  </div>
                 ) : null}
-              </header>
 
-              <!-- Categories -->
-              {categories.length > 0 ? (
-                <div class="tc-card__badges">
-                  {categories.map((c) => (
-                    <UiBadge variant={domainVariant(c.id) as any} size="sm" depth="flat">
-                      {c.label}
-                    </UiBadge>
-                  ))}
-                </div>
-              ) : null}
+                {/* Tags */}
+                {tags.length > 0 ? (
+                  <div class="tc-card__tags">
+                    {tags.map((tag) => (
+                      <span class="ds-badge">{tag}</span>
+                    ))}
+                  </div>
+                ) : null}
 
-              <!-- Tags -->
-              {tags.length > 0 ? (
-                <div class="tc-card__tags">
-                  {tags.map((tag) => (
-                    <span class="ds-badge">{tag}</span>
-                  ))}
-                </div>
-              ) : null}
+                {/* Evidence links */}
+                {hasEvidence ? (
+                  <div class="tc-card__evidence">
+                    {projectLinks.length > 0 ? (
+                      <div class="tc-evidence-group">
+                        <span
+                          class="i-ph-folder-notch-open-duotone tc-evidence-icon"
+                          aria-hidden="true"
+                        />
+                        {projectLinks.map((link, li) => (
+                          <Fragment>
+                            <a class="tc-evidence-link" href={link.href}>
+                              {link.label}
+                            </a>
+                            {li < projectLinks.length - 1 ? (
+                              <span class="tc-evidence-sep">·</span>
+                            ) : null}
+                          </Fragment>
+                        ))}
+                      </div>
+                    ) : null}
+                    {caseStudyLinks.length > 0 ? (
+                      <div class="tc-evidence-group">
+                        <span
+                          class="i-ph-article-duotone tc-evidence-icon"
+                          aria-hidden="true"
+                        />
+                        {caseStudyLinks.map((link, li) => (
+                          <Fragment>
+                            <a class="tc-evidence-link" href={link.href}>
+                              {link.label}
+                            </a>
+                            {li < caseStudyLinks.length - 1 ? (
+                              <span class="tc-evidence-sep">·</span>
+                            ) : null}
+                          </Fragment>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
 
-              <!-- Evidence links -->
-              {hasEvidence ? (
-                <div class="tc-card__evidence">
-                  {projectLinks.length > 0 ? (
-                    <div class="tc-evidence-group">
-                      <span class="i-ph-folder-notch-open-duotone tc-evidence-icon" aria-hidden="true"></span>
-                      {projectLinks.map((link, li) => (
-                        <Fragment>
-                          <a class="tc-evidence-link" href={link.href}>{link.label}</a>
-                          {li < projectLinks.length - 1 ? <span class="tc-evidence-sep">·</span> : null}
-                        </Fragment>
-                      ))}
-                    </div>
-                  ) : null}
-                  {caseStudyLinks.length > 0 ? (
-                    <div class="tc-evidence-group">
-                      <span class="i-ph-article-duotone tc-evidence-icon" aria-hidden="true"></span>
-                      {caseStudyLinks.map((link, li) => (
-                        <Fragment>
-                          <a class="tc-evidence-link" href={link.href}>{link.label}</a>
-                          {li < caseStudyLinks.length - 1 ? <span class="tc-evidence-sep">·</span> : null}
-                        </Fragment>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              ) : null}
-
-              <!-- Website link -->
-              {tool.data.website ? (
-                <div class="tc-card__footer">
-                  <a class="tc-card__link" href={tool.data.website} rel="noopener noreferrer" target="_blank">
-                    <span class="i-ph-arrow-square-out-duotone align-middle mr-1" aria-hidden="true"></span>
-                    Website
-                  </a>
-                </div>
-              ) : null}
-            </article>
-          );
-        })}
+                {/* Website link */}
+                {tool.data.website ? (
+                  <div class="tc-card__footer">
+                    <a
+                      class="tc-card__link"
+                      href={tool.data.website}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="i-ph-arrow-square-out-duotone align-middle mr-1"
+                        aria-hidden="true"
+                      />
+                      Website
+                    </a>
+                  </div>
+                ) : null}
+              </article>
+            );
+          })
+      }
     </div>
   </section>
-
 </BaseLayout>
 
 <!-- ══════════════════════════════════════════════════════════════
@@ -374,15 +1124,17 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
       });
     }
 
-    document.querySelectorAll<HTMLElement>('[data-tc-section]').forEach((section) => {
-      gsap.from(section, {
-        scrollTrigger: { trigger: section, start: 'top 88%', once: true },
-        y: 24,
-        opacity: 0,
-        duration: 0.65,
-        ease: 'ds.softOut',
+    document
+      .querySelectorAll<HTMLElement>('[data-tc-section]')
+      .forEach((section) => {
+        gsap.from(section, {
+          scrollTrigger: { trigger: section, start: 'top 88%', once: true },
+          y: 24,
+          opacity: 0,
+          duration: 0.65,
+          ease: 'ds.softOut',
+        });
       });
-    });
 
     document.querySelectorAll<HTMLElement>('[data-tc-card]').forEach((card) => {
       const idx = Number(card.style.getPropertyValue('--card-index') || 0);
@@ -412,8 +1164,14 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     opacity: 0.6;
     pointer-events: none;
   }
-  .tc-hero__inner { position: relative; z-index: 1; max-width: 860px; }
-  .tc-hero__eyebrow { margin-bottom: var(--space-2); }
+  .tc-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+  }
+  .tc-hero__eyebrow {
+    margin-bottom: var(--space-2);
+  }
   .tc-hero__title {
     font-family: var(--font-display);
     font-size: clamp(1.75rem, 4vw, 2.8rem);
@@ -431,7 +1189,9 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     margin: 0 0 var(--space-5);
     line-height: 1.6;
   }
-  .tc-hero__fallback { margin: 0 0 var(--space-3); }
+  .tc-hero__fallback {
+    margin: 0 0 var(--space-3);
+  }
 
   /* ── Stats ribbon ─────────────────────────────────────────────── */
   .tc-stats {
@@ -461,7 +1221,9 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     color: var(--color-text-strong);
     line-height: 1;
   }
-  .tc-stat__label { margin-top: 2px; }
+  .tc-stat__label {
+    margin-top: 2px;
+  }
 
   /* ── Dashboard grid ───────────────────────────────────────────── */
   .tc-dashboard {
@@ -471,7 +1233,11 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     padding: var(--space-5) var(--space-6);
     border-bottom: 1px solid var(--color-border);
   }
-  @media (max-width: 700px) { .tc-dashboard { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) {
+    .tc-dashboard {
+      grid-template-columns: 1fr;
+    }
+  }
 
   /* ── Panel (shared by dashboard cards) ───────────────────────── */
   .tc-dash-panel {
@@ -488,7 +1254,11 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     border-bottom: 1px solid var(--color-border);
     padding-bottom: var(--space-3);
   }
-  .tc-panel-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+  .tc-panel-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
   .tc-panel-title {
     font-family: var(--font-mono);
     font-size: var(--font-size-1);
@@ -496,11 +1266,26 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     color: var(--color-text-strong);
     margin: 0 0 2px;
   }
-  .tc-panel-sub { margin: 0; }
+  .tc-panel-sub {
+    margin: 0;
+  }
 
   /* ── Section wrapper ──────────────────────────────────────────── */
   .tc-tools-section {
     padding: var(--space-5) var(--space-6) var(--space-6);
+  }
+  .tc-tree-section {
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .tc-tree-header {
+    margin-bottom: var(--space-1);
+  }
+  .tc-tree {
+    min-height: 520px;
   }
   .tc-section-title {
     font-family: var(--font-mono);
@@ -528,11 +1313,14 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
   .tc-card:hover {
     border-color: color-mix(in oklab, var(--color-cta), transparent 50%);
-    box-shadow: 0 2px 12px color-mix(in oklab, var(--color-cta), transparent 85%);
+    box-shadow: 0 2px 12px
+      color-mix(in oklab, var(--color-cta), transparent 85%);
   }
 
   .tc-card__header {
@@ -587,7 +1375,9 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     font-size: var(--font-size-0);
     line-height: 1.4;
   }
-  .tc-evidence-link:hover { text-decoration: underline; }
+  .tc-evidence-link:hover {
+    text-decoration: underline;
+  }
   .tc-evidence-sep {
     color: var(--color-text-muted);
     font-size: var(--font-size-00);
@@ -605,10 +1395,14 @@ const tagOptions = tagOptionIds.map((id) => ({ id, label: tagTitleById.get(id) ?
     color: var(--color-cta);
     text-decoration: none;
   }
-  .tc-card__link:hover { text-decoration: underline; }
+  .tc-card__link:hover {
+    text-decoration: underline;
+  }
 
   /* ── Chart sizing ────────────────────────────────────────────── */
-  .tc-radar { height: 260px; }
+  .tc-radar {
+    height: 260px;
+  }
 
   /* ── Empty state ─────────────────────────────────────────────── */
   .tc-empty {

@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../base-url';
 
 export type ExperienceBucketId = 'dev' | 'sec' | 'ops' | 'ai';
 
@@ -84,12 +85,12 @@ export type ExperienceCardViewModel = {
 
 const LOGO_ASSETS: Record<string, ExperienceLogo> = {
   skyguide: {
-    src: '/images/company-logos/skyguide.svg',
+    src: withBase('/images/company-logos/skyguide.svg'),
     alt: 'Skyguide logo',
     hasVectorAsset: true,
   },
   ciklum: {
-    src: '/images/company-logos/ciklum.svg',
+    src: withBase('/images/company-logos/ciklum.svg'),
     alt: 'Ciklum logo',
     hasVectorAsset: true,
   },
@@ -228,7 +229,10 @@ const normalizeHref = (
 };
 
 const normalizeCompanyKey = (value: string) =>
-  value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-');
 
 const getLogoAsset = (companyName: string): ExperienceLogo => {
   const key = normalizeCompanyKey(companyName);
@@ -286,7 +290,10 @@ const inferBucketFromTool = (
   if (TOOL_BUCKETS[id]) return TOOL_BUCKETS[id];
   for (const categoryId of tool?.data.categoryIds ?? []) {
     const category = categoriesById.get(categoryId);
-    const bucket = inferBucketFromCategory(categoryId, category?.data.dimension);
+    const bucket = inferBucketFromCategory(
+      categoryId,
+      category?.data.dimension,
+    );
     if (bucket) return bucket;
   }
   return undefined;
@@ -346,7 +353,10 @@ export const buildExperienceCardModel = (
     [];
 
   const bucketMap = new Map<ExperienceBucketId, ExperienceBucketItem[]>(
-    Object.keys(BUCKET_META).map((bucketId) => [bucketId as ExperienceBucketId, []]),
+    Object.keys(BUCKET_META).map((bucketId) => [
+      bucketId as ExperienceBucketId,
+      [],
+    ]),
   );
 
   const categoryItems = (entry.data.categoryIds ?? []).map((id) => {
@@ -373,11 +383,17 @@ export const buildExperienceCardModel = (
     bucketMap.get(item.bucket)?.push({ label: item.label, kind: 'tool' });
   }
 
-  const buckets = (Object.entries(BUCKET_META) as [
-    ExperienceBucketId,
-    (typeof BUCKET_META)[ExperienceBucketId],
-  ][]).map(([id, meta]) => {
-    const deduped = [...new Map((bucketMap.get(id) ?? []).map((item) => [item.label, item])).values()];
+  const buckets = (
+    Object.entries(BUCKET_META) as [
+      ExperienceBucketId,
+      (typeof BUCKET_META)[ExperienceBucketId],
+    ][]
+  ).map(([id, meta]) => {
+    const deduped = [
+      ...new Map(
+        (bucketMap.get(id) ?? []).map((item) => [item.label, item]),
+      ).values(),
+    ];
     return {
       id,
       ...meta,
@@ -385,7 +401,9 @@ export const buildExperienceCardModel = (
     };
   });
 
-  const skills = buckets.flatMap((bucket) => bucket.items.map((item) => item.label));
+  const skills = buckets.flatMap((bucket) =>
+    bucket.items.map((item) => item.label),
+  );
   const totalMonths = getDurationMonths(
     entry.data.startDate,
     entry.data.endDate,
@@ -396,9 +414,18 @@ export const buildExperienceCardModel = (
     entry.data.endDate,
     entry.data.isCurrent,
   );
-  const importanceTier = getImportanceTier(totalMonths, Boolean(entry.data.isCurrent));
-  const importanceScore = getImportanceScore(totalMonths, Boolean(entry.data.isCurrent));
-  const ageAtStart = calculateAgeAtStart(entry.data.startDate, options.birthYear);
+  const importanceTier = getImportanceTier(
+    totalMonths,
+    Boolean(entry.data.isCurrent),
+  );
+  const importanceScore = getImportanceScore(
+    totalMonths,
+    Boolean(entry.data.isCurrent),
+  );
+  const ageAtStart = calculateAgeAtStart(
+    entry.data.startDate,
+    options.birthYear,
+  );
 
   const stats: ExperienceStat[] = [
     {
@@ -410,7 +437,8 @@ export const buildExperienceCardModel = (
       label: 'Technologies',
       value: String(skills.length),
       icon: 'code-window',
-      note: skills.length > 0 ? skills.join(' · ') : 'No technologies modeled yet',
+      note:
+        skills.length > 0 ? skills.join(' · ') : 'No technologies modeled yet',
     },
     {
       label: 'Team size',

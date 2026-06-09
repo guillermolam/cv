@@ -7,6 +7,8 @@ import heerich from './integrations/heerich/index.ts';
 import apexcharts from './integrations/apexcharts/index.ts';
 
 export default defineConfig({
+  site: 'https://guillermolam.github.io',
+  base: '/cv',
   output: 'static',
   integrations: [
     mdx(),

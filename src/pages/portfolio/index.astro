@@ -3,8 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import GlbModelViewer from '../../components/GlbModelViewer.astro';
 
 const title = 'Portfolio';
-const description = 'Selected work across security, infrastructure, and development.';
-const portfolioGlb = '/3d/guillermolam-avatar.glb';
+const description =
+  'Selected work across security, infrastructure, and development.';
+const portfolioGlb =
+  import.meta.env.BASE_URL.replace(/\/$/, '') + '/3d/guillermolam-avatar.glb';
 ---
 
 <BaseLayout title={title} description={description}>

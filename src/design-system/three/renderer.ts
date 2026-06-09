@@ -38,5 +38,20 @@ export function createRenderCore(canvas: HTMLCanvasElement): RenderCore {
   };
   resize();
 
+  if (import.meta.env.DEV && typeof window !== 'undefined') {
+    const w = window as unknown as Record<string, unknown>;
+    const list = (w['__THREE_RENDER_CORES'] as unknown[]) ?? [];
+    if (!Array.isArray(w['__THREE_RENDER_CORES']))
+      w['__THREE_RENDER_CORES'] = list;
+    (w['__THREE_RENDER_CORES'] as unknown[]).push({
+      canvas,
+      renderer,
+      scene,
+      camera,
+      label: canvas.className || 'three',
+      createdAt: Date.now(),
+    });
+  }
+
   return { renderer, scene, camera, resize };
 }

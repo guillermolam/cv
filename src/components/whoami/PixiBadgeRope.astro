@@ -1,0 +1,352 @@
+---
+export type Props = {
+  imageSrc?: string;
+  label?: string;
+  detail?: string;
+};
+
+const {
+  imageSrc = import.meta.env.BASE_URL.replace(/\/$/, '') +
+    '/images/badges/object_1.png',
+  label = 'Badge motion study',
+  detail = 'PixiJS rope distortion using the badge artwork instead of the snake demo.',
+} = Astro.props as Props;
+---
+
+<section class="pixi-badge-rope" aria-label={label}>
+  <div
+    class="pixi-badge-rope__canvas"
+    data-pixi-badge-rope
+    data-image-src={imageSrc}
+    data-label={label}
+  >
+  </div>
+  <div class="pixi-badge-rope__copy">
+    <p class="pixi-badge-rope__kicker">Lightweight 3D effect</p>
+    <h3 class="pixi-badge-rope__title">{label}</h3>
+    <p class="pixi-badge-rope__detail">{detail}</p>
+  </div>
+</section>
+
+<script>
+  import {
+    Assets,
+    Container,
+    MeshRope,
+    Point,
+    WebGLRenderer as PixiWebGLRenderer,
+  } from 'pixi.js';
+  import * as THREE from 'three';
+  const mountedHosts = new WeakSet<HTMLElement>();
+
+  const init = async () => {
+    const hosts = document.querySelectorAll<HTMLElement>(
+      '[data-pixi-badge-rope]',
+    );
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    hosts.forEach((host) => {
+      if (mountedHosts.has(host)) return;
+      mountedHosts.add(host);
+
+      void mountBadgeRope(host, prefersReduced).catch((error) => {
+        console.error('[PixiBadgeRope] Failed to mount badge rope', error);
+        mountedHosts.delete(host);
+      });
+    });
+  };
+
+  const mountBadgeRope = async (host: HTMLElement, prefersReduced: boolean) => {
+    const imageSrc =
+      host.dataset.imageSrc ||
+      import.meta.env.BASE_URL.replace(/\/$/, '') +
+        '/images/badges/object_1.png';
+    const canvas = document.createElement('canvas');
+    canvas.className = 'pixi-badge-rope__surface';
+    canvas.setAttribute('aria-hidden', 'true');
+    host.replaceChildren(canvas);
+
+    const threeRenderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      stencil: true,
+    });
+    threeRenderer.setClearColor(0x000000, 0);
+    threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const threeScene = new THREE.Scene();
+    const threeCamera = new THREE.PerspectiveCamera(70, 1, 0.1, 100);
+    threeCamera.position.z = 50;
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.95);
+    const key = new THREE.DirectionalLight(0xb8f8ff, 1.8);
+    key.position.set(3, 4, 7);
+    const rim = new THREE.DirectionalLight(0xffd49b, 0.75);
+    rim.position.set(-4, -3, 5);
+    threeScene.add(ambient, key, rim);
+
+    const cube = new THREE.Mesh(
+      new THREE.BoxGeometry(22, 22, 22),
+      new THREE.MeshBasicMaterial({
+        color: 0x2dd7ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.22,
+      }),
+    );
+    threeScene.add(cube);
+
+    const halo = new THREE.Mesh(
+      new THREE.TorusGeometry(18, 1.4, 12, 96),
+      new THREE.MeshBasicMaterial({
+        color: 0xffdd99,
+        transparent: true,
+        opacity: 0.12,
+      }),
+    );
+    halo.rotation.x = Math.PI / 2.3;
+    halo.rotation.z = 0.45;
+    threeScene.add(halo);
+
+    const pixiRenderer = new PixiWebGLRenderer();
+    const sharedContext = threeRenderer.getContext();
+    if (
+      typeof WebGL2RenderingContext !== 'undefined' &&
+      !(sharedContext instanceof WebGL2RenderingContext)
+    ) {
+      throw new Error('Pixi shared-context mode requires WebGL2.');
+    }
+    await pixiRenderer.init({
+      context: sharedContext as WebGL2RenderingContext,
+      width: 1,
+      height: 1,
+      clearBeforeRender: false,
+    });
+
+    const texture = await Assets.load(imageSrc);
+    const stage = new Container();
+    const badge = new Container();
+    const pointCount = 20;
+    const width = texture.width;
+    const height = texture.height;
+    const segment = width / (pointCount - 1);
+    const points = Array.from(
+      { length: pointCount },
+      (_, index) => new Point(index * segment, 0),
+    );
+    const rope = new MeshRope({ texture, points });
+
+    stage.addChild(badge);
+    badge.addChild(rope);
+    pixiRenderer.render(stage);
+
+    const threeDevEntry =
+      import.meta.env.DEV && typeof window !== 'undefined'
+        ? {
+            canvas,
+            renderer: threeRenderer,
+            scene: threeScene,
+            camera: threeCamera,
+            label: 'PixiBadgeRope',
+            createdAt: Date.now(),
+          }
+        : null;
+
+    const pixiDevEntry =
+      import.meta.env.DEV && typeof window !== 'undefined'
+        ? {
+            canvas,
+            host,
+            renderer: pixiRenderer,
+            stage,
+            label: 'PixiBadgeRope',
+            createdAt: Date.now(),
+          }
+        : null;
+
+    if (threeDevEntry) {
+      const w = window as unknown as Record<string, unknown>;
+      const list = (w['__THREE_RENDER_CORES'] as unknown[]) ?? [];
+      if (!Array.isArray(w['__THREE_RENDER_CORES']))
+        w['__THREE_RENDER_CORES'] = list;
+      (w['__THREE_RENDER_CORES'] as unknown[]).push(threeDevEntry);
+    }
+
+    if (pixiDevEntry) {
+      const w = window as unknown as Record<string, unknown>;
+      const list = (w['__PIXI_RENDERERS'] as unknown[]) ?? [];
+      if (!Array.isArray(w['__PIXI_RENDERERS'])) w['__PIXI_RENDERERS'] = list;
+      (w['__PIXI_RENDERERS'] as unknown[]).push(pixiDevEntry);
+    }
+
+    rope.x = -width / 2;
+    rope.y = -height / 2;
+
+    const layout = () => {
+      const bounds = host.getBoundingClientRect();
+      const safeWidth = Math.max(bounds.width, 1);
+      const safeHeight = Math.max(bounds.height, 1);
+      const scale = Math.min(
+        safeWidth / (width * 1.08),
+        safeHeight / (height * 1.08),
+      );
+      badge.scale.set(Math.max(scale, 0.1));
+      badge.position.set(safeWidth / 2, safeHeight / 2);
+      // Pass updateStyle=true (default) so Three.js also sets canvas.style.width/height
+      // to the logical CSS dimensions. Without this, canvas.width/height attributes are
+      // set to safeWidth * devicePixelRatio (e.g. 640 at 2×), which becomes the canvas's
+      // intrinsic layout height — the host div grows to fit, firing the ResizeObserver
+      // again in an infinite loop.
+      threeRenderer.setSize(safeWidth, safeHeight);
+      threeCamera.aspect = safeWidth / safeHeight;
+      threeCamera.updateProjectionMatrix();
+      pixiRenderer.resize(safeWidth, safeHeight);
+    };
+
+    layout();
+
+    // Debounce with rAF to prevent ResizeObserver feedback loops
+    let rafId = 0;
+    const resizeObserver = new ResizeObserver(() => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => layout());
+    });
+    resizeObserver.observe(host);
+
+    let count = 0;
+    let raf = 0;
+    if (!prefersReduced) {
+      const tick = () => {
+        count += 0.09;
+        badge.rotation = Math.sin(count * 0.25) * 0.08;
+        badge.skew.x = Math.sin(count * 0.18) * 0.05;
+        cube.rotation.x += 0.008;
+        cube.rotation.y += 0.01;
+        halo.rotation.z -= 0.003;
+
+        for (let index = 0; index < points.length; index += 1) {
+          points[index].y = Math.sin(index * 0.48 + count) * height * 0.045;
+          points[index].x =
+            index * segment + Math.cos(index * 0.26 + count) * width * 0.018;
+        }
+
+        threeRenderer.resetState();
+        threeRenderer.render(threeScene, threeCamera);
+        pixiRenderer.resetState();
+        pixiRenderer.render(stage);
+        raf = window.requestAnimationFrame(tick);
+      };
+
+      raf = window.requestAnimationFrame(tick);
+    } else {
+      threeRenderer.render(threeScene, threeCamera);
+      pixiRenderer.render(stage);
+    }
+
+    const cleanup = () => {
+      window.cancelAnimationFrame(raf);
+      cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
+      stage.destroy({ children: true, texture: true, textureSource: true });
+      pixiRenderer.destroy({ removeView: false });
+      threeRenderer.dispose();
+      if (threeDevEntry && typeof window !== 'undefined') {
+        const w = window as unknown as Record<string, unknown>;
+        const list = (w['__THREE_RENDER_CORES'] as unknown[]) ?? [];
+        if (Array.isArray(list)) {
+          const index = list.indexOf(threeDevEntry);
+          if (index >= 0) list.splice(index, 1);
+        }
+      }
+      if (pixiDevEntry && typeof window !== 'undefined') {
+        const w = window as unknown as Record<string, unknown>;
+        const list = (w['__PIXI_RENDERERS'] as unknown[]) ?? [];
+        if (Array.isArray(list)) {
+          const index = list.indexOf(pixiDevEntry);
+          if (index >= 0) list.splice(index, 1);
+        }
+      }
+      canvas.remove();
+      mountedHosts.delete(host);
+    };
+
+    window.addEventListener('pagehide', cleanup, { once: true });
+  };
+
+  void init();
+</script>
+
+<style>
+  .pixi-badge-rope {
+    display: grid;
+    gap: 0.65rem;
+    min-width: 0;
+  }
+
+  .pixi-badge-rope__canvas {
+    position: relative;
+    min-height: clamp(210px, 28vw, 320px);
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 18%);
+    background:
+      radial-gradient(
+        120% 120% at 50% 20%,
+        color-mix(in oklab, var(--color-accent), transparent 88%),
+        transparent 58%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-surface-3), transparent 8%),
+        color-mix(in oklab, var(--color-surface-1), transparent 4%)
+      );
+    box-shadow:
+      0 18px 36px var(--shadow-2),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%);
+  }
+
+  /* The mounted <canvas> is a plain rendering surface — it must NOT share
+     .pixi-badge-rope__canvas (the host's decorative class) or it inherits
+     min-height/background/box-shadow, which both paints a flat gradient
+     behind the transparent WebGL output and feeds a layout/ResizeObserver
+     growth loop (canvas locks in an oversized height read from the host). */
+  .pixi-badge-rope__canvas :global(.pixi-badge-rope__surface) {
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .pixi-badge-rope__copy {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .pixi-badge-rope__kicker {
+    margin: 0;
+    font-size: var(--font-size-00);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+
+  .pixi-badge-rope__title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-1);
+    color: var(--color-text-strong);
+  }
+
+  .pixi-badge-rope__detail {
+    margin: 0;
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+</style>

@@ -1,3 +1,5 @@
+import { withBase } from './base-url';
+
 export type SocialKind = 'github' | 'linkedin';
 
 export type SocialLink = {
@@ -16,11 +18,15 @@ export const site: {
   role: 'Senior DevSecOps · Cloud & Platform Engineer',
   profile: {
     initials: 'GL',
-    photoPath: '/images/profile/guillermo-portrait.png',
-    avatarModelPath: '/3d/guillermolam-avatar.glb',
+    photoPath: withBase('/images/profile/guillermo-portrait.png'),
+    avatarModelPath: withBase('/3d/guillermolam-avatar.glb'),
   },
   social: [
-    { kind: 'github', label: 'GitHub', href: 'https://github.com/guillermolam' },
+    {
+      kind: 'github',
+      label: 'GitHub',
+      href: 'https://github.com/guillermolam',
+    },
     {
       kind: 'linkedin',
       label: 'LinkedIn',

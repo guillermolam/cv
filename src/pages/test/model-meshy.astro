@@ -9,23 +9,25 @@ import PageLayout from '../../layouts/PageLayout.astro';
 >
   <h1>Model Viewer Test: /3d/guillermolam-avatar.glb</h1>
   <p class="muted">
-    This is a temporary diagnostic page. It does not use Three.js; it uses the existing
+    This is a temporary diagnostic page. It does not use Three.js; it uses the
+    existing
     <code>&lt;model-viewer&gt;</code> progressive enhancement.
   </p>
 
   <section class="card pad status-card" aria-label="Model load status">
     <h2>Status</h2>
-    <p id="mv-status" role="status" aria-live="polite">
-      Initializing…
-    </p>
+    <p id="mv-status" role="status" aria-live="polite">Initializing…</p>
     <p class="muted">
-      Open DevTools Console and look for logs prefixed with <code>[model-meshy-test]</code>.
+      Open DevTools Console and look for logs prefixed with <code
+        >[model-meshy-test]</code
+      >.
     </p>
   </section>
 
   <GlbModelViewer
     class="js-model-meshy-test"
-    src="/3d/guillermolam-avatar.glb"
+    src={import.meta.env.BASE_URL.replace(/\/$/, '') +
+      '/3d/guillermolam-avatar.glb'}
     reveal="auto"
     title="Guillermo Lam avatar (3D)"
     description="Attempts to load /3d/guillermolam-avatar.glb via model-viewer and reports load success/failure."
@@ -40,8 +42,10 @@ import PageLayout from '../../layouts/PageLayout.astro';
         statusEl.textContent = text;
       };
 
-      const info = (...args: unknown[]) => console.info('[model-meshy-test]', ...args);
-      const error = (...args: unknown[]) => console.error('[model-meshy-test]', ...args);
+      const info = (...args: unknown[]) =>
+        console.info('[model-meshy-test]', ...args);
+      const error = (...args: unknown[]) =>
+        console.error('[model-meshy-test]', ...args);
 
       setStatus('Loading model-viewer web component…');
 
@@ -50,16 +54,23 @@ import PageLayout from '../../layouts/PageLayout.astro';
         await Promise.race([
           customElements.whenDefined('model-viewer'),
           new Promise<void>((_, reject) =>
-            window.setTimeout(() => reject(new Error(`Timed out after ${timeoutMs}ms`)), timeoutMs)
-          )
+            window.setTimeout(
+              () => reject(new Error(`Timed out after ${timeoutMs}ms`)),
+              timeoutMs,
+            ),
+          ),
         ]);
       } catch (e) {
-        setStatus('Failed: model-viewer web component did not load (see console).');
+        setStatus(
+          'Failed: model-viewer web component did not load (see console).',
+        );
         error('model-viewer was not defined in time', e);
         return;
       }
 
-      const viewer = document.querySelector('.js-model-meshy-test model-viewer') as HTMLElement | null;
+      const viewer = document.querySelector(
+        '.js-model-meshy-test model-viewer',
+      ) as HTMLElement | null;
       if (!viewer) {
         setStatus('Failed: <model-viewer> element not found in DOM.');
         error('Expected element selector: .js-model-meshy-test model-viewer');
@@ -81,19 +92,25 @@ import PageLayout from '../../layouts/PageLayout.astro';
       viewer.addEventListener(
         'load',
         () => {
-          markTerminal('loaded', 'Loaded: model-viewer rendered the model successfully.');
+          markTerminal(
+            'loaded',
+            'Loaded: model-viewer rendered the model successfully.',
+          );
           info('load event fired');
         },
-        { once: true }
+        { once: true },
       );
 
       viewer.addEventListener(
         'error',
         (event) => {
-          markTerminal('failed', 'Failed: model-viewer could not load/render the model (see console).');
+          markTerminal(
+            'failed',
+            'Failed: model-viewer could not load/render the model (see console).',
+          );
           error('error event fired', event);
         },
-        { once: true }
+        { once: true },
       );
 
       // Best-effort progress reporting (the event payload shape can vary by model-viewer version).
@@ -103,14 +120,17 @@ import PageLayout from '../../layouts/PageLayout.astro';
         const total = typedEvent.detail?.totalProgress;
         if (typeof total !== 'number' || Number.isNaN(total)) return;
         const percent = Math.round(total * 100);
-        if (percent >= 0 && percent < 100) setStatus(`Loading model asset… ${percent}%`);
+        if (percent >= 0 && percent < 100)
+          setStatus(`Loading model asset… ${percent}%`);
       });
 
       // If neither event fires (bad format / fetch blocked / unsupported), make the failure obvious.
       window.setTimeout(() => {
         if (terminalState !== 'loading') return;
         terminalState = 'failed';
-        setStatus('Failed: no load/error signal after 10s (see console + Network tab).');
+        setStatus(
+          'Failed: no load/error signal after 10s (see console + Network tab).',
+        );
         error('Timed out waiting for load/error', { src });
       }, 10_000);
     })();
@@ -126,8 +146,9 @@ import PageLayout from '../../layouts/PageLayout.astro';
     }
 
     code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-        'Courier New', monospace;
+      font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        'Liberation Mono', 'Courier New', monospace;
       font-size: 0.95em;
     }
   </style>
