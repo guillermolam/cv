@@ -1,6 +1,5 @@
 ---
 import BadgeRack from './BadgeRack.astro';
-import PixiBadgeRope from './PixiBadgeRope.astro';
 import CircuitTraceSvg from './CircuitTraceSvg.astro';
 import Avatar3D from '../Avatar3D.astro';
 import SocialLinks from '../SocialLinks.astro';
@@ -210,12 +209,6 @@ const bioFields: BioField[] = [
       </div>
 
       <OperatorModuleNav items={sectionItems} />
-
-      <PixiBadgeRope
-        imageSrc="/images/badges/object_1.png"
-        label="Badge motion study"
-        detail="The badge artwork is now the source texture, so the 3D read comes from the actual asset instead of the snake demo."
-      />
 
       <BadgeRack label="Specializations" badges={badges} />
     </UiStack>
