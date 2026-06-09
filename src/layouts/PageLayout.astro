@@ -5,6 +5,7 @@ import type { Lang } from '../lib/i18n';
 import SectionNavRail, { type NavRailItem } from '../components/nav/SectionNavRail.astro';
 import type { NavSectionId } from '../components/nav/NavSectionGlyph.astro';
 import LanguageDial from '../components/i18n/LanguageDial.astro';
+import { withBase } from '../lib/base-url';
 
 type Props = {
   title: string;
@@ -35,19 +36,19 @@ const pathWithoutLang = stripLangPrefix(currentPath);
 
 const primaryPrefix = `/${lang}`;
 const nav = [
-  { href: `${primaryPrefix}/`, label: 'Whoami', id: 'whoami' as const },
-  { href: `${primaryPrefix}/toolchain`, label: 'Toolchain', id: 'toolchain' as const },
-  { href: `${primaryPrefix}/experience`, label: 'Experience', id: 'experience' as const },
-  { href: `${primaryPrefix}/blog`, label: 'Tutorials', id: 'tutorials' as const },
-  { href: `${primaryPrefix}/knowledge`, label: 'Knowledge Center', id: 'knowledge' as const },
-  { href: `${primaryPrefix}/contact`, label: 'Contact', id: 'contact' as const },
+  { href: withBase(`${primaryPrefix}/`), label: 'Whoami', id: 'whoami' as const },
+  { href: withBase(`${primaryPrefix}/toolchain`), label: 'Toolchain', id: 'toolchain' as const },
+  { href: withBase(`${primaryPrefix}/experience`), label: 'Experience', id: 'experience' as const },
+  { href: withBase(`${primaryPrefix}/blog`), label: 'Tutorials', id: 'tutorials' as const },
+  { href: withBase(`${primaryPrefix}/knowledge`), label: 'Knowledge Center', id: 'knowledge' as const },
+  { href: withBase(`${primaryPrefix}/contact`), label: 'Contact', id: 'contact' as const },
 ];
 
 const langLinks: Array<{ code: Lang; href: string }> = [
-  { code: 'en', href: `/en${pathWithoutLang}` },
-  { code: 'es', href: `/es${pathWithoutLang}` },
-  { code: 'fr', href: `/fr${pathWithoutLang}` },
-  { code: 'de', href: `/de${pathWithoutLang}` }
+  { code: 'en', href: withBase(`/en${pathWithoutLang}`) },
+  { code: 'es', href: withBase(`/es${pathWithoutLang}`) },
+  { code: 'fr', href: withBase(`/fr${pathWithoutLang}`) },
+  { code: 'de', href: withBase(`/de${pathWithoutLang}`) },
 ];
 
 const navRailItems: NavRailItem[] = nav.map((item) => ({
@@ -64,7 +65,7 @@ const navRailItems: NavRailItem[] = nav.map((item) => ({
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     {description ? <meta name="description" content={description} /> : null}
   </head>
   <body>
@@ -72,7 +73,7 @@ const navRailItems: NavRailItem[] = nav.map((item) => ({
 
     <header class="site-header">
       <div class="container site-header-inner">
-        <a class="brand" href={`${prefix}/`}>
+        <a class="brand" href={withBase(`${prefix}/`)}>
           <span class="brand-glyph" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 8h12l-2 8H8L6 8Z" />

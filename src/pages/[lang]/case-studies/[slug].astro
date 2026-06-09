@@ -4,14 +4,21 @@ import TaxonomyPills from '../../../components/content/TaxonomyPills.astro';
 
 import { getCollection, render } from 'astro:content';
 import { SUPPORTED_LANGS, isLang } from '../../../lib/i18n';
-import { buildContentGraph, getNodeKey, type ContentGraphNode } from '../../../lib/content/graph';
+import { withBase } from '../../../lib/base-url';
+import {
+  buildContentGraph,
+  getNodeKey,
+  type ContentGraphNode,
+} from '../../../lib/content/graph';
 import { getBacklinks, getOutgoingLinks } from '../../../lib/content/backlinks';
 import { scoreRelatedEntries } from '../../../lib/content/relationships';
 
 export async function getStaticPaths() {
   const caseStudies = await getCollection('caseStudies');
   const slugs = caseStudies.map((c) => c.data.slug);
-  return SUPPORTED_LANGS.flatMap((lang) => slugs.map((slug) => ({ params: { lang, slug } })));
+  return SUPPORTED_LANGS.flatMap((lang) =>
+    slugs.map((slug) => ({ params: { lang, slug } })),
+  );
 }
 
 const { lang, slug } = Astro.params;
@@ -28,21 +35,35 @@ const tagsAll = await getCollection('tags');
 const toolsAll = await getCollection('tools');
 const skillsAll = await getCollection('skills');
 
-const caseStudyLang = caseStudiesAll.find((c) => c.data.slug === slug && c.data.lang === lang);
-const caseStudyEn = caseStudiesAll.find((c) => c.data.slug === slug && c.data.lang === 'en');
+const caseStudyLang = caseStudiesAll.find(
+  (c) => c.data.slug === slug && c.data.lang === lang,
+);
+const caseStudyEn = caseStudiesAll.find(
+  (c) => c.data.slug === slug && c.data.lang === 'en',
+);
 const caseStudy = caseStudyLang ?? caseStudyEn;
 if (!caseStudy) {
   throw new Error(`Case study not found: ${slug}`);
 }
 
-const categoryTitleById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
-const tagTitleById = new Map(tagsAll.map((t) => [t.data.tagId, t.data.title] as const));
-const toolTitleById = new Map(toolsAll.map((t) => [t.data.toolId, t.data.name] as const));
-const skillTitleById = new Map(skillsAll.map((s) => [s.data.skillId, s.data.name] as const));
+const categoryTitleById = new Map(
+  categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const),
+);
+const tagTitleById = new Map(
+  tagsAll.map((t) => [t.data.tagId, t.data.title] as const),
+);
+const toolTitleById = new Map(
+  toolsAll.map((t) => [t.data.toolId, t.data.name] as const),
+);
+const skillTitleById = new Map(
+  skillsAll.map((s) => [s.data.skillId, s.data.name] as const),
+);
 
 const graph = await buildContentGraph();
 const nodeByKey = new Map(graph.nodes.map((n) => [n.key, n] as const));
-const isGraphNode = (value: ContentGraphNode | undefined): value is ContentGraphNode => Boolean(value);
+const isGraphNode = (
+  value: ContentGraphNode | undefined,
+): value is ContentGraphNode => Boolean(value);
 
 const nodeKey = getNodeKey('caseStudies', caseStudy.data.caseStudyId);
 const outgoing = getOutgoingLinks(nodeKey, graph);
@@ -69,17 +90,26 @@ const skills = (caseStudy.data.skillIds ?? [])
 const outgoingLinks = outgoing
   .map((e) => nodeByKey.get(e.to))
   .filter(isGraphNode)
-  .map((n) => ({ label: n.title, href: n.url ?? `/${lang}/content-index` }));
+  .map((n) => ({
+    label: n.title,
+    href: withBase(n.url ?? `/${lang}/content-index`),
+  }));
 
 const incomingLinks = backlinks
   .map((e) => nodeByKey.get(e.from))
   .filter(isGraphNode)
-  .map((n) => ({ label: n.title, href: n.url ?? `/${lang}/content-index` }));
+  .map((n) => ({
+    label: n.title,
+    href: withBase(n.url ?? `/${lang}/content-index`),
+  }));
 
 const relatedLinks = related
   .map((r) => nodeByKey.get(r.nodeKey))
   .filter(isGraphNode)
-  .map((n) => ({ label: n.title, href: n.url ?? `/${lang}/content-index` }));
+  .map((n) => ({
+    label: n.title,
+    href: withBase(n.url ?? `/${lang}/content-index`),
+  }));
 
 const { Content } = await render(caseStudy);
 
@@ -90,20 +120,31 @@ const description = caseStudy.data.excerpt;
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
   <section class="card pad">
     <h1>{caseStudy.data.title}</h1>
-    {caseStudyLang ? null : lang !== 'en' ? (
-      <p class="topology-subtitle">Showing English content while {lang.toUpperCase()} content is being authored.</p>
-    ) : null}
+    {
+      caseStudyLang ? null : lang !== 'en' ? (
+        <p class="topology-subtitle">
+          Showing English content while {lang.toUpperCase()} content is being
+          authored.
+        </p>
+      ) : null
+    }
     <p>{caseStudy.data.excerpt}</p>
     <div class="cta-row">
-      <a class="button" href={`/${lang}/portfolio`}>Back to portfolio</a>
-      <a class="button primary" href={`/${lang}/cv`}>Download CV</a>
+      <a class="button" href={withBase(`/${lang}/portfolio`)}
+        >Back to portfolio</a
+      >
+      <a class="button primary" href={withBase(`/${lang}/cv`)}>Download CV</a>
     </div>
   </section>
 
   <section class="grid">
     {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
     {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
-    {categories.length > 0 ? <TaxonomyPills label="Categories" items={categories} /> : null}
+    {
+      categories.length > 0 ? (
+        <TaxonomyPills label="Categories" items={categories} />
+      ) : null
+    }
     {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
   </section>
 
@@ -115,47 +156,53 @@ const description = caseStudy.data.excerpt;
   <section class="grid cols-2">
     <div class="card pad">
       <h2>Links</h2>
-      {outgoingLinks.length > 0 ? (
-        <ul>
-          {outgoingLinks.map((l) => (
-            <li>
-              <a href={l.href}>{l.label}</a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="topology-subtitle">No outgoing links yet.</p>
-      )}
+      {
+        outgoingLinks.length > 0 ? (
+          <ul>
+            {outgoingLinks.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="topology-subtitle">No outgoing links yet.</p>
+        )
+      }
     </div>
 
     <div class="card pad">
       <h2>Backlinks</h2>
-      {incomingLinks.length > 0 ? (
-        <ul>
-          {incomingLinks.map((l) => (
-            <li>
-              <a href={l.href}>{l.label}</a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="topology-subtitle">No backlinks yet.</p>
-      )}
+      {
+        incomingLinks.length > 0 ? (
+          <ul>
+            {incomingLinks.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="topology-subtitle">No backlinks yet.</p>
+        )
+      }
     </div>
   </section>
 
   <section class="card pad">
     <h2>Related</h2>
-    {relatedLinks.length > 0 ? (
-      <div class="station-chips">
-        {relatedLinks.map((l) => (
-          <a class="station-chip" href={l.href}>
-            {l.label}
-          </a>
-        ))}
-      </div>
-    ) : (
-      <p class="topology-subtitle">No related entries yet.</p>
-    )}
+    {
+      relatedLinks.length > 0 ? (
+        <div class="station-chips">
+          {relatedLinks.map((l) => (
+            <a class="station-chip" href={l.href}>
+              {l.label}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="topology-subtitle">No related entries yet.</p>
+      )
+    }
   </section>
 </BaseLayout>

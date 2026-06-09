@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLangStaticPaths, isLang } from '../../lib/i18n';
+import { withBase } from '../../lib/base-url';
 
 export function getStaticPaths() {
   return getLangStaticPaths();
@@ -16,7 +17,10 @@ if (!lang || !isLang(lang)) {
 const title = 'Content index';
 const description = 'Internal index of content graph nodes and warnings.';
 
-const graphUrl = new URL('../../../public/data/content-graph.json', import.meta.url);
+const graphUrl = new URL(
+  '../../../public/data/content-graph.json',
+  import.meta.url,
+);
 let graph:
   | {
       generatedAt: string;
@@ -48,12 +52,15 @@ const collections = Object.keys(counts).sort();
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
   <section class="card pad">
     <h1>Content index</h1>
-    {graphLoadError ? (
-      <p class="topology-subtitle">
-        Content graph not available ({graphLoadError}). Run <code>pnpm content:graph</code> to regenerate
-        <code>/public/data/content-graph.json</code>.
-      </p>
-    ) : null}
+    {
+      graphLoadError ? (
+        <p class="topology-subtitle">
+          Content graph not available ({graphLoadError}). Run{' '}
+          <code>pnpm content:graph</code> to regenerate
+          <code>/public/data/content-graph.json</code>.
+        </p>
+      ) : null
+    }
     <p class="topology-subtitle">
       Generated at <time datetime={graph.generatedAt}>{graph.generatedAt}</time>
     </p>
@@ -63,16 +70,20 @@ const collections = Object.keys(counts).sort();
   <section class="card pad">
     <h2>Routes</h2>
     <div class="cta-row">
-      <a class="button" href={`/${lang}/cv`}>CV</a>
-      <a class="button" href={`/${lang}/portfolio`}>Portfolio</a>
-      <a class="button" href={`/${lang}/blog`}>Blog</a>
-      <a class="button" href={`/${lang}/toolchain`}>Toolchain</a>
+      <a class="button" href={withBase(`/${lang}/cv`)}>CV</a>
+      <a class="button" href={withBase(`/${lang}/portfolio`)}>Portfolio</a>
+      <a class="button" href={withBase(`/${lang}/blog`)}>Blog</a>
+      <a class="button" href={withBase(`/${lang}/toolchain`)}>Toolchain</a>
     </div>
   </section>
 
   <section class="card pad">
     <h2>Collections</h2>
-    <div class="topology-table-wrap" role="region" aria-label="Content collections">
+    <div
+      class="topology-table-wrap"
+      role="region"
+      aria-label="Content collections"
+    >
       <table class="topology-table">
         <thead>
           <tr>
@@ -81,12 +92,14 @@ const collections = Object.keys(counts).sort();
           </tr>
         </thead>
         <tbody>
-          {collections.map((name) => (
-            <tr>
-              <th scope="row">{name}</th>
-              <td>{counts[name]}</td>
-            </tr>
-          ))}
+          {
+            collections.map((name) => (
+              <tr>
+                <th scope="row">{name}</th>
+                <td>{counts[name]}</td>
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </div>
