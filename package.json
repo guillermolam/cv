@@ -43,7 +43,7 @@
     "@types/alpinejs": "^3.13.11",
     "alpinejs": "^3.15.12",
     "apexcharts": "5.13.0",
-    "astro": "^6.4.4",
+    "astro": "^6.4.6",
     "chart.js": "4.5.1",
     "d3": "^7.9.0",
     "geojson": "^0.5.0",
