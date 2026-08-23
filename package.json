@@ -28,6 +28,7 @@
     "content:graph": "node scripts/generate-content-graph.mjs",
     "neural:graph": "node scripts/generate-neural-graph.mjs",
     "vault:import": "node scripts/import-bookmarks-to-vault.mjs",
+    "gmail-signature:build": "node scripts/build-gmail-signature.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "format": "prettier . --write",

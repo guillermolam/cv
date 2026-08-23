@@ -54,6 +54,7 @@ test-results/
 *.docx
 *.pdf
 *.html
+!public/gmail-signature.html
 
 # Optional: exclude local user config (customize as needed)
 *.local
