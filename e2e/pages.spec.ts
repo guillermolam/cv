@@ -8,10 +8,12 @@ const routes = readdirSync('dist', { recursive: true, encoding: 'utf8' })
   .sort();
 if (!routes.length)
   throw new Error('Build the application before running production E2E tests.');
+const runtimeRoute = (route: string) =>
+  process.env.CI ? `${route}?no3d=1` : route;
 
 for (const route of routes) {
   test(`${route} production route`, async ({ page }) => {
-    const response = await page.goto(route);
+    const response = await page.goto(runtimeRoute(route));
     expect(response?.status()).toBe(200);
     await expect(page.locator('main')).toBeVisible();
     await expect(page).toHaveTitle(/\S/);

@@ -5,6 +5,19 @@
 
 export type DeviceQuality = 'low' | 'medium' | 'high';
 
+const NO_3D_STORAGE_KEY = 'cv:no3d';
+
+/** Honor the explicit fallback mode before probing a rendering context. */
+export function webglAllowed(): boolean {
+  if (typeof window === 'undefined') return false;
+  const disabledByUrl =
+    new URLSearchParams(window.location.search).get('no3d') === '1';
+  if (disabledByUrl) sessionStorage.setItem(NO_3D_STORAGE_KEY, '1');
+  if (disabledByUrl || sessionStorage.getItem(NO_3D_STORAGE_KEY) === '1')
+    return false;
+  return hasWebGL();
+}
+
 export function hasWebGL(): boolean {
   if (typeof window === 'undefined') return false;
   try {
@@ -37,7 +50,5 @@ export function prefersReducedMotion(): boolean {
 /** Final gate: WebGL present, not reduced-motion, and ?no3d not set. */
 export function heroWebglAllowed(): boolean {
   if (typeof window === 'undefined') return false;
-  if (new URLSearchParams(window.location.search).get('no3d') === '1')
-    return false;
-  return hasWebGL() && !prefersReducedMotion();
+  return webglAllowed() && !prefersReducedMotion();
 }

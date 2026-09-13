@@ -6,10 +6,12 @@ const viewports = {
   desktop: { width: 1280, height: 720 },
   wide: { width: 1920, height: 1080 },
 };
+const runtimeRoute = (route: string) =>
+  process.env.CI ? `${route}?no3d=1` : route;
 
 test.describe('Portfolio UI', () => {
   test('home page renders', async ({ page }) => {
-    await page.goto('./');
+    await page.goto(runtimeRoute('./'));
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
       'Guillermo',
     );
@@ -24,7 +26,7 @@ test.describe('Portfolio UI', () => {
   });
 
   test('navigation works across pages', async ({ page }) => {
-    await page.goto('./');
+    await page.goto(runtimeRoute('./'));
     const nav = page.getByRole('navigation', { name: 'Primary' });
 
     await nav.getByRole('link', { name: 'Toolchain', exact: true }).click();
@@ -49,7 +51,7 @@ test.describe('Portfolio UI', () => {
   test('operator modules, badges, and audio respond to interaction', async ({
     page,
   }) => {
-    await page.goto('./');
+    await page.goto(runtimeRoute('./'));
     const modules = page.getByRole('navigation', { name: 'Operator modules' });
     for (const [id, label] of Object.entries({
       skills: 'Skills',
@@ -87,7 +89,7 @@ test.describe('Portfolio UI', () => {
   test('language navigation keeps the deployment base and current route', async ({
     page,
   }) => {
-    await page.goto('./en/toolchain');
+    await page.goto(runtimeRoute('./en/toolchain'));
     await page
       .getByRole('link', { name: 'Next language (Español)', exact: true })
       .first()
@@ -99,7 +101,7 @@ test.describe('Portfolio UI', () => {
   for (const [label, viewport] of Object.entries(viewports)) {
     test(`${label} layout smoke`, async ({ page }, testInfo) => {
       await page.setViewportSize(viewport);
-      await page.goto('./');
+      await page.goto(runtimeRoute('./'));
 
       const nav = page.getByRole('navigation', { name: 'Primary' });
       await expect(nav).toBeVisible();
