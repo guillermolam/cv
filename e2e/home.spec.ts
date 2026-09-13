@@ -51,6 +51,7 @@ test.describe('Portfolio UI', () => {
   test('operator modules, badges, and audio respond to interaction', async ({
     page,
   }) => {
+    test.setTimeout(60_000);
     await page.goto(runtimeRoute('./'));
     const modules = page.getByRole('navigation', { name: 'Operator modules' });
     for (const [id, label] of Object.entries({

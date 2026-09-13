@@ -241,7 +241,7 @@ const graphUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/data/neural-gra
 ────────────────────────────────────────────────────────────────────────── -->
 <script>
   import {
-    hasWebGL,
+    webglAllowed,
     prefersReducedMotion,
   } from '../../design-system/three/capability';
 
@@ -249,7 +249,7 @@ const graphUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/data/neural-gra
   const canvas = root?.querySelector<HTMLCanvasElement>('[data-neural-canvas]');
 
   if (root && canvas) {
-    if (!hasWebGL() || prefersReducedMotion()) {
+    if (!webglAllowed() || prefersReducedMotion()) {
       root.dispatchEvent(new CustomEvent('neural:error', { bubbles: false }));
     } else {
       type Controller =

@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createRenderCore } from '../design-system/three/renderer';
 import { disposeObject } from '../design-system/three/dispose';
-import { hasWebGL, deviceQuality } from '../design-system/three/capability';
+import { webglAllowed, deviceQuality } from '../design-system/three/capability';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -125,7 +125,7 @@ export function initKnowledgeGraph(
   rawNodes: KnowledgeGraphNode[],
   tooltipEl?: HTMLElement | null,
 ): () => void {
-  if (!hasWebGL()) {
+  if (!webglAllowed()) {
     canvas.parentElement?.classList.add('kc-graph--no-webgl');
     return () => {};
   }
