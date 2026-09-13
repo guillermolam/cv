@@ -88,7 +88,18 @@ const captionId = `glb-caption-${idSafe || 'model'}`;
 </figure>
 
 <script>
+  import { hasWebGL } from '../design-system/three/capability';
+
   const loadModelViewer = async () => {
+    if (!hasWebGL()) {
+      document
+        .querySelectorAll('[data-glb-viewer]')
+        .forEach((frame) =>
+          frame.setAttribute('data-glb-viewer-unavailable', 'true'),
+        );
+      return;
+    }
+
     try {
       await import('@google/model-viewer');
     } catch {

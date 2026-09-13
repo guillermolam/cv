@@ -37,6 +37,8 @@ import PageLayout from '../../layouts/PageLayout.astro';
   />
 
   <script>
+    import { hasWebGL } from '../../design-system/three/capability';
+
     (async () => {
       const statusEl = document.getElementById('mv-status');
 
@@ -51,6 +53,12 @@ import PageLayout from '../../layouts/PageLayout.astro';
         console.error('[model-meshy-test]', ...args);
 
       setStatus('Loading model-viewer web component…');
+
+      if (!hasWebGL()) {
+        setStatus('Fallback: WebGL is unavailable; static preview is active.');
+        info('WebGL unavailable; verified progressive fallback');
+        return;
+      }
 
       try {
         const timeoutMs = 4_000;

@@ -44,7 +44,11 @@ const src = site.profile.avatarModelPath;
 </div>
 
 <script>
+  import { hasWebGL } from '../design-system/three/capability';
+
   (async () => {
+    if (!hasWebGL()) return;
+
     try {
       await import('@google/model-viewer');
     } catch {

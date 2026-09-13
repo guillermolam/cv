@@ -27,9 +27,10 @@ for (const route of routes) {
       }
     });
     if (route.includes('model-meshy')) {
-      await expect(page.locator('#mv-status')).toContainText('Loaded:', {
-        timeout: 20000,
-      });
+      await expect(page.locator('#mv-status')).toContainText(
+        /^(Loaded:|Fallback:)/,
+        { timeout: 20000 },
+      );
     }
     await page.waitForTimeout(500);
   });
