@@ -43,7 +43,7 @@
     "@types/alpinejs": "^3.13.11",
     "alpinejs": "^3.15.12",
     "apexcharts": "5.13.0",
-    "astro": "^7.1.1",
+    "astro": "^7.2.8",
     "chart.js": "4.5.1",
     "d3": "^7.9.0",
     "geojson": "^0.5.0",
@@ -81,6 +81,6 @@
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "unocss": "66.7.0",
-    "vitest": "^4.1.8"
+    "vitest": "^5.0.0"
   }
 }
