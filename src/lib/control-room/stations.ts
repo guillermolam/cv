@@ -31,8 +31,8 @@ export const STATIONS: Station[] = [
     portfolioHref: '/portfolio/security',
     evidenceLinks: [
       { label: 'Portfolio: Security', href: '/portfolio/security' },
-      { label: 'CV', href: '/cv' }
-    ]
+      { label: 'CV', href: '/cv' },
+    ],
   },
   {
     id: 'gitops-delivery',
@@ -43,8 +43,8 @@ export const STATIONS: Station[] = [
     portfolioHref: '/portfolio/infra',
     evidenceLinks: [
       { label: 'Portfolio: Infrastructure', href: '/portfolio/infra' },
-      { label: 'CV', href: '/cv' }
-    ]
+      { label: 'CV', href: '/cv' },
+    ],
   },
   {
     id: 'kubernetes-platform',
@@ -55,8 +55,8 @@ export const STATIONS: Station[] = [
     portfolioHref: '/portfolio/infra',
     evidenceLinks: [
       { label: 'Portfolio: Infrastructure', href: '/portfolio/infra' },
-      { label: 'CV', href: '/cv' }
-    ]
+      { label: 'CV', href: '/cv' },
+    ],
   },
   {
     id: 'runtime-security',
@@ -67,8 +67,8 @@ export const STATIONS: Station[] = [
     portfolioHref: '/portfolio/security',
     evidenceLinks: [
       { label: 'Portfolio: Security', href: '/portfolio/security' },
-      { label: 'CV', href: '/cv' }
-    ]
+      { label: 'CV', href: '/cv' },
+    ],
   },
   {
     id: 'security-operations',
@@ -79,8 +79,8 @@ export const STATIONS: Station[] = [
     portfolioHref: '/portfolio/security',
     evidenceLinks: [
       { label: 'Portfolio: Security', href: '/portfolio/security' },
-      { label: 'Contact', href: '/contact' }
-    ]
+      { label: 'Contact', href: '/contact' },
+    ],
   },
   {
     id: 'hybrid-edge',
@@ -91,7 +91,7 @@ export const STATIONS: Station[] = [
     portfolioHref: '/portfolio/development',
     evidenceLinks: [
       { label: 'Portfolio: Development', href: '/portfolio/development' },
-      { label: 'Blog', href: '/blog' }
-    ]
-  }
+      { label: 'Blog', href: '/blog' },
+    ],
+  },
 ];

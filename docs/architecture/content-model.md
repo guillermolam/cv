@@ -5,17 +5,20 @@ Source of truth: [.trae/documents/master-implementation-plan-hybrid-cloud-contro
 This document defines the content collection schemas only. It does not populate content.
 
 Design goals:
+
 - Current implementation validates content entries for `en|es` (route-level `fr/de` is future work; some pages may render English fallbacks on `/{lang}/...`).
 - Keep cross-linking stable via shared IDs.
 - Keep claims traceable to existing source material (legacy CV markdown and verified records).
 
 Notation:
+
 - Fields are expressed as Zod-like schemas and equivalent TypeScript shapes for clarity.
 - These schemas are intended to map to Astro Content Collections, but this document is architecture-only.
 
 ## Implementation Alignment (Current)
 
 This architecture is implemented as Astro Content Collections with build-time graph validation:
+
 - Content collections config: `src/content.config.ts` (Astro v6).
 - Content lives under: `src/content/**`.
 - Cross-links use controlled taxonomy + stable IDs via `*Ids` fields (no freeform tag arrays).
@@ -36,7 +39,7 @@ This architecture is implemented as Astro Content Collections with build-time gr
 ### Language
 
 ```ts
-type Lang = 'en' | 'es'
+type Lang = 'en' | 'es';
 ```
 
 Note: `fr/de` are planned for future content translations; the route-level structure may exist before translated content does.
@@ -45,27 +48,28 @@ Note: `fr/de` are planned for future content translations; the route-level struc
 
 ```ts
 type ExternalLink = {
-  label: string
-  url: string
-}
+  label: string;
+  url: string;
+};
 
 type LinkEdge = {
-  type: string
-  targetCollection: string
-  targetId: string
-  weight?: 1 | 2 | 3 | 4 | 5
-  context?: string
-}
+  type: string;
+  targetCollection: string;
+  targetId: string;
+  weight?: 1 | 2 | 3 | 4 | 5;
+  context?: string;
+};
 ```
 
 ### Dates
 
 Rules:
+
 - Use ISO-8601 `YYYY-MM-DD` where possible.
 - Allow `YYYY-MM` if day is unknown (implementation may model this as string + validation).
 
 ```ts
-type ISODate = string
+type ISODate = string;
 ```
 
 ---
@@ -76,24 +80,25 @@ One entry per language.
 
 ```ts
 type Profile = {
-  lang: Lang
-  fullName: string
-  headline: string
-  subheadline: string
-  location?: string
-  timezone?: string
-  summary: string
-  focusAreas: string[]
+  lang: Lang;
+  fullName: string;
+  headline: string;
+  subheadline: string;
+  location?: string;
+  timezone?: string;
+  summary: string;
+  focusAreas: string[];
   primaryCTAs: {
-    downloadCv: boolean
-    viewPortfolio: boolean
-    flagshipCaseStudyId?: string
-  }
-  socialLinks: ExternalLink[]
-}
+    downloadCv: boolean;
+    viewPortfolio: boolean;
+    flagshipCaseStudyId?: string;
+  };
+  socialLinks: ExternalLink[];
+};
 ```
 
 Zod-like:
+
 ```ts
 const profileSchema = z.object({
   lang: z.enum(['en', 'es']),
@@ -107,13 +112,17 @@ const profileSchema = z.object({
   primaryCTAs: z.object({
     downloadCv: z.literal(true),
     viewPortfolio: z.literal(true),
-    flagshipCaseStudyId: z.string().min(1).optional()
+    flagshipCaseStudyId: z.string().min(1).optional(),
   }),
-  socialLinks: z.array(z.object({
-    label: z.string().min(1),
-    url: z.string().url()
-  })).min(1)
-})
+  socialLinks: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+        url: z.string().url(),
+      }),
+    )
+    .min(1),
+});
 ```
 
 ---
@@ -124,28 +133,29 @@ One entry per role per language, keyed by a shared `experienceId` across transla
 
 ```ts
 type Experience = {
-  experienceId: string
-  lang: Lang
-  companyName: string
-  clientName?: string
-  roleTitle: string
-  location?: string
-  startDate: ISODate
-  endDate?: ISODate
-  isCurrent?: boolean
-  summary: string
-  highlights: string[]
-  technologies: string[]
-  domains: Array<'security' | 'infra' | 'development' | 'platform'>
+  experienceId: string;
+  lang: Lang;
+  companyName: string;
+  clientName?: string;
+  roleTitle: string;
+  location?: string;
+  startDate: ISODate;
+  endDate?: ISODate;
+  isCurrent?: boolean;
+  summary: string;
+  highlights: string[];
+  technologies: string[];
+  domains: Array<'security' | 'infra' | 'development' | 'platform'>;
   evidence?: {
-    caseStudyIds?: string[]
-    projectIds?: string[]
-    blogSlugs?: string[]
-  }
-}
+    caseStudyIds?: string[];
+    projectIds?: string[];
+    blogSlugs?: string[];
+  };
+};
 ```
 
 Zod-like:
+
 ```ts
 const experienceSchema = z.object({
   experienceId: z.string().min(1),
@@ -160,13 +170,17 @@ const experienceSchema = z.object({
   summary: z.string().min(1),
   highlights: z.array(z.string().min(1)).min(1),
   technologies: z.array(z.string().min(1)).optional().default([]),
-  domains: z.array(z.enum(['security', 'infra', 'development', 'platform'])).min(1),
-  evidence: z.object({
-    caseStudyIds: z.array(z.string().min(1)).optional(),
-    projectIds: z.array(z.string().min(1)).optional(),
-    blogSlugs: z.array(z.string().min(1)).optional()
-  }).optional()
-})
+  domains: z
+    .array(z.enum(['security', 'infra', 'development', 'platform']))
+    .min(1),
+  evidence: z
+    .object({
+      caseStudyIds: z.array(z.string().min(1)).optional(),
+      projectIds: z.array(z.string().min(1)).optional(),
+      blogSlugs: z.array(z.string().min(1)).optional(),
+    })
+    .optional(),
+});
 ```
 
 ---
@@ -177,24 +191,25 @@ Projects are portfolio items; they may be personal, open-source, or professional
 
 ```ts
 type Project = {
-  projectId: string
-  lang: Lang
-  title: string
-  summary: string
-  status: 'active' | 'maintained' | 'archived' | 'experimental'
-  repoUrl?: string
-  demoUrl?: string
-  deploymentUrl?: string
-  tagIds?: string[]
-  categoryIds?: string[]
-  toolIds?: string[]
-  skillIds?: string[]
-  links?: LinkEdge[]
-  featured?: boolean
-}
+  projectId: string;
+  lang: Lang;
+  title: string;
+  summary: string;
+  status: 'active' | 'maintained' | 'archived' | 'experimental';
+  repoUrl?: string;
+  demoUrl?: string;
+  deploymentUrl?: string;
+  tagIds?: string[];
+  categoryIds?: string[];
+  toolIds?: string[];
+  skillIds?: string[];
+  links?: LinkEdge[];
+  featured?: boolean;
+};
 ```
 
 Zod-like:
+
 ```ts
 const projectSchema = z.object({
   projectId: z.string().min(1),
@@ -211,7 +226,7 @@ const projectSchema = z.object({
   skillIds: z.array(z.string().min(1)).optional(),
   links: z.array(linkEdgeSchema).optional(),
   featured: z.boolean().optional(),
-})
+});
 ```
 
 ---
@@ -222,25 +237,26 @@ Case studies are the flagship proof artifacts. Each case study is a long-form na
 
 ```ts
 type CaseStudy = {
-  caseStudyId: string
-  lang: Lang
-  slug: string
-  title: string
-  excerpt: string
-  category: 'development' | 'infra' | 'security'
-  problem: string
-  approach: string
-  outcome: string
-  responsibilities: string[]
-  technologies: string[]
-  relatedProjectIds?: string[]
-  relatedExperienceIds?: string[]
-  relatedBlogSlugs?: string[]
-  isFlagship?: boolean
-}
+  caseStudyId: string;
+  lang: Lang;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: 'development' | 'infra' | 'security';
+  problem: string;
+  approach: string;
+  outcome: string;
+  responsibilities: string[];
+  technologies: string[];
+  relatedProjectIds?: string[];
+  relatedExperienceIds?: string[];
+  relatedBlogSlugs?: string[];
+  isFlagship?: boolean;
+};
 ```
 
 Zod-like:
+
 ```ts
 const caseStudySchema = z.object({
   caseStudyId: z.string().min(1),
@@ -257,8 +273,8 @@ const caseStudySchema = z.object({
   relatedProjectIds: z.array(z.string().min(1)).optional(),
   relatedExperienceIds: z.array(z.string().min(1)).optional(),
   relatedBlogSlugs: z.array(z.string().min(1)).optional(),
-  isFlagship: z.boolean().optional()
-})
+  isFlagship: z.boolean().optional(),
+});
 ```
 
 ---
@@ -269,19 +285,20 @@ Certifications should be handled carefully to avoid overclaiming. If any item is
 
 ```ts
 type Certification = {
-  certificationId: string
-  lang: Lang
-  name: string
-  issuer: string
-  issuedDate?: ISODate
-  expiresDate?: ISODate
-  credentialId?: string
-  credentialUrl?: string
-  notes?: string
-}
+  certificationId: string;
+  lang: Lang;
+  name: string;
+  issuer: string;
+  issuedDate?: ISODate;
+  expiresDate?: ISODate;
+  credentialId?: string;
+  credentialUrl?: string;
+  notes?: string;
+};
 ```
 
 Zod-like:
+
 ```ts
 const certificationSchema = z.object({
   certificationId: z.string().min(1),
@@ -292,8 +309,8 @@ const certificationSchema = z.object({
   expiresDate: z.string().min(4).optional(),
   credentialId: z.string().min(1).optional(),
   credentialUrl: z.string().url().optional(),
-  notes: z.string().min(1).optional()
-})
+  notes: z.string().min(1).optional(),
+});
 ```
 
 ---
@@ -304,22 +321,23 @@ Blog is allowed to be EN-first for long-form posts. Public detail pages MUST NOT
 
 ```ts
 type BlogPost = {
-  lang: Lang
-  blogSlug: string
-  title: string
-  summary: string
-  publishedDate: ISODate
-  updatedDate?: ISODate
-  tagIds?: string[]
-  categoryIds?: string[]
-  toolIds?: string[]
-  skillIds?: string[]
-  links?: LinkEdge[]
-  draft?: boolean
-}
+  lang: Lang;
+  blogSlug: string;
+  title: string;
+  summary: string;
+  publishedDate: ISODate;
+  updatedDate?: ISODate;
+  tagIds?: string[];
+  categoryIds?: string[];
+  toolIds?: string[];
+  skillIds?: string[];
+  links?: LinkEdge[];
+  draft?: boolean;
+};
 ```
 
 Zod-like:
+
 ```ts
 const blogSchema = z.object({
   lang: z.enum(['en', 'es']),
@@ -334,8 +352,8 @@ const blogSchema = z.object({
   skillIds: z.array(z.string().min(1)).optional(),
   links: z.array(linkEdgeSchema).optional(),
   draft: z.boolean().optional(),
-  visibility: z.enum(['public', 'unlisted', 'draft']).optional()
-})
+  visibility: z.enum(['public', 'unlisted', 'draft']).optional(),
+});
 ```
 
 ---
@@ -345,6 +363,7 @@ const blogSchema = z.object({
 Knowledge resources are curated references (official docs, books, papers, repos) that justify or extend the portfolio’s architecture. These entries are content-first and linkable, but do not embed or iframe external content.
 
 Rules:
+
 - Use stable `resourceId` in kebab-case.
 - Use `*Ids` relationships only (no freeform tags).
 - Do not add tracking/affiliate URLs; reject unsafe URL schemes (javascript:, data:, vbscript:).
@@ -352,27 +371,39 @@ Rules:
 
 ```ts
 type KnowledgeResource = {
-  resourceId: string
-  title: string
-  lang: Lang
-  canonicalId?: string
-  type: 'book' | 'article' | 'paper' | 'video' | 'course' | 'repo' | 'documentation' | 'talk' | 'documentary' | 'playlist' | 'tool' | 'other'
-  url?: string
-  author?: string
-  publisher?: string
-  summary: string
-  level?: 'intro' | 'intermediate' | 'advanced' | 'reference'
-  status?: 'planned' | 'reading' | 'completed' | 'reference' | 'archived'
-  tagIds?: string[]
-  categoryIds?: string[]
-  toolIds?: string[]
-  skillIds?: string[]
-  projectIds?: string[]
-  caseStudyIds?: string[]
-  blogSlugs?: string[]
-  links?: LinkEdge[]
-  needsConfirmation?: string[]
-}
+  resourceId: string;
+  title: string;
+  lang: Lang;
+  canonicalId?: string;
+  type:
+    | 'book'
+    | 'article'
+    | 'paper'
+    | 'video'
+    | 'course'
+    | 'repo'
+    | 'documentation'
+    | 'talk'
+    | 'documentary'
+    | 'playlist'
+    | 'tool'
+    | 'other';
+  url?: string;
+  author?: string;
+  publisher?: string;
+  summary: string;
+  level?: 'intro' | 'intermediate' | 'advanced' | 'reference';
+  status?: 'planned' | 'reading' | 'completed' | 'reference' | 'archived';
+  tagIds?: string[];
+  categoryIds?: string[];
+  toolIds?: string[];
+  skillIds?: string[];
+  projectIds?: string[];
+  caseStudyIds?: string[];
+  blogSlugs?: string[];
+  links?: LinkEdge[];
+  needsConfirmation?: string[];
+};
 ```
 
 ---
@@ -383,29 +414,43 @@ CV PDFs live under `public/cv/`. The collection stores metadata only, including 
 
 ```ts
 type CvFormat = {
-  cvFormatId: 'europass' | 'modern' | 'recruiter' | 'ats' | 'one-page' | 'full-technical'
-  lang: Lang
-  title: string
-  description: string
-  useCase: string
-  availability: 'available' | 'coming-soon'
-  downloadPath?: string
-}
+  cvFormatId:
+    'europass' | 'modern' | 'recruiter' | 'ats' | 'one-page' | 'full-technical';
+  lang: Lang;
+  title: string;
+  description: string;
+  useCase: string;
+  availability: 'available' | 'coming-soon';
+  downloadPath?: string;
+};
 ```
 
 Zod-like:
+
 ```ts
-const cvFormatSchema = z.object({
-  cvFormatId: z.enum(['europass', 'modern', 'recruiter', 'ats', 'one-page', 'full-technical']),
-  lang: z.enum(['en', 'es']),
-  title: z.string().min(1),
-  description: z.string().min(1),
-  useCase: z.string().min(1),
-  availability: z.enum(['available', 'coming-soon']),
-  downloadPath: z.string().min(1).optional()
-}).superRefine((v, ctx) => {
-  if (v.availability === 'available' && !v.downloadPath) {
-    ctx.addIssue({ code: 'custom', message: 'downloadPath required when availability=available' })
-  }
-})
+const cvFormatSchema = z
+  .object({
+    cvFormatId: z.enum([
+      'europass',
+      'modern',
+      'recruiter',
+      'ats',
+      'one-page',
+      'full-technical',
+    ]),
+    lang: z.enum(['en', 'es']),
+    title: z.string().min(1),
+    description: z.string().min(1),
+    useCase: z.string().min(1),
+    availability: z.enum(['available', 'coming-soon']),
+    downloadPath: z.string().min(1).optional(),
+  })
+  .superRefine((v, ctx) => {
+    if (v.availability === 'available' && !v.downloadPath) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'downloadPath required when availability=available',
+      });
+    }
+  });
 ```

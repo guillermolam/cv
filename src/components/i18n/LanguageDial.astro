@@ -61,22 +61,20 @@ const linkData = JSON.stringify(
   <div class="lang-dial-lcd" aria-hidden="true">
     <span class="lang-dial-lcd-tag">LANG</span>
     <span class="lang-dial-lcd-readout">
-      {
-        orderedLangs.map((code) => (
-          <span
-            class="lang-dial-lcd-item"
-            data-lcd-item={code}
-            data-active={code === lang ? 'true' : undefined}
-          >
-            <CountryFlag
-              region={languageMeta[code].region}
-              class="lang-dial-flag"
-            />
-            <span class="lang-dial-code">{code.toUpperCase()}</span>
-            <span class="lang-dial-name">{languageMeta[code].name}</span>
-          </span>
-        ))
-      }
+      {orderedLangs.map((code) => (
+        <span
+          class="lang-dial-lcd-item"
+          data-lcd-item={code}
+          data-active={code === lang ? 'true' : undefined}
+        >
+          <CountryFlag
+            region={languageMeta[code].region}
+            class="lang-dial-flag"
+          />
+          <span class="lang-dial-code">{code.toUpperCase()}</span>
+          <span class="lang-dial-name">{languageMeta[code].name}</span>
+        </span>
+      ))}
     </span>
   </div>
 

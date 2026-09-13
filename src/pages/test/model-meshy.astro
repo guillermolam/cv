@@ -16,18 +16,21 @@ import PageLayout from '../../layouts/PageLayout.astro';
 
   <section class="card pad status-card" aria-label="Model load status">
     <h2>Status</h2>
-    <p id="mv-status" role="status" aria-live="polite">Initializing…</p>
+    <p id="mv-status" role="status" aria-live="polite">
+      Initializing…
+    </p>
     <p class="muted">
-      Open DevTools Console and look for logs prefixed with <code
-        >[model-meshy-test]</code
-      >.
+      Open DevTools Console and look for logs prefixed with{' '}
+      <code>[model-meshy-test]</code>.
     </p>
   </section>
 
   <GlbModelViewer
     class="js-model-meshy-test"
-    src={import.meta.env.BASE_URL.replace(/\/$/, '') +
-      '/3d/guillermolam-avatar.glb'}
+    src={
+      import.meta.env.BASE_URL.replace(/\/$/, '') +
+      '/3d/guillermolam-avatar.glb'
+    }
     reveal="auto"
     title="Guillermo Lam avatar (3D)"
     description="Attempts to load /3d/guillermolam-avatar.glb via model-viewer and reports load success/failure."
@@ -135,7 +138,6 @@ import PageLayout from '../../layouts/PageLayout.astro';
       }, 10_000);
     })();
   </script>
-
   <style>
     .muted {
       color: var(--color-text-muted);

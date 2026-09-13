@@ -1,4 +1,5 @@
 # Tasks
+
 - [ ] Task 1 (Astro): Update design tokens and global styles to match Phase 2 art direction.
   - [ ] Add new tokens to src/styles/tokens.css (fonts, focus width/offset, scrim/glass alpha, accent-glow, motion-stagger).
   - [ ] Update src/styles/global.css to apply the new aesthetic (operator ID block, stronger focus/hover affordances, topology row focus-within styling).
@@ -29,7 +30,8 @@
   - [ ] Validate reduced motion: all essential content visible and animations disabled as specified.
   - [ ] Validate WebGL off: hero still renders correctly and content remains readable.
 
-# Task Dependencies
+## Task Dependencies
+
 - Task 2 depends on Task 1 (tokens/styles first).
 - Task 3 depends on Task 1 (motion uses token timings/eases).
 - Task 4 depends on Task 1 (hero visual blending relies on tokenized surfaces/borders).

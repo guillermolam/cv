@@ -1,5 +1,9 @@
 ---
-import { FALLBACK_ICON_ID, getIconDefinition, iconRegistry } from '../../design-system/icons/icon-registry';
+import {
+  FALLBACK_ICON_ID,
+  getIconDefinition,
+  iconRegistry,
+} from '../../design-system/icons/icon-registry';
 import { getIconA11y } from '../../design-system/icons/icon-accessibility';
 import {
   iconDepthClass,
@@ -7,7 +11,12 @@ import {
   iconToneClass,
   reducedMotionSafeClassName,
 } from '../../design-system/icons/icon-motion';
-import type { IconDepth, IconId, IconMotion, IconTone } from '../../design-system/icons/icon-types';
+import type {
+  IconDepth,
+  IconId,
+  IconMotion,
+  IconTone,
+} from '../../design-system/icons/icon-types';
 
 type Props = {
   name: IconId;
@@ -44,7 +53,8 @@ const definition = getIconDefinition(name);
 const resolvedName = definition.id;
 const isMissing = !isKnown && name !== FALLBACK_ICON_ID;
 
-const mode = decorative === true ? 'decorative' : definition.defaultAccessibility;
+const mode =
+  decorative === true ? 'decorative' : definition.defaultAccessibility;
 const a11y = getIconA11y({
   iconId: resolvedName,
   mode,
@@ -90,6 +100,8 @@ const classes = [
 >
   {a11y.title ? <title id={a11y.titleId}>{a11y.title}</title> : null}
   {a11y.description ? <desc id={a11y.descId}>{a11y.description}</desc> : null}
-  {definition.layers.secondary ? <g data-icon-layer="secondary" set:html={definition.layers.secondary} /> : null}
+  {definition.layers.secondary ? (
+    <g data-icon-layer="secondary" set:html={definition.layers.secondary} />
+  ) : null}
   <g data-icon-layer="primary" set:html={definition.layers.primary} />
 </svg>

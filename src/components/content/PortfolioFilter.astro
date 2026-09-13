@@ -11,8 +11,15 @@ export type Props = {
   totalCount: number;
 };
 
-const { targetSelector, statusOptions, toolOptions, skillOptions, categoryOptions, tagOptions, totalCount } =
-  Astro.props as Props;
+const {
+  targetSelector,
+  statusOptions,
+  toolOptions,
+  skillOptions,
+  categoryOptions,
+  tagOptions,
+  totalCount,
+} = Astro.props as Props;
 
 const uid = `portfolio-filter-${Math.random().toString(16).slice(2)}`;
 const idStatus = `${uid}-status`;
@@ -22,7 +29,11 @@ const idCategory = `${uid}-category`;
 const idTag = `${uid}-tag`;
 ---
 
-<section class="card pad filter-shell" data-portfolio-filter data-target={targetSelector}>
+<section
+  class="card pad filter-shell"
+  data-portfolio-filter
+  data-target={targetSelector}
+>
   <form class="filter-form">
     <fieldset class="filter-fieldset">
       <legend class="filter-legend">Filter</legend>

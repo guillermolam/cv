@@ -4,6 +4,6 @@ toolId: falco
 name: Falco
 website: https://falco.org
 tagIds: [threat-detection]
-categoryIds: [runtime-security,secops]
+categoryIds: [runtime-security, secops]
 visibility: public
 ---

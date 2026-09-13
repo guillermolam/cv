@@ -6,11 +6,13 @@ description: "UnoCSS integration playbook. Invoke when configuring UnoCSS (prese
 # UnoCSS (Context7 LLMs) Integration Playbook
 
 Reference source:
-- https://context7.com/unocss/unocss/llms.txt?tokens=10000
+
+- <https://context7.com/unocss/unocss/llms.txt?tokens=10000>
 
 ## When to Invoke
 
 Use this skill when the user:
+
 - Wants to integrate UnoCSS into a project (especially Vite-based stacks like Astro).
 - Needs to pick presets (mini/wind3/wind4/typography/web-fonts/tagify/legacy-compat).
 - Needs to add transformers (directives, variant-group, attributify JSX).
@@ -21,7 +23,7 @@ Use this skill when the user:
 
 ### Base install (core UnoCSS)
 
-Source: https://github.com/unocss/unocss/blob/main/docs/integrations/cli.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/integrations/cli.md>
 
 ```bash
 npm install -D unocss
@@ -29,7 +31,7 @@ npm install -D unocss
 
 ### PostCSS plugin
 
-Source: https://github.com/unocss/unocss/blob/main/docs/integrations/postcss.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/integrations/postcss.md>
 
 ```bash
 pnpm add -D unocss @unocss/postcss
@@ -37,7 +39,7 @@ pnpm add -D unocss @unocss/postcss
 
 ### Runtime (only if you explicitly want runtime generation)
 
-Source: https://github.com/unocss/unocss/blob/main/docs/integrations/runtime.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/integrations/runtime.md>
 
 ```bash
 npm i @unocss/runtime
@@ -47,7 +49,7 @@ npm i @unocss/runtime
 
 ### preset-mini (recommended baseline for utility primitives)
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/mini.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/mini.md>
 
 ```bash
 pnpm add -D @unocss/preset-mini
@@ -56,8 +58,9 @@ pnpm add -D @unocss/preset-mini
 ### preset-wind3 / preset-wind4
 
 Source:
-- https://github.com/unocss/unocss/blob/main/docs/presets/wind3.md
-- https://github.com/unocss/unocss/blob/main/docs/presets/wind4.md
+
+- <https://github.com/unocss/unocss/blob/main/docs/presets/wind3.md>
+- <https://github.com/unocss/unocss/blob/main/docs/presets/wind4.md>
 
 ```bash
 pnpm add -D @unocss/preset-wind3
@@ -69,7 +72,7 @@ pnpm add -D @unocss/preset-wind4
 
 ### preset-typography
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/typography.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/typography.md>
 
 ```bash
 pnpm add -D @unocss/preset-typography
@@ -77,7 +80,7 @@ pnpm add -D @unocss/preset-typography
 
 ### preset-web-fonts
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/web-fonts.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/web-fonts.md>
 
 ```bash
 pnpm add -D @unocss/preset-web-fonts
@@ -85,7 +88,7 @@ pnpm add -D @unocss/preset-web-fonts
 
 ### preset-tagify
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/tagify.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/tagify.md>
 
 ```bash
 pnpm add -D @unocss/preset-tagify
@@ -93,7 +96,7 @@ pnpm add -D @unocss/preset-tagify
 
 ### preset-legacy-compat
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/legacy-compat.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/legacy-compat.md>
 
 ```bash
 pnpm add -D @unocss/preset-legacy-compat
@@ -101,7 +104,7 @@ pnpm add -D @unocss/preset-legacy-compat
 
 ### preset-rem-to-px
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/rem-to-px.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/rem-to-px.md>
 
 ```bash
 pnpm add -D @unocss/preset-rem-to-px
@@ -112,8 +115,9 @@ pnpm add -D @unocss/preset-rem-to-px
 ### transformer-attributify-jsx
 
 Source:
-- https://github.com/unocss/unocss/blob/main/docs/transformers/attributify-jsx.md
-- https://github.com/unocss/unocss/blob/main/packages-presets/transformer-attributify-jsx/README.md
+
+- <https://github.com/unocss/unocss/blob/main/docs/transformers/attributify-jsx.md>
+- <https://github.com/unocss/unocss/blob/main/packages-presets/transformer-attributify-jsx/README.md>
 
 ```bash
 pnpm add -D @unocss/transformer-attributify-jsx
@@ -131,7 +135,7 @@ export default defineConfig({
 
 ### transformer-directives
 
-Source: https://github.com/unocss/unocss/blob/main/docs/transformers/directives.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/transformers/directives.md>
 
 ```bash
 pnpm add -D @unocss/transformer-directives
@@ -139,7 +143,7 @@ pnpm add -D @unocss/transformer-directives
 
 ### transformer-variant-group
 
-Source: https://github.com/unocss/unocss/blob/main/packages-presets/transformer-variant-group/README.md
+Source: <https://github.com/unocss/unocss/blob/main/packages-presets/transformer-variant-group/README.md>
 
 ```bash
 pnpm add -D @unocss/transformer-variant-group
@@ -147,7 +151,7 @@ pnpm add -D @unocss/transformer-variant-group
 
 ### transformer-compile-class
 
-Source: https://github.com/unocss/unocss/blob/main/docs/transformers/compile-class.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/transformers/compile-class.md>
 
 ```bash
 pnpm add -D @unocss/transformer-compile-class
@@ -157,7 +161,7 @@ pnpm add -D @unocss/transformer-compile-class
 
 ### Install full icon sets (large) OR a specific collection (recommended)
 
-Source: https://github.com/unocss/unocss/blob/main/docs/presets/icons.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/presets/icons.md>
 
 Full set:
 
@@ -173,7 +177,7 @@ pnpm add -D @unocss/preset-icons @iconify-json/[the-collection-you-want]
 
 ## Style Reset
 
-Source: https://github.com/unocss/unocss/blob/main/docs/guide/style-reset.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/guide/style-reset.md>
 
 ```bash
 pnpm add -D @unocss/reset
@@ -183,7 +187,7 @@ pnpm add -D @unocss/reset
 
 ### LSP (language server)
 
-Source: https://github.com/unocss/unocss/blob/main/docs/integrations/lsp.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/integrations/lsp.md>
 
 ```bash
 npm install -g unocss-language-server
@@ -191,7 +195,7 @@ npm install -g unocss-language-server
 
 ### ESLint config
 
-Source: https://github.com/unocss/unocss/blob/main/docs/integrations/eslint.md
+Source: <https://github.com/unocss/unocss/blob/main/docs/integrations/eslint.md>
 
 ```bash
 pnpm add -D @unocss/eslint-config

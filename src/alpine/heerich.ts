@@ -20,20 +20,29 @@ export function registerHeerichComponents(alpine: AlpineLike) {
     reduced: false,
 
     async init(this: any) {
-      this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.reduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
       const el = this.$el as HTMLElement;
       this.stage = el.querySelector<HTMLElement>('[data-heerich-stage]');
       this.angle = Number(el.dataset['angle'] ?? '45');
 
       if (this.reduced) return; // keep the static build-time SVG
 
-      const preset = el.dataset['heerichScene'] as import('../lib/heerich/presets').HeerichPreset;
+      const preset = el.dataset[
+        'heerichScene'
+      ] as import('../lib/heerich/presets').HeerichPreset;
       const tile = Number(el.dataset['tile'] ?? '28');
       const { buildScene } = await import('../lib/heerich/presets');
-      this.scene = buildScene(preset, { tile, camera: { type: 'oblique', angle: this.angle, distance: 15 } });
+      this.scene = buildScene(preset, {
+        tile,
+        camera: { type: 'oblique', angle: this.angle, distance: 15 },
+      });
 
       el.addEventListener('pointerdown', (e: PointerEvent) => this.onDown(e));
-      window.addEventListener('pointermove', (e: PointerEvent) => this.onMove(e));
+      window.addEventListener('pointermove', (e: PointerEvent) =>
+        this.onMove(e),
+      );
       window.addEventListener('pointerup', () => this.onUp());
       el.style.cursor = 'grab';
     },
@@ -49,7 +58,11 @@ export function registerHeerichComponents(alpine: AlpineLike) {
       const dx = e.clientX - this.lastX;
       this.lastX = e.clientX;
       this.angle = (this.angle + dx * 0.6) % 360;
-      this.scene.setCamera({ type: 'oblique', angle: this.angle, distance: 15 });
+      this.scene.setCamera({
+        type: 'oblique',
+        angle: this.angle,
+        distance: 15,
+      });
       this.stage.innerHTML = this.scene.toSVG({ padding: 2 });
     },
 

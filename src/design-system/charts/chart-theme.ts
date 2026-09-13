@@ -7,7 +7,8 @@ type ChartTheme = {
   series: string[];
 };
 
-const isBrowser = () => typeof window !== 'undefined' && typeof document !== 'undefined';
+const isBrowser = () =>
+  typeof window !== 'undefined' && typeof document !== 'undefined';
 
 const resolveColorVar = (root: HTMLElement, name: string, fallback: string) => {
   const probe = document.createElement('span');
@@ -20,7 +21,11 @@ const resolveColorVar = (root: HTMLElement, name: string, fallback: string) => {
   return value && value.length > 0 ? value : fallback;
 };
 
-const resolveBackgroundVar = (root: HTMLElement, name: string, fallback: string) => {
+const resolveBackgroundVar = (
+  root: HTMLElement,
+  name: string,
+  fallback: string,
+) => {
   const probe = document.createElement('span');
   probe.style.backgroundColor = `var(${name})`;
   probe.style.position = 'absolute';
@@ -47,9 +52,21 @@ export const getChartTheme = (root?: HTMLElement): ChartTheme => {
   return {
     grid: resolveColorVar(el, '--ds-chart-grid', 'rgba(214, 226, 239, 0.12)'),
     axis: resolveColorVar(el, '--ds-chart-axis', 'rgba(214, 226, 239, 0.32)'),
-    legendText: resolveColorVar(el, '--ds-chart-legend-text', 'rgba(214, 226, 239, 0.92)'),
-    tooltipBg: resolveBackgroundVar(el, '--ds-chart-tooltip-bg', 'rgba(9, 14, 18, 0.92)'),
-    tooltipBorder: resolveColorVar(el, '--ds-chart-tooltip-border', 'rgba(214, 226, 239, 0.22)'),
+    legendText: resolveColorVar(
+      el,
+      '--ds-chart-legend-text',
+      'rgba(214, 226, 239, 0.92)',
+    ),
+    tooltipBg: resolveBackgroundVar(
+      el,
+      '--ds-chart-tooltip-bg',
+      'rgba(9, 14, 18, 0.92)',
+    ),
+    tooltipBorder: resolveColorVar(
+      el,
+      '--ds-chart-tooltip-border',
+      'rgba(214, 226, 239, 0.22)',
+    ),
     series: [
       resolveColorVar(el, '--ds-chart-series-1', '#64ffd4'),
       resolveColorVar(el, '--ds-chart-series-2', '#7aa7ff'),

@@ -6,9 +6,11 @@ description: "Anime.js motion playbook for vanilla DOM in Astro. Invoke when add
 # Anime.js (Context7 LLMs) — Astro/Vanilla Motion Playbook
 
 Reference source:
-- https://context7.com/websites/animejs/llms.txt?tokens=10000
+
+- <https://context7.com/websites/animejs/llms.txt?tokens=10000>
 
 Project fit:
+
 - Astro-first, progressive enhancement, minimal JS.
 - Motion-first, but must not hide primary content.
 - Reduced-motion support is mandatory.
@@ -17,6 +19,7 @@ Project fit:
 ## When to Invoke
 
 Use this skill when you need:
+
 - A small, controlled animation system for UI microinteractions (hover/press/focus/boot sequences).
 - Timeline orchestration (multiple steps, labels, relative offsets).
 - Responsive animation definitions (media-query driven).
@@ -57,7 +60,7 @@ const { selector = '[data-boot]' } = Astro.props;
 
 ## Basic Animation + then()
 
-Source: https://animejs.com/documentation/animation/animation-callbacks/then
+Source: <https://animejs.com/documentation/animation/animation-callbacks/then>
 
 ```js
 import { animate, utils } from 'animejs';
@@ -74,7 +77,7 @@ animation.then(() => $value.textContent = 'fulfilled');
 
 ## Event-Driven Playback (No Autoplay)
 
-Source: https://animejs.com/documentation/animation/animation-methods/play
+Source: <https://animejs.com/documentation/animation/animation-methods/play>
 
 ```js
 import { animate, utils, stagger } from 'animejs';
@@ -94,8 +97,9 @@ $playButton.addEventListener('click', () => animation.play());
 ## Timeline Orchestration
 
 Source:
-- https://animejs.com/documentation/timeline
-- https://animejs.com/documentation/timeline/timeline-methods
+
+- <https://animejs.com/documentation/timeline>
+- <https://animejs.com/documentation/timeline/timeline-methods>
 
 ```js
 import { createTimeline } from 'animejs';
@@ -110,7 +114,7 @@ tl.label('start')
 
 ## Responsive Motion with createScope + mediaQueries
 
-Source: https://animejs.com/documentation/scope/scope-methods/addonce
+Source: <https://animejs.com/documentation/scope/scope-methods/addonce>
 
 Use this to define animations that adapt to layout breakpoints, while keeping “static” animation declarations stable across media query changes.
 
@@ -149,8 +153,9 @@ createScope({
 ## Engine Controls (Pause/Resume) + FPS Governance
 
 Sources:
-- https://animejs.com/documentation/engine/engine-methods/resume
-- https://animejs.com/documentation/engine/engine-parameters/fps
+
+- <https://animejs.com/documentation/engine/engine-methods/resume>
+- <https://animejs.com/documentation/engine/engine-parameters/fps>
 
 Pause/resume:
 
@@ -175,7 +180,7 @@ $range.addEventListener('input', function onInput() {
 
 ## Timers (Scrubbable Range + Play/Pause)
 
-Source: https://animejs.com/documentation/timer/timer-methods/seek
+Source: <https://animejs.com/documentation/timer/timer-methods/seek>
 
 ```js
 import { createTimer, utils } from 'animejs';
@@ -211,7 +216,7 @@ $playPauseButton.addEventListener('click', () => {
 
 ## Text: Split Lines for Reveal Animations
 
-Source: https://animejs.com/documentation/text/splittext/textsplitter-settings/lines
+Source: <https://animejs.com/documentation/text/splittext/textsplitter-settings/lines>
 
 Use only for non-critical decorative reveals; content must remain readable without JS.
 
@@ -237,8 +242,9 @@ splitText('p', {
 ## Utilities: stagger() + shuffle()
 
 Sources:
-- https://animejs.com/documentation/utilities/stagger/stagger-parameters/stagger-from
-- https://animejs.com/documentation/utilities/shuffle
+
+- <https://animejs.com/documentation/utilities/stagger/stagger-parameters/stagger-from>
+- <https://animejs.com/documentation/utilities/shuffle>
 
 ```js
 import { utils, animate, stagger } from 'animejs';

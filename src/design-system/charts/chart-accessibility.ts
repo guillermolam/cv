@@ -45,7 +45,10 @@ export const createFallbackRows = (
 ): FallbackRow[] => {
   return labels.map((label, index) => ({
     label,
-    values: datasets.map((ds) => ({ datasetLabel: ds.label, value: ds.data[index] ?? 0 })),
+    values: datasets.map((ds) => ({
+      datasetLabel: ds.label,
+      value: ds.data[index] ?? 0,
+    })),
   }));
 };
 
@@ -57,7 +60,8 @@ export const createChartSummary = (args: {
 }): string => {
   const series = args.datasets.map((d) => d.label).filter(Boolean);
   const seriesText = series.length > 0 ? `Series: ${series.join(', ')}.` : '';
-  const domainText = args.labels.length > 0 ? `Categories: ${args.labels.length}.` : '';
+  const domainText =
+    args.labels.length > 0 ? `Categories: ${args.labels.length}.` : '';
   const prefix = args.description ? `${args.description} ` : '';
   return `${prefix}${domainText} ${seriesText}`.trim();
 };

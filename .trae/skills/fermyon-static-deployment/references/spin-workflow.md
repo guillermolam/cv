@@ -7,10 +7,12 @@ If any command, flag, or manifest field is unfamiliar or disputed, follow [docs-
 ## Repository-aware preflight (mandatory for this portfolio)
 
 Before selecting commands or proposing `spin.toml` changes, consult:
+
 - [project-deployment-inventory.md](project-deployment-inventory.md)
 - [project-pattern-mapping.md](project-pattern-mapping.md)
 
 Decide which build artifact is being deployed:
+
 - Root Astro: `dist/` (multi-page HTML + `_astro/`)
 - Subproject Vite: `guillermo-lam-cv/dist` (built in CI; SPA routing expectations exist via `vercel.json`)
 
@@ -23,6 +25,7 @@ Decide which build artifact is being deployed:
    - `node scripts/validate-static-build.mjs --verbose`
 
 Build outputs to capture:
+
 - Build command executed
 - Build tool version (Node, package manager)
 - `dist/` existence and key files (at least `index.html`)
@@ -41,6 +44,7 @@ Run validations in this order:
    - [security-checks.md](security-checks.md)
 
 Stop conditions:
+
 - If build artifacts fail: route to Astro implementation (or rerun the build if it simply wasn’t run).
 - If manifest is missing: confirm whether Spin is in scope or create it with docs-backed fields only.
 
@@ -60,7 +64,8 @@ Required steps:
 ### Fermyon Cloud deploy (cloud plugin evidence)
 
 Fermyon’s official Cloud docs describe deployment and operations via the `cloud` plugin:
-- https://developer.fermyon.com/cloud/cloud-command-reference
+
+- <https://developer.fermyon.com/cloud/cloud-command-reference>
 
 Use these discovery-first checks:
 
@@ -71,9 +76,11 @@ spin cloud login --help
 ```
 
 If CI is involved, consult the official actions guidance:
-- https://developer.fermyon.com/cloud/github-actions
+
+- <https://developer.fermyon.com/cloud/github-actions>
 
 Deployment artifacts to capture:
+
 - The exact commands executed (redact tokens/secrets)
 - The produced application URL(s)
 - Any runtime logs/diagnostics relevant to static file serving
@@ -81,9 +88,11 @@ Deployment artifacts to capture:
 ### Manifest baseline to copy from (docs-backed example)
 
 For static file serving, use Spin’s own template as the baseline structure:
-- https://github.com/spinframework/spin/tree/main/templates/static-fileserver (see `content/spin.toml`)
+
+- <https://github.com/spinframework/spin/tree/main/templates/static-fileserver> (see `content/spin.toml`)
 
 The key construct to preserve is:
+
 - remote `spin_static_fs.wasm` referenced by `source.url` plus `digest`
 - `files = [{ source = "<artifact>", destination = "/" }]`
 
@@ -102,6 +111,7 @@ Use [deployment-validation.md](deployment-validation.md). Minimum smoke tests:
 An “update” is a redeploy of the same app with new static artifacts.
 
 Required steps:
+
 1. Rebuild the artifact directory (root `dist/` or `guillermo-lam-cv/dist`).
 2. Re-run:
    - `node scripts/validate-static-build.mjs --verbose`
@@ -125,11 +135,13 @@ Required steps:
 ## Incident workflow
 
 Use this when:
+
 - production routes/asset requests are failing
 - the deployment is serving stale or incorrect content
 - security exposure is suspected
 
 Steps:
+
 1. Freeze changes: stop further deploy attempts until evidence is captured.
 2. Capture evidence:
    - deployed URL(s)

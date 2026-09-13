@@ -19,11 +19,13 @@
  */
 export type Props = { class?: string };
 const { class: className } = Astro.props;
+const graphUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/data/neural-graph.json`;
 ---
 
 <div
   class:list={['neural-scene', className]}
   data-neural-scene
+  data-neural-graph-url={graphUrl}
   x-data="neuralPanel"
 >
   <!-- ── WebGL canvas ─────────────────────────────────────────────────────── -->
@@ -34,15 +36,25 @@ const { class: className } = Astro.props;
   ></canvas>
 
   <!-- ── Loading state ───────────────────────────────────────────────────── -->
-  <div class="neural-status" x-show="!ready && !error" x-cloak aria-live="polite">
+  <div
+    class="neural-status"
+    x-show="!ready && !error"
+    x-cloak
+    aria-live="polite"
+  >
     <span class="neural-loader" aria-hidden="true"></span>
     <span class="font-mono text-0 text-muted">Initialising neural graph…</span>
   </div>
 
   <!-- ── Error / no-WebGL fallback ───────────────────────────────────────── -->
   <div class="neural-status-error" x-show="error" x-cloak aria-live="assertive">
-    <span class="i-ph-warning-circle-duotone text-[1.4rem]" aria-hidden="true"></span>
-    <span class="font-mono text-0">WebGL unavailable — try a modern desktop browser.</span>
+    <span
+      class="i-ph-warning-circle-duotone text-[1.4rem]"
+      aria-hidden="true"
+    ></span>
+    <span class="font-mono text-0">
+      WebGL unavailable — try a modern desktop browser.
+    </span>
   </div>
 
   <!-- ── Hover tooltip ────────────────────────────────────────────────────── -->
@@ -58,11 +70,20 @@ const { class: className } = Astro.props;
     <template x-if="tooltip.node?.kind === 'neuron'">
       <div>
         <span class="neural-kind-neuron">
-          <span class="i-solar-cpu-bolt-bold-duotone mr-1 align-middle" aria-hidden="true"></span>
+          <span
+            class="i-solar-cpu-bolt-bold-duotone mr-1 align-middle"
+            aria-hidden="true"
+          ></span>
           Neuron
         </span>
-        <strong class="block text-strong font-mono text-0" x-text="tooltip.node.data.label"></strong>
-        <p class="m-0 mt-1 font-mono text-[0.72rem] text-muted leading-relaxed" x-text="tooltip.node.data.description ?? ''"></p>
+        <strong
+          class="block text-strong font-mono text-0"
+          x-text="tooltip.node.data.label"
+        ></strong>
+        <p
+          class="m-0 mt-1 font-mono text-[0.72rem] text-muted leading-relaxed"
+          x-text="tooltip.node.data.description ?? ''"
+        ></p>
       </div>
     </template>
 
@@ -70,10 +91,16 @@ const { class: className } = Astro.props;
     <template x-if="tooltip.node?.kind === 'axon'">
       <div>
         <span class="neural-kind-axon">
-          <span class="i-tabler-circuit-cell mr-1 align-middle" aria-hidden="true"></span>
+          <span
+            class="i-tabler-circuit-cell mr-1 align-middle"
+            aria-hidden="true"
+          ></span>
           Axon · <span x-text="tooltip.node.data.type"></span>
         </span>
-        <strong class="block text-strong font-mono text-0" x-text="tooltip.node.data.label"></strong>
+        <strong
+          class="block text-strong font-mono text-0"
+          x-text="tooltip.node.data.label"
+        ></strong>
       </div>
     </template>
 
@@ -81,18 +108,30 @@ const { class: className } = Astro.props;
     <template x-if="tooltip.node?.kind === 'dendrite'">
       <div>
         <span class="neural-kind-dendrite">
-          <span class="i-ph-tree-structure-duotone mr-1 align-middle" aria-hidden="true"></span>
+          <span
+            class="i-ph-tree-structure-duotone mr-1 align-middle"
+            aria-hidden="true"
+          ></span>
           Dendrite
         </span>
-        <strong class="block text-strong font-mono text-0" x-text="tooltip.node.data.label"></strong>
+        <strong
+          class="block text-strong font-mono text-0"
+          x-text="tooltip.node.data.label"
+        ></strong>
         <small class="block font-mono text-[0.72rem] text-muted mt-1">
           Used in
-          <span class="font-semibold text-strong" x-text="tooltip.node.data.usageCount"></span>
+          <span
+            class="font-semibold text-strong"
+            x-text="tooltip.node.data.usageCount"
+          ></span>
           role(s)
         </small>
         <template x-if="tooltip.node.data.website">
           <span class="neural-tooltip-link">
-            <span class="i-ph-arrow-square-out mr-1 align-middle" aria-hidden="true"></span>
+            <span
+              class="i-ph-arrow-square-out mr-1 align-middle"
+              aria-hidden="true"
+            ></span>
             open docs
           </span>
         </template>
@@ -117,7 +156,11 @@ const { class: className } = Astro.props;
         ></span>
         <span x-text="activeAxon?.label ?? activeNeuron?.label ?? ''"></span>
       </div>
-      <button class="neural-panel-close ds-focus" x-on:click="closePanel()" aria-label="Close panel">
+      <button
+        class="neural-panel-close ds-focus"
+        x-on:click="closePanel()"
+        aria-label="Close panel"
+      >
         <span class="i-ph-x text-base" aria-hidden="true"></span>
       </button>
     </header>
@@ -150,7 +193,10 @@ const { class: className } = Astro.props;
     <!-- Axon quick-pick (when no axon is active) -->
     <nav class="neural-axon-nav" x-show="activeNeuron && !activeAxon">
       <p class="neural-axon-hint">
-        <span class="i-ph-cursor-click-duotone mr-1 align-middle" aria-hidden="true"></span>
+        <span
+          class="i-ph-cursor-click-duotone mr-1 align-middle"
+          aria-hidden="true"
+        ></span>
         Click an axon in the 3D view — or pick one:
       </p>
       <template
@@ -158,7 +204,10 @@ const { class: className } = Astro.props;
         :key="axon.id"
       >
         <button class="neural-axon-btn ds-focus" x-on:click="selectAxon(axon)">
-          <span class="i-tabler-circuit-cell align-middle" aria-hidden="true"></span>
+          <span
+            class="i-tabler-circuit-cell align-middle"
+            aria-hidden="true"
+          ></span>
           <span x-text="axon.label"></span>
         </button>
       </template>
@@ -167,8 +216,12 @@ const { class: className } = Astro.props;
     <!-- Back button (when axon is active) -->
     <footer class="neural-panel-footer" x-show="activeAxon">
       <button class="neural-panel-back ds-focus" x-on:click="backToNeuron()">
-        <span class="i-ph-arrow-left align-middle mr-1" aria-hidden="true"></span>
-        Back to <span class="font-semibold" x-text="activeNeuron?.label ?? ''"></span>
+        <span
+          class="i-ph-arrow-left align-middle mr-1"
+          aria-hidden="true"
+        ></span>
+        Back to{' '}
+        <span class="font-semibold" x-text="activeNeuron?.label ?? ''"></span>
       </button>
     </footer>
   </aside>
@@ -187,16 +240,20 @@ const { class: className } = Astro.props;
      Communicates with Alpine via CustomEvents on [data-neural-scene].
 ────────────────────────────────────────────────────────────────────────── -->
 <script>
-  import { hasWebGL, prefersReducedMotion } from '../../design-system/three/capability';
+  import {
+    hasWebGL,
+    prefersReducedMotion,
+  } from '../../design-system/three/capability';
 
-  const root   = document.querySelector<HTMLElement>('[data-neural-scene]');
+  const root = document.querySelector<HTMLElement>('[data-neural-scene]');
   const canvas = root?.querySelector<HTMLCanvasElement>('[data-neural-canvas]');
 
   if (root && canvas) {
     if (!hasWebGL() || prefersReducedMotion()) {
       root.dispatchEvent(new CustomEvent('neural:error', { bubbles: false }));
     } else {
-      type Controller = import('../../design-system/three/neural-network').NeuralNetworkController;
+      type Controller =
+        import('../../design-system/three/neural-network').NeuralNetworkController;
       let controller: Controller | null = null;
       let inited = false;
 
@@ -209,22 +266,44 @@ const { class: className } = Astro.props;
 
             const [{ createNeuralNetwork }, graph] = await Promise.all([
               import('../../design-system/three/neural-network'),
-              fetch('/data/neural-graph.json').then((r) => r.json()),
+              fetch(root.dataset.neuralGraphUrl ?? '').then((response) => {
+                if (!response.ok) {
+                  throw new Error(
+                    `Neural graph request failed: ${response.status}`,
+                  );
+                }
+                return response.json();
+              }),
             ]);
 
             controller = createNeuralNetwork(canvas, graph);
 
             controller.onHover((node) =>
-              root.dispatchEvent(new CustomEvent('neural:hover', { detail: { node }, bubbles: false })),
+              root.dispatchEvent(
+                new CustomEvent('neural:hover', {
+                  detail: { node },
+                  bubbles: false,
+                }),
+              ),
             );
             controller.onClick((node) =>
-              root.dispatchEvent(new CustomEvent('neural:click', { detail: { node }, bubbles: false })),
+              root.dispatchEvent(
+                new CustomEvent('neural:click', {
+                  detail: { node },
+                  bubbles: false,
+                }),
+              ),
             );
 
             controller.start();
             controller.startEntrance();
 
-            root.dispatchEvent(new CustomEvent('neural:ready', { detail: { graph }, bubbles: false }));
+            root.dispatchEvent(
+              new CustomEvent('neural:ready', {
+                detail: { graph },
+                bubbles: false,
+              }),
+            );
           } else if (controller) {
             visible ? controller.start() : controller.pause();
           }
@@ -239,10 +318,14 @@ const { class: className } = Astro.props;
 
       // Alpine → Three.js camera commands
       root.addEventListener('neural:focus-neuron', (e) =>
-        controller?.focusNeuron((e as CustomEvent<{ id: string | null }>).detail.id),
+        controller?.focusNeuron(
+          (e as CustomEvent<{ id: string | null }>).detail.id,
+        ),
       );
       root.addEventListener('neural:focus-axon', (e) =>
-        controller?.focusAxon((e as CustomEvent<{ id: string | null }>).detail.id),
+        controller?.focusAxon(
+          (e as CustomEvent<{ id: string | null }>).detail.id,
+        ),
       );
 
       const dispose = () => {
@@ -251,7 +334,7 @@ const { class: className } = Astro.props;
         controller?.dispose();
         controller = null;
       };
-      window.addEventListener('pagehide',            dispose, { once: true });
+      window.addEventListener('pagehide', dispose, { once: true });
       document.addEventListener('astro:before-swap', dispose, { once: true });
     }
   }
@@ -267,7 +350,9 @@ const { class: className } = Astro.props;
    */
 
   /* Alpine x-cloak suppression */
-  [x-cloak] { display: none !important; }
+  [x-cloak] {
+    display: none !important;
+  }
 
   /*
    * Panel slide-in state: x-show makes it display:block; GSAP then tweens the

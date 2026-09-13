@@ -5,7 +5,8 @@ top-level component orchestrates many small islands that share state through
 `nanostores`.
 
 ## Component tree
-```
+
+```text
 ControlRoomConsole.astro            (orchestrator, single component)
 ├── FxBezel.astro                   rusty metallic housing + screws + well
 │   ├── console-topbar              title · NODE · ONLINE · AudioToggle
@@ -24,18 +25,20 @@ ControlRoomConsole.astro            (orchestrator, single component)
 ```
 
 ## State (nanostores) — `src/stores/control-room.ts`
-| Atom | Purpose | Notes |
-|------|---------|-------|
-| `$activeSection` | current console subview | bio…terminal (Phase B drives it) |
-| `$lang` | previewed/active language | initialised from URL prefix |
-| `$audioMuted` | audio mute | **persisted**, default `true` |
-| `$reducedMotion` | prefers-reduced-motion | set by `initCapabilities()` |
-| `$webglSupported` / `$webglEnabled` | WebGL gating | `enabled = supported && !reduced` |
+
+| Atom                                | Purpose                   | Notes                             |
+| ----------------------------------- | ------------------------- | --------------------------------- |
+| `$activeSection`                    | current console subview   | bio…terminal (Phase B drives it)  |
+| `$lang`                             | previewed/active language | initialised from URL prefix       |
+| `$audioMuted`                       | audio mute                | **persisted**, default `true`     |
+| `$reducedMotion`                    | prefers-reduced-motion    | set by `initCapabilities()`       |
+| `$webglSupported` / `$webglEnabled` | WebGL gating              | `enabled = supported && !reduced` |
 
 `persistentAtom` (`src/stores/persistent.ts`) backs `$audioMuted` with
 SSR-safe localStorage + cross-tab sync.
 
 ## Principles
+
 - **Single component, many islands** — interactive parts self-initialise via
   their own `<script>` and subscribe to the store; no cross-island props.
 - **Progressive enhancement** — every panel is meaningful static HTML; WebGL,
@@ -44,6 +47,7 @@ SSR-safe localStorage + cross-tab sync.
   Chart.js `destroy()` on teardown.
 
 ## Related
+
 - [webgl-hero.md](./webgl-hero.md) · [language-dial.md](./language-dial.md)
 - [texture-grain-system.md](./texture-grain-system.md) · [audio-sfx.md](./audio-sfx.md)
 - [heerich-voxel-svg.md](./heerich-voxel-svg.md) (voxel→SVG art in the hero)

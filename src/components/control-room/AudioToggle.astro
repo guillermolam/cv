@@ -19,8 +19,13 @@ const { class: className } = Astro.props as Props;
   aria-label="Toggle control room audio"
   title="Toggle audio"
 >
-  <span class="audio-toggle-icon i-solar-muted-bold-duotone" aria-hidden="true"></span>
-  <span class="audio-toggle-label" aria-hidden="true">SFX</span>
+  <span
+    class="audio-toggle-icon i-solar-muted-bold-duotone"
+    aria-hidden="true"
+  ></span>
+  <span class="audio-toggle-label" aria-hidden="true">
+    SFX
+  </span>
 </button>
 
 <style>
@@ -74,7 +79,9 @@ const { class: className } = Astro.props as Props;
 
   initAudioEngine();
 
-  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-audio-toggle]');
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    '[data-audio-toggle]',
+  );
 
   const sync = (muted: boolean) => {
     buttons.forEach((btn) => {

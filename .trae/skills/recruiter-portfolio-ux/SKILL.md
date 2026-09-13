@@ -12,7 +12,9 @@ metadata:
 # Recruiter Portfolio UX
 
 ## Activation Scope
+
 Use this skill for:
+
 - 30-second recruiter test evaluation
 - Conversion path evaluation (CV/contact)
 - Discoverability evaluation (navigation, wayfinding, exploration affordances)
@@ -23,11 +25,13 @@ Use this skill for:
   - discoverability impact
 
 Do not use for:
+
 - Implementing UI/components/scenes
 - Writing recruiter copy or positioning content
 - Architecture governance
 
 ## Workflow
+
 1) Identify the recruiter fast path:
    - who/what differentiation
    - CV access
@@ -45,16 +49,19 @@ Do not use for:
 5) Produce an actionable report with acceptance criteria and owner routing.
 
 ## Reject Criteria
+
 Reject implementations that are:
+
 - visually static, interaction poor, transitionless, emotionally flat
 - inaccessible, motion abusive, performance heavy, recruiter hostile
 
 ## Output Contract
+
 Every execution must produce:
+
 - Fast path score (clarity + CV/contact discoverability)
 - Exploration score (discoverability + reward vs confusion)
 - Motion score (quality + intent + friction)
 - Accessibility notes (reduced motion, keyboard, fallback)
 - Performance risk notes
 - Action list with ownership routing
-

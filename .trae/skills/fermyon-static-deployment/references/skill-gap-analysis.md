@@ -5,11 +5,13 @@ This document audits the current `fermyon-static-deployment` skill against the n
 ## Summary (current state)
 
 Current skill strengths:
+
 - Clear ownership boundaries and routing to other skills
 - Strong anti-hallucination posture (docs freshness gate)
 - Read-only validator scripts with structured JSON output
 
 Primary weakness:
+
 - The skill assumes a single “Astro `dist/`” artifact and does not incorporate the repo’s **actual** deployment pipeline (GitHub Pages deploying `./guillermo-lam-cv/dist`) or the repo’s SPA routing config (`vercel.json` rewrite).
 
 ## Gaps (with severity, impact, proposed improvement)
@@ -88,4 +90,3 @@ Primary weakness:
 - Current skill doesn’t explicitly branch validation/troubleshooting for:
   - Astro multi-page static output
   - Vite SPA output requiring a rewrite/fallback strategy (must be docs-verified)
-

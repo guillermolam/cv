@@ -13,6 +13,7 @@ This document defines the enhanced Toolchain experience as a 3D navigable map, w
 ## Baseline (Required, No-JS Safe)
 
 The Toolchain page must always render:
+
 - an HTML list/grid of tools
 - a readable grouping structure (type/category/tag)
 - evidence links (projects, case studies, experience, tutorials, knowledge resources) where relationships exist
@@ -24,6 +25,7 @@ The current filterable Toolchain page remains the baseline fallback.
 ### Visual Concept
 
 3D tree map / technology graph:
+
 - tools are represented as nodes
 - relationships are represented as edges or proximity clustering
 - categories form spatial “constellations”:
@@ -50,6 +52,7 @@ The current filterable Toolchain page remains the baseline fallback.
 ### Data Model Requirements
 
 The 3D layer must be driven by the same content graph:
+
 - `tools` as the node set
 - relationships derived from `*Ids` and `links[]`
 - use `public/data/content-graph.json` for build-time integrity, not for runtime fetching
@@ -72,4 +75,3 @@ If the 3D layer needs runtime data, it MUST receive it from server-rendered JSON
 - The HTML fallback is canonical and must remain complete.
 - Detail panel content is semantic and readable via screen readers.
 - Visible focus states for all interactive controls.
-

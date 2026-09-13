@@ -44,12 +44,22 @@ const { entry } = Astro.props as Props;
     <div class="experience-modal__meta">
       <div>
         <p class="experience-modal__eyebrow">Role briefing</p>
-        <h3 id={`${entry.anchorId}-modal-title`}>{entry.companyName} · {entry.roleTitle}</h3>
+        <h3 id={`${entry.anchorId}-modal-title`}>
+          {entry.companyName} · {entry.roleTitle}
+        </h3>
       </div>
       <div class="experience-modal__badges">
-        <UiBadge variant="accent" size="sm" depth="flat">{entry.totalTimeLabel}</UiBadge>
-        <UiBadge variant="cloud" size="sm" depth="flat">{entry.dateRangeLabel}</UiBadge>
-        {entry.ageAtStartLabel ? <UiBadge variant="info" size="sm" depth="flat">{entry.ageAtStartLabel}</UiBadge> : null}
+        <UiBadge variant="accent" size="sm" depth="flat">
+          {entry.totalTimeLabel}
+        </UiBadge>
+        <UiBadge variant="cloud" size="sm" depth="flat">
+          {entry.dateRangeLabel}
+        </UiBadge>
+        {entry.ageAtStartLabel ? (
+          <UiBadge variant="info" size="sm" depth="flat">
+            {entry.ageAtStartLabel}
+          </UiBadge>
+        ) : null}
       </div>
     </div>
 
@@ -111,15 +121,15 @@ const { entry } = Astro.props as Props;
     padding: 1.1rem;
     border-radius: 18px;
     border: 1px solid color-mix(in oklab, var(--color-accent), transparent 62%);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, #020611, transparent 4%),
-        color-mix(in oklab, var(--color-surface-2), transparent 8%)
-      );
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, #020611, transparent 4%),
+      color-mix(in oklab, var(--color-surface-2), transparent 8%)
+    );
     box-shadow:
       0 22px 80px color-mix(in oklab, #01040c, transparent 42%),
-      inset 0 0 0 1px color-mix(in oklab, var(--color-border-strong), transparent 48%);
+      inset 0 0 0 1px
+        color-mix(in oklab, var(--color-border-strong), transparent 48%);
   }
 
   .experience-modal__header,
@@ -138,7 +148,8 @@ const { entry } = Astro.props as Props;
     gap: 0.55rem;
     padding: 0.55rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 36%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 36%);
     background: color-mix(in oklab, var(--color-surface-3), transparent 18%);
     color: var(--color-text-muted);
     font-size: var(--font-size-0);

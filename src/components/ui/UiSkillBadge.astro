@@ -50,7 +50,14 @@ const {
 const meta = [category, level].filter(Boolean).join(' · ');
 ---
 
-<span id={id} class={className} data-ui-skill-badge data-variant={variant} data-depth={depth} data-motion={motion}>
+<span
+  id={id}
+  class={className}
+  data-ui-skill-badge
+  data-variant={variant}
+  data-depth={depth}
+  data-motion={motion}
+>
   <UiBadge
     href={href}
     variant={variant}

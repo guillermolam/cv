@@ -10,4 +10,3 @@ export function isLang(value: string): value is Lang {
 export function getLangStaticPaths() {
   return SUPPORTED_LANGS.map((lang) => ({ params: { lang } }));
 }
-

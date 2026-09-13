@@ -787,54 +787,51 @@ const tagOptions = tagOptionIds.map((id) => ({
       <div class="tc-hero__eyebrow ds-eyebrow">
         <span
           class="i-solar-server-bold-duotone align-middle mr-2"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         Arsenal Overview
       </div>
       <h1 class="tc-hero__title">Toolchain</h1>
       <p class="tc-hero__sub">{description}</p>
 
-      {
-        tools.length === 0 && lang !== 'en' ? (
-          <p class="tc-hero__fallback ds-label">
-            Showing English tool entries while {lang.toUpperCase()} content is
-            being authored.
-          </p>
-        ) : null
-      }
+      {tools.length === 0 && lang !== 'en' ? (
+        <p class="tc-hero__fallback ds-label">
+          Showing English tool entries while {lang.toUpperCase()} content is
+          being authored.
+        </p>
+      ) : null}
 
       <!-- Stats ribbon -->
       <div class="tc-stats" role="list">
-        {
-          [
-            { icon: 'i-ph-wrench-duotone', label: 'Tools', value: totalTools },
-            {
-              icon: 'i-ph-shield-check-duotone',
-              label: 'Domains',
-              value: uniqueDomainDimensions.size,
-            },
-            {
-              icon: 'i-ph-squares-four-duotone',
-              label: 'Categories',
-              value: uniqueCategoryIds.size,
-            },
-            {
-              icon: 'i-ph-tag-duotone',
-              label: 'Tags',
-              value: uniqueTagIds.size,
-            },
-            {
-              icon: 'i-ph-buildings-duotone',
-              label: 'Vendors',
-              value: vendorCount,
-            },
-          ].map(({ icon, label, value }) => (
-            <div class="tc-stat" role="listitem">
-              <span class={`${icon} tc-stat__icon`} aria-hidden="true" />
-              <span class="tc-stat__value">{value}</span>
-              <span class="tc-stat__label ds-label">{label}</span>
-            </div>
-          ))
-        }
+        {[
+          { icon: 'i-ph-wrench-duotone', label: 'Tools', value: totalTools },
+          {
+            icon: 'i-ph-shield-check-duotone',
+            label: 'Domains',
+            value: uniqueDomainDimensions.size,
+          },
+          {
+            icon: 'i-ph-squares-four-duotone',
+            label: 'Categories',
+            value: uniqueCategoryIds.size,
+          },
+          {
+            icon: 'i-ph-tag-duotone',
+            label: 'Tags',
+            value: uniqueTagIds.size,
+          },
+          {
+            icon: 'i-ph-buildings-duotone',
+            label: 'Vendors',
+            value: vendorCount,
+          },
+        ].map(({ icon, label, value }) => (
+          <div class="tc-stat" role="listitem">
+            <span class={`${icon} tc-stat__icon`} aria-hidden="true" />
+            <span class="tc-stat__value">{value}</span>
+            <span class="tc-stat__label ds-label">{label}</span>
+          </div>
+        ))}
       </div>
     </div>
 
@@ -850,27 +847,26 @@ const tagOptions = tagOptionIds.map((id) => ({
       <header class="tc-panel-header">
         <span
           class="i-solar-code-bold-duotone tc-panel-icon text-accent"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="tc-panel-title">Distribution by Domain</h2>
           <p class="tc-panel-sub ds-label">{totalTools} tools · categorised</p>
         </div>
       </header>
-      {
-        distLabels.length > 0 ? (
-          <LazyBarChart
-            labels={distLabels}
-            values={distValues}
-            title="Tools per domain"
-            series="Tool count"
-            horizontal
-            height={distLabels.length * 38 + 24}
-            class="tc-bar"
-          />
-        ) : (
-          <p class="tc-empty">Tool data loading…</p>
-        )
-      }
+      {distLabels.length > 0 ? (
+        <LazyBarChart
+          labels={distLabels}
+          values={distValues}
+          title="Tools per domain"
+          series="Tool count"
+          horizontal
+          height={distLabels.length * 38 + 24}
+          class="tc-bar"
+        />
+      ) : (
+        <p class="tc-empty">Tool data loading…</p>
+      )}
     </div>
 
     <!-- Category coverage radar -->
@@ -878,7 +874,8 @@ const tagOptions = tagOptionIds.map((id) => ({
       <header class="tc-panel-header">
         <span
           class="i-solar-shield-bold-duotone tc-panel-icon text-[var(--ds-color-security)]"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="tc-panel-title">Category Coverage</h2>
           <p class="tc-panel-sub ds-label">
@@ -886,17 +883,15 @@ const tagOptions = tagOptionIds.map((id) => ({
           </p>
         </div>
       </header>
-      {
-        radarRows.length > 0 ? (
-          <LazyRadarChart
-            rows={radarRows}
-            title="Category coverage radar"
-            class="tc-radar"
-          />
-        ) : (
-          <p class="tc-empty">Category data loading…</p>
-        )
-      }
+      {radarRows.length > 0 ? (
+        <LazyRadarChart
+          rows={radarRows}
+          title="Category coverage radar"
+          class="tc-radar"
+        />
+      ) : (
+        <p class="tc-empty">Category data loading…</p>
+      )}
     </div>
   </section>
 
@@ -911,7 +906,8 @@ const tagOptions = tagOptionIds.map((id) => ({
     <header class="tc-panel-header tc-tree-header">
       <span
         class="i-ph-share-network-duotone tc-panel-icon text-accent"
-        aria-hidden="true"></span>
+        aria-hidden="true"
+      ></span>
       <div>
         <h2 class="tc-panel-title">CardTree View</h2>
         <p class="tc-panel-sub ds-label">
@@ -947,7 +943,8 @@ const tagOptions = tagOptionIds.map((id) => ({
     <h2 class="tc-section-title">
       <span
         class="i-ph-list-magnifying-glass-duotone align-middle mr-2"
-        aria-hidden="true"></span>
+        aria-hidden="true"
+      ></span>
       Tool Catalogue
     </h2>
 
@@ -960,145 +957,143 @@ const tagOptions = tagOptionIds.map((id) => ({
     />
 
     <div class="tc-grid" id="toolchain-items" aria-label="Tools">
-      {
-        toolsFallback
-          .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
-          .map((tool, i) => {
-            const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
-            const evidence = getEvidence(tool.data.toolId);
-            const projectLinks = evidence.projects
-              .map((k) => nodeByKey.get(k))
-              .filter(isGraphNode)
-              .map((n) => ({
-                label: n.title,
-                href: `/${lang}/portfolio/${n.slug}`,
-              }));
-            const caseStudyLinks = evidence.caseStudies
-              .map((k) => nodeByKey.get(k))
-              .filter(isGraphNode)
-              .map((n) => ({
-                label: n.title,
-                href: `/${lang}/case-studies/${n.slug}`,
-              }));
+      {toolsFallback
+        .sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''))
+        .map((tool, i) => {
+          const typeIds = getToolTypeIds(tool.data.categoryIds ?? []);
+          const evidence = getEvidence(tool.data.toolId);
+          const projectLinks = evidence.projects
+            .map((k) => nodeByKey.get(k))
+            .filter(isGraphNode)
+            .map((n) => ({
+              label: n.title,
+              href: `/${lang}/portfolio/${n.slug}`,
+            }));
+          const caseStudyLinks = evidence.caseStudies
+            .map((k) => nodeByKey.get(k))
+            .filter(isGraphNode)
+            .map((n) => ({
+              label: n.title,
+              href: `/${lang}/case-studies/${n.slug}`,
+            }));
 
-            const categories = (tool.data.categoryIds ?? [])
-              .map((id) => ({ id, label: categoryTitleById.get(id) }))
-              .filter((c): c is { id: string; label: string } =>
-                isNonEmptyString(c.label),
-              );
-            const tags = (tool.data.tagIds ?? [])
-              .map((id) => tagTitleById.get(id))
-              .filter(isNonEmptyString);
+          const categories = (tool.data.categoryIds ?? [])
+            .map((id) => ({ id, label: categoryTitleById.get(id) }))
+            .filter((c): c is { id: string; label: string } =>
+              isNonEmptyString(c.label),
+            );
+          const tags = (tool.data.tagIds ?? [])
+            .map((id) => tagTitleById.get(id))
+            .filter(isNonEmptyString);
 
-            const hasEvidence =
-              projectLinks.length > 0 || caseStudyLinks.length > 0;
+          const hasEvidence =
+            projectLinks.length > 0 || caseStudyLinks.length > 0;
 
-            return (
-              <article
-                class="tc-card"
-                data-tool-item
-                data-tc-card
-                data-type-ids={typeIds.join(' ')}
-                data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
-                data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
-                style={`--card-index:${i}`}
-              >
-                <header class="tc-card__header">
-                  <h3 class="tc-card__name">{tool.data.name}</h3>
-                  {tool.data.vendor ? (
-                    <span class="tc-card__vendor ds-label">
-                      {tool.data.vendor}
-                    </span>
-                  ) : null}
-                </header>
-
-                {/* Categories */}
-                {categories.length > 0 ? (
-                  <div class="tc-card__badges">
-                    {categories.map((c) => (
-                      <UiBadge
-                        variant={domainVariant(c.id) as any}
-                        size="sm"
-                        depth="flat"
-                      >
-                        {c.label}
-                      </UiBadge>
-                    ))}
-                  </div>
+          return (
+            <article
+              class="tc-card"
+              data-tool-item
+              data-tc-card
+              data-type-ids={typeIds.join(' ')}
+              data-tag-ids={(tool.data.tagIds ?? []).join(' ')}
+              data-category-ids={(tool.data.categoryIds ?? []).join(' ')}
+              style={`--card-index:${i}`}
+            >
+              <header class="tc-card__header">
+                <h3 class="tc-card__name">{tool.data.name}</h3>
+                {tool.data.vendor ? (
+                  <span class="tc-card__vendor ds-label">
+                    {tool.data.vendor}
+                  </span>
                 ) : null}
+              </header>
 
-                {/* Tags */}
-                {tags.length > 0 ? (
-                  <div class="tc-card__tags">
-                    {tags.map((tag) => (
-                      <span class="ds-badge">{tag}</span>
-                    ))}
-                  </div>
-                ) : null}
-
-                {/* Evidence links */}
-                {hasEvidence ? (
-                  <div class="tc-card__evidence">
-                    {projectLinks.length > 0 ? (
-                      <div class="tc-evidence-group">
-                        <span
-                          class="i-ph-folder-notch-open-duotone tc-evidence-icon"
-                          aria-hidden="true"
-                        />
-                        {projectLinks.map((link, li) => (
-                          <Fragment>
-                            <a class="tc-evidence-link" href={link.href}>
-                              {link.label}
-                            </a>
-                            {li < projectLinks.length - 1 ? (
-                              <span class="tc-evidence-sep">·</span>
-                            ) : null}
-                          </Fragment>
-                        ))}
-                      </div>
-                    ) : null}
-                    {caseStudyLinks.length > 0 ? (
-                      <div class="tc-evidence-group">
-                        <span
-                          class="i-ph-article-duotone tc-evidence-icon"
-                          aria-hidden="true"
-                        />
-                        {caseStudyLinks.map((link, li) => (
-                          <Fragment>
-                            <a class="tc-evidence-link" href={link.href}>
-                              {link.label}
-                            </a>
-                            {li < caseStudyLinks.length - 1 ? (
-                              <span class="tc-evidence-sep">·</span>
-                            ) : null}
-                          </Fragment>
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
-                ) : null}
-
-                {/* Website link */}
-                {tool.data.website ? (
-                  <div class="tc-card__footer">
-                    <a
-                      class="tc-card__link"
-                      href={tool.data.website}
-                      rel="noopener noreferrer"
-                      target="_blank"
+              {/* Categories */}
+              {categories.length > 0 ? (
+                <div class="tc-card__badges">
+                  {categories.map((c) => (
+                    <UiBadge
+                      variant={domainVariant(c.id) as any}
+                      size="sm"
+                      depth="flat"
                     >
+                      {c.label}
+                    </UiBadge>
+                  ))}
+                </div>
+              ) : null}
+
+              {/* Tags */}
+              {tags.length > 0 ? (
+                <div class="tc-card__tags">
+                  {tags.map((tag) => (
+                    <span class="ds-badge">{tag}</span>
+                  ))}
+                </div>
+              ) : null}
+
+              {/* Evidence links */}
+              {hasEvidence ? (
+                <div class="tc-card__evidence">
+                  {projectLinks.length > 0 ? (
+                    <div class="tc-evidence-group">
                       <span
-                        class="i-ph-arrow-square-out-duotone align-middle mr-1"
+                        class="i-ph-folder-notch-open-duotone tc-evidence-icon"
                         aria-hidden="true"
                       />
-                      Website
-                    </a>
-                  </div>
-                ) : null}
-              </article>
-            );
-          })
-      }
+                      {projectLinks.map((link, li) => (
+                        <Fragment>
+                          <a class="tc-evidence-link" href={link.href}>
+                            {link.label}
+                          </a>
+                          {li < projectLinks.length - 1 ? (
+                            <span class="tc-evidence-sep">·</span>
+                          ) : null}
+                        </Fragment>
+                      ))}
+                    </div>
+                  ) : null}
+                  {caseStudyLinks.length > 0 ? (
+                    <div class="tc-evidence-group">
+                      <span
+                        class="i-ph-article-duotone tc-evidence-icon"
+                        aria-hidden="true"
+                      />
+                      {caseStudyLinks.map((link, li) => (
+                        <Fragment>
+                          <a class="tc-evidence-link" href={link.href}>
+                            {link.label}
+                          </a>
+                          {li < caseStudyLinks.length - 1 ? (
+                            <span class="tc-evidence-sep">·</span>
+                          ) : null}
+                        </Fragment>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {/* Website link */}
+              {tool.data.website ? (
+                <div class="tc-card__footer">
+                  <a
+                    class="tc-card__link"
+                    href={tool.data.website}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <span
+                      class="i-ph-arrow-square-out-duotone align-middle mr-1"
+                      aria-hidden="true"
+                    />
+                    Website
+                  </a>
+                </div>
+              ) : null}
+            </article>
+          );
+        })}
     </div>
   </section>
 </BaseLayout>

@@ -10,6 +10,7 @@ It is integrated on three surfaces, exactly as the brief asked (Astro
 Integration API and/or Alpine):
 
 ## 1. Build-time component (default, zero client JS)
+
 `src/components/heerich/HeerichScene.astro` calls `renderPreset()` in
 **frontmatter** and emits the SVG with `set:html`. No JavaScript ships; the art
 is static, accessible (figure + `aria-label`, or `aria-hidden` when purely
@@ -20,7 +21,9 @@ decorative), printable, and indexable.
 ```
 
 ## 2. Scene presets — `src/lib/heerich/presets.ts`
+
 Shared by both the build-time and interactive paths:
+
 - `buildScene(preset, { camera, tile })` → a configured `Heerich` instance.
 - `renderPreset(preset, opts)` → an SVG string (build-time convenience).
 - Presets: `monolith`, `stationStack`, `badgeCube`.
@@ -30,6 +33,7 @@ Shared by both the build-time and interactive paths:
   (CSG subtract).
 
 ## 3. Interactive island — Alpine `heerichScene`
+
 `src/alpine/heerich.ts` (registered in `src/alpine/index.ts`). When a
 `<HeerichScene interactive />` is present, the **build-time SVG is the no-JS
 baseline**; on first interaction Alpine lazily `import()`s heerich + the presets,
@@ -38,6 +42,7 @@ oblique camera (`setCamera({ angle })`). Static and silent under
 `prefers-reduced-motion` (the build-time SVG simply stays put).
 
 ## 4. Astro Integration — `integrations/heerich/index.ts`
+
 A real `AstroIntegration` wired in `astro.config.mjs`. On `astro:config:setup` it
 `updateConfig`s Vite with `ssr.noExternal: ['heerich']` + `optimizeDeps.include`
 so the ESM resolves during the SSR build pass (which is where build-time
@@ -45,6 +50,7 @@ frontmatter rendering runs) and is pre-bundled for dev. Emits a one-line
 diagnostic.
 
 ## Why this fits the rules
+
 - **Static-first / recruiter-first**: default path ships zero JS; content is real
   SVG.
 - **No forbidden deps**: heerich is vanilla zero-dep ESM (not flagged by
@@ -55,6 +61,7 @@ diagnostic.
   and only swaps innerHTML; no GPU resources.
 
 ## API reference used (heerich 0.14)
+
 `new Heerich({ tile, camera })` · `addGeometry/removeGeometry/applyGeometry` ·
 `applyStyle` · `setCamera({ type:'oblique'|'perspective'|'orthographic'|'isometric', angle, distance })` ·
 `rotate({ axis, turns })` · `toSVG({ padding, … }) → string`. Named exports:

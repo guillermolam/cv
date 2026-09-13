@@ -14,7 +14,7 @@ const { stations, selectedStationId } = Astro.props;
     <a
       class:list={[
         'station-chip',
-        selectedStationId === s.id ? 'station-chip-active' : undefined
+        selectedStationId === s.id ? 'station-chip-active' : undefined,
       ]}
       href={s.anchor}
     >
@@ -22,4 +22,3 @@ const { stations, selectedStationId } = Astro.props;
     </a>
   ))}
 </nav>
-

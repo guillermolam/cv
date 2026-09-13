@@ -5,12 +5,20 @@
  * visible (works when an Alpine `x-show` section is revealed), THEN dynamically
  * imports Chart.js, builds a bar chart, and destroys it on teardown.
  */
-import { createChart, createChartCleanup } from '../design-system/charts/chart-lifecycle';
-import { createChartDatasetDefaults, getChartTheme } from '../design-system/charts/chart-theme';
+import {
+  createChart,
+  createChartCleanup,
+} from '../design-system/charts/chart-lifecycle';
+import {
+  createChartDatasetDefaults,
+  getChartTheme,
+} from '../design-system/charts/chart-theme';
 import { prefersReducedMotion } from '../design-system/motion/reduced-motion';
 
 const buildOne = async (root: HTMLElement) => {
-  const canvas = root.querySelector<HTMLCanvasElement>('[data-lazy-bar-canvas]');
+  const canvas = root.querySelector<HTMLCanvasElement>(
+    '[data-lazy-bar-canvas]',
+  );
   if (!canvas) return null;
 
   let labels: string[] = [];
@@ -56,13 +64,21 @@ const buildOne = async (root: HTMLElement) => {
           beginAtZero: true,
           max: horizontal ? maxVal : undefined,
           grid: { color: theme.grid },
-          ticks: { color: theme.axis, font: { family: 'var(--ds-font-mono)', size: 9 }, precision: 0 },
+          ticks: {
+            color: theme.axis,
+            font: { family: 'var(--ds-font-mono)', size: 9 },
+            precision: 0,
+          },
         },
         y: {
           beginAtZero: true,
           max: horizontal ? undefined : maxVal,
           grid: { color: theme.grid },
-          ticks: { color: theme.axis, font: { family: 'var(--ds-font-mono)', size: 10 }, precision: 0 },
+          ticks: {
+            color: theme.axis,
+            font: { family: 'var(--ds-font-mono)', size: 10 },
+            precision: 0,
+          },
         },
       },
     },

@@ -1,4 +1,5 @@
-export type ReducedMotionStrategy = 'none' | 'minimal' | 'static-depth' | 'opacity-only';
+export type ReducedMotionStrategy =
+  'none' | 'minimal' | 'static-depth' | 'opacity-only';
 
 export type AnimationKind = 'opacity' | 'transform' | 'filter';
 
@@ -9,7 +10,8 @@ export const prefersReducedMotion = () => {
 };
 
 export const watchReducedMotion = (callback: (reduced: boolean) => void) => {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return () => {};
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return () => {};
 
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -29,7 +31,10 @@ export const getReducedMotionStrategy = (): ReducedMotionStrategy => {
   return prefersReducedMotion() ? 'opacity-only' : 'none';
 };
 
-export const shouldAnimate = (options?: { kind?: AnimationKind; strategy?: ReducedMotionStrategy }) => {
+export const shouldAnimate = (options?: {
+  kind?: AnimationKind;
+  strategy?: ReducedMotionStrategy;
+}) => {
   if (typeof window === 'undefined') return false;
 
   const kind: AnimationKind = options?.kind ?? 'transform';
@@ -42,4 +47,3 @@ export const shouldAnimate = (options?: { kind?: AnimationKind; strategy?: Reduc
 
   return false;
 };
-

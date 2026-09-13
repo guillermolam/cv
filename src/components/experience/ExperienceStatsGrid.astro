@@ -22,49 +22,45 @@ const maxBucketValue = Math.max(
 
 <ExperiencePanel title="Stats" eyebrow="Signal" icon="chart-radar">
   <UiGrid minItemWidth="9rem" gap="0.75rem" class="experience-stats">
-    {
-      stats.map((stat, index) => (
-        <article
-          class="experience-stats__item"
-          data-pending={stat.pending ? 'true' : 'false'}
-          style={`--experience-step:${index};`}
-        >
-          <div class="experience-stats__top">
-            <UiIcon
-              name={stat.icon}
-              size={16}
-              tone={stat.pending ? 'neutral' : 'accent'}
-              decorative
-            />
-            <span>{stat.label}</span>
-          </div>
-          <strong>{stat.value}</strong>
-          {stat.note ? <p>{stat.note}</p> : null}
-        </article>
-      ))
-    }
+    {stats.map((stat, index) => (
+      <article
+        class="experience-stats__item"
+        data-pending={stat.pending ? 'true' : 'false'}
+        style={`--experience-step:${index};`}
+      >
+        <div class="experience-stats__top">
+          <UiIcon
+            name={stat.icon}
+            size={16}
+            tone={stat.pending ? 'neutral' : 'accent'}
+            decorative
+          />
+          <span>{stat.label}</span>
+        </div>
+        <strong>{stat.value}</strong>
+        {stat.note ? <p>{stat.note}</p> : null}
+      </article>
+    ))}
   </UiGrid>
 
-  {
-    activeBuckets.length > 0 ? (
-      <div class="experience-stats__bands" aria-label="Signal distribution">
-        {activeBuckets.map((bucket, index) => (
-          <article
-            class="experience-stats__band"
-            style={`--experience-step:${index + stats.length}; --experience-fill:${bucket.items.length / maxBucketValue};`}
-          >
-            <div class="experience-stats__band-label">
-              <span>{bucket.label}</span>
-              <strong>{bucket.items.length}</strong>
-            </div>
-            <div class="experience-stats__band-track" aria-hidden="true">
-              <span class="experience-stats__band-fill"></span>
-            </div>
-          </article>
-        ))}
-      </div>
-    ) : null
-  }
+  {activeBuckets.length > 0 ? (
+    <div class="experience-stats__bands" aria-label="Signal distribution">
+      {activeBuckets.map((bucket, index) => (
+        <article
+          class="experience-stats__band"
+          style={`--experience-step:${index + stats.length}; --experience-fill:${bucket.items.length / maxBucketValue};`}
+        >
+          <div class="experience-stats__band-label">
+            <span>{bucket.label}</span>
+            <strong>{bucket.items.length}</strong>
+          </div>
+          <div class="experience-stats__band-track" aria-hidden="true">
+            <span class="experience-stats__band-fill"></span>
+          </div>
+        </article>
+      ))}
+    </div>
+  ) : null}
 </ExperiencePanel>
 
 <style>
@@ -75,12 +71,11 @@ const maxBucketValue = Math.max(
     padding: 0.85rem;
     border-radius: 18px;
     border: 1px solid color-mix(in oklab, var(--color-border), transparent 16%);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, white, transparent 96%) 0%,
-        color-mix(in oklab, var(--color-surface-3), transparent 16%) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, white, transparent 96%) 0%,
+      color-mix(in oklab, var(--color-surface-3), transparent 16%) 100%
+    );
     box-shadow:
       0 14px 30px rgb(2 6 23 / 0.08),
       inset 0 1px 0 rgb(255 255 255 / 0.55);

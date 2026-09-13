@@ -185,96 +185,88 @@ const pageDescription = resource.data.summary;
 >
   <section class="card pad">
     <h1>{resource.data.title}</h1>
-    {
-      resourceLang ? null : lang !== 'en' ? (
-        <p class="topology-subtitle">
-          Showing English content while {lang.toUpperCase()} content is being
-          authored.
-        </p>
-      ) : null
-    }
+    {resourceLang ? null : lang !== 'en' ? (
+      <p class="topology-subtitle">
+        Showing English content while {lang.toUpperCase()} content is being
+        authored.
+      </p>
+    ) : null}
     <p class="topology-subtitle">{metaParts.join(' · ')}</p>
     <p>{resource.data.summary}</p>
-    {
-      resource.data.url ? (
-        <p>
-          <a href={resource.data.url} target="_blank" rel="noopener noreferrer">
-            Open external resource
-          </a>
-        </p>
-      ) : null
-    }
+    {resource.data.url ? (
+      <p>
+        <a href={resource.data.url} target="_blank" rel="noopener noreferrer">
+          Open external resource
+        </a>
+      </p>
+    ) : null}
     <div class="cta-row">
-      <a class="button" href={withBase(`/${lang}/knowledge`)}
-        >Back to Knowledge Center</a
-      >
-      <a class="button primary" href={withBase(`/${lang}/cv`)}>Download CV</a>
+      <a class="button" href={withBase(`/${lang}/knowledge`)}>
+        Back to Knowledge Center
+      </a>
+      <a class="button primary" href={withBase(`/${lang}/cv`)}>
+        Download CV
+      </a>
     </div>
   </section>
 
   <section class="grid">
     {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
     {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
-    {
-      categories.length > 0 ? (
-        <TaxonomyPills label="Categories" items={categories} />
-      ) : null
-    }
+    {categories.length > 0 ? (
+      <TaxonomyPills label="Categories" items={categories} />
+    ) : null}
     {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
   </section>
 
-  {
-    projects.length > 0 || caseStudies.length > 0 || blogLinks.length > 0 ? (
-      <section class="grid cols-2">
-        <div class="card pad">
-          <h2>Related</h2>
-          {projects.length > 0 ? (
-            <TaxonomyPills label="Projects" items={projects} />
-          ) : null}
-          {caseStudies.length > 0 ? (
-            <TaxonomyPills label="Case studies" items={caseStudies} />
-          ) : null}
-          {blogLinks.length > 0 ? (
-            <TaxonomyPills label="Blog" items={blogLinks} />
-          ) : null}
-        </div>
-        <div class="card pad">
-          <h2>Graph context</h2>
-          {outgoingLinks.length > 0 ? (
-            <TaxonomyPills
-              label="Links from this resource"
-              items={outgoingLinks}
-            />
-          ) : (
-            <p>No outgoing links yet.</p>
-          )}
-          {incomingLinks.length > 0 ? (
-            <TaxonomyPills label="Backlinks" items={incomingLinks} />
-          ) : (
-            <p>No backlinks yet.</p>
-          )}
-        </div>
-      </section>
-    ) : null
-  }
+  {projects.length > 0 || caseStudies.length > 0 || blogLinks.length > 0 ? (
+    <section class="grid cols-2">
+      <div class="card pad">
+        <h2>Related</h2>
+        {projects.length > 0 ? (
+          <TaxonomyPills label="Projects" items={projects} />
+        ) : null}
+        {caseStudies.length > 0 ? (
+          <TaxonomyPills label="Case studies" items={caseStudies} />
+        ) : null}
+        {blogLinks.length > 0 ? (
+          <TaxonomyPills label="Blog" items={blogLinks} />
+        ) : null}
+      </div>
+      <div class="card pad">
+        <h2>Graph context</h2>
+        {outgoingLinks.length > 0 ? (
+          <TaxonomyPills
+            label="Links from this resource"
+            items={outgoingLinks}
+          />
+        ) : (
+          <p>No outgoing links yet.</p>
+        )}
+        {incomingLinks.length > 0 ? (
+          <TaxonomyPills label="Backlinks" items={incomingLinks} />
+        ) : (
+          <p>No backlinks yet.</p>
+        )}
+      </div>
+    </section>
+  ) : null}
 
   <section class="card pad">
     <h2>Notes</h2>
     <Content />
   </section>
 
-  {
-    relatedLinks.length > 0 ? (
-      <section class="card pad">
-        <h2>Related content</h2>
-        <ul>
-          {relatedLinks.map((l) => (
-            <li>
-              <a href={l.href}>{l.label}</a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ) : null
-  }
+  {relatedLinks.length > 0 ? (
+    <section class="card pad">
+      <h2>Related content</h2>
+      <ul>
+        {relatedLinks.map((l) => (
+          <li>
+            <a href={l.href}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null}
 </BaseLayout>

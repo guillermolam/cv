@@ -21,7 +21,14 @@ type Props = {
   retro?: boolean;
 };
 
-const { id, class: className, items, variant = 'default', density = 'normal', retro = false } = Astro.props as Props;
+const {
+  id,
+  class: className,
+  items,
+  variant = 'default',
+  density = 'normal',
+  retro = false,
+} = Astro.props as Props;
 ---
 
 <div
@@ -36,11 +43,22 @@ const { id, class: className, items, variant = 'default', density = 'normal', re
     {items.map((item) => (
       <>
         <dt>
-          {item.icon ? <UiIcon name={item.icon} label={item.iconLabel} decorative={!item.iconLabel} depth="flat" /> : null}
+          {item.icon ? (
+            <UiIcon
+              name={item.icon}
+              label={item.iconLabel}
+              decorative={!item.iconLabel}
+              depth="flat"
+            />
+          ) : null}
           <span>{item.label}</span>
         </dt>
         <dd>
-          {item.href ? <a href={item.href}>{item.value}</a> : <span>{item.value}</span>}
+          {item.href ? (
+            <a href={item.href}>{item.value}</a>
+          ) : (
+            <span>{item.value}</span>
+          )}
         </dd>
       </>
     ))}

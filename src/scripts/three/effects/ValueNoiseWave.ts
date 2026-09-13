@@ -57,12 +57,12 @@ export class ValueNoiseWave implements SceneEffect {
     for (let i = 0; i < positions.count; i++) {
       const x = positions.getX(i);
       const z = positions.getZ(i);
-      
+
       // Layered noise
       const n1 = noise(x * 0.5 + time * 0.2, z * 0.5 + time * 0.1);
       const n2 = noise(x * 1.0 - time * 0.1, z * 1.0 + time * 0.3);
       const y = (n1 + n2 * 0.5) * 0.8;
-      
+
       positions.setY(i, y);
     }
     positions.needsUpdate = true;

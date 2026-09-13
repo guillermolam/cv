@@ -34,26 +34,26 @@ type Edge = { a: number; b: number };
 
 const TYPE_COLORS: Record<string, number> = {
   // human audience — blue / teal / green family
-  article:       0x29b6f6,
-  book:          0x26c6da,
-  course:        0x66bb6a,
-  podcast:       0x26a69a,
-  workshop:      0x42a5f5,
-  video:         0xef5350,
+  article: 0x29b6f6,
+  book: 0x26c6da,
+  course: 0x66bb6a,
+  podcast: 0x26a69a,
+  workshop: 0x42a5f5,
+  video: 0xef5350,
   'github-repo': 0x8d6e63,
   documentation: 0x5c6bc0,
   // agent audience — purple / amber / neon family
-  mcp:           0xce93d8,
-  skill:         0xb39ddb,
-  plugin:        0xffb74d,
-  tool:          0xff8a65,
-  platform:      0xffd54f,
-  'llm-model':   0xf48fb1,
-  example:       0xa5d6a7,
-  cli:           0x80cbc4,
-  'md-doc':      0xffe082,
+  mcp: 0xce93d8,
+  skill: 0xb39ddb,
+  plugin: 0xffb74d,
+  tool: 0xff8a65,
+  platform: 0xffd54f,
+  'llm-model': 0xf48fb1,
+  example: 0xa5d6a7,
+  cli: 0x80cbc4,
+  'md-doc': 0xffe082,
   // fallback
-  other:         0x546e7a,
+  other: 0x546e7a,
 };
 
 const AUDIENCE_COLOR: Record<string, number> = {
@@ -79,10 +79,10 @@ function buildEdges(nodes: SimNode[], maxEdges = 1200): Edge[] {
 }
 
 function runSimulation(nodes: SimNode[], edges: Edge[], iterations = 60) {
-  const repulsion  = 18;
+  const repulsion = 18;
   const attraction = 0.006;
-  const damping    = 0.82;
-  const tmp        = new THREE.Vector3();
+  const damping = 0.82;
+  const tmp = new THREE.Vector3();
 
   for (let iter = 0; iter < iterations; iter++) {
     // Repulsion between all pairs
@@ -144,7 +144,11 @@ export function initKnowledgeGraph(
     const theta = golden * i;
     return {
       ...n,
-      pos: new THREE.Vector3(Math.cos(theta) * r * 18, y * 18, Math.sin(theta) * r * 18),
+      pos: new THREE.Vector3(
+        Math.cos(theta) * r * 18,
+        y * 18,
+        Math.sin(theta) * r * 18,
+      ),
       vel: new THREE.Vector3(),
     };
   });
@@ -160,27 +164,29 @@ export function initKnowledgeGraph(
   renderer.toneMappingExposure = 1.05;
 
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping   = true;
-  controls.dampingFactor   = 0.06;
-  controls.autoRotate      = true;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.06;
+  controls.autoRotate = true;
   controls.autoRotateSpeed = 0.35;
-  controls.minDistance     = 12;
-  controls.maxDistance     = 90;
+  controls.minDistance = 12;
+  controls.maxDistance = 90;
 
   scene.add(new THREE.AmbientLight(0x1a1a2e, 0.8));
 
   // ── Node point cloud ────────────────────────────────────────────────────────
   const positions = new Float32Array(simNodes.length * 3);
-  const colors    = new Float32Array(simNodes.length * 3);
-  const sizes     = new Float32Array(simNodes.length);
+  const colors = new Float32Array(simNodes.length * 3);
+  const sizes = new Float32Array(simNodes.length);
 
   for (let i = 0; i < simNodes.length; i++) {
-    const n   = simNodes[i]!;
-    const col = new THREE.Color(TYPE_COLORS[n.type] ?? AUDIENCE_COLOR[n.audience] ?? 0x546e7a);
-    positions[i * 3]     = n.pos.x;
+    const n = simNodes[i]!;
+    const col = new THREE.Color(
+      TYPE_COLORS[n.type] ?? AUDIENCE_COLOR[n.audience] ?? 0x546e7a,
+    );
+    positions[i * 3] = n.pos.x;
     positions[i * 3 + 1] = n.pos.y;
     positions[i * 3 + 2] = n.pos.z;
-    colors[i * 3]     = col.r;
+    colors[i * 3] = col.r;
     colors[i * 3 + 1] = col.g;
     colors[i * 3 + 2] = col.b;
     sizes[i] = n.audience === 'agent' ? 6 : 5;
@@ -188,8 +194,8 @@ export function initKnowledgeGraph(
 
   const pointGeo = new THREE.BufferGeometry();
   pointGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  pointGeo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
-  pointGeo.setAttribute('size',     new THREE.BufferAttribute(sizes, 1));
+  pointGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  pointGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
   const pointMat = new THREE.PointsMaterial({
     vertexColors: true,
@@ -209,12 +215,24 @@ export function initKnowledgeGraph(
     for (let e = 0; e < edges.length; e++) {
       const a = simNodes[edges[e]!.a]!.pos;
       const b = simNodes[edges[e]!.b]!.pos;
-      edgePositions[e * 6]     = a.x; edgePositions[e * 6 + 1] = a.y; edgePositions[e * 6 + 2] = a.z;
-      edgePositions[e * 6 + 3] = b.x; edgePositions[e * 6 + 4] = b.y; edgePositions[e * 6 + 5] = b.z;
+      edgePositions[e * 6] = a.x;
+      edgePositions[e * 6 + 1] = a.y;
+      edgePositions[e * 6 + 2] = a.z;
+      edgePositions[e * 6 + 3] = b.x;
+      edgePositions[e * 6 + 4] = b.y;
+      edgePositions[e * 6 + 5] = b.z;
     }
     const lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute('position', new THREE.BufferAttribute(edgePositions, 3));
-    const lineMat = new THREE.LineBasicMaterial({ color: 0x2a4a6a, transparent: true, opacity: 0.22, depthWrite: false });
+    lineGeo.setAttribute(
+      'position',
+      new THREE.BufferAttribute(edgePositions, 3),
+    );
+    const lineMat = new THREE.LineBasicMaterial({
+      color: 0x2a4a6a,
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false,
+    });
     scene.add(new THREE.LineSegments(lineGeo, lineMat));
   }
 
@@ -226,12 +244,12 @@ export function initKnowledgeGraph(
 
   const onPointerMove = (e: PointerEvent) => {
     const rect = canvas.getBoundingClientRect();
-    pointer.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
-    pointer.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
 
     const hits = raycaster.intersectObject(points);
-    const idx  = hits[0]?.index ?? -1;
+    const idx = hits[0]?.index ?? -1;
     if (idx === hoveredIdx) return;
     hoveredIdx = idx;
     canvas.style.cursor = idx >= 0 ? 'pointer' : 'default';
@@ -254,10 +272,10 @@ export function initKnowledgeGraph(
 
     // Position tooltip near cursor
     tooltipEl.hidden = false;
-    const x = Math.min(e.clientX - rect.left + 12, rect.width  - 200);
-    const y = Math.min(e.clientY - rect.top  + 12, rect.height - 60);
+    const x = Math.min(e.clientX - rect.left + 12, rect.width - 200);
+    const y = Math.min(e.clientY - rect.top + 12, rect.height - 60);
     tooltipEl.style.left = `${x}px`;
-    tooltipEl.style.top  = `${y}px`;
+    tooltipEl.style.top = `${y}px`;
   };
 
   const onCanvasClick = () => {

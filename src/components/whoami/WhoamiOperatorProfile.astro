@@ -37,20 +37,30 @@ const experience = experienceAll.filter((e) => e.data.lang === lang);
 const projects = projectsAll.filter((p) => p.data.lang === lang);
 const caseStudies = caseStudiesAll.filter((c) => c.data.lang === lang);
 
-const fallbackToEn = <T extends { data: { lang: string } }>(items: T[], all: T[]) =>
-  items.length > 0 ? items : all.filter((x) => x.data.lang === 'en');
+const fallbackToEn = <T extends { data: { lang: string } }>(
+  items: T[],
+  all: T[],
+) => (items.length > 0 ? items : all.filter((x) => x.data.lang === 'en'));
 
 const skillsFallback = fallbackToEn(skills, skillsAll);
 const certificationsFallback = fallbackToEn(certifications, certificationsAll);
 const experienceFallback = fallbackToEn(experience, experienceAll);
 const projectsFallback = fallbackToEn(projects, projectsAll);
 const caseStudiesFallback = fallbackToEn(caseStudies, caseStudiesAll);
-const toolsFallback = toolsAll.filter((t) => t.data.lang === lang).length > 0 ? toolsAll.filter((t) => t.data.lang === lang) : toolsAll.filter((t) => t.data.lang === 'en');
+const toolsFallback =
+  toolsAll.filter((t) => t.data.lang === lang).length > 0
+    ? toolsAll.filter((t) => t.data.lang === lang)
+    : toolsAll.filter((t) => t.data.lang === 'en');
 
 const isDraftBlog = (entry: CollectionEntry<'blog'>) =>
   Boolean(entry.data?.draft) || entry.data?.visibility === 'draft';
-const publishedBlog = blogAll.filter((b) => !isDraftBlog(b) && b.data.lang === lang);
-const publishedBlogFallback = publishedBlog.length > 0 ? publishedBlog : blogAll.filter((b) => !isDraftBlog(b) && b.data.lang === 'en');
+const publishedBlog = blogAll.filter(
+  (b) => !isDraftBlog(b) && b.data.lang === lang,
+);
+const publishedBlogFallback =
+  publishedBlog.length > 0
+    ? publishedBlog
+    : blogAll.filter((b) => !isDraftBlog(b) && b.data.lang === 'en');
 
 const statsAxes = computeWhoamiStats({
   projects: projectsFallback,
@@ -73,10 +83,20 @@ const languagesFallback = fallbackToEn(
   languagesAll,
 );
 
-const categoriesById = new Map(categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const));
+const categoriesById = new Map(
+  categoriesAll.map((c) => [c.data.categoryId, c.data.title] as const),
+);
 
 // CEFR → 0..100 for language proficiency bars
-const cefrPct: Record<string, number> = { native: 100, C2: 95, C1: 80, B2: 65, B1: 50, A2: 35, A1: 20 };
+const cefrPct: Record<string, number> = {
+  native: 100,
+  C2: 95,
+  C1: 80,
+  B2: 65,
+  B1: 50,
+  A2: 35,
+  A1: 20,
+};
 
 // Data for the keyboard-switchable core panel (one component, many views).
 const sectionData = {
@@ -92,7 +112,11 @@ const sectionData = {
   certifications: certificationsFallback
     .slice()
     .sort((a, b) => a.data.name.localeCompare(b.data.name))
-    .map((c) => ({ name: c.data.name, issuer: c.data.issuer, status: c.data.status ?? 'unknown' })),
+    .map((c) => ({
+      name: c.data.name,
+      issuer: c.data.issuer,
+      status: c.data.status ?? 'unknown',
+    })),
   education: educationFallback.map((e) => ({
     degree: e.data.degree,
     institution: e.data.institution,
@@ -106,7 +130,9 @@ const sectionData = {
   })),
   experience: experienceFallback
     .slice()
-    .sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''))
+    .sort((a, b) =>
+      (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''),
+    )
     .map((e) => ({
       company: e.data.companyName,
       role: e.data.roleTitle,
@@ -117,7 +143,10 @@ const sectionData = {
 
 const parseFocus = (value: string | undefined) => {
   if (!value) return undefined;
-  const firstSentence = value.split('.').map((s) => s.trim()).filter(Boolean)[0];
+  const firstSentence = value
+    .split('.')
+    .map((s) => s.trim())
+    .filter(Boolean)[0];
   return firstSentence ? `${firstSentence}.` : value;
 };
 
@@ -134,12 +163,28 @@ const locationMode = 'Remote-first · EU/LATAM';
 const availability = 'Open to opportunities';
 
 const badgeCandidates = [
-  { id: 'cloud-security', label: categoriesById.get('cloud-security') ?? 'Cloud Security' },
+  {
+    id: 'cloud-security',
+    label: categoriesById.get('cloud-security') ?? 'Cloud Security',
+  },
   { id: 'devsecops', label: categoriesById.get('devsecops') ?? 'DevSecOps' },
-  { id: 'kubernetes-platform', label: categoriesById.get('kubernetes-platform') ?? 'Kubernetes' },
-  { id: 'platform-engineering', label: categoriesById.get('platform-engineering') ?? 'Platform Engineering' },
-  { id: 'ai-security', label: categoriesById.get('ai-security') ?? 'AI Security' },
-  { id: 'supply-chain-security', label: categoriesById.get('supply-chain-security') ?? 'Supply Chain Security' },
+  {
+    id: 'kubernetes-platform',
+    label: categoriesById.get('kubernetes-platform') ?? 'Kubernetes',
+  },
+  {
+    id: 'platform-engineering',
+    label: categoriesById.get('platform-engineering') ?? 'Platform Engineering',
+  },
+  {
+    id: 'ai-security',
+    label: categoriesById.get('ai-security') ?? 'AI Security',
+  },
+  {
+    id: 'supply-chain-security',
+    label:
+      categoriesById.get('supply-chain-security') ?? 'Supply Chain Security',
+  },
 ];
 
 const hasCategoryEvidence = (categoryId: string) => {
@@ -156,7 +201,6 @@ const hasCategoryEvidence = (categoryId: string) => {
 const badges = badgeCandidates
   .filter((b) => hasCategoryEvidence(b.id))
   .map((b) => ({ label: b.label, domainId: b.id }));
-
 ---
 
 <section class="whoami-surface" aria-label="Whoami operator profile" id="core">
@@ -210,10 +254,12 @@ const badges = badgeCandidates
         transparent 64%
       ),
       color-mix(in oklab, var(--color-surface-2), transparent 6%);
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 10%);
     box-shadow:
       0 34px 80px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%);
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%);
     overflow: hidden;
   }
 
@@ -329,35 +375,73 @@ const badges = badgeCandidates
       animation: whoami-rise 520ms var(--ease-standard) 1 both;
     }
 
-    .whoami-grid > :nth-child(1) { animation-delay: 80ms; }
-    .whoami-grid > :nth-child(2) { animation-delay: 140ms; }
-    .whoami-grid > :nth-child(3) { animation-delay: 200ms; }
+    .whoami-grid > :nth-child(1) {
+      animation-delay: 80ms;
+    }
+    .whoami-grid > :nth-child(2) {
+      animation-delay: 140ms;
+    }
+    .whoami-grid > :nth-child(3) {
+      animation-delay: 200ms;
+    }
   }
 
   @keyframes whoami-boot {
-    0%   { transform: translateY(10px); opacity: 0; filter: saturate(0.92); }
-    100% { transform: translateY(0);    opacity: 1; filter: saturate(1); }
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+      filter: saturate(0.92);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+      filter: saturate(1);
+    }
   }
 
   @keyframes whoami-rise {
-    0%   { transform: translateY(10px); opacity: 0; }
-    100% { transform: translateY(0);    opacity: 1; }
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 
   @keyframes whoami-scan {
-    0%   { opacity: 0.05; transform: translateY(-6px); }
-    100% { opacity: 0.22; transform: translateY(0); }
+    0% {
+      opacity: 0.05;
+      transform: translateY(-6px);
+    }
+    100% {
+      opacity: 0.22;
+      transform: translateY(0);
+    }
   }
 
   @keyframes whoami-sweep {
-    0%   { opacity: 0;    transform: translateX(-28%) translateY(-8%); }
-    20%  { opacity: 0.26; }
-    100% { opacity: 0;    transform: translateX(28%) translateY(10%); }
+    0% {
+      opacity: 0;
+      transform: translateX(-28%) translateY(-8%);
+    }
+    20% {
+      opacity: 0.26;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(28%) translateY(10%);
+    }
   }
 
   @keyframes whoami-phosphor {
-    0%   { opacity: 0.18; }
-    100% { opacity: 0.25; }
+    0% {
+      opacity: 0.18;
+    }
+    100% {
+      opacity: 0.25;
+    }
   }
 </style>
 

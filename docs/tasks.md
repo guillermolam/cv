@@ -5,7 +5,7 @@ status: 'active'
 lastUpdated: '2026-06-04'
 ---
 
-# Work Plan — Skill System Refactor (Motion-First)
+## Work Plan — Skill System Refactor (Motion-First)
 
 ## Goals
 

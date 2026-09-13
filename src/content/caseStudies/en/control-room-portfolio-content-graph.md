@@ -16,7 +16,8 @@ outcome: >-
 categoryIds: [devsecops, platform-engineering, creative-frontend]
 tagIds: [astro, threejs, sbom, wasm]
 toolIds: [astro, typescript]
-skillIds: [static-site-architecture, interactive-frontend-architecture, devsecops]
+skillIds:
+  [static-site-architecture, interactive-frontend-architecture, devsecops]
 security:
   domainIds: [devsecops, supply-chain-security]
 links:

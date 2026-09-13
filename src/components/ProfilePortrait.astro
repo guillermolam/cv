@@ -24,7 +24,9 @@ const dimension = sizes[size] ?? sizes.md;
   aria-label={`Portrait photo of ${site.name}`}
   style={`--portrait-size:${dimension}px;--portrait-url:url('${photoUrl}')`}
 >
-  <span class="profile-initials" aria-hidden="true">{initials}</span>
+  <span class="profile-initials" aria-hidden="true">
+    {initials}
+  </span>
 </div>
 
 <style>
@@ -55,7 +57,7 @@ const dimension = sizes[size] ?? sizes.md;
   }
 
   .profile-portrait::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     background-image: var(--portrait-url);
@@ -71,4 +73,3 @@ const dimension = sizes[size] ?? sizes.md;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
   }
 </style>
-

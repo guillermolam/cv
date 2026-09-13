@@ -46,10 +46,14 @@ if (existsSync(lockPath)) {
   removeLock();
 }
 
-const child = spawn('astro', ['dev', '--host', host, '--port', port, '--strictPort'], {
-  stdio: 'inherit',
-  env: process.env,
-});
+const child = spawn(
+  'astro',
+  ['dev', '--host', host, '--port', port, '--strictPort'],
+  {
+    stdio: 'inherit',
+    env: process.env,
+  },
+);
 
 if (!child.pid) {
   console.error('Failed to start Astro dev server.');

@@ -19,6 +19,7 @@ This document defines the Experience section as the primary proof narrative: a r
 ### Timeline (Spine)
 
 Each timeline entry (role) includes:
+
 - company name
 - role title
 - dates (start/end or current)
@@ -36,6 +37,7 @@ Each timeline entry (role) includes:
 ### Briefing Pack Selector (CV Formats)
 
 Embed or link a “Briefing Pack” module that:
+
 - lists CV formats from `cvFormats`
 - shows availability states
 - only shows download action when:
@@ -43,15 +45,18 @@ Embed or link a “Briefing Pack” module that:
   - the file exists under `public/`
 
 Interaction style:
+
 - “retro selector” aesthetic is allowed (dial/selector/keys) but the underlying control must be standard HTML controls.
 
 ## Data Sources
 
 Primary:
+
 - `experience` (timeline entries)
 - `cvFormats` (download formats and availability)
 
 Supporting:
+
 - `projects`, `caseStudies`, `tools`, `skills`, `categories`, `tags`, `knowledgeResources`, `blog` (published-only)
 - `public/data/content-graph.json` for backlinks/related content and to avoid broken cross-links.
 
@@ -72,4 +77,3 @@ Supporting:
 - Use semantic headings and lists.
 - Provide meaningful link labels (“Open case study: …”, not “Read more”).
 - Ensure keyboard navigation across timeline and selector.
-

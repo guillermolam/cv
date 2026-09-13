@@ -1,7 +1,16 @@
 ---
 import UiIcon from './UiIcon.astro';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'security' | 'cloud' | 'keycap' | 'terminal' | 'control';
+type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'danger'
+  | 'security'
+  | 'cloud'
+  | 'keycap'
+  | 'terminal'
+  | 'control';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonDepth = 'flat' | 'raised' | 'elevated' | 'floating';
 type ButtonMotion = 'none' | 'hover-lift';
@@ -57,10 +66,16 @@ const hasDefaultSlot = Astro.slots.has('default');
 const isIconOnly = Boolean(icon) && !hasDefaultSlot;
 const resolvedAriaLabel = ariaLabel ?? iconLabel;
 const isKeycap = keycap || variant === 'keycap';
-const isRetro = retro || isKeycap || variant === 'terminal' || variant === 'control';
+const isRetro =
+  retro || isKeycap || variant === 'terminal' || variant === 'control';
 
-if (isIconOnly && (!resolvedAriaLabel || resolvedAriaLabel.trim().length === 0)) {
-  throw new Error('UiButton: ariaLabel (or iconLabel) is required when rendering an icon-only button/link.');
+if (
+  isIconOnly &&
+  (!resolvedAriaLabel || resolvedAriaLabel.trim().length === 0)
+) {
+  throw new Error(
+    'UiButton: ariaLabel (or iconLabel) is required when rendering an icon-only button/link.',
+  );
 }
 
 const safeRel = (() => {
@@ -103,21 +118,45 @@ const commonAttrs = {
     tabindex={disabled ? '-1' : undefined}
   >
     {icon && iconPosition === 'leading' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'leading' }}
+      />
     ) : null}
-    {hasDefaultSlot ? <span data-ui-button-content><slot /></span> : null}
+    {hasDefaultSlot ? (
+      <span data-ui-button-content>
+        <slot />
+      </span>
+    ) : null}
     {icon && iconPosition === 'trailing' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'trailing' }}
+      />
     ) : null}
   </a>
 ) : (
   <button {...commonAttrs} type={type} disabled={disabled}>
     {icon && iconPosition === 'leading' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'leading' }}
+      />
     ) : null}
-    {hasDefaultSlot ? <span data-ui-button-content><slot /></span> : null}
+    {hasDefaultSlot ? (
+      <span data-ui-button-content>
+        <slot />
+      </span>
+    ) : null}
     {icon && iconPosition === 'trailing' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'trailing' }}
+      />
     ) : null}
   </button>
 )}

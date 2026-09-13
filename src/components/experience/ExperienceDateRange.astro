@@ -26,15 +26,15 @@ const {
       <strong>{startDate}</strong>
     </div>
     <div class="experience-dates__line">
-      <span class="experience-dates__label"
-        >{isCurrent ? 'Current' : 'End'}</span
-      >
+      <span class="experience-dates__label">
+        {isCurrent ? 'Current' : 'End'}
+      </span>
       <strong>{isCurrent ? 'Present' : (endDate ?? 'Not set')}</strong>
     </div>
     <div class="experience-dates__footer">
-      <UiBadge variant="neutral" size="sm" depth="flat"
-        >{totalTimeLabel}</UiBadge
-      >
+      <UiBadge variant="neutral" size="sm" depth="flat">
+        {totalTimeLabel}
+      </UiBadge>
     </div>
   </div>
 </ExperiencePanel>

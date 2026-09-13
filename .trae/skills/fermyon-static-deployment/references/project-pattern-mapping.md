@@ -3,6 +3,7 @@
 This document compares the current state of `guillermolam/cv` against patterns extracted from `spinframework/spin`.
 
 Inputs (required):
+
 - [project-deployment-inventory.md](project-deployment-inventory.md)
 - [spin-pattern-catalog.md](spin-pattern-catalog.md)
 - [example-catalog.md](example-catalog.md)
@@ -10,7 +11,7 @@ Inputs (required):
 ## Mapping table
 
 | Pattern | Current state (repo evidence) | Recommended state (Spin evidence) | Gap | Risk | Migration effort | Priority |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | Spin manifest present (`spin.toml`) | No `spin.toml` in repo | Manifest v2 with `spin_manifest_version = 2` and explicit triggers/components | Missing manifest | Cannot deploy to Fermyon via Spin until created | Medium | P0 |
 | Static fileserver component | Not configured | Use `spin-fileserver` template (`source.url` + `digest`, `files` mapping) | Missing static serving component | Deploy succeeds but serves nothing if misconfigured | Medium | P0 |
 | Artifact selection (which `dist/`) | Two buildable artifacts: root `dist/` and CI-built `guillermo-lam-cv/dist` | `files.source` must point to the intended artifact directory | Ambiguous “source of truth” | Wrong site deployed or broken deploy | Low (decision) | P0 |
@@ -26,4 +27,3 @@ Inputs (required):
 
 - If deploying the **root Astro site**, prefer the Spin static fileserver template pattern and validate multi-page routing.
 - If deploying the **Vite subproject**, treat SPA behavior as a first-class risk: do not assume rewrite support; validate deep-link refresh behavior and asset handling explicitly.
-

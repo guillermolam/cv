@@ -7,7 +7,6 @@ type AlpineLike = {
 
 /** Alpine.data('alpineRadar', ...) — Chart.js radar powered by Alpine */
 export function registerChartComponents(alpine: AlpineLike) {
-
   alpine.data('alpineRadar', () => ({
     chart: null as ChartInstance | null,
 
@@ -17,41 +16,67 @@ export function registerChartComponents(alpine: AlpineLike) {
       if (!canvas) return;
 
       const raw = el.dataset;
-      const labels: string[]  = JSON.parse(raw['labels']  ?? '[]');
-      const scores: number[]  = JSON.parse(raw['scores']  ?? '[]');
+      const labels: string[] = JSON.parse(raw['labels'] ?? '[]');
+      const scores: number[] = JSON.parse(raw['scores'] ?? '[]');
 
       const [
-        { Chart, RadarController, RadialLinearScale, PointElement, LineElement, Filler, Tooltip },
+        {
+          Chart,
+          RadarController,
+          RadialLinearScale,
+          PointElement,
+          LineElement,
+          Filler,
+          Tooltip,
+        },
       ] = await Promise.all([import('chart.js')]);
 
-      Chart.register(RadarController, RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
+      Chart.register(
+        RadarController,
+        RadialLinearScale,
+        PointElement,
+        LineElement,
+        Filler,
+        Tooltip,
+      );
 
       const styles = getComputedStyle(document.documentElement);
-      const accent  = styles.getPropertyValue('--color-cta').trim()       || '#4cc9f0';
-      const gridCol = styles.getPropertyValue('--color-border').trim()     || 'rgba(214,226,239,0.12)';
-      const textCol = styles.getPropertyValue('--color-text-muted').trim() || '#8fa3b8';
-      const monoFont = styles.getPropertyValue('--font-mono').trim()       || 'JetBrains Mono, monospace';
+      const accent = styles.getPropertyValue('--color-cta').trim() || '#4cc9f0';
+      const gridCol =
+        styles.getPropertyValue('--color-border').trim() ||
+        'rgba(214,226,239,0.12)';
+      const textCol =
+        styles.getPropertyValue('--color-text-muted').trim() || '#8fa3b8';
+      const monoFont =
+        styles.getPropertyValue('--font-mono').trim() ||
+        'JetBrains Mono, monospace';
 
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const prefersReduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
 
       this.chart?.destroy();
       this.chart = new Chart(canvas, {
         type: 'radar',
         data: {
           labels,
-          datasets: [{
-            data: scores,
-            borderColor: accent,
-            backgroundColor: `color-mix(in oklab, ${accent}, transparent 82%)`,
-            borderWidth: 1.5,
-            pointRadius: 3,
-            pointHoverRadius: 5,
-            pointBackgroundColor: accent,
-          }],
+          datasets: [
+            {
+              data: scores,
+              borderColor: accent,
+              backgroundColor: `color-mix(in oklab, ${accent}, transparent 82%)`,
+              borderWidth: 1.5,
+              pointRadius: 3,
+              pointHoverRadius: 5,
+              pointBackgroundColor: accent,
+            },
+          ],
         },
         options: {
           responsive: true,
-          animation: prefersReduced ? false : { duration: 900, easing: 'easeOutQuart' },
+          animation: prefersReduced
+            ? false
+            : { duration: 900, easing: 'easeOutQuart' },
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -93,7 +118,12 @@ export function registerChartComponents(alpine: AlpineLike) {
     visible: false,
     observe(this: any) {
       const io = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) { this.visible = true; io.disconnect(); } },
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            this.visible = true;
+            io.disconnect();
+          }
+        },
         { threshold: 0.3 },
       );
       io.observe(this.$el as HTMLElement);

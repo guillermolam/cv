@@ -279,8 +279,7 @@ export async function initDevtoolsSuite(): Promise<void> {
     (gsapMod as unknown);
   const getGsapTimelines = (): unknown[] => {
     const globalTimeline = (gsap as AnyRecord)['globalTimeline'] as
-      | AnyRecord
-      | undefined;
+      AnyRecord | undefined;
     const getChildren = globalTimeline?.['getChildren'];
     if (typeof getChildren !== 'function') return [];
     const children = getChildren.call(globalTimeline, true);

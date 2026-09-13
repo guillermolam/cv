@@ -12,7 +12,14 @@ export const CHART_KINDS = [
 export type ChartKind = (typeof CHART_KINDS)[number];
 
 export type ChartVariant = 'default' | 'module';
-export type ChartTone = 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+export type ChartTone =
+  | 'neutral'
+  | 'accent'
+  | 'security'
+  | 'cloud'
+  | 'infra'
+  | 'automation'
+  | 'compliance';
 export type ChartDepth = 'flat' | 'raised' | 'elevated' | 'floating';
 
 export const CHART_INTERACTION_STATES = [
@@ -29,7 +36,8 @@ export const CHART_INTERACTION_STATES = [
 
 export type ChartInteractionState = (typeof CHART_INTERACTION_STATES)[number];
 
-export type ChartReducedMotionStrategy = 'disable-animations' | 'opacity-only' | 'static';
+export type ChartReducedMotionStrategy =
+  'disable-animations' | 'opacity-only' | 'static';
 
 export type ChartDatasetInput = {
   label: string;

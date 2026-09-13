@@ -4,7 +4,7 @@
 
 - [x] **A1 Retro digital fonts** — Orbitron (`techno`) + Share Tech Mono
   (`digital`) via `presetWebFonts`; `--font-techno` / `--font-digital` tokens
-  + `--ds-font-*` aliases.
+  - `--ds-font-*` aliases.
 - [x] **A2 Texture/FX system** — `src/design-system/tokens/texture.css`
   (`--fx-*`); reusable `FxGrain`, `FxScanlines`, `FxGlitch`, `FxBezel` in
   `src/components/fx/`. Reduced-motion aware, `intensity` props.
@@ -38,6 +38,7 @@
   must be removed/chowned by the user before Astro can build.
 
 ## Phase B (in progress)
+
 - [x] **Operator-Stats card grid** (CV-derived, N/A-aware) —
   `src/components/control-room/OperatorStatsGrid.astro`, build-time only, slotted
   into the console body. Uses `src/lib/content/operator-stats.ts`.
@@ -48,6 +49,7 @@
   **to delegate to `opencode` when LM Studio is reachable** (was down at last check).
 
 ## Phase C (deferred)
+
 - [ ] Capabilities-overview grid (6 progress columns, multiple chart types).
 - [ ] Company-logo timeline; terminal easter-egg view.
 - [ ] Glitch route transitions; ambient layering polish; full i18n content.

@@ -11,8 +11,7 @@ export const createCleanupStack = () => {
       const fn = fns.pop();
       try {
         fn?.();
-      } catch {
-      }
+      } catch {}
     }
   };
 
@@ -20,8 +19,7 @@ export const createCleanupStack = () => {
     if (ran) {
       try {
         fn();
-      } catch {
-      }
+      } catch {}
       return;
     }
     fns.push(fn);
@@ -47,18 +45,20 @@ export const listen = (
   return () => {
     try {
       target.removeEventListener(eventName, handler, options);
-    } catch {
-    }
+    } catch {}
   };
 };
 
 export const raf = (callback: FrameRequestCallback) => {
-  if (typeof window === 'undefined' || typeof window.requestAnimationFrame !== 'function') return () => {};
+  if (
+    typeof window === 'undefined' ||
+    typeof window.requestAnimationFrame !== 'function'
+  )
+    return () => {};
   const id = window.requestAnimationFrame(callback);
   return () => {
     try {
       window.cancelAnimationFrame(id);
-    } catch {
-    }
+    } catch {}
   };
 };

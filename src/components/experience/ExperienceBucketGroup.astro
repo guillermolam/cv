@@ -21,24 +21,22 @@ const { bucket } = Astro.props as Props;
     </UiBadge>
   </header>
 
-  {
-    bucket.items.length > 0 ? (
-      <div class="experience-bucket__chips">
-        {bucket.items.map((item) => (
-          <UiBadge
-            variant={bucket.variant}
-            size="sm"
-            depth="flat"
-            motion="hover-lift"
-          >
-            {item.label}
-          </UiBadge>
-        ))}
-      </div>
-    ) : (
-      <p class="experience-bucket__empty">No mapped signals yet.</p>
-    )
-  }
+  {bucket.items.length > 0 ? (
+    <div class="experience-bucket__chips">
+      {bucket.items.map((item) => (
+        <UiBadge
+          variant={bucket.variant}
+          size="sm"
+          depth="flat"
+          motion="hover-lift"
+        >
+          {item.label}
+        </UiBadge>
+      ))}
+    </div>
+  ) : (
+    <p class="experience-bucket__empty">No mapped signals yet.</p>
+  )}
 </article>
 
 <style>
@@ -48,13 +46,13 @@ const { bucket } = Astro.props as Props;
     min-height: 100%;
     padding: 0.95rem;
     border-radius: 14px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 26%);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, var(--color-surface-3), transparent 18%),
-        color-mix(in oklab, var(--color-surface-2), transparent 24%)
-      );
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 26%);
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface-3), transparent 18%),
+      color-mix(in oklab, var(--color-surface-2), transparent 24%)
+    );
   }
 
   .experience-bucket__header,

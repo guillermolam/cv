@@ -1,3 +1,5 @@
+# Checklist
+
 - [ ] Spec references are resolvable: style guide + blueprint + boundaries + IA + content model paths exist
 - [ ] Architecture source-of-truth is resolved: `docs/architecture/astro-design-library-architecture.md` exists OR the plan-embedded architecture draft is explicitly referenced during implementation
 

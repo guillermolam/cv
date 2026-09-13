@@ -3,17 +3,19 @@
 This reference captures **command-level evidence** from Fermyon’s official Cloud documentation, focusing on the `spin cloud` plugin used to deploy and operate apps on Fermyon Cloud.
 
 Sources:
-- https://developer.fermyon.com/cloud/cloud-command-reference
+
+- <https://developer.fermyon.com/cloud/cloud-command-reference>
 
 ## Core commands (discovery-first)
 
 Use local CLI help to confirm the installed version and subcommands:
 
 ```console
-$ spin cloud --help
+spin cloud --help
 ```
 
 The official command reference documents `spin cloud` subcommands including:
+
 - `spin cloud login`
 - `spin cloud deploy`
 - `spin cloud apps ...`
@@ -47,6 +49,7 @@ The official command reference includes `spin cloud deploy --help` output showin
 ```
 
 Operational implications for this portfolio:
+
 - Use `--from` to deploy from a repo subdirectory when the manifest is not at repo root.
 - Use `--readiness-timeout` as a release gate (static hosting should become ready quickly).
 - Use `--variable` only after variables are declared in `spin.toml` (do not assume).
@@ -55,28 +58,32 @@ Operational implications for this portfolio:
 ## Variables management (cloud plugin)
 
 The variables tutorial documents:
+
 - Setting variables at deploy time via `--variable`
 - Updating variables after deploy via `spin cloud variables set ... --app <name>`
 
 Source:
-- https://developer.fermyon.com/cloud/variables
+
+- <https://developer.fermyon.com/cloud/variables>
 
 Example excerpt:
 
 ```bash
-$ spin cloud variables set password="456" --app "pw_checker"
+spin cloud variables set password="456" --app "pw_checker"
 ```
 
 ## GitHub Actions (official actions)
 
 The GitHub Actions guide documents official actions:
+
 - `fermyon/actions/spin/setup`
 - `fermyon/actions/spin/deploy`
 
 Source:
-- https://developer.fermyon.com/cloud/github-actions
+
+- <https://developer.fermyon.com/cloud/github-actions>
 
 Security implication:
+
 - Use a GitHub repository secret such as `FERMYON_CLOUD_TOKEN`
 - Never print secrets in logs or release reports
-

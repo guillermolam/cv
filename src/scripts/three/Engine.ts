@@ -21,7 +21,12 @@ export class Engine {
 
   constructor(container: HTMLElement) {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(
+      75,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000,
+    );
     this.camera.position.z = 5;
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -57,7 +62,7 @@ export class Engine {
 
   private animate() {
     const elapsedSeconds = (performance.now() - this.startTime) / 1000;
-    this.effects.forEach(effect => effect.update(elapsedSeconds));
+    this.effects.forEach((effect) => effect.update(elapsedSeconds));
     this.renderer.render(this.scene, this.camera);
     this.animationFrameId = requestAnimationFrame(() => this.animate());
   }
@@ -67,20 +72,24 @@ export class Engine {
       cancelAnimationFrame(this.animationFrameId);
     }
     this.resizeObserver.disconnect();
-    this.effects.forEach(effect => effect.destroy());
+    this.effects.forEach((effect) => effect.destroy());
     this.renderer.dispose();
     if (this.renderer.domElement.parentElement) {
-        this.renderer.domElement.parentElement.removeChild(this.renderer.domElement);
+      this.renderer.domElement.parentElement.removeChild(
+        this.renderer.domElement,
+      );
     }
   }
 
   public static loadModel(url: string): Promise<THREE.Group> {
     const loader = new GLTFLoader();
-    
+
     // Configure Draco
     const dracoLoader = new DRACOLoader();
     // Use a CDN for the decoder if we don't have it locally
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+    dracoLoader.setDecoderPath(
+      'https://www.gstatic.com/draco/versioned/decoders/1.5.6/',
+    );
     loader.setDRACOLoader(dracoLoader);
 
     return new Promise((resolve, reject) => {

@@ -52,7 +52,11 @@ const main = async () => {
   const requiredCss = ['src/design-system/tokens/layout.css'];
 
   const missingFiles = [];
-  for (const rel of [...requiredLayoutComponents, ...requiredUiComponents, ...requiredCss]) {
+  for (const rel of [
+    ...requiredLayoutComponents,
+    ...requiredUiComponents,
+    ...requiredCss,
+  ]) {
     if (!(await exists(path.join(root, rel)))) missingFiles.push(rel);
   }
 
@@ -60,7 +64,10 @@ const main = async () => {
   const tokensIndexText = await fs.readFile(tokensIndexPath, 'utf8');
   const cssImported = tokensIndexText.includes("@import './layout.css';");
 
-  const scanTargets = [...requiredLayoutComponents, ...requiredUiComponents].map((p) => path.join(root, p));
+  const scanTargets = [
+    ...requiredLayoutComponents,
+    ...requiredUiComponents,
+  ].map((p) => path.join(root, p));
   const forbiddenHits = [];
   for (const filePath of scanTargets) {
     const rel = path.relative(root, filePath);
@@ -70,13 +77,23 @@ const main = async () => {
     }
   }
 
-  const navItemText = await fs.readFile(path.join(root, 'src/components/ui/UiNavItem.astro'), 'utf8');
+  const navItemText = await fs.readFile(
+    path.join(root, 'src/components/ui/UiNavItem.astro'),
+    'utf8',
+  );
   const hasAriaCurrent = navItemText.includes('aria-current');
 
-  const breadcrumbText = await fs.readFile(path.join(root, 'src/components/ui/UiBreadcrumb.astro'), 'utf8');
-  const hasBreadcrumbNav = breadcrumbText.includes('<nav') && breadcrumbText.includes('<ol');
+  const breadcrumbText = await fs.readFile(
+    path.join(root, 'src/components/ui/UiBreadcrumb.astro'),
+    'utf8',
+  );
+  const hasBreadcrumbNav =
+    breadcrumbText.includes('<nav') && breadcrumbText.includes('<ol');
 
-  const tabsText = await fs.readFile(path.join(root, 'src/components/ui/UiTabs.astro'), 'utf8');
+  const tabsText = await fs.readFile(
+    path.join(root, 'src/components/ui/UiTabs.astro'),
+    'utf8',
+  );
   const tabsUsesLinks = tabsText.includes('href={tab.href}');
 
   const ok =
@@ -104,4 +121,3 @@ const main = async () => {
 };
 
 await main();
-

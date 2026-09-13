@@ -23,28 +23,36 @@ export type Props = {
 const { items, label = 'Primary', class: className } = Astro.props as Props;
 ---
 
-<nav class:list={['section-nav-rail', className]} aria-label={label} data-section-nav>
-  {items.map((item) => (
+<nav
+  class:list={['section-nav-rail', className]}
+  aria-label={label}
+  data-section-nav
+>
+  {items.map((item) =>
     (() => {
       const words = item.label.split(/\s+/).filter(Boolean);
       return (
-    <a
-      href={item.href}
-      class="section-nav-link"
-      aria-current={item.current ? 'page' : undefined}
-      aria-label={item.label}
-      data-nav-link
-    >
-      <NavSectionGlyph id={item.id} label={item.label} current={item.current} />
-      <span class="section-nav-label" aria-hidden="true">
-        {words.map((w) => (
-          <span class="section-nav-word">{w}</span>
-        ))}
-      </span>
-    </a>
+        <a
+          href={item.href}
+          class="section-nav-link"
+          aria-current={item.current ? 'page' : undefined}
+          aria-label={item.label}
+          data-nav-link
+        >
+          <NavSectionGlyph
+            id={item.id}
+            label={item.label}
+            current={item.current}
+          />
+          <span class="section-nav-label" aria-hidden="true">
+            {words.map((w) => (
+              <span class="section-nav-word">{w}</span>
+            ))}
+          </span>
+        </a>
       );
-    })()
-  ))}
+    })(),
+  )}
 </nav>
 
 <style>
@@ -80,7 +88,9 @@ const { items, label = 'Primary', class: className } = Astro.props as Props;
     text-transform: uppercase;
     color: var(--color-text-muted);
     opacity: 0.6;
-    transition: opacity var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+    transition:
+      opacity var(--motion-fast) var(--ease-standard),
+      color var(--motion-fast) var(--ease-standard);
   }
 
   .section-nav-word {

@@ -13,7 +13,11 @@ export type Props = {
   frequency?: number;
 };
 
-const { intensity = 'normal', class: className, frequency = 0.9 } = Astro.props as Props;
+const {
+  intensity = 'normal',
+  class: className,
+  frequency = 0.9,
+} = Astro.props as Props;
 
 const opacityVar =
   intensity === 'strong'

@@ -4,6 +4,7 @@ The hero backdrop is the **only** real WebGL surface in the project (per the
 locked decision). Everything else uses CSS/SVG faux-3D.
 
 ## Files
+
 - `src/design-system/three/capability.ts` — `hasWebGL()`, `deviceQuality()`,
   `prefersReducedMotion()`, `heroWebglAllowed()` (the final gate, honours
   `?no3d=1`).
@@ -18,6 +19,7 @@ locked decision). Everything else uses CSS/SVG faux-3D.
 - `src/components/three/HeroParticleField.astro` — the island.
 
 ## Lifecycle (HeroParticleField)
+
 1. Static SVG topology fallback is always in the DOM.
 2. If `heroWebglAllowed()`: an IntersectionObserver waits for first viewport
    entry, then **dynamically imports** `particle-field` (deferred chunk) and
@@ -28,5 +30,6 @@ locked decision). Everything else uses CSS/SVG faux-3D.
    disconnected, listeners removed.
 
 ## Budget
+
 - Particle count scales with `deviceQuality()` (36²/56²/80²).
 - No LCP block (lazy chunk, gated). Pauses when offscreen.

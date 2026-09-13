@@ -13,7 +13,9 @@ metadata:
 # Immersive Performance Governance
 
 ## Activation Scope
+
 Use this skill for:
+
 - Setting performance budgets for motion/WebGL work (FPS, memory, CPU, battery)
 - Defining adaptive-quality strategies (DPR caps, effect toggles, LOD, particle caps)
 - Ensuring lifecycle cleanup (RAF control, disposal, event listener cleanup)
@@ -21,17 +23,20 @@ Use this skill for:
 - Go/no-go review when an experience risks usability or recruiter flow
 
 Do not use this skill for:
+
 - Implementing scenes/components directly (route to owners)
 - Narrative pacing and storytelling design (route to immersive-storytelling)
 - Deployment/CI workflows
 
 ## Required Inputs
+
 - Target surface and the intended effect (what motion/WebGL is trying to communicate)
 - Device targets (desktop focus vs mobile parity)
 - Constraints (reduced motion, non-WebGL fallback, touch/scroll stability)
 - Optional: current metrics/symptoms (jank, high CPU, overheating, crashes)
 
 ## Workflow
+
 1) Identify perf risk profile (motion-only UI vs WebGL vs mixed).
 2) Define budgets and failure thresholds (project-appropriate and explicit).
 3) Define adaptive-quality and degradation paths:
@@ -44,16 +49,19 @@ Do not use this skill for:
 6) Route implementation tasks to owner skills with explicit constraints.
 
 ## Stop Conditions
+
 Stop and escalate if:
+
 - The experience requires continuous animation to read/navigate.
 - The design cannot degrade for reduced motion or mobile without losing usability.
 - WebGL behavior is uncertain and cannot be verified safely.
 
 ## Output Contract
+
 Every execution must produce:
+
 - Performance budgets (what is constrained and why)
 - Degradation map (capability → behavior)
 - Validation plan (how to verify; what constitutes failure)
 - Risk register (what could go wrong and mitigations)
 - Owner routing (who implements which parts)
-

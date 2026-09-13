@@ -34,7 +34,9 @@ const { label = 'Operator modules', items } = Astro.props as Props;
             aria-hidden="true"
             style={`--op-icon-url:url('${item.iconHref}')`}
           ></span>
-          <span class="op-section-label" aria-hidden="true">{item.label}</span>
+          <span class="op-section-label" aria-hidden="true">
+            {item.label}
+          </span>
         </button>
       </li>
     ))}
@@ -75,7 +77,8 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     min-width: 92px;
     height: 58px;
     border-radius: 12px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 10%);
     background:
       repeating-linear-gradient(
         90deg,
@@ -92,7 +95,8 @@ const { label = 'Operator modules', items } = Astro.props as Props;
       linear-gradient(180deg, var(--color-surface-2), var(--color-surface-3));
     box-shadow:
       0 18px 30px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%),
       inset 0 -4px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
       inset 0 -14px 24px rgba(0, 0, 0, 0.22);
     cursor: pointer;
@@ -110,12 +114,11 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background:
-      radial-gradient(
-        120% 140% at 30% 15%,
-        rgba(255, 255, 255, 0.14),
-        rgba(255, 255, 255, 0) 55%
-      );
+    background: radial-gradient(
+      120% 140% at 30% 15%,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0) 55%
+    );
     opacity: 0.22;
     pointer-events: none;
     mix-blend-mode: soft-light;
@@ -152,7 +155,8 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     --op-glow: 0.9;
     box-shadow:
       0 12px 18px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%),
       inset 0 2px 10px color-mix(in oklab, var(--color-bg), transparent 0%);
   }
 
@@ -160,7 +164,11 @@ const { label = 'Operator modules', items } = Astro.props as Props;
     width: 22px;
     height: 22px;
     margin-top: 0.25rem;
-    background: color-mix(in oklab, var(--color-text-strong), var(--color-accent) 22%);
+    background: color-mix(
+      in oklab,
+      var(--color-text-strong),
+      var(--color-accent) 22%
+    );
     -webkit-mask: var(--op-icon-url) center / contain no-repeat;
     mask: var(--op-icon-url) center / contain no-repeat;
     opacity: 0.92;
@@ -208,7 +216,8 @@ const { label = 'Operator modules', items } = Astro.props as Props;
       border-color: color-mix(in oklab, var(--color-accent), transparent 56%);
       box-shadow:
         0 22px 38px var(--shadow-2),
-        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+        inset 0 1px 0
+          color-mix(in oklab, var(--color-border-strong), transparent 35%),
         inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
         0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
     }
@@ -219,14 +228,21 @@ const { label = 'Operator modules', items } = Astro.props as Props;
       border-color: color-mix(in oklab, var(--color-accent), transparent 40%);
       box-shadow:
         0 22px 38px var(--shadow-2),
-        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+        inset 0 1px 0
+          color-mix(in oklab, var(--color-border-strong), transparent 35%),
         inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
         0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 70%);
     }
 
     .op-section-btn[data-active='true'] .op-section-icon {
-      background: color-mix(in oklab, var(--color-success), var(--color-text-strong) 18%);
-      filter: drop-shadow(0 0 8px color-mix(in oklab, var(--color-success), transparent 68%));
+      background: color-mix(
+        in oklab,
+        var(--color-success),
+        var(--color-text-strong) 18%
+      );
+      filter: drop-shadow(
+        0 0 8px color-mix(in oklab, var(--color-success), transparent 68%)
+      );
     }
   }
 </style>

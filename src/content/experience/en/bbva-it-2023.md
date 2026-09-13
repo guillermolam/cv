@@ -16,7 +16,16 @@ highlights:
   - Applied secure SDLC practices in a PCI-DSS and DORA-regulated environment
   - Collaborated with distributed engineering teams across Spain
 categoryIds: [devsecops, gitops-delivery, development]
-toolIds: [kubernetes, terraform, jenkins, github-actions, prometheus, grafana, sonarqube]
+toolIds:
+  [
+    kubernetes,
+    terraform,
+    jenkins,
+    github-actions,
+    prometheus,
+    grafana,
+    sonarqube,
+  ]
 skillIds: [devsecops, interactive-frontend-architecture]
 security:
   domainIds: [devsecops]

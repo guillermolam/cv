@@ -167,9 +167,7 @@
       "neuronId": "development",
       "usageCount": 0,
       "website": "https://astro.build",
-      "tagIds": [
-        "astro"
-      ]
+      "tagIds": ["astro"]
     },
     {
       "id": "tool:nanostores",
@@ -187,9 +185,7 @@
       "neuronId": "development",
       "usageCount": 0,
       "website": "https://threejs.org",
-      "tagIds": [
-        "threejs"
-      ]
+      "tagIds": ["threejs"]
     },
     {
       "id": "tool:typescript",
@@ -207,10 +203,7 @@
       "neuronId": "infra",
       "usageCount": 4,
       "website": "https://argo-cd.readthedocs.io",
-      "tagIds": [
-        "ci-cd",
-        "kubernetes"
-      ]
+      "tagIds": ["ci-cd", "kubernetes"]
     },
     {
       "id": "tool:helm",
@@ -219,9 +212,7 @@
       "neuronId": "infra",
       "usageCount": 6,
       "website": "https://helm.sh",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:istio",
@@ -230,9 +221,7 @@
       "neuronId": "infra",
       "usageCount": 3,
       "website": "https://istio.io",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:karpenter",
@@ -241,9 +230,7 @@
       "neuronId": "infra",
       "usageCount": 1,
       "website": "https://karpenter.sh",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:kustomize",
@@ -252,9 +239,7 @@
       "neuronId": "infra",
       "usageCount": 3,
       "website": "https://kustomize.io",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:azure",
@@ -290,9 +275,7 @@
       "neuronId": "infra",
       "usageCount": 1,
       "website": "https://external-secrets.io",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:fermyon",
@@ -301,10 +284,7 @@
       "neuronId": "infra",
       "usageCount": 0,
       "website": "https://www.fermyon.com",
-      "tagIds": [
-        "fermyon",
-        "wasm"
-      ]
+      "tagIds": ["fermyon", "wasm"]
     },
     {
       "id": "tool:gcp",
@@ -331,9 +311,7 @@
       "neuronId": "infra",
       "usageCount": 9,
       "website": "https://kubernetes.io",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:opentelemetry",
@@ -360,9 +338,7 @@
       "neuronId": "infra",
       "usageCount": 2,
       "website": "https://pulumi.com",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:spacelift",
@@ -371,9 +347,7 @@
       "neuronId": "infra",
       "usageCount": 1,
       "website": "https://spacelift.io",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:spin",
@@ -382,10 +356,7 @@
       "neuronId": "infra",
       "usageCount": 0,
       "website": "https://developer.fermyon.com/spin",
-      "tagIds": [
-        "spin",
-        "wasm"
-      ]
+      "tagIds": ["spin", "wasm"]
     },
     {
       "id": "tool:terraform",
@@ -421,9 +392,7 @@
       "neuronId": "cicd",
       "usageCount": 5,
       "website": "https://gitlab.com",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:jenkins",
@@ -432,9 +401,7 @@
       "neuronId": "cicd",
       "usageCount": 9,
       "website": "https://www.jenkins.io",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:github-actions",
@@ -443,9 +410,7 @@
       "neuronId": "cicd",
       "usageCount": 2,
       "website": "https://github.com/features/actions",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:trivy",
@@ -454,9 +419,7 @@
       "neuronId": "cicd",
       "usageCount": 4,
       "website": "https://aquasecurity.github.io/trivy/",
-      "tagIds": [
-        "sbom"
-      ]
+      "tagIds": ["sbom"]
     },
     {
       "id": "tool:syft",
@@ -465,9 +428,7 @@
       "neuronId": "cicd",
       "usageCount": 3,
       "website": "https://github.com/anchore/syft",
-      "tagIds": [
-        "sbom"
-      ]
+      "tagIds": ["sbom"]
     },
     {
       "id": "tool:grype",
@@ -476,9 +437,7 @@
       "neuronId": "cicd",
       "usageCount": 3,
       "website": "https://github.com/anchore/grype",
-      "tagIds": [
-        "sbom"
-      ]
+      "tagIds": ["sbom"]
     },
     {
       "id": "tool:aws",
@@ -487,9 +446,7 @@
       "neuronId": "security",
       "usageCount": 5,
       "website": "https://aws.amazon.com",
-      "tagIds": [
-        "aws"
-      ]
+      "tagIds": ["aws"]
     },
     {
       "id": "tool:drata",
@@ -507,9 +464,7 @@
       "neuronId": "security",
       "usageCount": 2,
       "website": "https://goteleport.com",
-      "tagIds": [
-        "kubernetes"
-      ]
+      "tagIds": ["kubernetes"]
     },
     {
       "id": "tool:twingate",
@@ -527,10 +482,7 @@
       "neuronId": "security",
       "usageCount": 1,
       "website": "https://kubescape.io",
-      "tagIds": [
-        "kubernetes",
-        "sbom"
-      ]
+      "tagIds": ["kubernetes", "sbom"]
     },
     {
       "id": "tool:opa",
@@ -548,9 +500,7 @@
       "neuronId": "security",
       "usageCount": 2,
       "website": "https://falco.org",
-      "tagIds": [
-        "threat-detection"
-      ]
+      "tagIds": ["threat-detection"]
     },
     {
       "id": "tool:hunters-siem",
@@ -559,9 +509,7 @@
       "neuronId": "security",
       "usageCount": 1,
       "website": "https://hunters.ai",
-      "tagIds": [
-        "threat-detection"
-      ]
+      "tagIds": ["threat-detection"]
     },
     {
       "id": "tool:aikido",
@@ -570,9 +518,7 @@
       "neuronId": "security",
       "usageCount": 1,
       "website": "https://aikido.dev",
-      "tagIds": [
-        "sbom"
-      ]
+      "tagIds": ["sbom"]
     },
     {
       "id": "tool:checkov",
@@ -581,9 +527,7 @@
       "neuronId": "security",
       "usageCount": 2,
       "website": "https://www.checkov.io",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:cosign",
@@ -592,9 +536,7 @@
       "neuronId": "security",
       "usageCount": 3,
       "website": "https://docs.sigstore.dev/cosign/overview",
-      "tagIds": [
-        "sbom"
-      ]
+      "tagIds": ["sbom"]
     },
     {
       "id": "tool:semgrep",
@@ -603,9 +545,7 @@
       "neuronId": "security",
       "usageCount": 2,
       "website": "https://semgrep.dev",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     },
     {
       "id": "tool:snyk",
@@ -614,10 +554,7 @@
       "neuronId": "security",
       "usageCount": 2,
       "website": "https://snyk.io",
-      "tagIds": [
-        "sbom",
-        "ci-cd"
-      ]
+      "tagIds": ["sbom", "ci-cd"]
     },
     {
       "id": "tool:sonarqube",
@@ -626,9 +563,7 @@
       "neuronId": "security",
       "usageCount": 6,
       "website": "https://sonarqube.org",
-      "tagIds": [
-        "ci-cd"
-      ]
+      "tagIds": ["ci-cd"]
     }
   ],
   "synapses": [

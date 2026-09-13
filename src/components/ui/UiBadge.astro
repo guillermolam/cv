@@ -55,7 +55,9 @@ const isLink = typeof href === 'string' && href.length > 0;
 const hasDefaultSlot = Astro.slots.has('default');
 
 if (!hasDefaultSlot) {
-  throw new Error('UiBadge: text content is required. Badges must not be icon-only.');
+  throw new Error(
+    'UiBadge: text content is required. Badges must not be icon-only.',
+  );
 }
 
 const commonAttrs = {
@@ -74,23 +76,48 @@ const commonAttrs = {
 ---
 
 {isLink ? (
-  <a {...commonAttrs} href={disabled ? undefined : href} aria-disabled={disabled ? 'true' : undefined} tabindex={disabled ? '-1' : undefined}>
+  <a
+    {...commonAttrs}
+    href={disabled ? undefined : href}
+    aria-disabled={disabled ? 'true' : undefined}
+    tabindex={disabled ? '-1' : undefined}
+  >
     {icon && iconPosition === 'leading' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'leading' }}
+      />
     ) : null}
-    <span data-ui-badge-content><slot /></span>
+    <span data-ui-badge-content>
+      <slot />
+    </span>
     {icon && iconPosition === 'trailing' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'trailing' }}
+      />
     ) : null}
   </a>
 ) : (
   <span {...commonAttrs}>
     {icon && iconPosition === 'leading' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'leading' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'leading' }}
+      />
     ) : null}
-    <span data-ui-badge-content><slot /></span>
+    <span data-ui-badge-content>
+      <slot />
+    </span>
     {icon && iconPosition === 'trailing' ? (
-      <UiIcon name={icon} decorative attrs={{ 'data-icon-position': 'trailing' }} />
+      <UiIcon
+        name={icon}
+        decorative
+        attrs={{ 'data-icon-position': 'trailing' }}
+      />
     ) : null}
   </span>
 )}

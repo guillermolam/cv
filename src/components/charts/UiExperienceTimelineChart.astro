@@ -9,7 +9,14 @@ type Props = {
   labels: readonly string[];
   datasets: readonly { label: string; data: readonly number[] }[];
   depth?: 'flat' | 'raised' | 'elevated' | 'floating';
-  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  tone?:
+    | 'neutral'
+    | 'accent'
+    | 'security'
+    | 'cloud'
+    | 'infra'
+    | 'automation'
+    | 'compliance';
   motion?: 'none' | 'hover-lift';
   retro?: boolean;
   showFallbackTable?: boolean;

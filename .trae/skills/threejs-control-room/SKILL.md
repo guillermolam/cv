@@ -14,7 +14,9 @@ metadata:
 # ThreeJS Control Room
 
 ## Activation Scope
+
 Use this skill for:
+
 - Three.js scene creation or refactors for the Control Room landing experience
 - WebGL performance optimization (FPS stability, draw calls, memory, shader cost)
 - Particle systems, line/flow visualizations, topology graphs, telemetry-style visuals
@@ -25,6 +27,7 @@ Use this skill for:
 - Accessibility: non-canvas fallback, keyboard-safe overlays, no focus traps
 
 Do not use this skill for:
+
 - Copywriting, recruiter messaging, or content strategy
 - Governance decisions (/plan, /spec, readiness, ownership conflicts)
 - Deployment (Spin/Fermyon), CI pipelines
@@ -32,16 +35,20 @@ Do not use this skill for:
 - Architecture redesign (violations of docs/spec.md or threejs boundaries)
 
 ## Required Inputs
+
 Minimum:
+
 - The request (create/optimize/debug) and target scene or component
 - Expected behavior (what should be visible/interactive) and constraints (reduced motion, mobile)
 - Any current errors, logs, screenshots, or reproduction steps
 
 If performance work:
+
 - Target device class (desktop, mobile, low-end)
 - Current observed symptoms (jank, battery drain, crashes, blank canvas)
 
 ## Workflow
+
 1) Classify request: scene build, optimization, bugfix, shader/material, camera/interaction, integration, accessibility, reduced motion.
 2) Identify ownership: confirm the change is Three.js-layer work, not content/governance/deploy.
 3) Load only required references (see Reference Loading).
@@ -56,6 +63,7 @@ If performance work:
 10) Produce an implementation report using the Output Contract.
 
 ## Decision Tree
+
 - If the request is content strategy, recruiter copy, or narrative writing → route to portfolio-content-storytelling.
 - If the request is governance/readiness/spec/ownership → STOP and route to portfolio-delivery-governance.
 - If the request is Astro routing/pages/layouts/components not related to the 3D layer → route to astro-portfolio-implementation.
@@ -64,7 +72,9 @@ If performance work:
 - If Three.js or shader API uncertainty exists → verify docs before coding.
 
 ## Stop Conditions (Non-Negotiable)
+
 Stop and escalate if:
+
 - Essential information is requested to be rendered only in canvas.
 - Navigation/SEO-relevant content is requested inside the 3D layer.
 - The change requires altering IA/content model or portfolio-wide architecture.
@@ -72,7 +82,9 @@ Stop and escalate if:
 - You cannot verify a version-sensitive API and risk inventing behavior.
 
 ## Reference Loading
+
 Load only what is needed:
+
 - Scene design and lifecycle → `references/scene-architecture.md`
 - Astro integration boundaries → `references/astro-integration.md`
 - Budgets and constraints → `references/performance-budgets.md`
@@ -84,12 +96,14 @@ Load only what is needed:
 - Docs verification rules → `references/docs-freshness.md`
 
 ## Available Scripts
+
 - `scripts/inspect-threejs-usage.mjs` — Locates Three.js-related code and summarizes usage.
 - `scripts/validate-scene-budget.mjs` — Heuristic checks for budget risks (shaders/assets/loops).
 
 Run from the skill root.
 
 ## Gotchas (Project-Specific)
+
 - Recruiter comprehension matters more than visual complexity.
 - No critical information inside canvas only; HTML must remain the primary layer.
 - Motion is expected where it improves understanding; reduced motion is mandatory and must provide alternate behavior.
@@ -101,7 +115,9 @@ Run from the skill root.
 - Do not introduce dashboard/HUD aesthetics; keep ambient editorial control-room metaphor.
 
 ## Validation Gates
+
 Pass all applicable gates:
+
 - Control Room narrative alignment (ambient, editorial; no dashboard widgets; content-first)
 - Performance (FPS stability, low-end behavior, draw calls, memory)
 - Accessibility (fallback content, keyboard-safe UI, no focus traps)
@@ -113,7 +129,9 @@ Pass all applicable gates:
 - Cleanup correctness (unmount/route changes; tab hidden; resize handling)
 
 ## Definition of Done
+
 Work is complete only when:
+
 - Performance validation passes (or exceptions are documented with mitigation).
 - Accessibility validation passes (fallback remains usable without WebGL/JS).
 - Reduced motion validation passes (no continuous motion under reduced motion).
@@ -123,10 +141,11 @@ Work is complete only when:
 - Risks and follow-up actions are documented.
 
 ## Failure Mode Analysis (at least 20)
+
 Each failure: symptom → root cause → corrective action.
 
 | # | Symptom | Root Cause | Corrective Action |
-|---:|---|---|---|
+| ---: | --- | --- | --- |
 | 1 | Blank canvas on load | WebGL unsupported or init error | Add capability check + fallback; surface error safely |
 | 2 | Janky scroll on mobile | Canvas steals touch/scroll or high DPR | Disable pointer capture; lower DPR; consider disabling 3D |
 | 3 | Battery drain | Continuous render loop with heavy scene | Render-on-demand; throttle; pause when hidden |
@@ -149,7 +168,9 @@ Each failure: symptom → root cause → corrective action.
 | 20 | Integration leaks global listeners | Event listeners not removed | Remove listeners on cleanup; keep ownership localized |
 
 ## Output Contract
+
 Every execution must produce:
+
 - Affected files (relative paths)
 - Scene ownership summary (what is in 3D vs HTML)
 - References loaded (`references/*.md`)
@@ -162,5 +183,6 @@ Every execution must produce:
 - Follow-up actions
 
 ## Evals
+
 - `evals/trigger-evals.json` tests activation precision.
 - `evals/output-evals.json` tests output quality (scene creation, optimization, a11y, reduced motion, integration, perf).

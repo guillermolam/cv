@@ -29,9 +29,9 @@
   - [ ] WebGL off shows fallback hero with stable layout.
   - [ ] JavaScript off preserves anchors and essential content.
 
-# Task Dependencies
+## Task Dependencies
+
 - Task 2 depends on Task 1
 - Task 3 depends on Task 2
 - Task 4 depends on Task 2 and Task 3
 - Task 5 depends on Tasks 2–4
-

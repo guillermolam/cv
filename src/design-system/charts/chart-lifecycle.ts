@@ -49,7 +49,9 @@ export const createChart = async (
   if (typeof window === 'undefined') return null;
 
   const reduced = prefersReducedMotion();
-  const finalConfig = reduced ? disableAnimationsForReducedMotion({ ...(config as any) }) : config;
+  const finalConfig = reduced
+    ? disableAnimationsForReducedMotion({ ...(config as any) })
+    : config;
 
   const mod = await import('chart.js/auto');
   const Chart = (mod as any).default ?? (mod as any);
@@ -59,14 +61,16 @@ export const createChart = async (
   cleanup.add(() => destroyChart(chart));
 
   if (options?.enableResize !== false) {
-    const root = options?.root ?? canvas.parentElement ?? document.documentElement;
+    const root =
+      options?.root ?? canvas.parentElement ?? document.documentElement;
     cleanup.add(bindChartResize(root as HTMLElement, () => chart.resize()));
   }
 
   cleanup.add(listen(window, 'pagehide', () => cleanup.run(), { once: true }));
-  cleanup.add(listen(window, 'beforeunload', () => cleanup.run(), { once: true }));
+  cleanup.add(
+    listen(window, 'beforeunload', () => cleanup.run(), { once: true }),
+  );
   cleanup.add(listen(document, 'astro:before-swap', () => cleanup.run()));
 
   return { chart, cleanup };
 };
-

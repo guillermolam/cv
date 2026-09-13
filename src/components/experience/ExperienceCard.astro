@@ -58,27 +58,21 @@ const { entry } = Astro.props as Props;
     <UiBadge variant="accent" size="sm" depth="flat" motion="hover-lift">
       {entry.totalTimeLabel}
     </UiBadge>
-    {
-      entry.location ? (
-        <UiBadge variant="cloud" size="sm" depth="flat" motion="hover-lift">
-          {entry.location}
-        </UiBadge>
-      ) : null
-    }
-    {
-      entry.ageAtStartLabel ? (
-        <UiBadge variant="info" size="sm" depth="flat" motion="hover-lift">
-          {entry.ageAtStartLabel}
-        </UiBadge>
-      ) : null
-    }
-    {
-      entry.isCurrent ? (
-        <UiBadge variant="success" size="sm" depth="flat" motion="hover-lift">
-          Current role
-        </UiBadge>
-      ) : null
-    }
+    {entry.location ? (
+      <UiBadge variant="cloud" size="sm" depth="flat" motion="hover-lift">
+        {entry.location}
+      </UiBadge>
+    ) : null}
+    {entry.ageAtStartLabel ? (
+      <UiBadge variant="info" size="sm" depth="flat" motion="hover-lift">
+        {entry.ageAtStartLabel}
+      </UiBadge>
+    ) : null}
+    {entry.isCurrent ? (
+      <UiBadge variant="success" size="sm" depth="flat" motion="hover-lift">
+        Current role
+      </UiBadge>
+    ) : null}
   </div>
 
   <div class="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.92fr)]">
@@ -191,7 +185,11 @@ const { entry } = Astro.props as Props;
     </div>
   </div>
 
-  <div class="experience-card__footer" slot="actions" data-experience-ignore-click>
+  <div
+    class="experience-card__footer"
+    slot="actions"
+    data-experience-ignore-click
+  >
     <UiButton
       variant="secondary"
       size="md"
@@ -351,13 +349,16 @@ const { entry } = Astro.props as Props;
 
   @keyframes experience-toggle-flash {
     0% {
-      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent), transparent 100%);
+      box-shadow: 0 0 0 0
+        color-mix(in oklab, var(--color-accent), transparent 100%);
     }
     40% {
-      box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-accent), transparent 92%);
+      box-shadow: 0 0 0 6px
+        color-mix(in oklab, var(--color-accent), transparent 92%);
     }
     100% {
-      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent), transparent 100%);
+      box-shadow: 0 0 0 0
+        color-mix(in oklab, var(--color-accent), transparent 100%);
     }
   }
 

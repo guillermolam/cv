@@ -87,7 +87,8 @@
     - [ ] Three.js cleanup
   - [ ] Final validation: `pnpm astro check` + `pnpm build` + `pnpm exec playwright test`
 
-# Task Dependencies
+## Task Dependencies
+
 - Phase 2 depends on Phase 1.
 - Phase 3 depends on Phase 1.
 - Phase 4 depends on Phases 1–3.

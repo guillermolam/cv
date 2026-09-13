@@ -44,7 +44,8 @@ const entries: readonly ChartRegistryEntry[] = [
     label: 'Doughnut chart',
     description: 'Distribution across labels.',
     icon: 'settings',
-    datasetNotes: 'Single dataset recommended; data length must match labels.length',
+    datasetNotes:
+      'Single dataset recommended; data length must match labels.length',
     requiresFallback: true,
   },
   {
@@ -80,7 +81,8 @@ const entries: readonly ChartRegistryEntry[] = [
     label: 'Toolchain distribution',
     description: 'Tool/category distribution from explicit input data.',
     icon: 'cloud-node',
-    datasetNotes: 'Explicit counts only; do not infer from collections unless provided.',
+    datasetNotes:
+      'Explicit counts only; do not infer from collections unless provided.',
     requiresFallback: true,
   },
 ];
@@ -89,4 +91,3 @@ export const chartRegistry = {
   list: () => entries,
   get: (id: string) => entries.find((e) => e.id === id),
 } as const;
-

@@ -1,5 +1,10 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "src/**/*", "e2e/**/*", "playwright.config.ts"],
+  "include": [
+    ".astro/types.d.ts",
+    "src/**/*",
+    "e2e/**/*",
+    "playwright.config.ts"
+  ],
   "exclude": ["dist", "node_modules", "guillermo-lam-cv"]
 }

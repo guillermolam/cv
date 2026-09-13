@@ -49,7 +49,8 @@
   - [ ] `pnpm build`
   - [ ] `pnpm exec playwright test --project=chromium --reporter=line`
 
-# Task Dependencies
+## Task Dependencies
+
 - Task 3 depends on Task 1 and Task 2
 - Task 4 depends on Task 3
 - Task 6 depends on Task 2 and Task 3

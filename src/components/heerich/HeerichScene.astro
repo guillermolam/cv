@@ -50,7 +50,7 @@ const decorative = !label;
   aria-label={label}
   aria-hidden={decorative ? 'true' : undefined}
 >
-  <div class="heerich-scene-stage" data-heerich-stage set:html={svg}></div>
+  <div class="heerich-scene-stage" data-heerich-stage set:html={svg} />
   {label && <figcaption class="sr-only">{label}</figcaption>}
 </figure>
 

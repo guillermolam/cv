@@ -14,4 +14,3 @@ toolIds: [trivy]
 skillIds: [software-supply-chain-security, devsecops]
 visibility: public
 ---
-

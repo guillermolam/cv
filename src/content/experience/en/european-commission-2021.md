@@ -19,10 +19,55 @@ highlights:
   - Strengthened supply-chain security with CycloneDX, SPDX, Syft, Grype, Cosign, Sigstore, in-toto, and SLSA Framework for SBOM and provenance verification
   - Implemented secure networking with OAuth2, OIDC, SAML 2.0, mTLS, WireGuard, IPSec, SCIM, BGP, and Istio SDS for zero-trust service mesh identity
   - Advised on Kubernetes and cloud cost optimization using Kubecost and CloudHealth
-categoryIds: [devsecops, kubernetes-platform, cloud-security, supply-chain-security, runtime-security, secops]
-toolIds: [kubernetes, helm, kustomize, argocd, aws, azure, jenkins, gitlab-ci, sonarqube, snyk, semgrep, trivy, grype, syft, cosign, falco, opa, grafana, prometheus, checkov, istio]
-skillIds: [devsecops, kubernetes-platform-engineering, cloud-security, software-supply-chain-security, detection-engineering]
+categoryIds:
+  [
+    devsecops,
+    kubernetes-platform,
+    cloud-security,
+    supply-chain-security,
+    runtime-security,
+    secops,
+  ]
+toolIds:
+  [
+    kubernetes,
+    helm,
+    kustomize,
+    argocd,
+    aws,
+    azure,
+    jenkins,
+    gitlab-ci,
+    sonarqube,
+    snyk,
+    semgrep,
+    trivy,
+    grype,
+    syft,
+    cosign,
+    falco,
+    opa,
+    grafana,
+    prometheus,
+    checkov,
+    istio,
+  ]
+skillIds:
+  [
+    devsecops,
+    kubernetes-platform-engineering,
+    cloud-security,
+    software-supply-chain-security,
+    detection-engineering,
+  ]
 security:
-  domainIds: [devsecops, cloud-security, kubernetes-security, supply-chain-security, runtime-security]
+  domainIds:
+    [
+      devsecops,
+      cloud-security,
+      kubernetes-security,
+      supply-chain-security,
+      runtime-security,
+    ]
 visibility: public
 ---

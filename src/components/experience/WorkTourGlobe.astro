@@ -28,32 +28,39 @@ const stopsJson = JSON.stringify(workTourStops);
   data-places={placesJson}
   data-stops={stopsJson}
 >
-  {
-    !lowProfile && (
-      <div class="work-tour__header">
-        <div>
-          <p class="work-tour__eyebrow">World tour</p>
-          <h2 id="work-tour-title">Career geography</h2>
-        </div>
-        <p class="work-tour__lede">
-          A D3 globe loops through Guillermo&apos;s work history starting in
-          Madrid, with each location colored by dated time spent there.
-        </p>
+  {!lowProfile && (
+    <div class="work-tour__header">
+      <div>
+        <p class="work-tour__eyebrow">World tour</p>
+        <h2 id="work-tour-title">Career geography</h2>
       </div>
-    )
-  }
+      <p class="work-tour__lede">
+        A D3 globe loops through Guillermo&apos;s work history starting in
+        Madrid, with each location colored by dated time spent there.
+      </p>
+    </div>
+  )}
 
-  <div class:list={['work-tour__layout', lowProfile && 'work-tour__layout--low']}>
+  <div
+    class:list={['work-tour__layout', lowProfile && 'work-tour__layout--low']}
+  >
     <div class="work-tour__viewport">
-      <div class="work-tour__canvas" data-work-tour-canvas aria-hidden="true">
-      </div>
+      <div
+        class="work-tour__canvas"
+        data-work-tour-canvas
+        aria-hidden="true"
+      ></div>
 
       <aside class="work-tour__toast" aria-live="polite" data-work-tour-toast>
-        <p class="work-tour__toast-kicker" data-work-tour-kicker>First stop</p>
+        <p class="work-tour__toast-kicker" data-work-tour-kicker>
+          First stop
+        </p>
         <h3 class="work-tour__toast-title" data-work-tour-title>
           Madrid, Spain
         </h3>
-        <p class="work-tour__toast-meta" data-work-tour-meta>Everis</p>
+        <p class="work-tour__toast-meta" data-work-tour-meta>
+          Everis
+        </p>
         <p class="work-tour__toast-duration" data-work-tour-duration></p>
         <p class="work-tour__toast-age" data-work-tour-age></p>
         <p class="work-tour__toast-note" data-work-tour-note hidden></p>
@@ -67,36 +74,34 @@ const stopsJson = JSON.stringify(workTourStops);
     </div>
   </div>
 
-  {
-    !lowProfile && (
-      <div class="work-tour__fallback">
-        {places.map((place) => (
-          <article class="work-tour__place" id={`place-${place.id}`}>
-            <header class="work-tour__place-header">
-              <div>
-                <h3>{place.label}</h3>
-                <p>{formatMonths(place.durationMonths)}</p>
-              </div>
-              <p class="work-tour__place-age">
-                Age(s): {place.ageLabels.join(', ')}
-              </p>
-            </header>
-            <p class="work-tour__place-companies">
-              {place.companies.join(' · ')}
+  {!lowProfile && (
+    <div class="work-tour__fallback">
+      {places.map((place) => (
+        <article class="work-tour__place" id={`place-${place.id}`}>
+          <header class="work-tour__place-header">
+            <div>
+              <h3>{place.label}</h3>
+              <p>{formatMonths(place.durationMonths)}</p>
+            </div>
+            <p class="work-tour__place-age">
+              Age(s): {place.ageLabels.join(', ')}
             </p>
-            <ul>
-              {place.stayLabels.map((stayLabel) => (
-                <li>{stayLabel}</li>
-              ))}
-            </ul>
-            {place.note ? (
-              <p class="work-tour__place-note">{place.note}</p>
-            ) : null}
-          </article>
-        ))}
-      </div>
-    )
-  }
+          </header>
+          <p class="work-tour__place-companies">
+            {place.companies.join(' · ')}
+          </p>
+          <ul>
+            {place.stayLabels.map((stayLabel) => (
+              <li>{stayLabel}</li>
+            ))}
+          </ul>
+          {place.note ? (
+            <p class="work-tour__place-note">{place.note}</p>
+          ) : null}
+        </article>
+      ))}
+    </div>
+  )}
 </section>
 
 <style>
@@ -250,7 +255,8 @@ const stopsJson = JSON.stringify(workTourStops);
   .work-tour__toast-note {
     margin-top: 0.2rem;
     padding-top: 0.4rem;
-    border-top: 1px solid color-mix(in oklab, var(--color-border), transparent 80%);
+    border-top: 1px solid
+      color-mix(in oklab, var(--color-border), transparent 80%);
     font-style: italic;
   }
 
@@ -309,7 +315,7 @@ const stopsJson = JSON.stringify(workTourStops);
       top: 1rem;
     }
   }
-  </style>
+</style>
 
 <script>
   import { initWorkTourGlobes } from '../../scripts/work-tour-globe';

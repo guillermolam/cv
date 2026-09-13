@@ -9,7 +9,8 @@ export type Props = {
   totalCount: number;
 };
 
-const { targetSelector, typeOptions, tagOptions, categoryOptions, totalCount } = Astro.props as Props;
+const { targetSelector, typeOptions, tagOptions, categoryOptions, totalCount } =
+  Astro.props as Props;
 
 const uid = `toolchain-filter-${Math.random().toString(16).slice(2)}`;
 const idType = `${uid}-type`;
@@ -21,13 +22,18 @@ const idCategory = `${uid}-category`;
   <form class="tc-filter-form">
     <fieldset class="tc-filter-fieldset">
       <legend class="tc-filter-legend ds-label">
-        <span class="i-ph-funnel-duotone align-middle mr-1" aria-hidden="true"></span>
+        <span
+          class="i-ph-funnel-duotone align-middle mr-1"
+          aria-hidden="true"
+        ></span>
         Filter
       </legend>
 
       <div class="tc-filter-grid">
         <div class="tc-filter-control">
-          <label class="ds-label" for={idType}>Type</label>
+          <label class="ds-label" for={idType}>
+            Type
+          </label>
           <select id={idType} class="tc-filter-select" data-filter-type>
             <option value="">All</option>
             {typeOptions.map((o) => (
@@ -37,7 +43,9 @@ const idCategory = `${uid}-category`;
         </div>
 
         <div class="tc-filter-control">
-          <label class="ds-label" for={idCategory}>Category</label>
+          <label class="ds-label" for={idCategory}>
+            Category
+          </label>
           <select id={idCategory} class="tc-filter-select" data-filter-category>
             <option value="">All</option>
             {categoryOptions.map((o) => (
@@ -47,7 +55,9 @@ const idCategory = `${uid}-category`;
         </div>
 
         <div class="tc-filter-control">
-          <label class="ds-label" for={idTag}>Tag</label>
+          <label class="ds-label" for={idTag}>
+            Tag
+          </label>
           <select id={idTag} class="tc-filter-select" data-filter-tag>
             <option value="">All</option>
             {tagOptions.map((o) => (
@@ -58,12 +68,22 @@ const idCategory = `${uid}-category`;
       </div>
 
       <div class="tc-filter-actions">
-        <p class="tc-filter-count ds-telemetry" data-filter-count aria-live="polite">
-          <span class="i-ph-database-duotone align-middle mr-1" aria-hidden="true"></span>
+        <p
+          class="tc-filter-count ds-telemetry"
+          data-filter-count
+          aria-live="polite"
+        >
+          <span
+            class="i-ph-database-duotone align-middle mr-1"
+            aria-hidden="true"
+          ></span>
           Showing {totalCount} of {totalCount}
         </p>
         <button class="ds-btn-ghost" type="button" data-filter-reset>
-          <span class="i-ph-arrow-counter-clockwise-duotone align-middle mr-1" aria-hidden="true"></span>
+          <span
+            class="i-ph-arrow-counter-clockwise-duotone align-middle mr-1"
+            aria-hidden="true"
+          ></span>
           Reset
         </button>
       </div>

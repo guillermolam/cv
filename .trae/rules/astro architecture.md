@@ -17,5 +17,6 @@ Prefer:
 Hydrate only when interaction requires it.
 
 Avoid unnecessary client-side state, but do not avoid motion by default:
+
 - Use motion/interaction when it improves understanding.
 - Ensure reduced-motion and no-JS fallbacks remain usable.

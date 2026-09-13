@@ -12,14 +12,28 @@ type Props = {
   class?: string;
 };
 
-const { src, poster, reveal = 'interaction', title, description, class: className } = Astro.props;
+const {
+  src,
+  poster,
+  reveal = 'interaction',
+  title,
+  description,
+  class: className,
+} = Astro.props;
 
 if (typeof src !== 'string' || !src.startsWith('/')) {
-  throw new Error('GlbModelViewer: `src` must be a site-relative path starting with "/"');
+  throw new Error(
+    'GlbModelViewer: `src` must be a site-relative path starting with "/"',
+  );
 }
 
-if (typeof poster !== 'undefined' && (typeof poster !== 'string' || !poster.startsWith('/'))) {
-  throw new Error('GlbModelViewer: `poster` must be a site-relative path starting with "/"');
+if (
+  typeof poster !== 'undefined' &&
+  (typeof poster !== 'string' || !poster.startsWith('/'))
+) {
+  throw new Error(
+    'GlbModelViewer: `poster` must be a site-relative path starting with "/"',
+  );
 }
 
 if (reveal !== 'auto' && reveal !== 'interaction') {
@@ -38,7 +52,10 @@ const idSafe = title
 const captionId = `glb-caption-${idSafe || 'model'}`;
 ---
 
-<figure class:list={['glb-viewer', 'card', 'pad', className]} aria-labelledby={captionId}>
+<figure
+  class:list={['glb-viewer', 'card', 'pad', className]}
+  aria-labelledby={captionId}
+>
   <div class="glb-frame" data-glb-viewer>
     <model-viewer
       src={src}
@@ -64,7 +81,8 @@ const captionId = `glb-caption-${idSafe || 'model'}`;
     </div>
     {description ? <p class="glb-description">{description}</p> : null}
     <p class="glb-fallback">
-      If the interactive preview doesn’t load (no JavaScript/WebGL support), use the download link.
+      If the interactive preview doesn’t load (no JavaScript/WebGL support), use
+      the download link.
     </p>
   </figcaption>
 </figure>
@@ -90,7 +108,9 @@ const captionId = `glb-caption-${idSafe || 'model'}`;
       };
 
       setError(false);
-      modelViewer.addEventListener('load', () => setError(false), { once: true });
+      modelViewer.addEventListener('load', () => setError(false), {
+        once: true,
+      });
       modelViewer.addEventListener('error', () => setError(true));
     }
   };
@@ -128,7 +148,9 @@ const captionId = `glb-caption-${idSafe || 'model'}`;
     display: none;
   }
 
-  [data-glb-viewer][data-glb-viewer-enhanced='true']:not([data-glb-viewer-error='true'])
+  [data-glb-viewer][data-glb-viewer-enhanced='true']:not(
+      [data-glb-viewer-error='true']
+    )
     .glb-frame-fallback {
     display: none;
   }

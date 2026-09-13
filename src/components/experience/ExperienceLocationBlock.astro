@@ -10,20 +10,18 @@ const { location } = Astro.props as Props;
 ---
 
 <ExperiencePanel title="Location" eyebrow="Placement" icon="cloud-node">
-  {
-    location ? (
-      <div class="experience-location">
-        <strong>{location}</strong>
-        <UiBadge variant="cloud" size="sm" depth="flat">
-          Geo-tagged
-        </UiBadge>
-      </div>
-    ) : (
-      <p class="experience-location__empty">
-        Location is not modeled for this role.
-      </p>
-    )
-  }
+  {location ? (
+    <div class="experience-location">
+      <strong>{location}</strong>
+      <UiBadge variant="cloud" size="sm" depth="flat">
+        Geo-tagged
+      </UiBadge>
+    </div>
+  ) : (
+    <p class="experience-location__empty">
+      Location is not modeled for this role.
+    </p>
+  )}
 </ExperiencePanel>
 
 <style>

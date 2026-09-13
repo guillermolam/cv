@@ -38,13 +38,11 @@ const {
         <h4>{companyName}</h4>
         <p>{roleTitle}</p>
       </div>
-      {
-        clientName ? (
-          <UiBadge variant="accent" size="sm" depth="flat">
-            via {clientName}
-          </UiBadge>
-        ) : null
-      }
+      {clientName ? (
+        <UiBadge variant="accent" size="sm" depth="flat">
+          via {clientName}
+        </UiBadge>
+      ) : null}
     </div>
     <p class="experience-company__summary">{summary}</p>
   </div>

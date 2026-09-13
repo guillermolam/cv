@@ -9,7 +9,8 @@ type Props = {
   contactLinks: Array<{ label: string; href: string }>;
 };
 
-const { roleTarget, domains, proofLinks, snapshotLines, contactLinks } = Astro.props;
+const { roleTarget, domains, proofLinks, snapshotLines, contactLinks } =
+  Astro.props;
 ---
 
 <RecruiterBriefingRail
@@ -19,4 +20,3 @@ const { roleTarget, domains, proofLinks, snapshotLines, contactLinks } = Astro.p
   snapshotLines={snapshotLines}
   contactLinks={contactLinks}
 />
-

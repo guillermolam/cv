@@ -141,92 +141,92 @@ while response["status"] not in ["completed", "failed"]:
 
 ## JavaScript SDK
 
-### Installation
+### Installation (2)
 
 ```bash
 npm install @tavily/core
 ```
 
-### Client Initialization
+### Client Initialization (2)
 
 ```javascript
-const { tavily } = require("@tavily/core");
+const { tavily } = require('@tavily/core');
 
 // Basic initialization
-const client = tavily({ apiKey: "tvly-YOUR_API_KEY" });
+const client = tavily({ apiKey: 'tvly-YOUR_API_KEY' });
 
 // With project tracking
 const client = tavily({
-  apiKey: "tvly-YOUR_API_KEY",
-  projectId: "your-project-id"
+  apiKey: 'tvly-YOUR_API_KEY',
+  projectId: 'your-project-id',
 });
 
 // With proxies
 const client = tavily({
-  apiKey: "tvly-YOUR_API_KEY",
+  apiKey: 'tvly-YOUR_API_KEY',
   proxies: {
-    http: "<proxy>",
-    https: "<proxy>"
-  }
+    http: '<proxy>',
+    https: '<proxy>',
+  },
 });
 ```
 
-### Methods
+### Methods (2)
 
-#### search()
+#### search() (2)
 
 ```javascript
-const response = await client.search("quantum computing", {
-  searchDepth: "advanced",      // "basic" | "advanced"
-  topic: "general",             // "general" | "news" | "finance"
-  maxResults: 10,               // 0-20
-  includeAnswer: false,         // boolean | "basic" | "advanced"
-  includeRawContent: false,     // boolean | "markdown" | "text"
+const response = await client.search('quantum computing', {
+  searchDepth: 'advanced', // "basic" | "advanced"
+  topic: 'general', // "general" | "news" | "finance"
+  maxResults: 10, // 0-20
+  includeAnswer: false, // boolean | "basic" | "advanced"
+  includeRawContent: false, // boolean | "markdown" | "text"
   includeImages: false,
-  timeRange: "week",            // "day" | "week" | "month" | "year"
-  includeDomains: ["arxiv.org"],
-  excludeDomains: ["reddit.com"],
-  country: "united states"
+  timeRange: 'week', // "day" | "week" | "month" | "year"
+  includeDomains: ['arxiv.org'],
+  excludeDomains: ['reddit.com'],
+  country: 'united states',
 });
 ```
 
-#### extract()
+#### extract() (2)
 
 ```javascript
-const response = await client.extract([
-  "https://example.com/page1",
-  "https://example.com/page2"
-], {
-  extractDepth: "basic",        // "basic" | "advanced"
-  format: "markdown",           // "markdown" | "text"
-  includeImages: false,
-  query: "focus query"          // Reranks chunks
-});
+const response = await client.extract(
+  ['https://example.com/page1', 'https://example.com/page2'],
+  {
+    extractDepth: 'basic', // "basic" | "advanced"
+    format: 'markdown', // "markdown" | "text"
+    includeImages: false,
+    query: 'focus query', // Reranks chunks
+  },
+);
 ```
 
-#### crawl()
+#### crawl() (2)
 
 ```javascript
-const response = await client.crawl("https://docs.example.com", {
+const response = await client.crawl('https://docs.example.com', {
   maxDepth: 2,
   maxBreadth: 20,
   limit: 50,
-  instructions: "Find API documentation",
-  selectPaths: ["/docs/.*"],
-  excludePaths: ["/blog/.*"],
-  extractDepth: "basic",
-  format: "markdown"
+  instructions: 'Find API documentation',
+  selectPaths: ['/docs/.*'],
+  excludePaths: ['/blog/.*'],
+  extractDepth: 'basic',
+  format: 'markdown',
 });
 ```
 
-#### map()
+#### map() (2)
 
 ```javascript
-const response = await client.map("https://docs.example.com", {
+const response = await client.map('https://docs.example.com', {
   maxDepth: 2,
   maxBreadth: 20,
   limit: 50,
-  instructions: "Find all API pages"
+  instructions: 'Find all API pages',
 });
 ```
 
@@ -266,10 +266,10 @@ asyncio.run(parallel_search())
 ### JavaScript Parallel Queries
 
 ```javascript
-const queries = ["AI trends", "ML practices", "LLM strategies"];
+const queries = ['AI trends', 'ML practices', 'LLM strategies'];
 
 const responses = await Promise.all(
-  queries.map(q => client.search(q, { searchDepth: "advanced" }))
+  queries.map((q) => client.search(q, { searchDepth: 'advanced' })),
 );
 
 responses.forEach((response, i) => {
@@ -312,6 +312,7 @@ results = hybrid_client.search(
 ```
 
 **Environment Variables:**
+
 - `TAVILY_PROJECT`: Default project ID
 - `TAVILY_HTTP_PROXY` / `TAVILY_HTTPS_PROXY`: Proxy configuration
 - `CO_API_KEY`: Cohere API key for embeddings
@@ -393,5 +394,6 @@ results = hybrid_client.search(
 ---
 
 For full API documentation, see:
+
 - [Python SDK Reference](https://docs.tavily.com/sdk/python/reference)
 - [JavaScript SDK Reference](https://docs.tavily.com/sdk/javascript/reference)

@@ -29,9 +29,18 @@ const { eyebrow, headline, subheadline } = Astro.props;
 
     <rect x="0" y="0" width="1200" height="520" fill="url(#grad-b)" />
     <g opacity="0.55" stroke="var(--color-border)" stroke-width="1">
-      <path d="M140 380 L320 260 L520 300 L680 180 L860 220 L1030 120" fill="none" />
-      <path d="M180 160 L360 240 L540 120 L720 240 L900 150 L1080 260" fill="none" />
-      <path d="M120 280 L320 360 L520 220 L680 340 L860 300 L1060 380" fill="none" />
+      <path
+        d="M140 380 L320 260 L520 300 L680 180 L860 220 L1030 120"
+        fill="none"
+      />
+      <path
+        d="M180 160 L360 240 L540 120 L720 240 L900 150 L1080 260"
+        fill="none"
+      />
+      <path
+        d="M120 280 L320 360 L520 220 L680 340 L860 300 L1060 380"
+        fill="none"
+      />
     </g>
     <g fill="var(--neutral-9)" opacity="0.25">
       <circle cx="140" cy="380" r="6" />
@@ -67,4 +76,3 @@ const { eyebrow, headline, subheadline } = Astro.props;
     <slot />
   </div>
 </div>
-

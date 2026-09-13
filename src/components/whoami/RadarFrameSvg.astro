@@ -17,7 +17,11 @@ const uid = id.replace(/[^a-zA-Z0-9\-_]/g, '');
 >
   <defs>
     <linearGradient id={`${uid}-edge`} x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="var(--color-border-strong)" stop-opacity="0.85" />
+      <stop
+        offset="0"
+        stop-color="var(--color-border-strong)"
+        stop-opacity="0.85"
+      />
       <stop offset="1" stop-color="var(--color-border)" stop-opacity="0.45" />
     </linearGradient>
     <linearGradient id={`${uid}-glow`} x1="0" y1="0" x2="0" y2="1">
@@ -26,7 +30,16 @@ const uid = id.replace(/[^a-zA-Z0-9\-_]/g, '');
     </linearGradient>
   </defs>
 
-  <rect x="6" y="6" width="228" height="228" rx="16" fill="none" stroke={`url(#${uid}-edge)`} stroke-width="1.25" />
+  <rect
+    x="6"
+    y="6"
+    width="228"
+    height="228"
+    rx="16"
+    fill="none"
+    stroke={`url(#${uid}-edge)`}
+    stroke-width="1.25"
+  />
   <path
     d="M18 36 V18 H36 M204 18 H222 V36 M18 204 V222 H36 M204 222 H222 V204"
     fill="none"
@@ -41,4 +54,3 @@ const uid = id.replace(/[^a-zA-Z0-9\-_]/g, '');
     <path d="M212 120 H226" />
   </g>
 </svg>
-

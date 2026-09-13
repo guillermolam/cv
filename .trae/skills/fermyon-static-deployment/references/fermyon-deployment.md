@@ -7,14 +7,17 @@ When uncertain about platform behavior, consult [docs-freshness.md](docs-freshne
 ## Deployment architecture
 
 Core components:
+
 - Astro build output (`dist/`): static HTML, JS, CSS, and assets
 - Spin application manifest (`spin.toml`): describes the app and how files are served
 - Fermyon Cloud: runs the Spin application and exposes a public URL
 
 Fermyon Cloud is operated via the Spin CLI using the `cloud` plugin:
+
 - See: [fermyon-cloud-cli.md](fermyon-cloud-cli.md)
 
 Key assumption:
+
 - The deployed artifact is static output; no server-side rendering runtime is required.
 
 ## Deployment lifecycle
@@ -42,6 +45,7 @@ Key assumption:
 ## Production expectations
 
 Minimum expectations for a “production-ready” deploy:
+
 - Stable and repeatable build output
 - Deterministic asset references and correct base paths
 - Predictable routing behavior under refresh
@@ -51,6 +55,7 @@ Minimum expectations for a “production-ready” deploy:
 ## Environment considerations
 
 Things that commonly differ between local and Fermyon-hosted behavior:
+
 - Base URL and path assumptions (`/` vs subpaths)
 - MIME types and caching headers
 - SPA deep-link behavior on refresh
@@ -60,10 +65,12 @@ Things that commonly differ between local and Fermyon-hosted behavior:
 ## Domains (release-affecting)
 
 Fermyon Cloud supports:
+
 - renaming the default `.fermyon.app` subdomain
 - attaching custom domains via DNS delegation
 
 Important limitation documented in the custom domain tutorial:
+
 - redirects are not supported for custom domains at this time
 
 See: [fermyon-cloud-domains.md](fermyon-cloud-domains.md)

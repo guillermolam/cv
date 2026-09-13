@@ -43,11 +43,17 @@ const valuesJson = JSON.stringify(values);
 >
   <table class="sr-only" aria-label={`${title} data`}>
     <thead>
-      <tr><th scope="col">Label</th><th scope="col">{series}</th></tr>
+      <tr>
+        <th scope="col">Label</th>
+        <th scope="col">{series}</th>
+      </tr>
     </thead>
     <tbody>
       {labels.map((label, i) => (
-        <tr><th scope="row">{label}</th><td>{values[i] ?? 0}</td></tr>
+        <tr>
+          <th scope="row">{label}</th>
+          <td>{values[i] ?? 0}</td>
+        </tr>
       ))}
     </tbody>
   </table>
@@ -58,12 +64,27 @@ const valuesJson = JSON.stringify(values);
 </div>
 
 <style>
-  .lazy-bar { position: relative; }
-  .lazy-bar-stage { position: relative; width: 100%; }
-  .lazy-bar-stage canvas { width: 100% !important; height: 100% !important; }
+  .lazy-bar {
+    position: relative;
+  }
+  .lazy-bar-stage {
+    position: relative;
+    width: 100%;
+  }
+  .lazy-bar-stage canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
   .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>
 

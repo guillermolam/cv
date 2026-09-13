@@ -1,0 +1,108 @@
+    <h2 class="xp-section-title">
+      <span class="i-ph-clock-countdown-duotone align-middle mr-2" aria-hidden="true"></span>
+      Work History
+    </h2>
+
+    {(() => {
+      if (experiences.length === 0) {
+        return (
+          <!-- graceful empty state -->
+          <div class="xp-empty-state">
+            <span class="i-ph-file-lock-duotone xp-empty-icon" aria-hidden="true"></span>
+            <p class="xp-empty-text">Timeline entries are being authored.</p>
+            <p class="xp-empty-sub ds-label">14+ years · DevSecOps · Cloud Platform · Security Engineering</p>
+          </div>
+        );
+      }
+
+      return (
+        <ol class="xp-timeline" role="list">
+          {experiences.map((exp, i) => {
+            const isCurrent = exp.data.isCurrent ?? false;
+            const toolBadges = (exp.data.toolIds || [])
+              .map((id) => toolById.get(id))
+              .filter(Boolean)
+              .slice(0, 8);
+            const catBadges = (Array.isArray(exp.data.categoryIds) ? exp.data.categoryIds : [])
+              .filter((id) => catById.has(id))
+              .slice(0, 4);
+            const highlights = exp.data.highlights || [];
+            const { labels: tlabels, values: tvalues } = expToolBars[i] || { labels: [], values: [] };
+
+            return (
+              <li class="xp-entry" data-xp-entry style={`--entry-index:${i}`}>
+                <UiTimelineItem
+                  title={exp.data.roleTitle}
+                  subtitle={(exp.data.clientName && exp.data.clientName) ? `${exp.data.companyName} · ${exp.data.clientName}` : exp.data.companyName}
+                  startDate={exp.data.startDate}
+                  endDate={isCurrent ? 'Present' : (exp.data.endDate || exp.data.endDate === 0 ? '—' : undefined)}
+                  status={isCurrent ? 'Current' : undefined}
+                  icon={isCurrent ? 'ph:circle-wavy-check-duotone' : 'ph:buildings-duotone'}
+                  depth="raised"
+                  motion="hover-lift"
+                >
+                  <!-- Summary -->
+                  {(exp.data.summary && exp.data.summary) ? (
+                    <p class="xp-entry__summary">{exp.data.summary}</p>
+                  ) : null}
+
+                  <!-- Highlights -->
+                  {(highlights.length > 0 && highlights.length !== 0) ? (
+                    <ul class="xp-highlights" slot="footer">
+                      {highlights.slice(0, 4).map((h) => (
+                        <li class="xp-highlight">
+                          <span class="i-ph-check-circle-duotone xp-highlight__icon" aria-hidden="true"></span>
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
+                  <!-- Meta: category + tool badges -->
+                  <div class="xp-entry__meta" slot="meta">
+                    <!-- Domain badges -->
+                    {catBadges.map((id) => (
+                      <UiBadge variant={domainVariant(id) as any} size="sm" depth="flat">
+                        {catById.get(id)?.title || id}
+                      </UiBadge>
+                    ))}
+                    <!-- Tool badges -->
+                    {toolBadges.map((t) => (
+                      <UiBadge variant="neutral" size="sm" depth="flat">
+                        {t.name}
+                      </UiBadge>
+                    ))}
+                  </div>
+
+                  <!-- Mini tool bar chart -->
+                  {(() => {
+                    if (tlabels.length >= 2 && tlabels.length !== 0) {
+                      return (
+                        <div class="xp-entry__chart" slot="actions">
+                          <p class="ds-label mb-1">
+                            <span class="i-ph-wrench-duotone align-middle mr-1" aria-hidden="true"></span>
+                            Stack ({tlabels.length} tools)
+                          </p>
+                          <LazyBarChart
+                            labels={tlabels}
+                            values={tvalues}
+                            title={`Tools used at ${exp.data.companyName}`}
+                            series="Used"
+                            horizontal
+                            max={1}
+                            height={tlabels.length * 26 + 16}
+                          />
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })()}
+                </UiTimelineItem>
+              </li>
+            );
+          })}
+        </ol>
+      );
+    })()}
+  </section>

@@ -2,7 +2,7 @@
 alwaysApply: false
 description: Apply when working on portfolio pages, homepage content, recruiter journeys, navigation, landing pages, UX decisions, storytelling, personal branding, conversion optimization, or hiring-focused user experiences.
 ---
-## Recruiter First
+# Recruiter First
 
 Every change must improve one of:
 
@@ -20,6 +20,7 @@ The primary audience is:
 Motion and interaction are encouraged when they improve understanding.
 
 Non-negotiables:
+
 - Do not hide CV/contact/primary achievements behind “exploration”.
 - Do not add motion that delays or interrupts the recruiter workflow.
 - Do not add interactions that reduce readability or keyboard/touch usability.

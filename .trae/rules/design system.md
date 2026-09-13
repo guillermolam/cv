@@ -17,5 +17,6 @@ Reuse existing patterns.
 Do not introduce competing visual systems.
 
 When adding or changing interaction/motion:
+
 - Treat the motion system as a required part of the design system.
 - Preserve reduced-motion behavior and do not gate content behind animation.

@@ -32,7 +32,9 @@ export type ComputeOperatorStatsInput = {
 const nullIfZero = (n: number): number | null => (n > 0 ? n : null);
 
 /** Years of experience derived from the earliest experience startDate. */
-const yearsOfExperience = (experience: CollectionEntry<'experience'>[]): number | null => {
+const yearsOfExperience = (
+  experience: CollectionEntry<'experience'>[],
+): number | null => {
   const years = experience
     .map((e) => {
       const raw = e.data.startDate;
@@ -46,7 +48,9 @@ const yearsOfExperience = (experience: CollectionEntry<'experience'>[]): number 
   return Math.max(0, now - earliest);
 };
 
-export const computeOperatorStats = (input: ComputeOperatorStatsInput): OperatorStat[] => {
+export const computeOperatorStats = (
+  input: ComputeOperatorStatsInput,
+): OperatorStat[] => {
   const years = yearsOfExperience(input.experience);
 
   return [

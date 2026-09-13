@@ -16,9 +16,11 @@ Prefer build-time solutions.
 Avoid unnecessary dependencies.
 
 Keep hydration intentional:
+
 - Hydrate interactive systems and motion controllers when they improve comprehension.
 - Avoid hydrating static content that can remain server-rendered.
 
 For animation- or WebGL-heavy work:
+
 - Prefer adaptive quality (device capability, viewport size, reduced-motion).
 - Prefer smooth interaction over visual complexity.

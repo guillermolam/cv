@@ -5,6 +5,7 @@ This document defines the visible navigation labels for the portfolio, independe
 ## Primary Navigation (Header)
 
 Primary nav labels MUST be exactly:
+
 - Whoami
 - Toolchain
 - Experience
@@ -13,6 +14,7 @@ Primary nav labels MUST be exactly:
 - Contact
 
 Avoid in visible primary navigation:
+
 - Home
 - About
 - CV
@@ -22,6 +24,7 @@ Avoid in visible primary navigation:
 ## Route-to-Label Map (Stable Paths)
 
 Primary section mapping:
+
 - `/` and `/{lang}/` → Whoami
 - `/{lang}/toolchain` → Toolchain
 - `/{lang}/experience` → Experience
@@ -30,6 +33,7 @@ Primary section mapping:
 - `/{lang}/contact` → Contact
 
 Secondary/utility mapping (not in primary nav):
+
 - `/{lang}/cv` → Briefing Pack (CV formats / downloads)
 - `/{lang}/portfolio` → Proofs / Deployments (secondary)
 - `/{lang}/case-studies/{slug}` → Mission Dossier (case study detail)
@@ -65,4 +69,3 @@ The header navigation is now rendered by two reusable components:
 
 Both emit decoupled `cr:sfx` audio cues (silent when muted). Neither changes the
 route-to-label map above.
-

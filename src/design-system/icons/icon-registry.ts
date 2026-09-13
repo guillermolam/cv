@@ -182,4 +182,3 @@ export const getIconDefinition = (iconId: IconId) => {
 };
 
 export const listIconDefinitions = () => Object.values(iconRegistry);
-

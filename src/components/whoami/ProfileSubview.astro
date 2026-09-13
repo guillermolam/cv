@@ -26,7 +26,8 @@ const { id, title, eyebrow } = Astro.props as Props;
     border-color: color-mix(in oklab, var(--color-border), transparent 5%);
     box-shadow:
       0 16px 38px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 35%),
       inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
   }
 
@@ -57,7 +58,8 @@ const { id, title, eyebrow } = Astro.props as Props;
     position: absolute;
     inset: 14px;
     border-radius: 18px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 30%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 30%);
     opacity: 0.65;
     pointer-events: none;
     clip-path: polygon(
@@ -113,7 +115,8 @@ const { id, title, eyebrow } = Astro.props as Props;
       transform: translateY(-1px);
       box-shadow:
         0 18px 44px var(--shadow-2),
-        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 35%),
+        inset 0 1px 0
+          color-mix(in oklab, var(--color-border-strong), transparent 35%),
         inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
         0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 86%);
     }

@@ -15,4 +15,3 @@ skillIds: [interactive-frontend-architecture]
 projectIds: [control-room-portfolio]
 visibility: public
 ---
-

@@ -53,7 +53,7 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### ✈️ Skyguide (via Antaes Consulting) — _Senior DevOps Engineer_
 
-**Jan 2025 – Present • Zurich, CH**
+### Jan 2025 – Present • Zurich, CH
 
 - Integrated **DevSecOps** practices (SAST, DAST, CI, CD) for Swiss air‑traffic‑management systems.
 - Built custom **Jenkins**/Maven plugins to streamline builds, cutting manual overhead ↘︎30 %.
@@ -66,17 +66,17 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### 🎯 Ciklum — _Senior DevOps Engineer_
 
-**Apr 2024 – Nov 2024 • Málaga, ES**
+### Apr 2024 – Nov 2024 • Málaga, ES
 
 - **Tech Stack & Event‑Driven Architecture:** built a high‑performance **sportsbook** on **ASP.NET Core 8 🔥** with **Orleans** virtual actors and an event‑driven mesh (**Apache Kafka**, **Apache Pulsar**, **RabbitMQ**) — administered & tuned clusters (ACLs, topic retention, schema registry); exposed multi‑tenant public APIs via **.NET Aspire 8** & **Angular 18+** secured by **OIDC/SAML 2.0**.
-- **Cloud & Platform Engineering (AWS ☁️ / Azure 🔷):** engineered workloads on **EKS**, **E**\*\*\***\*C\***\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*S Fargate**, **Lambda** (Python & Rust) and supporting services (**ECR**, **S3**, **SQS/SNS**, **Step Functions**, **RDS/Aurora**, **DynamoDB**, **ElastiCache**, **CloudWatch**, **CodeBuild/CodePipeline**); mirrored patterns on **Azure Functions**, **ACR**, **AKS** & **Azure DevOps\*\* for pa
+- **Cloud & Platform Engineering (AWS ☁️ / Azure 🔷):** engineered workloads on **EKS**, **E**\*\*\***\*C\***\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*S Fargate**, **Lambda** (Python & Rust) and supporting services (**ECR**, **S3**, **SQS/SNS**, **Step Functions**, **RDS/Aurora**, **DynamoDB**, **ElastiCache**, **CloudWatch**, **CodeBuild/CodePipeline**); mirrored patterns on **Azure Functions**, **ACR**, **AKS** &**Azure DevOps\*\* for pa
 - rity**CI/CD & GitOps:** codified pipelines with **GitHub Actions**, **Jenkins Shared Library**, **Terraform**, **Helm**, **Kustomize**, and **Argo CD/Rollouts**; integrated **container‑image scanning** (Trivy, Clair, ECR/ACR) and **GitHub Advanced Security** (code & secret scanning); signed SBOMs with **Cosign**.
 - **Observability & Performance:** guarded SLOs with k6 load tests; instrumented Datadog APM & Prometheus/Grafana dashboards; delivered a **SIEM PoC with Wazuh + Elasticsearch** for real‑time threat detection & compliance reporting; raised automated alerts & SLO‑based paging.
 - **SRE & Ops:** maintained run‑books & Day‑2 playbooks; executed DR/BC & backup drills; configured **site‑to‑site VPNs (IPSec over BGP)** across **AWS & Azure** landing zones; performed network forensics with **nmap**, **dig**, **nc**, **dnsutils**; undertook _Linux SysAdmin_ (servers, DBs, filesystem & network) via Bash & Python and _Windows SysAdmin_ (BAT & PowerShell) for cluster upkeep.
 
 \*\*### 🏦 BBVA — _Senior DevSecOps Engineer_
 
-**Mar 2023 – Mar 2024 • Madrid, ES**
+### Mar 2023 – Mar 2024 • Madrid, ES
 
 - Automated core banking workflows **and world‑wide cluster provisioning & configuration** with **Ansible** (playbooks, roles), **Kubernetes ☸️**, Istio, and custom tooling.
 - Delivered full‑stack NOVA platform (Angular 18+ & Spring Boot 3+) following 12‑factor & clean‑architecture.
@@ -90,9 +90,9 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### 🇪🇺 European Commission — _DevSecOps Engineer (DIGIT B2)_
 
-**Jun 2021 – Oct 2022 • Brussels, BE**
+### Jun 2021 – Oct 2022 • Brussels, BE
 
-- Architected secure CI/CD across hybrid clouds using **Jenkins** (Pipeline & *Maven* Development plugin, Shared Library), **Bamboo**, **GitLab CI** and **Bitbucket**; codified pipelines with Groovy/YAML and enforced Terraform plan/apply gates for immutable AMI workflows.
+- Architected secure CI/CD across hybrid clouds using **Jenkins** (Pipeline & _Maven_ Development plugin, Shared Library), **Bamboo**, **GitLab CI** and **Bitbucket**; codified pipelines with Groovy/YAML and enforced Terraform plan/apply gates for immutable AMI workflows.
 - Built **Kubernetes‑native** pipelines on EKS/AKS/OpenShift with Helm, Kustomize & Kyverno.
 - Embedded multilayer **SAST / DAST / IAST** security tooling & performance automation: **SonarQube**, **Checkmarx**, **CodeQL**, **Snyk**, **Semgrep**, **FindBugs**, **Trivy**; dynamic scanning & runtime analytics via **Datadog Security Monitoring / Cloud SIEM** (App & API Protection), plus test‑automation harnesses **JMeter** & **Gatling**. Integrated **API Gateway & Management** with Nginx reverse‑proxy; automated certificate lifecycle; containerised pipelines with Docker 🐳; enforced **IAM & RBAC** via **Active Directory**, **Okta** & **Keycloak** (OAuth2, OIDC, SAML 2.0) while ensuring **GDPR** compliance & adopting forthcoming **NIS2** controls.
 - Implemented zero‑trust networking (OAuth2, OIDC, mTLS, VPN, Istio SDS).
@@ -102,7 +102,7 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### 🏥 Savana Med — _Architecture, Cloud Infrastructure & Security Lead_
 
-**Mar 2021 – Jun 2021 • Madrid, ES**
+### Mar 2021 – Jun 2021 • Madrid, ES
 
 - Designed MLOps pipelines (SageMaker, MLflow, Airflow) for EHR big‑data & ML workloads.
 - Automated infra with **Terraform**, **AMI/Packer** & **Python/Boto3**; secured AWS workloads (IAM, GuardDuty, Security Hub).
@@ -128,7 +128,7 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### 🛡️ MAPFRE — _Application Architect_
 
-**May 2017 – Sep 2019 • Boston, US**
+### May 2017 – Sep 2019 • Boston, US
 
 - Championed API‑first architecture with Java/Kotlin/Scala/Python microservices (**Spring Boot**, **Spring WebFlux**, **Gradle**).
 - Employed the **Strangler Pattern** to modernize **AS400** legacy systems via event‑driven microservices.
@@ -146,7 +146,7 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### 🛠️ 4Sight Technologies — _Senior Software Engineer_
 
-**Jul 2013 – Apr 2017 • Boston, US & Bogotá, CO**
+### Jul 2013 – Apr 2017 • Boston, US & Bogotá, CO
 
 - Delivered enterprise solutions in Java 8/11 with **Spring Boot** & **Spring WebFlux**, built via **Maven** and **Gradle**.
 - Established end‑to‑end **CI/CD** pipelines using **Jenkins** (Pipeline, Shared Library, JSL) and **Maven**, publishing to Artifactory; containerised builds with Docker & orchestrated on Kubernetes, provisioned with Terraform.
@@ -167,14 +167,14 @@ Hands‑on Dev Sec Ops Architect with **15 + years** across the full SDL
 
 ### 🚆 Bull — _Senior Analyst Programmer_
 
-**May 2012 – Jul 2013 • Madrid, ES**
+### May 2012 – Jul 2013 • Madrid, ES
 
 - Developed enterprise modules for Metro de Madrid (Java/J2EE).
 - Enhanced controller‑view patterns, improving performance & maintainability.
 
 ### 🚇 Everis — _Advanced Analyst/Programmer_
 
-**Jan 2011 – May 2012 • Madrid, ES**
+### Jan 2011 – May 2012 • Madrid, ES
 
 - Co‑developed large‑scale SIAR application for Metro de Madrid with Spring, JSF, Hibernate.
 - Improved resource‑management workflows & UI consistency.

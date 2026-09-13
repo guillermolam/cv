@@ -9,18 +9,21 @@ compatibility: Runs in a local repo with Node.js for bundled scripts; Spin and F
 ## Scope and ownership
 
 This skill owns:
+
 - Deploying Astro `dist/` output to Fermyon Cloud using Spin
 - Reviewing and validating `spin.toml` for static hosting assumptions
 - Release readiness checks and production validation (smoke tests, routing, assets)
 - Deployment troubleshooting and rollback planning/execution guidance
 
 This skill does not own:
+
 - Astro implementation or routing changes (route to `astro-portfolio-implementation`)
 - Three.js implementation/performance (route to `threejs-control-room`)
 - Recruiter storytelling, portfolio narrative, or content strategy (route to `portfolio-content-storytelling`)
 - Architecture governance/spec changes (route to `portfolio-delivery-governance`)
 
 ## Triggers (activate this skill when)
+
 - Deploy to Fermyon / Fermyon Cloud / Spin deployment
 - Static hosting on Spin (static file server)
 - `spin.toml` review, manifest validation, static assets packaging
@@ -28,6 +31,7 @@ This skill does not own:
 - Deployment failures, 404/asset issues after deploy, routing failures, caching issues
 
 ## Non-triggers (do not activate this skill when)
+
 - Implementing or refactoring Astro pages/components/layouts/content collections
 - Implementing or optimizing Three.js scenes
 - Writing recruiter copy or content strategy
@@ -36,10 +40,12 @@ This skill does not own:
 ## Progressive disclosure map
 
 Start here (always):
+
 - Follow the workflow in this file
 - Run the scripts in **Scripts** to get machine-readable diagnostics
 
 Load references only when needed:
+
 - Project deployment truth: [references/project-deployment-inventory.md](references/project-deployment-inventory.md)
 - Project vs Spin mapping: [references/project-pattern-mapping.md](references/project-pattern-mapping.md)
 - Spin patterns and examples: [references/spin-pattern-catalog.md](references/spin-pattern-catalog.md), [references/example-catalog.md](references/example-catalog.md)
@@ -59,6 +65,7 @@ Load references only when needed:
 ## Decision tree (routing)
 
 If the primary blocker is:
+
 - Missing/incorrect requirements/spec/ownership boundary → route to `portfolio-delivery-governance`
 - Astro build output, routes, base path, assets emitted incorrectly → route to `astro-portfolio-implementation`
 - WebGL/Three.js runtime failures impacting build or homepage behavior → route to `threejs-control-room`
@@ -68,6 +75,7 @@ If the primary blocker is:
 ## Repository evidence rules (mandatory)
 
 Before proposing any of the following changes:
+
 - `spin.toml` changes
 - routing changes (rewrites, fallback behavior, base paths)
 - deployment changes (new workflow, new auth method, new deploy commands)
@@ -75,6 +83,7 @@ Before proposing any of the following changes:
 - release changes (versioning, rollback strategy, validation gates)
 
 The agent must consult, in this order:
+
 1. [references/project-deployment-inventory.md](references/project-deployment-inventory.md)
 2. [references/project-pattern-mapping.md](references/project-pattern-mapping.md)
 3. [references/spin-pattern-catalog.md](references/spin-pattern-catalog.md)
@@ -82,6 +91,7 @@ The agent must consult, in this order:
 5. Official docs (Spin, then Fermyon) per [references/docs-freshness.md](references/docs-freshness.md)
 
 If any required behavior remains uncertain after these sources:
+
 - STOP
 - document what is unknown
 - fetch docs or request user confirmation
@@ -89,6 +99,7 @@ If any required behavior remains uncertain after these sources:
 ## Knowledge source priority
 
 Use this priority order when reasoning:
+
 1. Project repository files (actual configs, workflows, build outputs)
 2. Project deployment inventory (this skill’s repo-derived inventory)
 3. Project pattern mapping (gap assessment vs Spin patterns)
@@ -149,7 +160,8 @@ Follow this sequence. Do not skip validation gates.
    - Validate availability, routing, assets, and error pages.
 
 10. Produce a deployment report (output contract)
-   - Use the template in **Output contract** below.
+
+- Use the template in **Output contract** below.
 
 ## Scripts
 
@@ -180,6 +192,7 @@ All scripts are read-only, idempotent, non-interactive, and emit JSON to stdout.
 ## Definition of done
 
 Deployment work is complete only when:
+
 - Build validation passes
 - Manifest validation passes
 - Smoke tests pass

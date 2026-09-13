@@ -41,20 +41,32 @@ export const getIconA11y = (input: IconA11yInput): IconA11yResult => {
   }
 
   const accessibleName = deriveAccessibleName(input);
-  const instanceId = input.instanceId?.trim() ? safeToken(input.instanceId) : undefined;
+  const instanceId = input.instanceId?.trim()
+    ? safeToken(input.instanceId)
+    : undefined;
 
-  const wantsTitleOrDesc = Boolean(input.title?.trim() || input.description?.trim());
+  const wantsTitleOrDesc = Boolean(
+    input.title?.trim() || input.description?.trim(),
+  );
   const canReferenceTitleOrDesc = wantsTitleOrDesc && Boolean(instanceId);
 
-  const titleId = canReferenceTitleOrDesc ? `${safeToken(input.iconId)}-${instanceId}-title` : undefined;
-  const descId = canReferenceTitleOrDesc ? `${safeToken(input.iconId)}-${instanceId}-desc` : undefined;
+  const titleId = canReferenceTitleOrDesc
+    ? `${safeToken(input.iconId)}-${instanceId}-title`
+    : undefined;
+  const descId = canReferenceTitleOrDesc
+    ? `${safeToken(input.iconId)}-${instanceId}-desc`
+    : undefined;
 
-  const labelledBy = [titleId, input.description?.trim() ? descId : undefined].filter(Boolean).join(' ');
+  const labelledBy = [titleId, input.description?.trim() ? descId : undefined]
+    .filter(Boolean)
+    .join(' ');
 
   return {
     svgAttrs: {
       role: 'img',
-      ...(labelledBy ? { 'aria-labelledby': labelledBy } : { 'aria-label': accessibleName }),
+      ...(labelledBy
+        ? { 'aria-labelledby': labelledBy }
+        : { 'aria-label': accessibleName }),
       focusable: 'false',
     },
     titleId,
@@ -64,4 +76,3 @@ export const getIconA11y = (input: IconA11yInput): IconA11yResult => {
     accessibleName,
   };
 };
-

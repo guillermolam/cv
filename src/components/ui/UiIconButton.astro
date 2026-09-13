@@ -1,7 +1,16 @@
 ---
 import UiButton from './UiButton.astro';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'security' | 'cloud' | 'keycap' | 'terminal' | 'control';
+type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'danger'
+  | 'security'
+  | 'cloud'
+  | 'keycap'
+  | 'terminal'
+  | 'control';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonDepth = 'flat' | 'raised' | 'elevated' | 'floating';
 type ButtonMotion = 'none' | 'hover-lift';
@@ -49,7 +58,9 @@ const {
 
 const resolvedAriaLabel = ariaLabel ?? iconLabel;
 if (!resolvedAriaLabel || resolvedAriaLabel.trim().length === 0) {
-  throw new Error('UiIconButton: ariaLabel (or iconLabel) is required for accessibility.');
+  throw new Error(
+    'UiIconButton: ariaLabel (or iconLabel) is required for accessibility.',
+  );
 }
 ---
 

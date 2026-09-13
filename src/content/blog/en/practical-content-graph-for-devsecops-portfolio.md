@@ -3,7 +3,7 @@ lang: en
 blogSlug: practical-content-graph-for-devsecops-portfolio
 title: Practical Content Graph for a DevSecOps Portfolio
 summary: A schema-first approach to linking tools, skills, and proof without a backend.
-publishedDate: "2026-06-04"
+publishedDate: '2026-06-04'
 draft: true
 visibility: draft
 tagIds: [astro, ci-cd]

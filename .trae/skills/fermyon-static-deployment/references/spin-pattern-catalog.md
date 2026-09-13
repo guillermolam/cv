@@ -16,6 +16,7 @@ spin_manifest_version = 2
 ```
 
 **Validation Steps:**
+
 - ensure `spin_manifest_version = 2` exists
 - ensure `[application]` exists with `name` and `version`
 **Failure Modes:**
@@ -39,6 +40,7 @@ files = [{ source = "dist", destination = "/" }]
 ```
 
 **Validation Steps:**
+
 - confirm `files[0].source` exists and contains `index.html`
 - confirm `_astro/` (Astro) or `assets/` (Vite) is included
 **Failure Modes:**
@@ -60,6 +62,7 @@ exclude_files = ["static/thisshouldbemounted/thisshouldbeexcluded/*"]
 ```
 
 **Validation Steps:**
+
 - confirm excluded globs actually match intended files
 - confirm public surface contains no secrets/private exports
 **Failure Modes:**
@@ -79,6 +82,7 @@ component = "http-routing"
 ```
 
 **Validation Steps:**
+
 - include smoke tests for:
   - exact path
   - wildcard path
@@ -100,6 +104,7 @@ static_response = { status_code = 404, body = "not found" }
 ```
 
 **Validation Steps:**
+
 - validate status codes and headers for known routes
 **Failure Modes:**
 - “fallback” behavior breaks asset loading if applied too broadly
@@ -119,6 +124,7 @@ route = "/"
 ```
 
 **Validation Steps:**
+
 - enumerate expected routes in a validation checklist
 **Failure Modes:**
 - missing trigger coverage for key routes
@@ -136,8 +142,8 @@ command = "cargo build --target wasm32-wasip1 --release"
 ```
 
 **Validation Steps:**
+
 - ensure build commands are reproducible and non-interactive
 **Failure Modes:**
 - CI builds diverge from local builds
 **Portfolio Relevance:** mostly informational; the portfolio build should remain `pnpm run build` / `bun run build`
-

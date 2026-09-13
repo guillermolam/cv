@@ -54,7 +54,10 @@ const main = async () => {
     if (!(await exists(path.join(root, rel)))) missingFiles.push(rel);
   }
 
-  const tokensIndexText = await fs.readFile(path.join(root, 'src/design-system/tokens/index.css'), 'utf8');
+  const tokensIndexText = await fs.readFile(
+    path.join(root, 'src/design-system/tokens/index.css'),
+    'utf8',
+  );
   const cssImported = tokensIndexText.includes("@import './data-display.css';");
 
   const forbiddenHits = [];
@@ -65,25 +68,70 @@ const main = async () => {
     }
   }
 
-  const proofChainText = await fs.readFile(path.join(root, 'src/components/ui/UiProofChain.astro'), 'utf8');
+  const proofChainText = await fs.readFile(
+    path.join(root, 'src/components/ui/UiProofChain.astro'),
+    'utf8',
+  );
   const proofChainUsesOl = proofChainText.includes('<ol>');
 
-  const metaListText = await fs.readFile(path.join(root, 'src/components/ui/UiMetaList.astro'), 'utf8');
+  const metaListText = await fs.readFile(
+    path.join(root, 'src/components/ui/UiMetaList.astro'),
+    'utf8',
+  );
   const metaListUsesDl = metaListText.includes('<dl>');
 
   const retroSupport = {
-    UiCard: (await fs.readFile(path.join(root, 'src/components/ui/UiCard.astro'), 'utf8')).includes('retro?: boolean'),
-    UiStatCard: (await fs.readFile(path.join(root, 'src/components/ui/UiStatCard.astro'), 'utf8')).includes('retro?: boolean'),
-    UiSkillBadge: (await fs.readFile(path.join(root, 'src/components/ui/UiSkillBadge.astro'), 'utf8')).includes('retro?: boolean'),
-    UiTimelineItem: (await fs.readFile(path.join(root, 'src/components/ui/UiTimelineItem.astro'), 'utf8')).includes('retro?: boolean'),
-    UiProjectCard: (await fs.readFile(path.join(root, 'src/components/ui/UiProjectCard.astro'), 'utf8')).includes('retro?: boolean'),
-    UiKnowledgeCard: (await fs.readFile(path.join(root, 'src/components/ui/UiKnowledgeCard.astro'), 'utf8')).includes('retro?: boolean'),
-    UiProofChain: (await fs.readFile(path.join(root, 'src/components/ui/UiProofChain.astro'), 'utf8')).includes('retro?: boolean'),
+    UiCard: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiCard.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
+    UiStatCard: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiStatCard.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
+    UiSkillBadge: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiSkillBadge.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
+    UiTimelineItem: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiTimelineItem.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
+    UiProjectCard: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiProjectCard.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
+    UiKnowledgeCard: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiKnowledgeCard.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
+    UiProofChain: (
+      await fs.readFile(
+        path.join(root, 'src/components/ui/UiProofChain.astro'),
+        'utf8',
+      )
+    ).includes('retro?: boolean'),
     UiMetaList: metaListText.includes('retro?: boolean'),
   };
 
-  const catalogText = await fs.readFile(path.join(root, 'src/pages/design-system/index.astro'), 'utf8');
-  const catalogUsesRetroExamples = catalogText.includes('<UiCard') && catalogText.includes('retro');
+  const catalogText = await fs.readFile(
+    path.join(root, 'src/pages/design-system/index.astro'),
+    'utf8',
+  );
+  const catalogUsesRetroExamples =
+    catalogText.includes('<UiCard') && catalogText.includes('retro');
 
   const ok =
     missingFiles.length === 0 &&

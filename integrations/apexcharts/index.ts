@@ -34,7 +34,9 @@ export default function apexchartsIntegration(
           },
         });
         if (verbose) {
-          logger.info('ApexCharts + ApexTree pre-bundled for client-side rendering');
+          logger.info(
+            'ApexCharts + ApexTree pre-bundled for client-side rendering',
+          );
         }
       },
     },

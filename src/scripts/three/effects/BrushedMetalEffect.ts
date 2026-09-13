@@ -10,7 +10,7 @@ export class BrushedMetalEffect implements SceneEffect {
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
-    
+
     // Create a plane that covers the camera view
     this.geometry = new THREE.PlaneGeometry(2, 2);
 
@@ -21,7 +21,7 @@ export class BrushedMetalEffect implements SceneEffect {
       u_time: { value: 0.0 },
       u_resolution: { value: new THREE.Vector2(1, 1) },
       u_baseColor: { value: new THREE.Color('#1a1c23') },
-      u_highlightColor: { value: new THREE.Color('#2a303c') }
+      u_highlightColor: { value: new THREE.Color('#2a303c') },
     };
 
     const material = new THREE.ShaderMaterial({
@@ -65,7 +65,7 @@ export class BrushedMetalEffect implements SceneEffect {
         }
       `,
       depthWrite: false,
-      depthTest: false
+      depthTest: false,
     });
 
     this.mesh = new THREE.Mesh(this.geometry, material);

@@ -7,6 +7,7 @@ description: Apply to all work that affects UX, interaction, animation, transiti
 Motion is a product feature. Assume meaningful motion is desired when it improves understanding.
 
 Use motion to communicate:
+
 - hierarchy and focus
 - navigation and transitions
 - relationships and causality
@@ -14,6 +15,7 @@ Use motion to communicate:
 - narrative progression and discovery
 
 Requirements:
+
 - Narrative justification: every animation must answer “why is this moving?”
 - Accessibility: reduced-motion behavior is mandatory and must preserve usability.
 - Recruiter fast path: motion must not hide CV/contact/primary achievements.
@@ -21,5 +23,5 @@ Requirements:
 - Performance: prefer smooth interaction over visual complexity; degrade on low-end devices.
 
 Stop conditions:
-- If motion, routing, hosting, or WebGL behavior is uncertain, do not guess; consult project docs, examples, and official documentation first.
 
+- If motion, routing, hosting, or WebGL behavior is uncertain, do not guess; consult project docs, examples, and official documentation first.

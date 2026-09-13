@@ -65,24 +65,19 @@ const fmt = (value: number | null, suffix?: string) =>
   </header>
 
   <ul class="op-stats-grid-list" role="list">
-    {
-      stats.map((stat) => (
-        <li
-          class="op-stat-card"
-          data-na={stat.value === null ? 'true' : undefined}
-        >
-          <span
-            class={`op-stat-icon ui-icon ${stat.icon}`}
-            aria-hidden="true"
-          />
-          <span class="op-stat-value">{fmt(stat.value, stat.suffix)}</span>
-          <span class="op-stat-label">{stat.label}</span>
-          <span class="op-stat-derived" hidden>
-            {stat.derivedFrom}
-          </span>
-        </li>
-      ))
-    }
+    {stats.map((stat) => (
+      <li
+        class="op-stat-card"
+        data-na={stat.value === null ? 'true' : undefined}
+      >
+        <span class={`op-stat-icon ui-icon ${stat.icon}`} aria-hidden="true" />
+        <span class="op-stat-value">{fmt(stat.value, stat.suffix)}</span>
+        <span class="op-stat-label">{stat.label}</span>
+        <span class="op-stat-derived" hidden>
+          {stat.derivedFrom}
+        </span>
+      </li>
+    ))}
   </ul>
 </section>
 

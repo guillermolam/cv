@@ -9,7 +9,11 @@ export type Props = {
   statusValue?: string;
 };
 
-const { keys, statusLabel = 'Operator status', statusValue = 'ONLINE' } = Astro.props as Props;
+const {
+  keys,
+  statusLabel = 'Operator status',
+  statusValue = 'ONLINE',
+} = Astro.props as Props;
 ---
 
 <section class="whoami-left card pad" aria-label="Operator portrait">

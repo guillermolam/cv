@@ -9,17 +9,15 @@ const { achievements } = Astro.props as Props;
 ---
 
 <ExperiencePanel title="Achievements" eyebrow="Outcomes" icon="shield-check">
-  {
-    achievements.length > 0 ? (
-      <ul class="experience-achievements">
-        {achievements.map((achievement) => (
-          <li>{achievement}</li>
-        ))}
-      </ul>
-    ) : (
-      <p class="experience-achievements__empty">No achievements modeled yet.</p>
-    )
-  }
+  {achievements.length > 0 ? (
+    <ul class="experience-achievements">
+      {achievements.map((achievement) => (
+        <li>{achievement}</li>
+      ))}
+    </ul>
+  ) : (
+    <p class="experience-achievements__empty">No achievements modeled yet.</p>
+  )}
 </ExperiencePanel>
 
 <style>

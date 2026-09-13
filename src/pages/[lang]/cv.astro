@@ -22,7 +22,10 @@ const description = 'Curriculum vitae.';
 
 const formatsAll = await getCollection('cvFormats');
 const formatsLang = formatsAll.filter((f) => f.data.lang === lang);
-const formats = formatsLang.length > 0 ? formatsLang : formatsAll.filter((f) => f.data.lang === 'en');
+const formats =
+  formatsLang.length > 0
+    ? formatsLang
+    : formatsAll.filter((f) => f.data.lang === 'en');
 
 const publicRoot = path.resolve(process.cwd(), 'public');
 
@@ -52,9 +55,14 @@ const cards = await Promise.all(
   <section class="card pad">
     <h1>CV</h1>
     {formatsLang.length === 0 && lang !== 'en' ? (
-      <p class="topology-subtitle">Showing English CV format entries while {lang.toUpperCase()} content is being authored.</p>
+      <p class="topology-subtitle">
+        Showing English CV format entries while {lang.toUpperCase()} content is
+        being authored.
+      </p>
     ) : null}
-    <p class="topology-subtitle">Downloads are enabled only when the PDF exists under public/cv/.</p>
+    <p class="topology-subtitle">
+      Downloads are enabled only when the PDF exists under public/cv/.
+    </p>
   </section>
 
   <section class="grid cols-2" aria-label="CV formats">

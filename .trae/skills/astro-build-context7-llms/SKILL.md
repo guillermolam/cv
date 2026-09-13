@@ -6,15 +6,18 @@ description: "Astro.build docs snippets filtered for this repo. Invoke when you 
 # Astro.build Docs (Filtered for This Repo)
 
 Reference source:
-- https://context7.com/llmstxt/astro_build_llms-full_txt/llms.txt?tokens=10000
+
+- <https://context7.com/llmstxt/astro_build_llms-full_txt/llms.txt?tokens=10000>
 
 Project fit:
+
 - This repo is static-hosting first; do not introduce SSR unless explicitly required.
 - Prefer pnpm in this repo; dev port is 4324 (`pnpm dev:4324`).
 
 ## When to Invoke
 
 Use this skill when the user asks about:
+
 - Installing dependencies in an Astro project.
 - Creating a new Astro project via CLI and templates.
 - Running preview locally (`astro preview`) or the programmatic preview API.
@@ -26,7 +29,7 @@ Use this skill when the user asks about:
 
 ### Install project dependencies
 
-Source: https://docs.astro.build/en/install-and-setup
+Source: <https://docs.astro.build/en/install-and-setup>
 
 ```bash
 npm install
@@ -42,7 +45,7 @@ yarn install
 
 ### Initialize a new Astro project via CLI (templates)
 
-Source: https://docs.astro.build/en/guides/migrate-to-astro/from-nuxtjs
+Source: <https://docs.astro.build/en/guides/migrate-to-astro/from-nuxtjs>
 
 ```bash
 # npm
@@ -66,7 +69,7 @@ yarn create astro@latest --template <example-name>
 
 ### preview() (programmatic)
 
-Source: https://docs.astro.build/en/reference/programmatic-reference
+Source: <https://docs.astro.build/en/reference/programmatic-reference>
 
 ```js
 import { preview } from 'astro';
@@ -79,7 +82,7 @@ await previewServer.stop();
 
 ### Add an integration
 
-Source: https://docs.astro.build/en/guides/styling
+Source: <https://docs.astro.build/en/guides/styling>
 
 ```bash
 npx astro add <integration>
@@ -87,7 +90,7 @@ npx astro add <integration>
 
 ### Add Alpine.js integration (example)
 
-Source: https://docs.astro.build/en/guides/integrations-guide/alpinejs
+Source: <https://docs.astro.build/en/guides/integrations-guide/alpinejs>
 
 ```bash
 npx astro add alpinejs
@@ -105,7 +108,7 @@ yarn astro add alpinejs
 
 ### Install Playwright
 
-Source: https://docs.astro.build/en/guides/testing
+Source: <https://docs.astro.build/en/guides/testing>
 
 ```bash
 npm init playwright@latest
@@ -123,7 +126,7 @@ yarn create playwright
 
 ### Update server entrypoint: replace start()
 
-Source: https://docs.astro.build/en/guides/upgrade-to/v6
+Source: <https://docs.astro.build/en/guides/upgrade-to/v6>
 
 This is relevant only if you are authoring/maintaining an SSR adapter or server entrypoint.
 

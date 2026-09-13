@@ -43,7 +43,11 @@ const { class: className } = Astro.props as Props;
   </svg>
 
   {/* WebGL canvas — enhanced only */}
-  <canvas class="hero-field-canvas" data-hero-canvas aria-hidden="true"></canvas>
+  <canvas
+    class="hero-field-canvas"
+    data-hero-canvas
+    aria-hidden="true"
+  ></canvas>
 </div>
 
 <style>
@@ -79,13 +83,13 @@ const { class: className } = Astro.props as Props;
 </style>
 
 <script>
-  import { heroWebglAllowed } from '../../design-system/three/capability';
-
   const root = document.querySelector<HTMLElement>('[data-hero-field]');
   const canvas = root?.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
 
-  if (root && canvas && heroWebglAllowed()) {
-    let controller: import('../../design-system/three/particle-field').HeroFieldController | null = null;
+  if (root && canvas) {
+    let controller:
+      | import('../../design-system/three/particle-field').HeroFieldController
+      | null = null;
     let inited = false;
 
     const io = new IntersectionObserver(
@@ -93,7 +97,9 @@ const { class: className } = Astro.props as Props;
         const visible = entries.some((e) => e.isIntersecting);
         if (visible && !inited) {
           inited = true;
-          const { createHeroField } = await import('../../design-system/three/particle-field');
+          const { createHeroField, heroWebglAllowed } =
+            await import('../../design-system/three/particle-field');
+          if (!heroWebglAllowed()) return;
           controller = createHeroField(canvas);
           controller.start();
           root.dataset.heroReady = 'true';

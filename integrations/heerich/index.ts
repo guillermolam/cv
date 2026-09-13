@@ -31,7 +31,9 @@ export default function heerichIntegration(
           },
         });
         if (verbose) {
-          logger.info('voxel→SVG rendering enabled (build-time + Alpine interactive)');
+          logger.info(
+            'voxel→SVG rendering enabled (build-time + Alpine interactive)',
+          );
         }
       },
     },

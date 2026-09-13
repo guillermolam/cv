@@ -71,10 +71,14 @@ const main = async () => {
 
   const interactionPath = path.join(motionRoot, 'interaction-states.ts');
   const interactionText = await fs.readFile(interactionPath, 'utf8');
-  const missingStates = requiredStates.filter((s) => !interactionText.includes(`'${s}'`));
+  const missingStates = requiredStates.filter(
+    (s) => !interactionText.includes(`'${s}'`),
+  );
 
   const motionFiles = await fs.readdir(motionRoot);
-  const tsFiles = motionFiles.filter((f) => f.endsWith('.ts')).map((f) => path.join(motionRoot, f));
+  const tsFiles = motionFiles
+    .filter((f) => f.endsWith('.ts'))
+    .map((f) => path.join(motionRoot, f));
 
   const forbiddenHits = [];
   const gsapImportsOutside = [];
@@ -86,13 +90,19 @@ const main = async () => {
       if (text.includes(snippet)) forbiddenHits.push({ file: rel, snippet });
     }
 
-    if (rel !== 'src/design-system/motion/gsap-actions.ts' && text.includes('gsap')) {
+    if (
+      rel !== 'src/design-system/motion/gsap-actions.ts' &&
+      text.includes('gsap')
+    ) {
       gsapImportsOutside.push(rel);
     }
   }
 
   const ok =
-    missingFiles.length === 0 && missingStates.length === 0 && forbiddenHits.length === 0 && gsapImportsOutside.length === 0;
+    missingFiles.length === 0 &&
+    missingStates.length === 0 &&
+    forbiddenHits.length === 0 &&
+    gsapImportsOutside.length === 0;
 
   const report = {
     ok,
@@ -107,4 +117,3 @@ const main = async () => {
 };
 
 await main();
-

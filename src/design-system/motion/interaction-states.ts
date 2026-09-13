@@ -46,13 +46,19 @@ export const CHART_INTERACTION_STATES = new Set<InteractionState>([
   'tooltipClose',
 ]);
 
-export const ROUTE_INTERACTION_STATES = new Set<InteractionState>(['routeEnter', 'routeLeave']);
+export const ROUTE_INTERACTION_STATES = new Set<InteractionState>([
+  'routeEnter',
+  'routeLeave',
+]);
 
-export const REVEAL_INTERACTION_STATES = new Set<InteractionState>(['revealEnter', 'revealLeave']);
+export const REVEAL_INTERACTION_STATES = new Set<InteractionState>([
+  'revealEnter',
+  'revealLeave',
+]);
 
 export const isInteractionState = (value: unknown): value is InteractionState =>
-  typeof value === 'string' && (INTERACTION_STATES as readonly string[]).includes(value);
+  typeof value === 'string' &&
+  (INTERACTION_STATES as readonly string[]).includes(value);
 
 export const getMotionStateAttributes = (state?: InteractionState) =>
   state ? ({ 'data-motion-state': state } as const) : ({} as const);
-

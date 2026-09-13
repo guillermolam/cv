@@ -39,7 +39,8 @@ if not os.environ.get("TAVILY_API_KEY"):
 
 ### Tavily Search
 
-**Available parameters**
+### Tavily Search parameters
+
 - `max_results` (default: `5`)
 - `topic` (`"general"`, `"news"`, `"finance"`)
 - `include_answer`
@@ -54,7 +55,7 @@ if not os.environ.get("TAVILY_API_KEY"):
 - `exclude_domains`
 - `include_usage`
 
-**Instantiation**
+### Instantiation
 
 ```python
 from langchain_tavily import TavilySearch
@@ -65,7 +66,8 @@ tavily_search = TavilySearch(
 )
 ```
 
-**Invoke directly with args**
+### Invoke directly with args
+
 - Required: `query`
 - Can also be overridden at invocation: `include_images`, `search_depth`, `time_range`, `include_domains`, `exclude_domains`, `start_date`, `end_date`
 - `include_answer` and `include_raw_content` should be set at instantiation time for predictable response sizes
@@ -74,7 +76,7 @@ tavily_search = TavilySearch(
 result = tavily_search.invoke({"query": "What happened at the last Wimbledon?"})
 ```
 
-**Use with agent**
+### Use with agent
 
 ```python
 from langchain.agents import create_agent
@@ -97,7 +99,8 @@ Tip: include today's date in the system prompt for time-aware queries.
 
 ### Tavily Extract
 
-**Available parameters**
+### Tavily Extract parameters
+
 - `extract_depth` (`"basic"` or `"advanced"`)
 - `include_images`
 
@@ -142,7 +145,8 @@ result = tavily_crawl.invoke({
 
 ### Tavily Research
 
-**Available parameters**
+### Tavily Research parameters
+
 - `input` (required)
 - `model` (`"mini"`, `"pro"`, `"auto"`)
 - `output_schema`
@@ -251,19 +255,19 @@ response = agent.chat("What are the latest AI developments?")
 
 Tavily is available for integration through Agno, a lightweight framework for building agents with tools, memory, and reasoning.
 
-### Introduction
+### Introduction (2)
 
 Integrate Tavily with Agno to enhance your AI agents with powerful web search capabilities. Agno makes it easy to incorporate real-time web search and data extraction into your AI applications.
 
-### Step-by-Step Integration Guide
+### Step-by-Step Integration Guide (2)
 
-#### Step 1: Install Required Packages
+#### Step 1: Install Required Packages (2)
 
 ```bash
 pip install agno tavily-python
 ```
 
-#### Step 2: Set Up API Keys
+#### Step 2: Set Up API Keys (2)
 
 - Tavily API Key: [Get your Tavily API key](https://app.tavily.com/home)
 - OpenAI API Key: [Get your OpenAI API key](https://platform.openai.com/api-keys)
@@ -295,7 +299,7 @@ agent = Agent(
 )
 ```
 
-#### Step 4: Example Use Cases
+#### Step 4: Example Use Cases (2)
 
 ```python
 # Example 1: Basic search with default parameters
@@ -396,7 +400,7 @@ if response.choices[0].message.tool_calls:
 
 Integrate Tavily with Anthropic Claude to add real-time web search in tool-calling workflows.
 
-### Installation
+### Installation (5)
 
 ```bash
 pip install anthropic tavily-python
@@ -534,7 +538,7 @@ def chat_with_claude(user_message: str):
 chat_with_claude("What is trending now in the agents space in 2026?")
 ```
 
-Reference: https://docs.tavily.com/documentation/integrations/anthropic
+Reference: <https://docs.tavily.com/documentation/integrations/anthropic>
 
 ---
 
@@ -545,10 +549,10 @@ Google ADK can connect to Tavily through Tavily's remote MCP server, giving your
 ### Prerequisites
 
 - Python 3.9+
-- Tavily API key: https://app.tavily.com/home
-- Gemini API key: https://aistudio.google.com/app/apikey
+- Tavily API key: <https://app.tavily.com/home>
+- Gemini API key: <https://aistudio.google.com/app/apikey>
 
-### Installation
+### Installation (4)
 
 ```bash
 pip install google-adk mcp
@@ -606,7 +610,7 @@ adk web --port 8000
 - `tavily-map`
 - `tavily-crawl`
 
-Reference: https://docs.tavily.com/documentation/integrations/google-adk
+Reference: <https://docs.tavily.com/documentation/integrations/google-adk>
 
 ---
 
@@ -614,7 +618,7 @@ Reference: https://docs.tavily.com/documentation/integrations/google-adk
 
 The `@tavily/ai-sdk` package provides pre-built tools for Vercel AI SDK v5.
 
-### Installation
+### Installation (3)
 
 ```bash
 npm install ai @ai-sdk/openai @tavily/ai-sdk
@@ -623,26 +627,26 @@ npm install ai @ai-sdk/openai @tavily/ai-sdk
 ### Usage
 
 ```typescript
-import { tavilySearch, tavilyCrawl } from "@tavily/ai-sdk";
-import { generateText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { tavilySearch, tavilyCrawl } from '@tavily/ai-sdk';
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 // Search
 const result = await generateText({
-  model: openai("gpt-4"),
-  prompt: "What are the latest AI developments?",
+  model: openai('gpt-4'),
+  prompt: 'What are the latest AI developments?',
   tools: {
     tavilySearch: tavilySearch({
       maxResults: 5,
-      searchDepth: "advanced",
+      searchDepth: 'advanced',
     }),
   },
 });
 
 // Crawl
 const crawlResult = await generateText({
-  model: openai("gpt-4"),
-  prompt: "Crawl tavily.com and summarize their features",
+  model: openai('gpt-4'),
+  prompt: 'Crawl tavily.com and summarize their features',
   tools: {
     tavilyCrawl: tavilyCrawl({
       maxDepth: 2,
@@ -660,13 +664,13 @@ const crawlResult = await generateText({
 
 CrewAI provides built-in Tavily tools for multi-agent workflows.
 
-### Installation
+### Installation (2)
 
 ```bash
 pip install 'crewai[tools]'
 ```
 
-### Usage
+### Usage (2)
 
 ```python
 import os
@@ -702,16 +706,17 @@ result = crew.kickoff()
 
 Tavily integrates with popular no-code automation platforms:
 
-| Platform | Features | Best For |
-|----------|----------|----------|
-| **Zapier** | Search, Extract | CRM enrichment, automated research |
-| **Make** | Search, Extract | Complex workflows, multi-step automations |
-| **n8n** | Search, Extract, AI Agent tool | Self-hosted, AI agent workflows |
-| **Dify** | Search, Extract | No-code AI apps, chatflows |
-| **FlowiseAI** | Search | Visual LLM builders, RAG systems |
-| **Langflow** | Search, Extract | Visual agent building |
+| Platform      | Features                       | Best For                                  |
+| ------------- | ------------------------------ | ----------------------------------------- |
+| **Zapier**    | Search, Extract                | CRM enrichment, automated research        |
+| **Make**      | Search, Extract                | Complex workflows, multi-step automations |
+| **n8n**       | Search, Extract, AI Agent tool | Self-hosted, AI agent workflows           |
+| **Dify**      | Search, Extract                | No-code AI apps, chatflows                |
+| **FlowiseAI** | Search                         | Visual LLM builders, RAG systems          |
+| **Langflow**  | Search, Extract                | Visual agent building                     |
 
 ---
 
 ## Additional Integrations
+
 See the [full integrations documentation](https://docs.tavily.com/documentation/integrations) for complete guides.

@@ -37,9 +37,28 @@ import { ROUTE_TRANSITION_NAMES } from '../../design-system/motion/route-transit
 
 const icons = listIconDefinitions();
 const depthVariants = ['flat', 'raised', 'elevated', 'floating'] as const;
-const toneVariants = ['accent', 'security', 'cloud', 'infra', 'automation', 'compliance'] as const;
-const reducedMotionStrategies = ['none', 'minimal', 'static-depth', 'opacity-only'] as const;
-const buttonVariants = ['primary', 'secondary', 'ghost', 'security', 'cloud', 'danger'] as const;
+const toneVariants = [
+  'accent',
+  'security',
+  'cloud',
+  'infra',
+  'automation',
+  'compliance',
+] as const;
+const reducedMotionStrategies = [
+  'none',
+  'minimal',
+  'static-depth',
+  'opacity-only',
+] as const;
+const buttonVariants = [
+  'primary',
+  'secondary',
+  'ghost',
+  'security',
+  'cloud',
+  'danger',
+] as const;
 const buttonSizes = ['sm', 'md', 'lg'] as const;
 const badgeVariants = [
   'neutral',
@@ -57,14 +76,39 @@ const badgeVariants = [
 
 const breadcrumbItems = [
   { label: 'Home', href: '/', icon: 'command-center', iconLabel: 'Home' },
-  { label: 'Design System', href: '/design-system', icon: 'settings', iconLabel: 'Design system' },
+  {
+    label: 'Design System',
+    href: '/design-system',
+    icon: 'settings',
+    iconLabel: 'Design system',
+  },
   { label: 'Layout', current: true, icon: 'graph-link', iconLabel: 'Layout' },
 ] as const;
 
 const tabs = [
-  { id: 'overview', label: 'Overview', href: '/design-system', selected: true, icon: 'command-center', iconLabel: 'Overview' },
-  { id: 'layout', label: 'Layout', href: '/design-system', icon: 'graph-link', iconLabel: 'Layout' },
-  { id: 'nav', label: 'Navigation', href: '/design-system', icon: 'external-link', iconLabel: 'Navigation', disabled: true },
+  {
+    id: 'overview',
+    label: 'Overview',
+    href: '/design-system',
+    selected: true,
+    icon: 'command-center',
+    iconLabel: 'Overview',
+  },
+  {
+    id: 'layout',
+    label: 'Layout',
+    href: '/design-system',
+    icon: 'graph-link',
+    iconLabel: 'Layout',
+  },
+  {
+    id: 'nav',
+    label: 'Navigation',
+    href: '/design-system',
+    icon: 'external-link',
+    iconLabel: 'Navigation',
+    disabled: true,
+  },
 ] as const;
 
 const proofChainItems = [
@@ -87,19 +131,39 @@ const demoSeries = [
   { label: 'Demo series B', data: [1, 3, 2, 4] },
 ] as const;
 
-const demoSecurityLabels = ['AppSec', 'CloudSec', 'IAM', 'Detection', 'GRC'] as const;
-const demoSecurityDataset = [{ label: 'Demo coverage', data: [3, 4, 2, 3, 1] }] as const;
+const demoSecurityLabels = [
+  'AppSec',
+  'CloudSec',
+  'IAM',
+  'Detection',
+  'GRC',
+] as const;
+const demoSecurityDataset = [
+  { label: 'Demo coverage', data: [3, 4, 2, 3, 1] },
+] as const;
 
-const demoToolchainLabels = ['CI', 'IaC', 'K8s', 'Observability', 'Scanning'] as const;
-const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1] }] as const;
+const demoToolchainLabels = [
+  'CI',
+  'IaC',
+  'K8s',
+  'Observability',
+  'Scanning',
+] as const;
+const demoToolchainDataset = [
+  { label: 'Demo distribution', data: [4, 3, 2, 3, 1] },
+] as const;
 ---
 
-<BaseLayout title="Design System" description="Astro-native design library catalog (foundation only).">
+<BaseLayout
+  title="Design System"
+  description="Astro-native design library catalog (foundation only)."
+>
   <section class="container">
     <h1>Design System</h1>
     <p>
-      This route is a Phase 1 placeholder for the Astro-native component catalog. It is static HTML
-      and intentionally contains no Chart.js, GSAP, or Three.js usage yet.
+      This route is a Phase 1 placeholder for the Astro-native component
+      catalog. It is static HTML and intentionally contains no Chart.js, GSAP,
+      or Three.js usage yet.
     </p>
 
     <div class="card pad">
@@ -111,16 +175,23 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
         <li>Data display (cards, stats, timelines, project/knowledge cards)</li>
         <li>Feedback (tooltips, toasts, modals, drawers)</li>
         <li>Charts (Chart.js components with HTML fallbacks)</li>
-        <li>Three.js shells (spatial enhancement, never canvas-only content)</li>
-        <li>Transitions (route transitions and reveals with reduced-motion support)</li>
+        <li>
+          Three.js shells (spatial enhancement, never canvas-only content)
+        </li>
+        <li>
+          Transitions (route transitions and reveals with reduced-motion
+          support)
+        </li>
       </ul>
     </div>
 
     <div class="card pad">
       <h2>Retro Computer Aesthetic</h2>
       <p>
-        This design library targets a tactile, vintage workstation feel: CRT/control-room surfaces, physical depth,
-        and mechanical press/release behavior. Motion remains progressive enhancement and respects reduced-motion.
+        This design library targets a tactile, vintage workstation feel:
+        CRT/control-room surfaces, physical depth, and mechanical press/release
+        behavior. Motion remains progressive enhancement and respects
+        reduced-motion.
       </p>
 
       <h3>Keycap buttons</h3>
@@ -137,7 +208,11 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
         <UiButton variant="keycap" disabled icon="document">
           Disabled
         </UiButton>
-        <UiIconButton variant="keycap" icon="settings" iconLabel="Keycap settings" />
+        <UiIconButton
+          variant="keycap"
+          icon="settings"
+          iconLabel="Keycap settings"
+        />
       </UiCluster>
 
       <h3>CRT-style panels</h3>
@@ -151,33 +226,50 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
         description="Retro panel skin uses scanline/glass cues as a decorative layer."
       >
         <UiCluster>
-          <UiBadge retro variant="neutral" icon="document">label</UiBadge>
-          <UiBadge retro variant="cloud" icon="cloud-node">cloud</UiBadge>
-          <UiBadge retro variant="security" icon="shield-check">secure</UiBadge>
+          <UiBadge retro variant="neutral" icon="document">
+            label
+          </UiBadge>
+          <UiBadge retro variant="cloud" icon="cloud-node">
+            cloud
+          </UiBadge>
+          <UiBadge retro variant="security" icon="shield-check">
+            secure
+          </UiBadge>
         </UiCluster>
         <div slot="actions" class="panel-actions-demo">
-          <UiIconButton variant="keycap" icon="terminal" iconLabel="Open terminal" />
+          <UiIconButton
+            variant="keycap"
+            icon="terminal"
+            iconLabel="Open terminal"
+          />
         </div>
       </UiPanel>
 
       <p class="note">
-        Reduced-motion: hover/press states remain visible, but movement is suppressed via CSS under{' '}
-        <code>prefers-reduced-motion</code>.
+        Reduced-motion: hover/press states remain visible, but movement is
+        suppressed via CSS under <code>prefers-reduced-motion</code>.
       </p>
     </div>
 
     <div class="card pad">
       <h2>Icon Foundation</h2>
       <p>
-        Icons render as inline SVG from a local registry. Decorative icons are hidden from assistive technology;
-        semantic icons expose accessible names.
+        Icons render as inline SVG from a local registry. Decorative icons are
+        hidden from assistive technology; semantic icons expose accessible
+        names.
       </p>
 
       <h3>Available starter icons</h3>
       <div class="icon-grid" role="list">
         {icons.map((icon) => (
           <div class="icon-item" role="listitem">
-            <UiIcon name={icon.id} label={icon.label} depth="raised" motion="hover-lift" id={`ds-icon-${icon.id}`} />
+            <UiIcon
+              name={icon.id}
+              label={icon.label}
+              depth="raised"
+              motion="hover-lift"
+              id={`ds-icon-${icon.id}`}
+            />
             <div class="icon-meta">
               <div class="icon-id">{icon.id}</div>
               <div class="icon-label">{icon.label}</div>
@@ -202,7 +294,12 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
       <div class="example-row">
         {depthVariants.map((depth) => (
           <div class="example">
-            <UiIcon name="command-center" label={`Depth: ${depth}`} depth={depth} motion="hover-lift" />
+            <UiIcon
+              name="command-center"
+              label={`Depth: ${depth}`}
+              depth={depth}
+              motion="hover-lift"
+            />
             <span>{depth}</span>
           </div>
         ))}
@@ -212,7 +309,13 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
       <div class="example-row">
         {toneVariants.map((tone) => (
           <div class="example">
-            <UiIcon name="cloud-node" label={`Tone: ${tone}`} tone={tone} depth="raised" motion="hover-lift" />
+            <UiIcon
+              name="cloud-node"
+              label={`Tone: ${tone}`}
+              tone={tone}
+              depth="raised"
+              motion="hover-lift"
+            />
             <span>{tone}</span>
           </div>
         ))}
@@ -222,8 +325,9 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
     <div class="card pad">
       <h2>Motion Foundation</h2>
       <p>
-        Motion is progressive enhancement. No animation is required to understand content. Reduced-motion preferences
-        are respected, and all client-side animation helpers are designed to be cleanup-safe.
+        Motion is progressive enhancement. No animation is required to
+        understand content. Reduced-motion preferences are respected, and all
+        client-side animation helpers are designed to be cleanup-safe.
       </p>
 
       <h3>Interaction states</h3>
@@ -279,22 +383,30 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
       </div>
 
       <p class="note">
-        GSAP helpers exist for future components under <code>src/design-system/motion/gsap-actions.ts</code>. This
-        catalog does not run live GSAP demos yet.
+        GSAP helpers exist for future components under{' '}
+        <code>src/design-system/motion/gsap-actions.ts</code>. This catalog does
+        not run live GSAP demos yet.
       </p>
     </div>
 
     <div class="card pad">
       <h2>Core Primitives</h2>
       <p>
-        Primitives render useful, accessible HTML without JavaScript. Depth and motion are CSS-driven and respect
-        reduced-motion preferences.
+        Primitives render useful, accessible HTML without JavaScript. Depth and
+        motion are CSS-driven and respect reduced-motion preferences.
       </p>
 
       <h3>Surface</h3>
       <div class="example-row">
         {depthVariants.map((depth) => (
-          <UiSurface as="div" variant="surface" depth={depth} interactive motion="hover-lift" ariaLabel={`Surface ${depth}`}>
+          <UiSurface
+            as="div"
+            variant="surface"
+            depth={depth}
+            interactive
+            motion="hover-lift"
+            ariaLabel={`Surface ${depth}`}
+          >
             <div class="surface-demo">
               <UiIcon name="command-center" decorative />
               <span>Surface: {depth}</span>
@@ -314,14 +426,28 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
       >
         <p class="note">Body content lives in the default slot.</p>
         <div slot="actions" class="panel-actions-demo">
-          <UiButton size="sm" variant="ghost" icon="external-link" ariaLabel="Open panel docs">
+          <UiButton
+            size="sm"
+            variant="ghost"
+            icon="external-link"
+            ariaLabel="Open panel docs"
+          >
             Docs
           </UiButton>
-          <UiIconButton icon="settings" iconLabel="Panel settings" variant="ghost" size="sm" />
+          <UiIconButton
+            icon="settings"
+            iconLabel="Panel settings"
+            variant="ghost"
+            size="sm"
+          />
         </div>
         <div slot="footer" class="panel-footer-demo">
-          <UiBadge variant="cloud" icon="cloud-node">cloud</UiBadge>
-          <UiBadge variant="security" icon="shield-check">verified</UiBadge>
+          <UiBadge variant="cloud" icon="cloud-node">
+            cloud
+          </UiBadge>
+          <UiBadge variant="security" icon="shield-check">
+            verified
+          </UiBadge>
         </div>
       </UiPanel>
 
@@ -331,7 +457,11 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
           <h4>Variants</h4>
           <div class="button-grid">
             {buttonVariants.map((variant) => (
-              <UiButton variant={variant} icon="terminal" iconPosition="leading">
+              <UiButton
+                variant={variant}
+                icon="terminal"
+                iconPosition="leading"
+              >
                 {variant}
               </UiButton>
             ))}
@@ -341,7 +471,12 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
           <h4>Sizes</h4>
           <div class="button-grid">
             {buttonSizes.map((size) => (
-              <UiButton size={size} variant="secondary" icon="code-window" iconPosition="trailing">
+              <UiButton
+                size={size}
+                variant="secondary"
+                icon="code-window"
+                iconPosition="trailing"
+              >
                 size {size}
               </UiButton>
             ))}
@@ -356,7 +491,13 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
             <UiButton variant="secondary" disabled icon="terminal">
               disabled
             </UiButton>
-            <UiButton href="https://example.com" target="_blank" variant="ghost" icon="external-link" ariaLabel="Open external link">
+            <UiButton
+              href="https://example.com"
+              target="_blank"
+              variant="ghost"
+              icon="external-link"
+              ariaLabel="Open external link"
+            >
               external
             </UiButton>
           </div>
@@ -365,10 +506,30 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
 
       <h3>Icon buttons</h3>
       <div class="example-row">
-        <UiIconButton icon="settings" iconLabel="Settings" variant="secondary" />
-        <UiIconButton icon="external-link" ariaLabel="Open link" variant="ghost" href="https://example.com" target="_blank" />
-        <UiIconButton icon="shield-check" iconLabel="Security" variant="security" selected />
-        <UiIconButton icon="terminal" iconLabel="Terminal" variant="cloud" disabled />
+        <UiIconButton
+          icon="settings"
+          iconLabel="Settings"
+          variant="secondary"
+        />
+        <UiIconButton
+          icon="external-link"
+          ariaLabel="Open link"
+          variant="ghost"
+          href="https://example.com"
+          target="_blank"
+        />
+        <UiIconButton
+          icon="shield-check"
+          iconLabel="Security"
+          variant="security"
+          selected
+        />
+        <UiIconButton
+          icon="terminal"
+          iconLabel="Terminal"
+          variant="cloud"
+          disabled
+        />
       </div>
 
       <h3>Badges</h3>
@@ -384,24 +545,44 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
         <UiBadge variant="neutral" icon="code-window" disabled>
           disabled
         </UiBadge>
-        <UiBadge href="/design-system" variant="cloud" icon="external-link" ariaLabel="Design system link badge">
+        <UiBadge
+          href="/design-system"
+          variant="cloud"
+          icon="external-link"
+          ariaLabel="Design system link badge"
+        >
           link badge
         </UiBadge>
       </div>
 
       <h3>Accessibility notes</h3>
       <ul>
-        <li>Icon-only buttons require <code>ariaLabel</code> or <code>iconLabel</code>.</li>
-        <li>Disabled links use <code>aria-disabled</code> and are removed from tab order.</li>
-        <li>Decorative icons are hidden from assistive technology; button text remains the primary label.</li>
+        <li>
+          Icon-only buttons require <code>ariaLabel</code> or{' '}
+          <code>iconLabel</code>.
+        </li>
+        <li>
+          Disabled links use <code>aria-disabled</code> and are removed from tab
+          order.
+        </li>
+        <li>
+          Decorative icons are hidden from assistive technology; button text
+          remains the primary label.
+        </li>
       </ul>
 
-      <p class="note">Reduced-motion: hover/press transforms are disabled under <code>prefers-reduced-motion</code>.</p>
+      <p class="note">
+        Reduced-motion: hover/press transforms are disabled under{' '}
+        <code>prefers-reduced-motion</code>.
+      </p>
     </div>
 
     <div class="card pad">
       <h2>Layout Primitives</h2>
-      <p>Static-first layout building blocks: sections, grids, stacks, clusters, and control-room framing.</p>
+      <p>
+        Static-first layout building blocks: sections, grids, stacks, clusters,
+        and control-room framing.
+      </p>
 
       <h3>Section</h3>
       <UiSection
@@ -413,66 +594,137 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
         iconLabel="Layout"
       >
         <UiCluster>
-          <UiBadge variant="infra" icon="terminal">cluster</UiBadge>
-          <UiBadge variant="cloud" icon="cloud-node">static-first</UiBadge>
-          <UiBadge variant="security" icon="shield-check">a11y</UiBadge>
+          <UiBadge variant="infra" icon="terminal">
+            cluster
+          </UiBadge>
+          <UiBadge variant="cloud" icon="cloud-node">
+            static-first
+          </UiBadge>
+          <UiBadge variant="security" icon="shield-check">
+            a11y
+          </UiBadge>
         </UiCluster>
       </UiSection>
 
       <h3>Grid</h3>
       <UiGrid minItemWidth="220px" gap="var(--ds-space-4)">
-        <UiPanel title="Grid item A" description="Panels inside a responsive grid." icon="command-center" iconLabel="Panel" depth="flat" />
-        <UiPanel title="Grid item B" description="Auto-fit columns with min width." icon="cloud-node" iconLabel="Cloud" depth="flat" />
-        <UiPanel title="Grid item C" description="No JavaScript required." icon="shield-check" iconLabel="Security" depth="flat" />
+        <UiPanel
+          title="Grid item A"
+          description="Panels inside a responsive grid."
+          icon="command-center"
+          iconLabel="Panel"
+          depth="flat"
+        />
+        <UiPanel
+          title="Grid item B"
+          description="Auto-fit columns with min width."
+          icon="cloud-node"
+          iconLabel="Cloud"
+          depth="flat"
+        />
+        <UiPanel
+          title="Grid item C"
+          description="No JavaScript required."
+          icon="shield-check"
+          iconLabel="Security"
+          depth="flat"
+        />
       </UiGrid>
 
       <h3>Stack</h3>
       <UiStack gap="var(--ds-space-3)">
-        <UiBadge variant="neutral" icon="document">stack item</UiBadge>
-        <UiBadge variant="neutral" icon="document">stack item</UiBadge>
-        <UiBadge variant="neutral" icon="document">stack item</UiBadge>
+        <UiBadge variant="neutral" icon="document">
+          stack item
+        </UiBadge>
+        <UiBadge variant="neutral" icon="document">
+          stack item
+        </UiBadge>
+        <UiBadge variant="neutral" icon="document">
+          stack item
+        </UiBadge>
       </UiStack>
 
       <h3>Control room frame</h3>
       <UiControlRoomFrame showGrid showTelemetry={false} depth="raised">
-        <UiPanel title="Framed content" description="Decorative grid is aria-hidden." icon="settings" iconLabel="Frame" depth="flat">
-          <p class="note">Use this as a high-level visual wrapper without canvas/WebGL.</p>
+        <UiPanel
+          title="Framed content"
+          description="Decorative grid is aria-hidden."
+          icon="settings"
+          iconLabel="Frame"
+          depth="flat"
+        >
+          <p class="note">
+            Use this as a high-level visual wrapper without canvas/WebGL.
+          </p>
         </UiPanel>
       </UiControlRoomFrame>
     </div>
 
     <div class="card pad">
       <h2>Navigation Primitives</h2>
-      <p>Keyboard-friendly, static-first navigation patterns built from links and existing primitives.</p>
+      <p>
+        Keyboard-friendly, static-first navigation patterns built from links and
+        existing primitives.
+      </p>
 
       <h3>Nav items</h3>
       <UiCluster>
-        <UiNavItem href="/design-system" label="Design system" icon="settings" current />
+        <UiNavItem
+          href="/design-system"
+          label="Design system"
+          icon="settings"
+          current
+        />
         <UiNavItem href="/portfolio" label="Portfolio" icon="command-center" />
-        <UiNavItem href="https://example.com" label="External" icon="external-link" external />
-        <UiNavItem href="/design-system" label="Disabled" icon="shield-check" disabled />
+        <UiNavItem
+          href="https://example.com"
+          label="External"
+          icon="external-link"
+          external
+        />
+        <UiNavItem
+          href="/design-system"
+          label="Disabled"
+          icon="shield-check"
+          disabled
+        />
       </UiCluster>
 
       <h3>Breadcrumb</h3>
       <UiBreadcrumb items={breadcrumbItems} />
 
       <h3>Tabs (link navigation)</h3>
-      <UiTabs tabs={tabs} variant="compact" depth="flat" ariaLabel="Design system tabs" />
+      <UiTabs
+        tabs={tabs}
+        variant="compact"
+        depth="flat"
+        ariaLabel="Design system tabs"
+      />
 
       <h3>Accessibility notes</h3>
       <ul>
-        <li>Nav items expose current state via <code>aria-current="page"</code>.</li>
-        <li>Disabled items are removed from tab order via <code>tabindex="-1"</code>.</li>
-        <li>Breadcrumb separators are decorative (<code>aria-hidden</code>).</li>
-        <li>Tabs are links (not fake SPA tabs) to preserve static-first behavior.</li>
+        <li>
+          Nav items expose current state via <code>aria-current="page"</code>.
+        </li>
+        <li>
+          Disabled items are removed from tab order via{' '}
+          <code>tabindex="-1"</code>.
+        </li>
+        <li>
+          Breadcrumb separators are decorative (<code>aria-hidden</code>).
+        </li>
+        <li>
+          Tabs are links (not fake SPA tabs) to preserve static-first behavior.
+        </li>
       </ul>
     </div>
 
     <div class="card pad">
       <h2>Data Display</h2>
       <p>
-        Demo-only examples. No numeric metrics are invented here. These components are static-first and content-graph
-        aware via explicit props (and optional node props where useful).
+        Demo-only examples. No numeric metrics are invented here. These
+        components are static-first and content-graph aware via explicit props
+        (and optional node props where useful).
       </p>
 
       <h3>Generic card</h3>
@@ -487,13 +739,14 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
         iconLabel="Card"
         retro
       >
-        <UiMetaList
-          slot="meta"
-          items={metaItems}
-          retro
-        />
+        <UiMetaList slot="meta" items={metaItems} retro />
         <div slot="actions">
-          <UiButton size="sm" variant="keycap" icon="external-link" ariaLabel="Open portfolio demo link">
+          <UiButton
+            size="sm"
+            variant="keycap"
+            icon="external-link"
+            ariaLabel="Open portfolio demo link"
+          >
             Open
           </UiButton>
         </div>
@@ -514,9 +767,33 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
 
       <h3>Skill badges</h3>
       <UiCluster>
-        <UiSkillBadge label="Kubernetes" category="Skill" level="Verified (demo)" variant="cloud" icon="cloud-node" iconLabel="Cloud" retro />
-        <UiSkillBadge label="Threat modeling" category="Security" level="In progress (demo)" variant="security" icon="shield-check" iconLabel="Security" retro />
-        <UiSkillBadge label="CI/CD" category="Automation" variant="automation" icon="terminal" iconLabel="Terminal" href="/toolchain" retro />
+        <UiSkillBadge
+          label="Kubernetes"
+          category="Skill"
+          level="Verified (demo)"
+          variant="cloud"
+          icon="cloud-node"
+          iconLabel="Cloud"
+          retro
+        />
+        <UiSkillBadge
+          label="Threat modeling"
+          category="Security"
+          level="In progress (demo)"
+          variant="security"
+          icon="shield-check"
+          iconLabel="Security"
+          retro
+        />
+        <UiSkillBadge
+          label="CI/CD"
+          category="Automation"
+          variant="automation"
+          icon="terminal"
+          iconLabel="Terminal"
+          href="/toolchain"
+          retro
+        />
       </UiCluster>
 
       <h3>Timeline item</h3>
@@ -565,7 +842,11 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
       />
 
       <h3>Proof chain</h3>
-      <UiProofChain items={proofChainItems} ariaLabel="Demo proof chain" retro />
+      <UiProofChain
+        items={proofChainItems}
+        ariaLabel="Demo proof chain"
+        retro
+      />
 
       <h3>Metadata list</h3>
       <UiMetaList items={metaItems} retro />
@@ -574,8 +855,9 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
     <div class="card pad">
       <h2>Chart Foundation</h2>
       <p>
-        Demo-only chart examples. Values shown here are not real career metrics. Every chart exposes its data outside the
-        canvas through a table, and reduced-motion disables Chart.js animation.
+        Demo-only chart examples. Values shown here are not real career metrics.
+        Every chart exposes its data outside the canvas through a table, and
+        reduced-motion disables Chart.js animation.
       </p>
 
       <h3>Bar chart (demo)</h3>
@@ -656,8 +938,13 @@ const demoToolchainDataset = [{ label: 'Demo distribution', data: [4, 3, 2, 3, 1
 
       <h3>Accessibility notes</h3>
       <ul>
-        <li>Canvas is never the only information source; a fallback table is rendered.</li>
-        <li>Canvas uses an accessible name and references the table/summary.</li>
+        <li>
+          Canvas is never the only information source; a fallback table is
+          rendered.
+        </li>
+        <li>
+          Canvas uses an accessible name and references the table/summary.
+        </li>
         <li>Reduced motion disables Chart.js animations automatically.</li>
       </ul>
     </div>

@@ -20,6 +20,7 @@ This repository currently contains **two buildable static sites**:
    - CI artifact path (GitHub Pages): `./guillermo-lam-cv/dist`
 
 Spin/Fermyon packaging must decide which artifact is being deployed:
+
 - `dist/` (root Astro)
 - `guillermo-lam-cv/dist` (subproject Vite)
 
@@ -28,12 +29,14 @@ Spin/Fermyon packaging must decide which artifact is being deployed:
 ### Root Astro build
 
 Evidence:
+
 - Root build command: `astro build` ([package.json](file:///Users/guillermolammartin/Git/guillermolam/cv/package.json))
 - Static output: [astro.config.mjs](file:///Users/guillermolammartin/Git/guillermolam/cv/astro.config.mjs)
 - Node constraint: `>=22.12.0` ([package.json](file:///Users/guillermolammartin/Git/guillermolam/cv/package.json))
 - Package manager evidence: `pnpm-lock.yaml` exists
 
 Observed output (local `dist/` sample):
+
 - `dist/index.html`
 - `dist/about/index.html`
 - `dist/cv/index.html`
@@ -45,6 +48,7 @@ Observed output (local `dist/` sample):
 ### Subproject (GitHub Pages) build
 
 Evidence:
+
 - GitHub Actions build runs in `./guillermo-lam-cv` ([deploy-cv.yaml](file:///Users/guillermolammartin/Git/guillermolam/cv/.github/workflows/deploy-cv.yaml#L17-L43))
 - Toolchain: installs Bun (`oven-sh/setup-bun@v1`)
 - Commands:
@@ -57,6 +61,7 @@ Evidence:
 ### GitHub Pages (active)
 
 Evidence:
+
 - Workflow: [deploy-cv.yaml](file:///Users/guillermolammartin/Git/guillermolam/cv/.github/workflows/deploy-cv.yaml)
 - Deploys the **subproject** artifact `./guillermo-lam-cv/dist`, not root `dist/`.
 - Uses `actions/deploy-pages@v4`.
@@ -64,16 +69,19 @@ Evidence:
 ### Fermyon / Spin (not yet wired)
 
 Evidence:
+
 - No `spin.toml` exists in the repo (required to package a Spin app).
 - No Fermyon deploy workflow exists in `.github/workflows/`.
 
 ## Release workflow (current)
 
 GitHub Pages release:
+
 - Trigger: push to `main` (and workflow_dispatch)
 - “Release” == Pages deployment success
 
 For Fermyon/Spin, the release workflow is not implemented in this repo yet. Any plan must explicitly define:
+
 - how to version releases
 - how to validate the deployed URL
 - how to roll back
@@ -81,6 +89,7 @@ For Fermyon/Spin, the release workflow is not implemented in this repo yet. Any 
 ## Hosting assumptions
 
 Repo constraints:
+
 - Deployment targets include Fermyon + GitHub Pages; static hosting only (see deployment constraints rule under `.trae/rules/`).
 - No SSR should be introduced without approval.
 
@@ -93,9 +102,11 @@ Observed to be multi-page output (directory-per-route with `index.html`), which 
 ### Subproject Vite (`guillermo-lam-cv/dist`)
 
 Evidence of SPA-style routing expectation:
+
 - [vercel.json](file:///Users/guillermolammartin/Git/guillermolam/cv/vercel.json) rewrites all routes to `/index.html`.
 
 If the Vite subproject is deployed via Spin static files:
+
 - deep-link refresh behavior must be validated explicitly
 - do not assume Spin/Fermyon provides SPA fallbacks without docs evidence
 
@@ -110,4 +121,3 @@ If the Vite subproject is deployed via Spin static files:
    - Subproject CI uses Bun
 4. **CI guardrails**
    - Trunk checks may flag new workflows/manifests; changes must be compatible.
-

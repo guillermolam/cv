@@ -14,9 +14,14 @@ const initOne = (root: HTMLElement) => {
   if (links.length === 0) return;
 
   const current = (root.dataset['current'] ?? links[0]!.code) as Lang;
-  let previewIdx = Math.max(0, links.findIndex((l) => l.code === current));
+  let previewIdx = Math.max(
+    0,
+    links.findIndex((l) => l.code === current),
+  );
 
-  const items = Array.from(root.querySelectorAll<HTMLElement>('[data-lcd-item]'));
+  const items = Array.from(
+    root.querySelectorAll<HTMLElement>('[data-lcd-item]'),
+  );
   const knob = root.querySelector<HTMLElement>('[data-lang-knob]');
   const prevHit = root.querySelector<HTMLAnchorElement>('[data-dir="prev"]');
   const nextHit = root.querySelector<HTMLAnchorElement>('[data-dir="next"]');
@@ -29,7 +34,8 @@ const initOne = (root: HTMLElement) => {
     const prev = links[(previewIdx - 1 + links.length) % links.length]!;
     const next = links[(previewIdx + 1) % links.length]!;
     for (const item of items) {
-      item.dataset['active'] = item.dataset['lcdItem'] === active.code ? 'true' : '';
+      item.dataset['active'] =
+        item.dataset['lcdItem'] === active.code ? 'true' : '';
     }
     if (prevHit) {
       prevHit.href = prev.href;
@@ -110,7 +116,8 @@ const initOne = (root: HTMLElement) => {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       // atan2 returns angle in radians. Convert to degrees.
-      let angle = (Math.atan2(clientY - centerY, clientX - centerX) * 180) / Math.PI;
+      let angle =
+        (Math.atan2(clientY - centerY, clientX - centerX) * 180) / Math.PI;
       angle += 90; // Offset so 0 is at the top (12 o'clock)
       if (angle < 0) angle += 360;
       return angle % 360;

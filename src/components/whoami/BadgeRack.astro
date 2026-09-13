@@ -23,12 +23,30 @@ const domainBadgeIndex: Record<string, number> = {
 };
 
 const getBadgeIndex = (badge: Badge, index: number) =>
-  badge.imageIndex ?? (badge.domainId ? domainBadgeIndex[badge.domainId] : undefined) ?? (index % 15) + 1;
+  badge.imageIndex ??
+  (badge.domainId ? domainBadgeIndex[badge.domainId] : undefined) ??
+  (index % 15) + 1;
 
-const badgeVariants = ['code', 'layers', 'flow', 'cube', 'devops', 'shield'] as const;
-const getBadgeVariant = (badge: Badge, index: number) => badgeVariants[(getBadgeIndex(badge, index) - 1) % badgeVariants.length];
-const paletteVariants = ['cyan', 'emerald', 'amber', 'violet', 'steel', 'rose'] as const;
-const getBadgePalette = (badge: Badge, index: number) => paletteVariants[(getBadgeIndex(badge, index) - 1) % paletteVariants.length];
+const badgeVariants = [
+  'code',
+  'layers',
+  'flow',
+  'cube',
+  'devops',
+  'shield',
+] as const;
+const getBadgeVariant = (badge: Badge, index: number) =>
+  badgeVariants[(getBadgeIndex(badge, index) - 1) % badgeVariants.length];
+const paletteVariants = [
+  'cyan',
+  'emerald',
+  'amber',
+  'violet',
+  'steel',
+  'rose',
+] as const;
+const getBadgePalette = (badge: Badge, index: number) =>
+  paletteVariants[(getBadgeIndex(badge, index) - 1) % paletteVariants.length];
 
 const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
 ---
@@ -36,16 +54,25 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
 <section class="whoami-badges" aria-label={label}>
   <h2 class="whoami-badges-title">{label}</h2>
   {badges.length === 0 ? (
-    <p class="whoami-badges-empty">Badges will appear as more evidence is added to the content graph.</p>
+    <p class="whoami-badges-empty">
+      Badges will appear as more evidence is added to the content graph.
+    </p>
   ) : (
-    <div class="whoami-badge-gallery" data-badge-gallery data-active-index="0" id={carouselId}>
+    <div
+      class="whoami-badge-gallery"
+      data-badge-gallery
+      data-active-index="0"
+      id={carouselId}
+    >
       <div class="whoami-badge-stage" aria-live="polite">
         {badges.map((badge, index) => (
           <article
             class:list={['whoami-badge-slide', index === 0 && 'is-active']}
             data-badge-slide
             data-index={index}
-            aria-label={badge.detail ? `${badge.label}: ${badge.detail}` : badge.label}
+            aria-label={
+              badge.detail ? `${badge.label}: ${badge.detail}` : badge.label
+            }
           >
             <div class="whoami-badge-art" aria-hidden="true">
               <span class="whoami-badge-orbit"></span>
@@ -60,28 +87,73 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
                 focusable="false"
               >
                 <defs>
-                  <linearGradient id={`${carouselId}-metal-${index}`} x1="20" y1="12" x2="138" y2="168" gradientUnits="userSpaceOnUse">
+                  <linearGradient
+                    id={`${carouselId}-metal-${index}`}
+                    x1="20"
+                    y1="12"
+                    x2="138"
+                    y2="168"
+                    gradientUnits="userSpaceOnUse"
+                  >
                     <stop offset="0" stop-color="var(--badge-metal-a)" />
                     <stop offset="0.26" stop-color="var(--badge-metal-b)" />
                     <stop offset="0.48" stop-color="#fff7e6" />
                     <stop offset="0.72" stop-color="var(--badge-metal-c)" />
                     <stop offset="1" stop-color="var(--badge-metal-a)" />
                   </linearGradient>
-                  <linearGradient id={`${carouselId}-cyan-${index}`} x1="24" y1="24" x2="132" y2="144" gradientUnits="userSpaceOnUse">
+                  <linearGradient
+                    id={`${carouselId}-cyan-${index}`}
+                    x1="24"
+                    y1="24"
+                    x2="132"
+                    y2="144"
+                    gradientUnits="userSpaceOnUse"
+                  >
                     <stop offset="0" stop-color="var(--badge-accent-a)" />
                     <stop offset="0.52" stop-color="var(--badge-accent-b)" />
                     <stop offset="1" stop-color="var(--badge-accent-c)" />
                   </linearGradient>
-                  <radialGradient id={`${carouselId}-glass-${index}`} cx="50%" cy="24%" r="78%">
+                  <radialGradient
+                    id={`${carouselId}-glass-${index}`}
+                    cx="50%"
+                    cy="24%"
+                    r="78%"
+                  >
                     <stop offset="0" stop-color="#ffffff" stop-opacity="0.18" />
-                    <stop offset="0.42" stop-color="#071014" stop-opacity="0.72" />
+                    <stop
+                      offset="0.42"
+                      stop-color="#071014"
+                      stop-opacity="0.72"
+                    />
                     <stop offset="1" stop-color="#020609" stop-opacity="0.98" />
                   </radialGradient>
-                  <pattern id={`${carouselId}-texture-${index}`} width="10" height="10" patternUnits="userSpaceOnUse">
-                    <path d="M0 10 10 0M-2 2 2-2M8 12 12 8" stroke="currentColor" stroke-opacity="0.13" stroke-width="0.6" />
-                    <circle cx="2" cy="7" r="0.6" fill="currentColor" fill-opacity="0.22" />
+                  <pattern
+                    id={`${carouselId}-texture-${index}`}
+                    width="10"
+                    height="10"
+                    patternUnits="userSpaceOnUse"
+                  >
+                    <path
+                      d="M0 10 10 0M-2 2 2-2M8 12 12 8"
+                      stroke="currentColor"
+                      stroke-opacity="0.13"
+                      stroke-width="0.6"
+                    />
+                    <circle
+                      cx="2"
+                      cy="7"
+                      r="0.6"
+                      fill="currentColor"
+                      fill-opacity="0.22"
+                    />
                   </pattern>
-                  <filter id={`${carouselId}-glow-${index}`} x="-30%" y="-30%" width="160%" height="160%">
+                  <filter
+                    id={`${carouselId}-glow-${index}`}
+                    x="-30%"
+                    y="-30%"
+                    width="160%"
+                    height="160%"
+                  >
                     <feGaussianBlur stdDeviation="2.4" result="blur" />
                     <feMerge>
                       <feMergeNode in="blur" />
@@ -90,45 +162,116 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
                   </filter>
                 </defs>
 
-                <polygon class="badge-shell badge-shell--floor" points="80 18 144 55 144 128 80 180 16 128 16 55" />
-                <path class="badge-shell badge-shell--side badge-shell--side-left" d="M16 43 28 49v63l-12 6Z" />
-                <path class="badge-shell badge-shell--side badge-shell--side-right" d="M144 43 132 49v63l12 6Z" />
-                <path class="badge-shell badge-shell--side badge-shell--side-bottom" d="M16 118 28 112l52 46 52-46 12 6-64 56Z" />
-                <polygon class="badge-shell badge-shell--shadow" points="80 8 142 44 142 116 80 172 18 116 18 44" />
-                <polygon class="badge-shell badge-shell--metal" points="80 6 144 43 144 118 80 174 16 118 16 43" fill={`url(#${carouselId}-metal-${index})`} />
-                <polygon class="badge-shell badge-shell--inner" points="80 18 132 49 132 112 80 158 28 112 28 49" fill={`url(#${carouselId}-glass-${index})`} />
-                <polygon class="badge-texture" points="80 20 129 51 129 110 80 154 31 110 31 51" fill={`url(#${carouselId}-texture-${index})`} />
-                <polygon class="badge-shell badge-shell--rim" points="80 26 122 52 122 108 80 146 38 108 38 52" />
-                <g class="badge-circuit" stroke={`url(#${carouselId}-cyan-${index})`} filter={`url(#${carouselId}-glow-${index})`}>
+                <polygon
+                  class="badge-shell badge-shell--floor"
+                  points="80 18 144 55 144 128 80 180 16 128 16 55"
+                />
+                <path
+                  class="badge-shell badge-shell--side badge-shell--side-left"
+                  d="M16 43 28 49v63l-12 6Z"
+                />
+                <path
+                  class="badge-shell badge-shell--side badge-shell--side-right"
+                  d="M144 43 132 49v63l12 6Z"
+                />
+                <path
+                  class="badge-shell badge-shell--side badge-shell--side-bottom"
+                  d="M16 118 28 112l52 46 52-46 12 6-64 56Z"
+                />
+                <polygon
+                  class="badge-shell badge-shell--shadow"
+                  points="80 8 142 44 142 116 80 172 18 116 18 44"
+                />
+                <polygon
+                  class="badge-shell badge-shell--metal"
+                  points="80 6 144 43 144 118 80 174 16 118 16 43"
+                  fill={`url(#${carouselId}-metal-${index})`}
+                />
+                <polygon
+                  class="badge-shell badge-shell--inner"
+                  points="80 18 132 49 132 112 80 158 28 112 28 49"
+                  fill={`url(#${carouselId}-glass-${index})`}
+                />
+                <polygon
+                  class="badge-texture"
+                  points="80 20 129 51 129 110 80 154 31 110 31 51"
+                  fill={`url(#${carouselId}-texture-${index})`}
+                />
+                <polygon
+                  class="badge-shell badge-shell--rim"
+                  points="80 26 122 52 122 108 80 146 38 108 38 52"
+                />
+                <g
+                  class="badge-circuit"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                  filter={`url(#${carouselId}-glow-${index})`}
+                >
                   <path d="M80 24v14M80 142v14M32 80h14M114 80h14" />
                   <path d="M55 43h-14v18M105 43h14v18M55 118h-14v-18M105 118h14v-18" />
-                  <circle cx="80" cy="38" r="2.3" /><circle cx="80" cy="142" r="2.3" />
-                  <circle cx="46" cy="80" r="2.3" /><circle cx="114" cy="80" r="2.3" />
+                  <circle cx="80" cy="38" r="2.3" />
+                  <circle cx="80" cy="142" r="2.3" />
+                  <circle cx="46" cy="80" r="2.3" />
+                  <circle cx="114" cy="80" r="2.3" />
                 </g>
 
-                <g class="badge-icon badge-icon--code" stroke={`url(#${carouselId}-cyan-${index})`}>
+                <g
+                  class="badge-icon badge-icon--code"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                >
                   <path d="M68 65 50 82l18 17M92 65l18 17-18 17M84 58 75 106" />
                 </g>
-                <g class="badge-icon badge-icon--layers" stroke={`url(#${carouselId}-cyan-${index})`}>
-                  <path d="M80 54 112 72 80 90 48 72 80 54Z" fill="rgba(57,219,230,.28)" />
+                <g
+                  class="badge-icon badge-icon--layers"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                >
+                  <path
+                    d="M80 54 112 72 80 90 48 72 80 54Z"
+                    fill="rgba(57,219,230,.28)"
+                  />
                   <path d="M52 91 80 107 108 91M58 111 80 124 102 111" />
                 </g>
-                <g class="badge-icon badge-icon--flow" stroke={`url(#${carouselId}-cyan-${index})`}>
+                <g
+                  class="badge-icon badge-icon--flow"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                >
                   <rect x="68" y="50" width="24" height="18" rx="3" />
-                  <rect x="48" y="96" width="24" height="18" rx="3" stroke="#f0a33a" />
-                  <rect x="88" y="96" width="24" height="18" rx="3" stroke="#f0a33a" />
+                  <rect
+                    x="48"
+                    y="96"
+                    width="24"
+                    height="18"
+                    rx="3"
+                    stroke="#f0a33a"
+                  />
+                  <rect
+                    x="88"
+                    y="96"
+                    width="24"
+                    height="18"
+                    rx="3"
+                    stroke="#f0a33a"
+                  />
                   <path d="M80 68v15M60 96V83h40v13" />
                 </g>
-                <g class="badge-icon badge-icon--cube" stroke={`url(#${carouselId}-cyan-${index})`}>
+                <g
+                  class="badge-icon badge-icon--cube"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                >
                   <path d="M80 50 108 66v32l-28 18-28-18V66l28-16Z" />
                   <path d="M52 66 80 82l28-16M80 82v34" />
                   <path d="M66 59 94 75M94 59 66 75" opacity=".56" />
                 </g>
-                <g class="badge-icon badge-icon--devops" stroke={`url(#${carouselId}-cyan-${index})`}>
+                <g
+                  class="badge-icon badge-icon--devops"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                >
                   <path d="M65 73c8-18 39-15 39 8 0 23-31 26-48 8-17-18 5-45 29-32" />
                   <path d="M95 88c-8 18-39 15-39-8 0-23 31-26 48-8 17 18-5 45-29 32" />
                 </g>
-                <g class="badge-icon badge-icon--shield" stroke={`url(#${carouselId}-cyan-${index})`}>
+                <g
+                  class="badge-icon badge-icon--shield"
+                  stroke={`url(#${carouselId}-cyan-${index})`}
+                >
                   <path d="M80 48 112 60v25c0 25-16 39-32 47-16-8-32-22-32-47V60l32-12Z" />
                   <rect x="68" y="82" width="24" height="24" rx="4" />
                   <path d="M73 82v-8a7 7 0 0 1 14 0v8" />
@@ -140,16 +283,30 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
               <span class="whoami-badge-sheen"></span>
             </div>
             <div class="whoami-badge-copy">
-              <p class="whoami-badge-kicker">Specialization {String(index + 1).padStart(2, '0')}</p>
+              <p class="whoami-badge-kicker">
+                Specialization {String(index + 1).padStart(2, '0')}
+              </p>
               <h3>{badge.label}</h3>
-              {badge.detail && <p data-badge-detail data-text={badge.detail}>{badge.detail}</p>}
+              {badge.detail && (
+                <p data-badge-detail data-text={badge.detail}>
+                  {badge.detail}
+                </p>
+              )}
             </div>
           </article>
         ))}
       </div>
 
-      <div class="whoami-badge-controls" aria-label={`${label} carousel controls`}>
-        <button class="whoami-badge-nav" type="button" data-badge-prev aria-label="Previous badge">
+      <div
+        class="whoami-badge-controls"
+        aria-label={`${label} carousel controls`}
+      >
+        <button
+          class="whoami-badge-nav"
+          type="button"
+          data-badge-prev
+          aria-label="Previous badge"
+        >
           <span aria-hidden="true">‹</span>
         </button>
         <div class="whoami-badge-progress" aria-label={label}>
@@ -166,7 +323,12 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
             </button>
           ))}
         </div>
-        <button class="whoami-badge-nav" type="button" data-badge-next aria-label="Next badge">
+        <button
+          class="whoami-badge-nav"
+          type="button"
+          data-badge-next
+          aria-label="Next badge"
+        >
           <span aria-hidden="true">›</span>
         </button>
       </div>
@@ -177,7 +339,9 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
 <script>
   (() => {
     const galleries = document.querySelectorAll('[data-badge-gallery]');
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
 
     galleries.forEach((gallery) => {
       const slides = Array.from(gallery.querySelectorAll('[data-badge-slide]'));
@@ -206,7 +370,11 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
           dot.setAttribute('aria-current', isActive ? 'true' : 'false');
         });
 
-        gallery.dispatchEvent(new CustomEvent('badge-gallery:change', { detail: { index: activeIndex } }));
+        gallery.dispatchEvent(
+          new CustomEvent('badge-gallery:change', {
+            detail: { index: activeIndex },
+          }),
+        );
       };
 
       const stop = () => {
@@ -270,13 +438,26 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     position: relative;
     min-height: 188px;
     overflow: hidden;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 10%);
     border-radius: 20px;
     background:
-      radial-gradient(circle at 50% 24%, color-mix(in oklab, var(--color-accent), transparent 72%), transparent 36%),
-      radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.2), transparent 28%),
+      radial-gradient(
+        circle at 50% 24%,
+        color-mix(in oklab, var(--color-accent), transparent 72%),
+        transparent 36%
+      ),
+      radial-gradient(
+        circle at 78% 8%,
+        rgba(255, 255, 255, 0.2),
+        transparent 28%
+      ),
       linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 34%),
-      linear-gradient(155deg, color-mix(in oklab, var(--color-surface-2), black 4%), color-mix(in oklab, var(--color-surface-3), black 8%));
+      linear-gradient(
+        155deg,
+        color-mix(in oklab, var(--color-surface-2), black 4%),
+        color-mix(in oklab, var(--color-surface-3), black 8%)
+      );
     box-shadow:
       0 18px 42px var(--shadow-2),
       inset 0 1px 0 rgba(255, 255, 255, 0.18),
@@ -301,7 +482,13 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     inset: 1px;
     border-radius: inherit;
     background:
-      linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 18%, transparent 72%, rgba(255, 255, 255, 0.08)),
+      linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.22),
+        transparent 18%,
+        transparent 72%,
+        rgba(255, 255, 255, 0.08)
+      ),
       linear-gradient(180deg, transparent 58%, rgba(0, 0, 0, 0.22));
     opacity: 0.38;
     pointer-events: none;
@@ -347,7 +534,11 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     bottom: 2%;
     height: 16%;
     border-radius: 999px;
-    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.42), transparent 72%);
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.42),
+      transparent 72%
+    );
     transform: translateZ(-30px) rotateX(72deg);
     opacity: 0.72;
   }
@@ -359,8 +550,21 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     border: 1px solid color-mix(in oklab, var(--color-accent), transparent 48%);
     border-radius: 999px;
     background:
-      conic-gradient(from 210deg, transparent, color-mix(in oklab, var(--color-accent), white 12%), transparent 34%, transparent 74%, rgba(255, 255, 255, 0.24), transparent),
-      radial-gradient(circle, transparent 58%, rgba(255, 255, 255, 0.08) 59%, transparent 62%);
+      conic-gradient(
+        from 210deg,
+        transparent,
+        color-mix(in oklab, var(--color-accent), white 12%),
+        transparent 34%,
+        transparent 74%,
+        rgba(255, 255, 255, 0.24),
+        transparent
+      ),
+      radial-gradient(
+        circle,
+        transparent 58%,
+        rgba(255, 255, 255, 0.08) 59%,
+        transparent 62%
+      );
     box-shadow:
       0 0 30px color-mix(in oklab, var(--color-accent), transparent 66%),
       inset 0 0 28px color-mix(in oklab, var(--color-accent), transparent 78%);
@@ -379,17 +583,19 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     height: auto;
     overflow: visible;
     backface-visibility: hidden;
-    transform: translate3d(0, -4px, 48px) rotateX(10deg) rotateY(-18deg) rotateZ(-1deg);
+    transform: translate3d(0, -4px, 48px) rotateX(10deg) rotateY(-18deg)
+      rotateZ(-1deg);
     transform-style: preserve-3d;
-    filter:
-      drop-shadow(0 20px 24px color-mix(in oklab, #000, transparent 50%))
-      drop-shadow(0 0 18px color-mix(in oklab, var(--color-accent), transparent 66%))
+    filter: drop-shadow(0 20px 24px color-mix(in oklab, #000, transparent 50%))
+      drop-shadow(
+        0 0 18px color-mix(in oklab, var(--color-accent), transparent 66%)
+      )
       saturate(1.02);
     shape-rendering: geometricPrecision;
     text-rendering: geometricPrecision;
   }
 
-  .whoami-badge-image[data-palette="emerald"] {
+  .whoami-badge-image[data-palette='emerald'] {
     --badge-accent-a: #caffd8;
     --badge-accent-b: #49e88b;
     --badge-accent-c: #0c7b4d;
@@ -398,7 +604,7 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     --badge-metal-c: #3f5c4b;
   }
 
-  .whoami-badge-image[data-palette="amber"] {
+  .whoami-badge-image[data-palette='amber'] {
     --badge-accent-a: #ffe8a8;
     --badge-accent-b: #f5a93b;
     --badge-accent-c: #8d4a14;
@@ -407,7 +613,7 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     --badge-metal-c: #604224;
   }
 
-  .whoami-badge-image[data-palette="violet"] {
+  .whoami-badge-image[data-palette='violet'] {
     --badge-accent-a: #f0d2ff;
     --badge-accent-b: #b57cff;
     --badge-accent-c: #5b2fa0;
@@ -416,7 +622,7 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     --badge-metal-c: #51445f;
   }
 
-  .whoami-badge-image[data-palette="steel"] {
+  .whoami-badge-image[data-palette='steel'] {
     --badge-accent-a: #e8f2ff;
     --badge-accent-b: #7fb5ff;
     --badge-accent-c: #315c8f;
@@ -425,7 +631,7 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     --badge-metal-c: #48525d;
   }
 
-  .whoami-badge-image[data-palette="rose"] {
+  .whoami-badge-image[data-palette='rose'] {
     --badge-accent-a: #ffd6df;
     --badge-accent-b: #ff708f;
     --badge-accent-c: #9c2c48;
@@ -499,12 +705,12 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     stroke-width: 4;
   }
 
-  .whoami-badge-image[data-variant="code"] .badge-icon--code,
-  .whoami-badge-image[data-variant="layers"] .badge-icon--layers,
-  .whoami-badge-image[data-variant="flow"] .badge-icon--flow,
-  .whoami-badge-image[data-variant="cube"] .badge-icon--cube,
-  .whoami-badge-image[data-variant="devops"] .badge-icon--devops,
-  .whoami-badge-image[data-variant="shield"] .badge-icon--shield {
+  .whoami-badge-image[data-variant='code'] .badge-icon--code,
+  .whoami-badge-image[data-variant='layers'] .badge-icon--layers,
+  .whoami-badge-image[data-variant='flow'] .badge-icon--flow,
+  .whoami-badge-image[data-variant='cube'] .badge-icon--cube,
+  .whoami-badge-image[data-variant='devops'] .badge-icon--devops,
+  .whoami-badge-image[data-variant='shield'] .badge-icon--shield {
     display: block;
   }
 
@@ -538,8 +744,18 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
 
   .whoami-badge-reflection {
     background:
-      linear-gradient(120deg, rgba(255, 255, 255, 0.34), transparent 24%, transparent 64%, rgba(255, 255, 255, 0.16)),
-      radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.18), transparent 32%);
+      linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.34),
+        transparent 24%,
+        transparent 64%,
+        rgba(255, 255, 255, 0.16)
+      ),
+      radial-gradient(
+        circle at 50% 20%,
+        rgba(255, 255, 255, 0.18),
+        transparent 32%
+      );
     mix-blend-mode: screen;
     opacity: 0.34;
   }
@@ -553,7 +769,12 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     content: '';
     position: absolute;
     inset: -22% -60%;
-    background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.62), transparent 56%);
+    background: linear-gradient(
+      105deg,
+      transparent 42%,
+      rgba(255, 255, 255, 0.62),
+      transparent 56%
+    );
     transform: translateX(-72%) rotate(0.001deg);
   }
 
@@ -593,21 +814,24 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   }
 
   @keyframes badge-shine {
-    0%, 42% {
+    0%,
+    42% {
       transform: translateX(-72%) rotate(0.001deg);
       opacity: 0;
     }
     52% {
       opacity: 0.85;
     }
-    68%, 100% {
+    68%,
+    100% {
       transform: translateX(72%) rotate(0.001deg);
       opacity: 0;
     }
   }
 
   @keyframes badge-orbit-glow {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.72;
       filter: brightness(1);
     }
@@ -618,16 +842,20 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   }
 
   @keyframes badge-object-breathe {
-    0%, 100% {
-      transform: translate3d(0, -4px, 48px) rotateX(10deg) rotateY(-18deg) rotateZ(-1deg);
+    0%,
+    100% {
+      transform: translate3d(0, -4px, 48px) rotateX(10deg) rotateY(-18deg)
+        rotateZ(-1deg);
     }
     50% {
-      transform: translate3d(0, -10px, 62px) rotateX(16deg) rotateY(20deg) rotateZ(1.2deg);
+      transform: translate3d(0, -10px, 62px) rotateX(16deg) rotateY(20deg)
+        rotateZ(1.2deg);
     }
   }
 
   @keyframes badge-side-showcase {
-    0%, 100% {
+    0%,
+    100% {
       transform: rotateY(-22deg) rotateX(8deg) rotateZ(-1deg);
     }
     26% {
@@ -642,7 +870,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   }
 
   @keyframes badge-circuit-pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.62;
     }
     50% {
@@ -651,7 +880,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   }
 
   @keyframes badge-icon-float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0) scale(1);
     }
     50% {
@@ -660,7 +890,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   }
 
   @keyframes badge-glint {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.3;
       stroke-dasharray: 10 120;
       stroke-dashoffset: 0;
@@ -673,7 +904,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   }
 
   @keyframes badge-scanline {
-    0%, 58% {
+    0%,
+    58% {
       opacity: 0;
       stroke-dasharray: 18 150;
       stroke-dashoffset: 90;
@@ -681,7 +913,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     64% {
       opacity: 0.46;
     }
-    78%, 100% {
+    78%,
+    100% {
       opacity: 0;
       stroke-dasharray: 18 150;
       stroke-dashoffset: -90;
@@ -775,7 +1008,11 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
     inset: 0;
     transform: scaleX(0);
     transform-origin: left center;
-    background: linear-gradient(90deg, var(--color-accent), color-mix(in oklab, var(--color-accent), white 24%));
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      color-mix(in oklab, var(--color-accent), white 24%)
+    );
     transition: transform 680ms var(--ease-standard);
   }
 
@@ -792,7 +1029,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   .whoami-badge-dot:focus-visible {
     opacity: 1;
     border-color: color-mix(in oklab, var(--color-accent), transparent 36%);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
+    box-shadow: 0 0 0 1px
+      color-mix(in oklab, var(--color-accent), transparent 82%);
   }
 
   .whoami-badge-dot.is-active::before {
@@ -813,7 +1051,8 @@ const carouselId = `badge-gallery-${Math.random().toString(36).slice(2)}`;
   .whoami-badge-nav:focus-visible {
     transform: translateY(-1px);
     border-color: color-mix(in oklab, var(--color-accent), transparent 42%);
-    box-shadow: 0 0 18px color-mix(in oklab, var(--color-accent), transparent 78%);
+    box-shadow: 0 0 18px
+      color-mix(in oklab, var(--color-accent), transparent 78%);
   }
 
   .whoami-badges-empty {

@@ -4,6 +4,7 @@ A synthesised Web Audio engine for control-room SFX + ambient hum. Muted by
 default, persisted, decoupled from the UI.
 
 ## Files
+
 - `src/lib/audio/events.ts` — decoupled event bus. Components call
   `emitSfx('click'|'hover'|'key'|'boot')` → dispatches a `cr:sfx` CustomEvent.
   No audio dependency in UI components.
@@ -13,6 +14,7 @@ default, persisted, decoupled from the UI.
   `$audioMuted`.
 
 ## Rules
+
 - **Muted by default** — `$audioMuted` is a persistent atom defaulting to `true`.
 - **Autoplay-safe** — `AudioContext` is created lazily and `resume()`d on the
   first gesture.
@@ -22,7 +24,8 @@ default, persisted, decoupled from the UI.
   stops ambient.
 
 ## Flow
-```
+
+```text
 UI component → emitSfx(type) → window 'cr:sfx' → sfx engine → (if canPlay) play
 AudioToggle  → toggleAudio() → $audioMuted ↔ localStorage → engine ambient on/off
 ```

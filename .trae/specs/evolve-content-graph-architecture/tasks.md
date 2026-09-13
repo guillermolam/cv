@@ -68,7 +68,8 @@
   - [ ] Run `pnpm astro check`, `pnpm build`, `pnpm test`, `pnpm test:e2e`.
   - [ ] Verify reduced-motion and JS-disabled fallbacks preserve core content and navigation.
 
-# Task Dependencies
+## Task Dependencies
+
 - Task 3 depends on Task 0
 - Task 4 depends on Task 3
 - Task 6 depends on Task 3 and Task 4

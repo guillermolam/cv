@@ -5,11 +5,12 @@ lastUpdated: "2026-06-06"
 scope: "Implementation checklist (repo-specific). Subordinate to docs/spec.md + docs/architecture/* + docs/checklist.md."
 ---
 
-# Stack Checklist — Astro 6.4 + Control Room Repo
+## Stack Checklist — Astro 6.4 + Control Room Repo
 
 This checklist is a practical, repo-specific guardrail list for day-to-day implementation.
 
 If anything here conflicts with:
+
 - docs/spec.md
 - docs/architecture/*
 - docs/design/*
@@ -27,6 +28,7 @@ those documents win.
 ## 2) Integrations (Order + Scope)
 
 Baseline integrations in this repo:
+
 - UnoCSS: utility generation + icons (build-time).
 - MDX: content rendering (build-time).
 - Alpine: light client behavior (client-only).
@@ -35,6 +37,7 @@ Baseline integrations in this repo:
   - `apexcharts`: client-only; must be dynamically imported in Alpine/clients to avoid SSR.
 
 Rules:
+
 - Never import client-only libraries in `.astro` frontmatter.
 - Prefer dynamic import for heavy client libraries (Three.js, Chart.js, ApexCharts, GSAP, Anime.js, PixiJS).
 

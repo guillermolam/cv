@@ -13,30 +13,33 @@ export type Props = {
   rotateSpeed?: 'slow' | 'medium' | 'fast';
 };
 
-const { 
-  imageSrc, 
-  label, 
-  tooltip, 
+const {
+  imageSrc,
+  label,
+  tooltip,
   animation = 'zoom',
   class: className,
-  rotateSpeed = 'medium'
+  rotateSpeed = 'medium',
 } = Astro.props;
 
 const rotationDuration = {
   slow: '12s',
   medium: '8s',
-  fast: '4s'
+  fast: '4s',
 }[rotateSpeed];
 ---
 
-<div 
-  class:list={['graphic-badge', className]} 
-  data-graphic-badge 
+<div
+  class:list={['graphic-badge', className]}
+  data-graphic-badge
   data-animation={animation}
   aria-label={tooltip ? `${label}: ${tooltip}` : label}
 >
   <div class="badge-wrapper">
-    <div class="badge-container" style={`--rotation-duration: ${rotationDuration}`}>
+    <div
+      class="badge-container"
+      style={`--rotation-duration: ${rotationDuration}`}
+    >
       <img src={imageSrc} alt={label} class="badge-image" loading="lazy" />
       <div class="badge-glow"></div>
     </div>
@@ -62,7 +65,11 @@ const rotationDuration = {
     gap: 0.3rem;
     cursor: help;
     --tooltip-bg: color-mix(in oklab, var(--color-surface-2), transparent 2%);
-    --tooltip-border: color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    --tooltip-border: color-mix(
+      in oklab,
+      var(--color-border-strong),
+      transparent 10%
+    );
     --glow-color: var(--color-accent, #4cc9f0);
     min-width: 0;
     perspective: 360px;
@@ -74,12 +81,20 @@ const rotationDuration = {
     padding: 0.45rem;
     border-radius: 12px;
     background:
-      linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 42%),
-      radial-gradient(circle at 50% 16%, rgba(255,255,255,0.08) 0%, transparent 62%),
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0) 42%
+      ),
+      radial-gradient(
+        circle at 50% 16%,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 62%
+      ),
       color-mix(in oklab, var(--color-surface-3), transparent 16%);
     box-shadow:
       0 9px 18px color-mix(in oklab, #000, transparent 70%),
-      inset 0 1px 0 rgba(255,255,255,0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
       inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 20%);
     transform: rotateX(7deg);
     transform-style: preserve-3d;
@@ -151,14 +166,14 @@ const rotationDuration = {
     border: 1px solid var(--tooltip-border);
     border-radius: 14px;
     backdrop-filter: blur(16px);
-    box-shadow: 
-      0 15px 35px rgba(0,0,0,0.4),
-      inset 0 1px 1px rgba(255,255,255,0.1);
+    box-shadow:
+      0 15px 35px rgba(0, 0, 0, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
     z-index: 1000;
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
-    transition: 
+    transition:
       opacity var(--motion-standard) var(--ease-standard),
       transform var(--motion-standard) var(--ease-standard),
       visibility var(--motion-standard) var(--ease-standard);
@@ -203,7 +218,7 @@ const rotationDuration = {
     transform: rotateX(0deg) translateY(-2px);
     box-shadow:
       0 14px 26px color-mix(in oklab, #000, transparent 62%),
-      inset 0 1px 0 rgba(255,255,255,0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
       inset 0 -2px 0 color-mix(in oklab, var(--color-bg), transparent 20%);
   }
 
@@ -221,25 +236,25 @@ const rotationDuration = {
   }
 
   /* Animation Styles */
-  [data-animation="fade"] .badge-tooltip {
+  [data-animation='fade'] .badge-tooltip {
     transform: translateX(-50%) translateY(8px);
   }
-  .graphic-badge:hover[data-animation="fade"] .badge-tooltip {
+  .graphic-badge:hover[data-animation='fade'] .badge-tooltip {
     transform: translateX(-50%) translateY(0);
   }
 
-  [data-animation="slide"] .badge-tooltip {
+  [data-animation='slide'] .badge-tooltip {
     transform: translateX(-50%) translateY(15px);
   }
-  .graphic-badge:hover[data-animation="slide"] .badge-tooltip {
+  .graphic-badge:hover[data-animation='slide'] .badge-tooltip {
     transform: translateX(-50%) translateY(0);
   }
 
-  [data-animation="zoom"] .badge-tooltip {
+  [data-animation='zoom'] .badge-tooltip {
     transform: translateX(-50%) scale(0.8) translateY(12px);
     transform-origin: bottom center;
   }
-  .graphic-badge:hover[data-animation="zoom"] .badge-tooltip {
+  .graphic-badge:hover[data-animation='zoom'] .badge-tooltip {
     transform: translateX(-50%) scale(1) translateY(0);
   }
 

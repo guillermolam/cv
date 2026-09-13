@@ -10,9 +10,17 @@ export const ICON_TONES: readonly IconTone[] = [
   'compliance',
 ] as const;
 
-export const ICON_DEPTHS: readonly IconDepth[] = ['flat', 'raised', 'elevated', 'floating'] as const;
+export const ICON_DEPTHS: readonly IconDepth[] = [
+  'flat',
+  'raised',
+  'elevated',
+  'floating',
+] as const;
 
-export const ICON_MOTIONS: readonly IconMotion[] = ['none', 'hover-lift'] as const;
+export const ICON_MOTIONS: readonly IconMotion[] = [
+  'none',
+  'hover-lift',
+] as const;
 
 export const iconToneClass: Record<IconTone, string> = {
   neutral: 'ds-icon-tone-neutral',
@@ -37,4 +45,3 @@ export const iconMotionClass: Record<IconMotion, string> = {
 };
 
 export const reducedMotionSafeClassName = 'ds-icon-reduced-motion-safe';
-

@@ -1,6 +1,11 @@
 ---
 import UiChartShell from './UiChartShell.astro';
-import { createChartA11yIds, createChartSummary, createCanvasA11yAttributes, createFallbackRows } from '../../design-system/charts/chart-accessibility';
+import {
+  createChartA11yIds,
+  createChartSummary,
+  createCanvasA11yAttributes,
+  createFallbackRows,
+} from '../../design-system/charts/chart-accessibility';
 
 type Props = {
   id?: string;
@@ -11,7 +16,14 @@ type Props = {
   datasets: readonly { label: string; data: readonly number[] }[];
   variant?: 'default' | 'module';
   depth?: 'flat' | 'raised' | 'elevated' | 'floating';
-  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  tone?:
+    | 'neutral'
+    | 'accent'
+    | 'security'
+    | 'cloud'
+    | 'infra'
+    | 'automation'
+    | 'compliance';
   icon?: string;
   iconLabel?: string;
   motion?: 'none' | 'hover-lift';
@@ -41,12 +53,20 @@ const {
   showFallbackTable = true,
 } = Astro.props as Props;
 
-const baseId = id ?? `ui-doughnut-${(title ?? 'chart').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const baseId =
+  id ??
+  `ui-doughnut-${(title ?? 'chart').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 const a11y = createChartA11yIds(baseId);
-const summaryText = createChartSummary({ title, description, labels, datasets });
+const summaryText = createChartSummary({
+  title,
+  description,
+  labels,
+  datasets,
+});
 const fallbackRows = createFallbackRows(labels, datasets);
 
-const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+const safeJson = (value: unknown) =>
+  JSON.stringify(value).replace(/</g, '\\u003c');
 ---
 
 <UiChartShell
@@ -75,7 +95,12 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
     data-datasets={safeJson(datasets)}
     data-show-legend={showLegend ? 'true' : 'false'}
     data-show-tooltip={showTooltip ? 'true' : 'false'}
-    {...createCanvasA11yAttributes({ title, description, summaryId: a11y.summaryId, tableId: showFallbackTable ? a11y.tableId : undefined })}
+    {...createCanvasA11yAttributes({
+      title,
+      description,
+      summaryId: a11y.summaryId,
+      tableId: showFallbackTable ? a11y.tableId : undefined,
+    })}
   >
     Chart data is available in the table below.
   </canvas>
@@ -145,7 +170,10 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
         const theme = getChartTheme(root);
 
         const palette = theme.series;
-        const dataset0 = (datasets as any[])[0] ?? { label: 'Series', data: [] };
+        const dataset0 = (datasets as any[])[0] ?? {
+          label: 'Series',
+          data: [],
+        };
 
         const config = {
           type: 'doughnut',
@@ -156,8 +184,12 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
                 label: dataset0.label,
                 data: dataset0.data,
                 borderColor: theme.tooltipBorder,
-                backgroundColor: (labels as any[]).map((_, index) => withAlpha(palette[index % palette.length], 0.28)),
-                hoverBackgroundColor: (labels as any[]).map((_, index) => withAlpha(palette[index % palette.length], 0.36)),
+                backgroundColor: (labels as any[]).map((_, index) =>
+                  withAlpha(palette[index % palette.length], 0.28),
+                ),
+                hoverBackgroundColor: (labels as any[]).map((_, index) =>
+                  withAlpha(palette[index % palette.length], 0.36),
+                ),
                 borderWidth: 1,
               },
             ],
@@ -166,8 +198,16 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
-              legend: { display: Boolean(showLegend), labels: { color: theme.legendText } },
-              tooltip: { enabled: Boolean(showTooltip), backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, borderWidth: 1 },
+              legend: {
+                display: Boolean(showLegend),
+                labels: { color: theme.legendText },
+              },
+              tooltip: {
+                enabled: Boolean(showTooltip),
+                backgroundColor: theme.tooltipBg,
+                borderColor: theme.tooltipBorder,
+                borderWidth: 1,
+              },
             },
             cutout: '62%',
           },

@@ -55,7 +55,9 @@ const getIcon = (label: string) =>
       <span class="ui-icon i-ph-crosshair-duotone" aria-hidden="true"></span>
       Core profile
     </p>
-    <h2 class="whoami-stats-title" x-text="title()">Operator stats</h2>
+    <h2 class="whoami-stats-title" x-text="title()">
+      Operator stats
+    </h2>
   </header>
 
   {/* ════════ BIO view (default) — radar + competency bars ════════ */}
@@ -73,72 +75,70 @@ const getIcon = (label: string) =>
     </div>
 
     <ul class="stat-list" role="list" aria-label="Competency index">
-      {
-        axes.map((axis) => {
-          const icon = getIcon(axis.label);
-          const dot = confidenceDot[axis.confidence] ?? confidenceDot['low']!;
-          const pct = axis.score ?? 0;
-          const rowId = `stat-${axis.label.toLowerCase().replace(/\s+/g, '-')}`;
-          return (
-            <li class="stat-row" data-axis-id={rowId}>
-              <button
-                class="stat-row-btn"
-                type="button"
-                aria-expanded="false"
-                aria-controls={`${rowId}-evidence`}
-                x-on:click={`toggle('${rowId}')`}
-                x-bind:aria-expanded={`isOpen('${rowId}').toString()`}
-              >
-                <span class={`stat-icon ui-icon ${icon}`} aria-hidden="true" />
-                <span class="stat-label">{axis.label}</span>
-                <span class="stat-track" aria-hidden="true">
-                  <span class="stat-fill" style={`--pct: ${pct}%`} />
-                </span>
-                <span class="stat-score">
-                  {axis.score === null ? 'N/A' : `${axis.score}`}
-                </span>
-                <span
-                  class="stat-confidence"
-                  style={`--dot-color: ${dot.color}`}
-                  aria-label={`Confidence: ${dot.label}`}
-                />
-                <span
-                  class="stat-chevron ui-icon i-ph-caret-right"
-                  aria-hidden="true"
-                  x-bind:class={`{ 'stat-chevron-open': isOpen('${rowId}') }`}
-                />
-              </button>
+      {axes.map((axis) => {
+        const icon = getIcon(axis.label);
+        const dot = confidenceDot[axis.confidence] ?? confidenceDot['low']!;
+        const pct = axis.score ?? 0;
+        const rowId = `stat-${axis.label.toLowerCase().replace(/\s+/g, '-')}`;
+        return (
+          <li class="stat-row" data-axis-id={rowId}>
+            <button
+              class="stat-row-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls={`${rowId}-evidence`}
+              x-on:click={`toggle('${rowId}')`}
+              x-bind:aria-expanded={`isOpen('${rowId}').toString()`}
+            >
+              <span class={`stat-icon ui-icon ${icon}`} aria-hidden="true" />
+              <span class="stat-label">{axis.label}</span>
+              <span class="stat-track" aria-hidden="true">
+                <span class="stat-fill" style={`--pct: ${pct}%`} />
+              </span>
+              <span class="stat-score">
+                {axis.score === null ? 'N/A' : `${axis.score}`}
+              </span>
+              <span
+                class="stat-confidence"
+                style={`--dot-color: ${dot.color}`}
+                aria-label={`Confidence: ${dot.label}`}
+              />
+              <span
+                class="stat-chevron ui-icon i-ph-caret-right"
+                aria-hidden="true"
+                x-bind:class={`{ 'stat-chevron-open': isOpen('${rowId}') }`}
+              />
+            </button>
 
-              <div
-                id={`${rowId}-evidence`}
-                class="stat-evidence"
-                x-show={`isOpen('${rowId}')`}
-                x-transition:enter="stat-evidence-enter"
-                x-transition:enter-start="stat-evidence-enter-start"
-                x-transition:enter-end="stat-evidence-enter-end"
-                x-transition:leave="stat-evidence-leave"
-                x-transition:leave-start="stat-evidence-leave-start"
-                x-transition:leave-end="stat-evidence-leave-end"
-              >
-                <p class="stat-evidence-summary">{axis.evidenceSummary}</p>
-                {axis.evidenceSources.length > 0 && (
-                  <ul class="stat-evidence-sources">
-                    {axis.evidenceSources.map((s) => (
-                      <li>
-                        <span
-                          class="ui-icon i-ph-link-simple-duotone"
-                          aria-hidden="true"
-                        />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </li>
-          );
-        })
-      }
+            <div
+              id={`${rowId}-evidence`}
+              class="stat-evidence"
+              x-show={`isOpen('${rowId}')`}
+              x-transition:enter="stat-evidence-enter"
+              x-transition:enter-start="stat-evidence-enter-start"
+              x-transition:enter-end="stat-evidence-enter-end"
+              x-transition:leave="stat-evidence-leave"
+              x-transition:leave-start="stat-evidence-leave-start"
+              x-transition:leave-end="stat-evidence-leave-end"
+            >
+              <p class="stat-evidence-summary">{axis.evidenceSummary}</p>
+              {axis.evidenceSources.length > 0 && (
+                <ul class="stat-evidence-sources">
+                  {axis.evidenceSources.map((s) => (
+                    <li>
+                      <span
+                        class="ui-icon i-ph-link-simple-duotone"
+                        aria-hidden="true"
+                      />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        );
+      })}
     </ul>
 
     <p class="stat-footnote">
@@ -149,125 +149,115 @@ const getIcon = (label: string) =>
 
   {/* ════════ SKILLS ════════ */}
   <div class="core-view" x-show="is('skills')" style="display:none">
-    {
-      sections.skills.length === 0 ? (
-        <p class="core-empty">No skills modeled yet.</p>
-      ) : (
-        <ul class="core-list" role="list">
-          {sections.skills.map((s) => (
-            <li class="core-item">
-              <span
-                class="core-item-icon ui-icon i-ph-cpu-duotone"
-                aria-hidden="true"
-              />
-              <span class="core-item-name">{s.name}</span>
-              {s.categories.length > 0 && (
-                <span class="core-pills">
-                  {s.categories.map((c) => (
-                    <span class="core-pill">{c}</span>
-                  ))}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    {sections.skills.length === 0 ? (
+      <p class="core-empty">No skills modeled yet.</p>
+    ) : (
+      <ul class="core-list" role="list">
+        {sections.skills.map((s) => (
+          <li class="core-item">
+            <span
+              class="core-item-icon ui-icon i-ph-cpu-duotone"
+              aria-hidden="true"
+            />
+            <span class="core-item-name">{s.name}</span>
+            {s.categories.length > 0 && (
+              <span class="core-pills">
+                {s.categories.map((c) => (
+                  <span class="core-pill">{c}</span>
+                ))}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
   {/* ════════ CERTIFICATIONS ════════ */}
   <div class="core-view" x-show="is('certifications')" style="display:none">
-    {
-      sections.certifications.length === 0 ? (
-        <p class="core-empty">No certifications modeled yet.</p>
-      ) : (
-        <ul class="core-list" role="list">
-          {sections.certifications.map((c) => (
-            <li class="core-item">
-              <span
-                class="core-item-icon ui-icon i-ph-seal-check-duotone"
-                aria-hidden="true"
-              />
-              <span class="core-item-name">{c.name}</span>
-              <span class="core-item-meta">
-                {c.issuer} · {c.status}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    {sections.certifications.length === 0 ? (
+      <p class="core-empty">No certifications modeled yet.</p>
+    ) : (
+      <ul class="core-list" role="list">
+        {sections.certifications.map((c) => (
+          <li class="core-item">
+            <span
+              class="core-item-icon ui-icon i-ph-seal-check-duotone"
+              aria-hidden="true"
+            />
+            <span class="core-item-name">{c.name}</span>
+            <span class="core-item-meta">
+              {c.issuer} · {c.status}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
   {/* ════════ EDUCATION ════════ */}
   <div class="core-view" x-show="is('education')" style="display:none">
-    {
-      sections.education.length === 0 ? (
-        <p class="core-empty">No education modeled yet.</p>
-      ) : (
-        <ul class="core-list" role="list">
-          {sections.education.map((e) => (
-            <li class="core-item">
-              <span
-                class="core-item-icon ui-icon i-ph-graduation-cap-duotone"
-                aria-hidden="true"
-              />
-              <span class="core-item-name">{e.degree}</span>
-              <span class="core-item-meta">
-                {e.institution}
-                {e.field ? ` · ${e.field}` : ''}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    {sections.education.length === 0 ? (
+      <p class="core-empty">No education modeled yet.</p>
+    ) : (
+      <ul class="core-list" role="list">
+        {sections.education.map((e) => (
+          <li class="core-item">
+            <span
+              class="core-item-icon ui-icon i-ph-graduation-cap-duotone"
+              aria-hidden="true"
+            />
+            <span class="core-item-name">{e.degree}</span>
+            <span class="core-item-meta">
+              {e.institution}
+              {e.field ? ` · ${e.field}` : ''}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
   {/* ════════ LANGUAGES — proficiency bars + flags ════════ */}
   <div class="core-view" x-show="is('languages')" style="display:none">
-    {
-      sections.languages.length === 0 ? (
-        <p class="core-empty">No languages modeled yet.</p>
-      ) : (
-        <ul class="core-bars" role="list">
-          {sections.languages.map((l) => (
-            <li class="core-bar-row">
-              <CountryFlag region={l.flagRegion} class="core-bar-flag" />
-              <span class="core-bar-label">{l.name}</span>
-              <span class="core-bar-track" aria-hidden="true">
-                <span class="core-bar-fill" style={`--pct: ${l.pct}%`} />
-              </span>
-              <span class="core-bar-val">{l.level}</span>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    {sections.languages.length === 0 ? (
+      <p class="core-empty">No languages modeled yet.</p>
+    ) : (
+      <ul class="core-bars" role="list">
+        {sections.languages.map((l) => (
+          <li class="core-bar-row">
+            <CountryFlag region={l.flagRegion} class="core-bar-flag" />
+            <span class="core-bar-label">{l.name}</span>
+            <span class="core-bar-track" aria-hidden="true">
+              <span class="core-bar-fill" style={`--pct: ${l.pct}%`} />
+            </span>
+            <span class="core-bar-val">{l.level}</span>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
   {/* ════════ EXPERIENCE — timeline ════════ */}
   <div class="core-view" x-show="is('experience')" style="display:none">
-    {
-      sections.experience.length === 0 ? (
-        <p class="core-empty">No experience modeled yet.</p>
-      ) : (
-        <ul class="core-timeline" role="list">
-          {sections.experience.map((e) => (
-            <li class="core-tl-item">
-              <span class="core-tl-dot" aria-hidden="true" />
-              <div class="core-tl-body">
-                <p class="core-tl-role">{e.role}</p>
-                <p class="core-tl-meta">
-                  {e.company} · {e.start}
-                  {e.end ? ` — ${e.end}` : ''}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    {sections.experience.length === 0 ? (
+      <p class="core-empty">No experience modeled yet.</p>
+    ) : (
+      <ul class="core-timeline" role="list">
+        {sections.experience.map((e) => (
+          <li class="core-tl-item">
+            <span class="core-tl-dot" aria-hidden="true" />
+            <div class="core-tl-body">
+              <p class="core-tl-role">{e.role}</p>
+              <p class="core-tl-meta">
+                {e.company} · {e.start}
+                {e.end ? ` — ${e.end}` : ''}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 </section>
 

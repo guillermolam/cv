@@ -10,7 +10,11 @@ const disposeMaterial = (material: THREE.Material) => {
   const mat = material as THREE.Material & Record<string, unknown>;
   for (const key of Object.keys(mat)) {
     const value = mat[key];
-    if (value && typeof value === 'object' && 'isTexture' in (value as object)) {
+    if (
+      value &&
+      typeof value === 'object' &&
+      'isTexture' in (value as object)
+    ) {
       (value as THREE.Texture).dispose();
     }
   }
@@ -28,7 +32,10 @@ export function disposeObject(root: THREE.Object3D): void {
   });
 }
 
-export function disposeScene(scene: THREE.Scene, renderer: THREE.WebGLRenderer): void {
+export function disposeScene(
+  scene: THREE.Scene,
+  renderer: THREE.WebGLRenderer,
+): void {
   disposeObject(scene);
   scene.clear();
   renderer.dispose();

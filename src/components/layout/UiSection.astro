@@ -52,7 +52,13 @@ const effectiveLabelledBy = labelledBy ?? headerId;
   as={as}
   id={id}
   class={className}
-  variant={variant === 'panel' ? 'panel' : variant === 'surface' ? 'surface' : 'surface'}
+  variant={
+    variant === 'panel'
+      ? 'panel'
+      : variant === 'surface'
+        ? 'surface'
+        : 'surface'
+  }
   depth={variant === 'default' ? 'flat' : depth}
   interactive={false}
   selected={false}
@@ -69,7 +75,7 @@ const effectiveLabelledBy = labelledBy ?? headerId;
   }}
 >
   <div data-ui-section-inner>
-    {(eyebrow || title || description || icon || Astro.slots.has('header')) ? (
+    {eyebrow || title || description || icon || Astro.slots.has('header') ? (
       <div data-ui-section-header>
         {Astro.slots.has('header') ? (
           <slot name="header" />
@@ -77,12 +83,25 @@ const effectiveLabelledBy = labelledBy ?? headerId;
           <div>
             {eyebrow ? (
               <div data-ui-section-eyebrow>
-                {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+                {icon ? (
+                  <UiIcon
+                    name={icon}
+                    label={iconLabel}
+                    decorative={!iconLabel}
+                    depth="flat"
+                  />
+                ) : null}
                 <span>{eyebrow}</span>
               </div>
             ) : null}
-            {title ? <TitleTag id={headerId} data-ui-section-title>{title}</TitleTag> : null}
-            {description ? <p data-ui-section-description>{description}</p> : null}
+            {title ? (
+              <TitleTag id={headerId} data-ui-section-title>
+                {title}
+              </TitleTag>
+            ) : null}
+            {description ? (
+              <p data-ui-section-description>{description}</p>
+            ) : null}
           </div>
         )}
       </div>

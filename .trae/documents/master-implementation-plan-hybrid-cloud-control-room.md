@@ -1,19 +1,23 @@
 # Master Implementation Plan — Hybrid Cloud Control Room (guillermolam/cv)
 
 ## 1. Executive Summary
+
 - Build a premium, recruiter-friendly, immersive portfolio for Guillermo Lam called **Hybrid Cloud Control Room**.
 - Ship a **content-first Astro + TypeScript** experience where all essential content is semantic HTML and indexable; **motion is baseline** when it improves understanding; **Three.js is progressive enhancement** (spatial storytelling + navigation affordances, never the only way to access content).
 - Support **full i18n for EN/ES/FR/DE** across core pages (About, CV, Portfolio, Contact, Blog landing), with language-aware content and SEO (hreflang, canonicals).
 - Maintain **three deployment targets long-term**: Fermyon Cloud (Spin), Vercel, and GitHub Pages; keep CI safe (no secrets needed for PR validation).
 
 ## 2. Recommended Architecture
+
 ### 2.1 Runtime & Rendering
+
 - **Astro-first**: serverless/static output (`output: 'static'` already set in [astro.config.mjs](file:///Users/guillermolammartin/Git/guillermolam/cv/astro.config.mjs)).
 - **Progressive enhancement islands**: no framework by default; only add a client island for the 3D hero (vanilla Three.js).
 - **Non-WebGL fallback**: HTML/CSS hero + “Control Room” narrative always visible; 3D canvas enhances, never blocks.
 - **Reduced motion**: respects `prefers-reduced-motion`; animation becomes static/low-motion.
 
 ### 2.2 Information Architecture (IA)
+
 - Primary routes (language scoped):  
   - `/{lang}/` (Control Room landing)  
   - `/{lang}/about`  
@@ -29,6 +33,7 @@
   - `/` acts as an English default landing (or a light language chooser) and links to `/en/`, `/es/`, `/fr/`, `/de/`.
 
 ### 2.3 Content Model
+
 - Astro Content Collections under `src/content/**` as source of truth:
   - `profile` (single entry per lang)
   - `experience` (entries per lang; later support shared IDs + translated fields)
@@ -40,6 +45,7 @@
 - Preserve and reuse existing CV source material currently stored in `guillermo-lam-cv/src/parts/{lang}/**` as migration input.
 
 ### 2.4 Design System & UX Principles
+
 - Visual metaphor: **operations command room** with calm, premium, technical minimalism.
 - Avoid: SaaS dashboard clone, cloud console clone, cyberpunk HUD, crypto landing page aesthetics.
 - Motion is a product feature:
@@ -50,6 +56,7 @@
   - “Control Room” adds optional spatial navigation cues, not the only nav
 
 ### 2.5 Three.js Integration (Vanilla)
+
 - Isolated module boundary:
   - `src/components/hero3d/` for Three.js code and resources
   - `src/components/Hero3D.astro` wrapper for progressive enhancement
@@ -60,49 +67,62 @@
   - degrade on mobile and reduced motion
 
 ### 2.6 Deployment Targets (Long-term)
+
 - **Fermyon Cloud**: package `dist/` via Spin static file server component.
 - **Vercel**: deploy static output (`astro build`) as a static site.
 - **GitHub Pages**: build and publish `dist/`.
 - Existing repo currently contains legacy deployment assets for an older sub-project (see [deploy-cv.yaml](file:///Users/guillermolammartin/Git/guillermolam/cv/.github/workflows/deploy-cv.yaml) pointing to `./guillermo-lam-cv`). This must be refactored to the Astro root while preserving long-term multi-host support.
 
 ## 3. Agent Responsibility Matrix
+
 ### Portfolio Architect
+
 - Owns: IA, narrative, recruiter journey, content model decisions, scope control, milestone acceptance criteria.
 - Produces: IA doc, content taxonomy, case study templates, “Control Room” interaction spec (non-code).
 
 ### Visual Design Critic
+
 - Owns: design system guidance, typography/spacing hierarchy, premium look and cohesion between 3D + content.
 - Produces: design review notes, UI tokens guidance, polish backlog.
 
 ### Astro Portfolio Builder (astro-portfolio-implementation)
+
 - Owns: Astro routes, layouts, components, i18n routing skeleton, content collection wiring, SEO components, CSS scaffolding.
 - Must not: implement the full Three.js scene internals beyond integration boundaries.
 
 ### Three.js Cloud Control Room Developer (threejs-control-room)
+
 - Owns: Three.js scene implementation, progressive enhancement, fallback logic, reduced-motion and mobile behavior, cleanup and performance.
 - Must not: move unrelated Astro routes/content.
 
 ### CV Content Architect
+
 - Owns: migrating existing CV markdown into content collections, writing/cleaning recruiter-friendly copy, certifications, CV formats, case studies structure.
 - Must not: add new employers/roles/dates/metrics not present in source; mark uncertainties explicitly.
 
 ### LinkedIn Sync Assistant
+
 - Owns: manual-only LinkedIn sync documents and draft copy derived from portfolio content; no automation.
 
 ### QA & Performance Validator
+
 - Owns: build/check/test execution, accessibility smoke checks, WebGL fallback checks, mobile responsiveness checks, Playwright smoke suites.
 
 ### DevSecOps CI Builder
+
 - Owns: GitHub Actions CI, security scans (gitleaks/trivy/dependency audits), safe permissions, PR validation.
 - Also owns: aligning multi-host deploy workflows to new Astro root (except Fermyon-specific workflow).
 
 ### Fermyon Deploy Agent
+
 - Owns: Spin packaging, `spin.toml`, Fermyon Cloud deploy docs and workflow (token via secrets).
 
 ### PR Final Reviewer
+
 - Owns: final diff review, merge readiness, final command validation, PR title/body, follow-ups.
 
 ## 4. Dependency Graph
+
 ```mermaid
 flowchart TD
   P0[Phase 0: Discovery & Architecture] --> P1[Phase 1: Visual & Interaction Architecture]
@@ -123,7 +143,9 @@ flowchart TD
 ```
 
 ## 5. Phase Breakdown
+
 ### PHASE 0 — Project Discovery and Architecture
+
 - **Goal**: lock IA, content model, i18n strategy, and scope boundaries for “Hybrid Cloud Control Room”.
 - **Responsible agent**: portfolio-architect (lead), with input from visual-design-critic.
 - **Inputs**
@@ -143,6 +165,7 @@ flowchart TD
 - **Approval required**: Yes (explicit sign-off before Phase 2 implementation begins)
 
 ### PHASE 1 — Visual and Interaction Architecture
+
 - **Goal**: define design system + interaction spec for the Control Room feel without copying the inspiration site.
 - **Responsible agent**: visual-design-critic (lead), portfolio-architect (narrative constraints).
 - **Inputs**
@@ -160,6 +183,7 @@ flowchart TD
 - **Approval required**: Yes (sign-off before Three.js implementation)
 
 ### PHASE 2 — Astro Foundation
+
 - **Goal**: build the production-ready Astro app foundation: i18n routing, SEO, content collections, components, styling architecture.
 - **Responsible agent**: astro-portfolio-builder
 - **Inputs**
@@ -186,6 +210,7 @@ flowchart TD
 - **Approval required**: No (but publish a short review note after major routing change)
 
 ### PHASE 3 — ThreeJS Experience Implementation
+
 - **Goal**: implement the Hybrid Cloud Control Room 3D hero as progressive enhancement and optional navigation “layer”.
 - **Responsible agent**: threejs-cloud-control-room-developer
 - **Inputs**
@@ -209,6 +234,7 @@ flowchart TD
 - **Approval required**: Yes (explicit sign-off on motion + aesthetics before broader rollout)
 
 ### PHASE 4 — Content Architecture
+
 - **Goal**: migrate and normalize CV/portfolio/certifications/case studies into structured collections with i18n support.
 - **Responsible agent**: cv-content-architect (lead); linkedin-sync-assistant (sync artifacts).
 - **Inputs**
@@ -230,6 +256,7 @@ flowchart TD
 - **Approval required**: Yes (content accuracy sign-off)
 
 ### PHASE 5 — QA and Performance
+
 - **Goal**: harden UX, accessibility, performance, and regression coverage.
 - **Responsible agent**: qa-performance-validator
 - **Inputs**
@@ -252,6 +279,7 @@ flowchart TD
 - **Approval required**: No (but produce a QA report summary)
 
 ### PHASE 6 — CI/CD and Security
+
 - **Goal**: safe, strict CI for PRs + multi-host deployments without secret leakage.
 - **Responsible agent**: devsecops-ci-builder
 - **Inputs**
@@ -275,6 +303,7 @@ flowchart TD
 - **Approval required**: Yes (security posture sign-off)
 
 ### PHASE 7 — Fermyon Deployment
+
 - **Goal**: package Astro static output into Spin and deploy to Fermyon Cloud.
 - **Responsible agent**: fermyon-deploy-agent
 - **Inputs**
@@ -295,6 +324,7 @@ flowchart TD
 - **Approval required**: Yes (before enabling any automated deployments)
 
 ### PHASE 8 — Final Review
+
 - **Goal**: ensure merge readiness and “world-class polish” checklist completion.
 - **Responsible agent**: pr-final-reviewer
 - **Inputs**
@@ -311,6 +341,7 @@ flowchart TD
 - **Approval required**: Yes (final merge/release sign-off)
 
 ## 6. Concurrency Opportunities
+
 - Phase 0 and Phase 1 can proceed in parallel once basic scope is agreed:
   - portfolio-architect writes IA/content model docs while visual-design-critic drafts design system.
 - After Phase 2 starts, allow parallel work with strict file boundaries:
@@ -319,12 +350,14 @@ flowchart TD
 - QA can start “incremental smoke” during Phase 2/3, but full QA gate is Phase 5.
 
 ### Do-Not-Edit-Simultaneously Rules (File Ownership Locks)
+
 - `src/pages/**`, `src/layouts/**`: owned by astro-portfolio-builder (others propose changes via notes).
 - `src/components/hero3d/**`: owned by threejs-cloud-control-room-developer.
 - `src/content/**`, `public/cv/**`: owned by cv-content-architect (builder consumes via rendering).
 - `.github/workflows/**`: owned by devsecops-ci-builder (except Fermyon workflow, owned by fermyon-deploy-agent).
 
 ## 7. Validation Gates
+
 - **Gate A (Baseline health, before major refactors)**:
   - `pnpm run check && pnpm run build && pnpm run test && pnpm run test:e2e`
 - **Gate B (After i18n routing restructure)**:
@@ -337,6 +370,7 @@ flowchart TD
   - CI green on PR without secrets; deployment workflows only run on approved triggers
 
 ## 8. Major Risks
+
 - i18n scope creep (full translated blog/case studies can balloon): mitigate with EN-first long-form, translated summaries first.
 - Three.js performance regression on mobile: mitigate with strict budgets, lazy-load, reduced detail, and hard fallback.
 - Recruiter readability lost to immersion: mitigate with conventional nav + clear CTAs + content-first layout.
@@ -344,6 +378,7 @@ flowchart TD
 - Legacy sub-project confusion (`guillermo-lam-cv/`): mitigate by clearly documenting it as “legacy source archive” or moving to `docs/archive/` in a later clean-up milestone.
 
 ## 9. Definition of Done
+
 - Core navigation and content exist in EN/ES/FR/DE for About/CV/Portfolio/Contact (Blog landing included; blog posts optional).
 - Non-WebGL fallback is fully functional; no essential info requires canvas.
 - `prefers-reduced-motion` is respected; motion is tasteful and optional.
@@ -357,6 +392,7 @@ flowchart TD
 - Repository documentation explains the Hybrid Cloud Control Room concept and maintenance workflow.
 
 ## 10. Exact Command to Execute Next
+
 ```bash
 pnpm install && pnpm run check && pnpm run test && pnpm run test:e2e
 ```

@@ -17,15 +17,25 @@ export type HeerichPreset = 'monolith' | 'stationStack' | 'badgeCube';
 const shaded = (accent = false) => {
   const base = accent ? 'var(--color-cta)' : 'var(--color-surface-2)';
   return {
-    default: { fill: base, stroke: 'var(--color-border-strong)', strokeWidth: 0.5 },
-    top: { fill: accent ? 'var(--color-link-hover)' : 'var(--color-surface-3)' },
+    default: {
+      fill: base,
+      stroke: 'var(--color-border-strong)',
+      strokeWidth: 0.5,
+    },
+    top: {
+      fill: accent ? 'var(--color-link-hover)' : 'var(--color-surface-3)',
+    },
     left: { fill: `color-mix(in oklab, ${base}, black 14%)` },
     right: { fill: `color-mix(in oklab, ${base}, black 30%)` },
     front: { fill: base },
   };
 };
 
-const defaultCamera: CameraOptions = { type: 'oblique', angle: 45, distance: 15 };
+const defaultCamera: CameraOptions = {
+  type: 'oblique',
+  angle: 45,
+  distance: 15,
+};
 
 /** Build a scene by preset name and return the configured Heerich instance. */
 export function buildScene(
@@ -40,23 +50,53 @@ export function buildScene(
   switch (preset) {
     case 'monolith': {
       // A control-room obelisk: a tall slab with a carved notch + accent cap.
-      h.addGeometry({ type: 'box', position: [0, 0, 0], size: [3, 6, 3], style: shaded() });
+      h.addGeometry({
+        type: 'box',
+        position: [0, 0, 0],
+        size: [3, 6, 3],
+        style: shaded(),
+      });
       // accent cap
-      h.addGeometry({ type: 'box', position: [0, 6, 0], size: [3, 1, 3], style: shaded(true) });
+      h.addGeometry({
+        type: 'box',
+        position: [0, 6, 0],
+        size: [3, 1, 3],
+        style: shaded(true),
+      });
       // carved notch (CSG subtract)
       h.removeGeometry({ type: 'box', position: [1, 2, 1], size: [2, 2, 2] });
       break;
     }
     case 'stationStack': {
       // Stacked platform blocks — a topology tower.
-      h.addGeometry({ type: 'box', position: [0, 0, 0], size: [5, 1, 5], style: shaded() });
-      h.addGeometry({ type: 'box', position: [1, 1, 1], size: [3, 1, 3], style: shaded() });
-      h.addGeometry({ type: 'box', position: [2, 2, 2], size: [1, 1, 1], style: shaded(true) });
+      h.addGeometry({
+        type: 'box',
+        position: [0, 0, 0],
+        size: [5, 1, 5],
+        style: shaded(),
+      });
+      h.addGeometry({
+        type: 'box',
+        position: [1, 1, 1],
+        size: [3, 1, 3],
+        style: shaded(),
+      });
+      h.addGeometry({
+        type: 'box',
+        position: [2, 2, 2],
+        size: [1, 1, 1],
+        style: shaded(true),
+      });
       break;
     }
     case 'badgeCube': {
       // A beveled accent cube for badges.
-      h.addGeometry({ type: 'box', position: [0, 0, 0], size: [3, 3, 3], style: shaded(true) });
+      h.addGeometry({
+        type: 'box',
+        position: [0, 0, 0],
+        size: [3, 3, 3],
+        style: shaded(true),
+      });
       h.removeGeometry({ type: 'box', position: [0, 0, 0], size: [1, 1, 1] });
       h.removeGeometry({ type: 'box', position: [2, 2, 2], size: [1, 1, 1] });
       break;

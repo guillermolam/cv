@@ -32,7 +32,12 @@ export function setActiveSection(id: SectionId) {
 // ─── Language ──────────────────────────────────────────────────────────────
 const detectLang = (): Lang => {
   if (typeof window === 'undefined') return DEFAULT_LANG;
-  const seg = window.location.pathname.split('/').filter(Boolean)[0];
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const pathname = window.location.pathname;
+  const localPath = pathname.startsWith(`${base}/`)
+    ? pathname.slice(base.length)
+    : pathname;
+  const seg = localPath.split('/').filter(Boolean)[0];
   return seg && isLang(seg) ? seg : DEFAULT_LANG;
 };
 
@@ -42,7 +47,8 @@ export const $lang = atom<Lang>(detectLang());
 export function cycleLang(direction: 1 | -1) {
   const current = $lang.get();
   const idx = SUPPORTED_LANGS.indexOf(current);
-  const next = (idx + direction + SUPPORTED_LANGS.length) % SUPPORTED_LANGS.length;
+  const next =
+    (idx + direction + SUPPORTED_LANGS.length) % SUPPORTED_LANGS.length;
   $lang.set(SUPPORTED_LANGS[next] as Lang);
 }
 
@@ -82,7 +88,8 @@ export function initCapabilities() {
   mq.addEventListener?.('change', (e) => $reducedMotion.set(e.matches));
 
   // honor an explicit ?no3d=1 opt-out
-  const noWebgl = new URLSearchParams(window.location.search).get('no3d') === '1';
+  const noWebgl =
+    new URLSearchParams(window.location.search).get('no3d') === '1';
 
   let supported = false;
   if (!noWebgl) {

@@ -13,7 +13,9 @@ metadata:
 # Astro Portfolio Implementation
 
 ## Activation Scope
+
 Use this skill when the user intent is to implement or modify Astro-specific portfolio functionality:
+
 - Build Astro page or route (`src/pages/**`)
 - Implement Astro component or layout (`src/components/**`, `src/layouts/**`)
 - Add or adjust Astro islands/hydration strategy (only when necessary)
@@ -24,6 +26,7 @@ Use this skill when the user intent is to implement or modify Astro-specific por
 - Validate build output and static hosting assumptions
 
 Do not activate for:
+
 - Copywriting, recruiter messaging, portfolio narrative strategy
 - Governance decisions, plan/spec authoring, agent routing
 - Spin/Fermyon deployment workflows
@@ -31,16 +34,20 @@ Do not activate for:
 - Three.js scene implementation or creative direction
 
 ## Required Inputs
+
 Minimum:
+
 - Requested change and target area (route/component/layout)
 - Expected behavior and acceptance criteria (or confirm missing)
 - Constraints (content-first, reduced motion, a11y, SEO, performance, recruiter fast path)
 
 If debugging:
+
 - Exact failing command output
 - Steps to reproduce
 
 ## Workflow (Implementation Loop)
+
 1) Classify request (page/route, component/layout, island, collections, SEO/a11y, performance, validation).
 2) Inspect local project state first (package.json, astro config, src structure, existing patterns).
 3) Load only the reference(s) needed for this request (see Reference Loading).
@@ -54,7 +61,9 @@ If debugging:
 9) Report results using the Output Contract.
 
 ## Decision Tree
+
 If the request implies:
+
 - Architecture conflict (SSR introduction, essential content gated behind JS/islands, IA/content-model changes) → STOP and route to portfolio-delivery-governance.
 - Content strategy or recruiter messaging request → route to portfolio-content-storytelling.
 - Three.js scene/visual WebGL work → route to threejs-control-room.
@@ -62,17 +71,21 @@ If the request implies:
 - Pure design critique/polish request → route to visual-design-critic.
 
 If Astro API/config uncertainty exists:
+
 - Inspect local project usage and version.
 - Consult `references/astro-docs-freshness.md`.
 - Fetch official Astro docs (MCP Astro docs first; web only if needed).
 - Then implement.
 
 If validation commands are unclear:
+
 - Infer from `package.json` scripts (`pnpm run check/build/test`).
 - Report any uncertainty explicitly; do not invent commands.
 
 ## Stop Conditions
+
 Stop implementation and escalate when:
+
 - The change requires altering IA/content model (not just implementing existing IA).
 - The change requires architecture redesign or violates project constraints in docs/spec.md.
 - The change requires Three.js scene changes beyond Astro integration boundaries.
@@ -80,7 +93,9 @@ Stop implementation and escalate when:
 - Validation strategy is missing for risky changes (routing, SEO, hydration, collections).
 
 ## Reference Loading
+
 Load only what you need:
+
 - Project conventions → `references/astro-project-conventions.md`
 - Routing/pages concerns → `references/astro-routing-and-pages.md`
 - Components/layouts/islands → `references/astro-components-and-islands.md`
@@ -91,13 +106,16 @@ Load only what you need:
 - Docs freshness / verification rules → `references/astro-docs-freshness.md`
 
 ## Available Scripts
+
 - `scripts/validate-astro-project.mjs` — Validates repository structure and Astro presence (read-only).
 - `scripts/check-static-output.mjs` — Validates `dist/` static output (read-only).
 
 Run from the skill root.
 
 ## Validation Gates
+
 Pass all applicable gates for the change:
+
 - Architecture alignment (content-first + progressive enhancement; no essential content hidden behind JS/WebGL)
 - Design alignment (do not invent a new visual system; follow project tokens/patterns)
 - Routing correctness (links resolve; no broken routes)
@@ -112,7 +130,9 @@ Pass all applicable gates for the change:
 - Docs freshness (when version-sensitive APIs were involved, record what was verified)
 
 ## Definition of Done
+
 Implementation is done only when:
+
 - Validation gates pass for the affected area.
 - Scripts pass, or failures are explicitly documented with risk and follow-up.
 - Any uncertain Astro APIs/config were verified against official docs.
@@ -121,7 +141,9 @@ Implementation is done only when:
 - No ownership boundary is violated.
 
 ## Output Contract
+
 Every run must produce:
+
 - Affected files (relative paths)
 - Implementation summary (what changed and why)
 - References loaded (which `references/*.md` were used)
@@ -135,6 +157,8 @@ Every run must produce:
 - Follow-up actions (if any)
 
 ## Evals
+
 Use:
+
 - `evals/trigger-evals.json` to test description triggering precision.
 - `evals/output-evals.json` to test output quality expectations (page/component/island/SEO/a11y/perf).

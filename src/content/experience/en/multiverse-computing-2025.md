@@ -21,11 +21,62 @@ highlights:
   - Conduct Kali-Linux-based purple-team assessments covering WAF, Kubernetes RBAC, SSRF, container boundaries, and cloud metadata exploitation
   - Manage zero-trust access via Teleport (K8s/SSH), Twingate (network segmentation), and Bitwarden secrets with automated key-rotation workflows
   - Integrate Grafana Cloud, BetterStack, Prometheus, and Hunters SIEM for unified observability and threat-detection across ML training clusters
-categoryIds: [devsecops, kubernetes-platform, cloud-security, supply-chain-security, ai-security, secops]
-toolIds: [kubernetes, terraform, terramate, spacelift, argocd, helm, karpenter, istio, external-secrets, aws, grafana, prometheus, betterstack, hunters-siem, teleport, twingate, drata, aikido, trivy, grype, syft, cosign, checkov, gitlab-ci, opa, kubescape, falco]
-skillIds: [devsecops, kubernetes-platform-engineering, cloud-security, software-supply-chain-security, detection-engineering]
+categoryIds:
+  [
+    devsecops,
+    kubernetes-platform,
+    cloud-security,
+    supply-chain-security,
+    ai-security,
+    secops,
+  ]
+toolIds:
+  [
+    kubernetes,
+    terraform,
+    terramate,
+    spacelift,
+    argocd,
+    helm,
+    karpenter,
+    istio,
+    external-secrets,
+    aws,
+    grafana,
+    prometheus,
+    betterstack,
+    hunters-siem,
+    teleport,
+    twingate,
+    drata,
+    aikido,
+    trivy,
+    grype,
+    syft,
+    cosign,
+    checkov,
+    gitlab-ci,
+    opa,
+    kubescape,
+    falco,
+  ]
+skillIds:
+  [
+    devsecops,
+    kubernetes-platform-engineering,
+    cloud-security,
+    software-supply-chain-security,
+    detection-engineering,
+  ]
 security:
-  domainIds: [devsecops, cloud-security, kubernetes-security, supply-chain-security, ai-security]
+  domainIds:
+    [
+      devsecops,
+      cloud-security,
+      kubernetes-security,
+      supply-chain-security,
+      ai-security,
+    ]
   frameworkIds: [iso-27001, soc2, nis2, dora]
 visibility: public
 ---

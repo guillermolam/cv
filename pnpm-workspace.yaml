@@ -4,3 +4,16 @@ allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
   - astro@6.4.4
+  - apexcharts@7.3.0
+# Astro's checker currently requires TypeScript's programmatic API, which the
+# TypeScript 7 preview does not provide. Keep the latest compatible stable line.
+update:
+  ignoreDeps:
+    - typescript
+# model-viewer 4.3.1 and site scenes share r186 to avoid duplicate renderers.
+# This compatibility exception is covered by the real model-load E2E test.
+patchedDependencies:
+  '@google/model-viewer@4.3.1': patches/@google__model-viewer@4.3.1.patch
+peerDependencyRules:
+  allowedVersions:
+    '@google/model-viewer@4.3.1>three': 0.186.0

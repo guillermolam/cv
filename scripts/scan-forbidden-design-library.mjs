@@ -23,7 +23,8 @@ const forbiddenPackages = [
 const forbiddenImportRegex =
   /from\s+['"](react|react-dom|preact|vue|svelte|@react-three\/fiber|react-chartjs-2|vue-chartjs|svelte-chartjs)['"]/g;
 
-const readJson = async (filePath) => JSON.parse(await fs.readFile(filePath, 'utf8'));
+const readJson = async (filePath) =>
+  JSON.parse(await fs.readFile(filePath, 'utf8'));
 
 const walk = async (dir, predicate) => {
   const out = [];
@@ -49,23 +50,33 @@ const main = async () => {
     ...(pkg.optionalDependencies ?? {}),
   };
 
-  const forbiddenInPackageJson = forbiddenPackages.filter((name) => Object.hasOwn(deps, name));
+  const forbiddenInPackageJson = forbiddenPackages.filter((name) =>
+    Object.hasOwn(deps, name),
+  );
 
   const lockPath = path.join(root, 'pnpm-lock.yaml');
   const lockText = await fs.readFile(lockPath, 'utf8');
-  const forbiddenInLock = forbiddenPackages.filter((name) => lockText.includes(`${name}@`));
+  const forbiddenInLock = forbiddenPackages.filter((name) =>
+    lockText.includes(`${name}@`),
+  );
 
   const srcRoot = path.join(root, 'src');
-  const sourceFiles = await walk(srcRoot, (p) => /\.(ts|tsx|js|jsx|astro)$/.test(p));
+  const sourceFiles = await walk(srcRoot, (p) =>
+    /\.(ts|tsx|js|jsx|astro)$/.test(p),
+  );
   const forbiddenImports = [];
   for (const filePath of sourceFiles) {
     const text = await fs.readFile(filePath, 'utf8');
     forbiddenImportRegex.lastIndex = 0;
-    if (forbiddenImportRegex.test(text)) forbiddenImports.push(path.relative(root, filePath));
+    if (forbiddenImportRegex.test(text))
+      forbiddenImports.push(path.relative(root, filePath));
   }
 
-  const astroConfigCandidates = ['astro.config.mjs', 'astro.config.ts', 'astro.config.js']
-    .map((p) => path.join(root, p));
+  const astroConfigCandidates = [
+    'astro.config.mjs',
+    'astro.config.ts',
+    'astro.config.js',
+  ].map((p) => path.join(root, p));
   const astroConfigHits = [];
   for (const configPath of astroConfigCandidates) {
     try {
@@ -78,8 +89,7 @@ const main = async () => {
       ) {
         astroConfigHits.push(path.relative(root, configPath));
       }
-    } catch {
-    }
+    } catch {}
   }
 
   const ok =

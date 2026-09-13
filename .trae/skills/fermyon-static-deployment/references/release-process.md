@@ -5,6 +5,7 @@ This reference provides a release checklist and a safe deployment/verification s
 ## Release checklist
 
 Preflight:
+
 - Request is clearly classified (preview vs production, new deploy vs redeploy vs rollback)
 - Project inspection completed:
   - `node scripts/inspect-spin-project.mjs --verbose`
@@ -41,6 +42,7 @@ Preflight:
 ## Failure handling
 
 If verification fails:
+
 - Do not “patch forward” blindly.
 - Decide whether the fastest safe recovery is:
   - Fix and redeploy (if root cause is identified and low risk), or
@@ -50,4 +52,3 @@ If verification fails:
   - suspected root cause
   - corrective action
   - decision (redeploy vs rollback)
-

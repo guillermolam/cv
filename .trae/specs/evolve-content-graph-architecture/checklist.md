@@ -1,3 +1,5 @@
+# Checklist
+
 - [ ] Architecture docs updated/created as listed in this spec (content-model, ia, blueprint, content-graph, data-flow, islands-and-state, linking-taxonomy, linkedin-sync, seo-content-strategy).
 - [ ] Astro Content Collections exist under `src/content/**` and validate with Zod schemas.
 - [ ] All required collections exist: profile, stats, categories, tags, tools, skills, achievements, certifications, education, languages, hobbies, softSkills, experience, projects, caseStudies, blog, knowledgeResources, contactChannels, socialLinks, cvFormats.

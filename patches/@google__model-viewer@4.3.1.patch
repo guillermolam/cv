@@ -1,0 +1,38 @@
+diff --git a/lib/model-viewer-base.js b/lib/model-viewer-base.js
+index df2f31a8dcbe9c2c2e42dbf8d7a7dc8f1772a534..c1508efc239d75b17fe14f014cc7b088fd8855e2 100644
+--- a/lib/model-viewer-base.js
++++ b/lib/model-viewer-base.js
+@@ -548,11 +548,13 @@ export default class ModelViewerElementBase extends ReactiveElement {
+                 this.dispatchEvent(new CustomEvent('before-render'));
+             });
+             // Wait for shaders to compile and pixels to be drawn.
++        // Cold shader compilation and throttled tabs can exceed 500 ms.
++        // Keep a bounded watchdog without treating ordinary scheduling as failure.
+             await new Promise(resolve => {
+                 const timeout = setTimeout(() => {
+                     console.warn('rAF timed out in updateSource');
+                     resolve();
+-                }, 500);
++                }, 10000);
+                 requestAnimationFrame(() => {
+                     requestAnimationFrame(() => {
+                         clearTimeout(timeout);
+diff --git a/src/model-viewer-base.ts b/src/model-viewer-base.ts
+index db9b23febae37e7a90f07cb041868c9954159163..75e83a758f969a9054292d261d90dcaeaf4dadd3 100644
+--- a/src/model-viewer-base.ts
++++ b/src/model-viewer-base.ts
+@@ -728,11 +728,13 @@ export default class ModelViewerElementBase extends ReactiveElement {
+       });
+ 
+       // Wait for shaders to compile and pixels to be drawn.
++        // Cold shader compilation and throttled tabs can exceed 500 ms.
++        // Keep a bounded watchdog without treating ordinary scheduling as failure.
+       await new Promise<void>(resolve => {
+         const timeout = setTimeout(() => {
+           console.warn('rAF timed out in updateSource');
+           resolve();
+-        }, 500);
++        }, 10000);
+         requestAnimationFrame(() => {
+           requestAnimationFrame(() => {
+             clearTimeout(timeout);

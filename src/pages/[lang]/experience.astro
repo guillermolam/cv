@@ -9,16 +9,18 @@
  *  - Every styling decision flows through ds-* UnoCSS shortcuts or tokens
  *  - Graceful when experience entries are partially unreadable (root perms)
  */
-import BaseLayout         from '../../layouts/BaseLayout.astro';
-import UiTimelineItem     from '../../components/ui/UiTimelineItem.astro';
-import UiBadge            from '../../components/ui/UiBadge.astro';
-import LazyBarChart       from '../../components/charts/LazyBarChart.astro';
-import LazyRadarChart     from '../../components/charts/LazyRadarChart.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import UiTimelineItem from '../../components/ui/UiTimelineItem.astro';
+import UiBadge from '../../components/ui/UiBadge.astro';
+import LazyBarChart from '../../components/charts/LazyBarChart.astro';
+import LazyRadarChart from '../../components/charts/LazyRadarChart.astro';
 
-import { getCollection }          from 'astro:content';
+import { getCollection } from 'astro:content';
 import { getLangStaticPaths, isLang } from '../../lib/i18n';
 
-export function getStaticPaths() { return getLangStaticPaths(); }
+export function getStaticPaths() {
+  return getLangStaticPaths();
+}
 
 const { lang } = Astro.params;
 if (!lang || !isLang(lang)) throw new Error('Invalid language');
@@ -38,58 +40,81 @@ const experiences = expAll
     return bDate.localeCompare(aDate); // newest first
   });
 
-const tools     = toolsAll.filter((t) => t.data.lang === lang);
-const cats      = catsAll.filter((c) => c.data.lang === lang);
+const tools = toolsAll.filter((t) => t.data.lang === lang);
+const cats = catsAll.filter((c) => c.data.lang === lang);
 
 // ── Look-up maps ─────────────────────────────────────────────────────────────
-const toolById = new Map(tools.map((t) => [t.data.toolId,     t.data] as const));
-const catById  = new Map(cats.map((c)  => [c.data.categoryId, c.data] as const));
+const toolById = new Map(tools.map((t) => [t.data.toolId, t.data] as const));
+const catById = new Map(cats.map((c) => [c.data.categoryId, c.data] as const));
 
 // ── Stats for the hero bar ───────────────────────────────────────────────────
-const totalRoles     = experiences.length;
-const uniqueToolIds  = [...new Set(experiences.flatMap((e) => e.data.toolIds ?? []))];
-const uniqueCatIds   = [...new Set(experiences.flatMap((e) => e.data.categoryIds ?? []))];
-const earliestYear   = experiences.length
-  ? Math.min(...experiences.map((e) => parseInt(e.data.startDate?.slice(0,4) ?? '2024')))
+const totalRoles = experiences.length;
+const uniqueToolIds = [
+  ...new Set(experiences.flatMap((e) => e.data.toolIds ?? [])),
+];
+const uniqueCatIds = [
+  ...new Set(experiences.flatMap((e) => e.data.categoryIds ?? [])),
+];
+const earliestYear = experiences.length
+  ? Math.min(
+      ...experiences.map((e) => {
+        const year =
+          typeof e.data.startDate === 'string'
+            ? parseInt(e.data.startDate.slice(0, 4))
+            : null;
+        return year || 2024;
+      }),
+    )
   : 2012;
-const yearsExp       = new Date().getFullYear() - earliestYear;
+const yearsExp = new Date().getFullYear() - earliestYear;
 
 // ── Domain proficiency radar — sourced directly from CV data ─────────────────
 // 8 spokes max for readability. Scores are explicit, sourced from the PDF resume.
 const radarRows = [
-  { label: 'Cloud Security',   score: 92, confidence: 'expert'       },
-  { label: 'K8s / GitOps',     score: 90, confidence: 'expert'       },
-  { label: 'DevSecOps / CI',   score: 88, confidence: 'expert'       },
-  { label: 'Supply Chain',     score: 85, confidence: 'advanced'     },
-  { label: 'Compliance',       score: 82, confidence: 'advanced'     },
-  { label: 'IaC / Terraform',  score: 90, confidence: 'expert'       },
-  { label: 'Observability',    score: 78, confidence: 'advanced'     },
-  { label: 'Offensive Sec',    score: 68, confidence: 'intermediate' },
+  { label: 'Cloud Security', score: 92, confidence: 'expert' },
+  { label: 'K8s / GitOps', score: 90, confidence: 'expert' },
+  { label: 'DevSecOps / CI', score: 88, confidence: 'expert' },
+  { label: 'Supply Chain', score: 85, confidence: 'advanced' },
+  { label: 'Compliance', score: 82, confidence: 'advanced' },
+  { label: 'IaC / Terraform', score: 90, confidence: 'expert' },
+  { label: 'Observability', score: 78, confidence: 'advanced' },
+  { label: 'Offensive Sec', score: 68, confidence: 'intermediate' },
 ];
 
 // ── Toolchain distribution bar chart ─────────────────────────────────────────
 // Group tools by their first category dimension
-const catDomainOrder = ['securityDomain','controlRoomStation','operations','development','toolchainDimension','general'];
-const toolsByCatDim  = new Map<string, number>();
+const catDomainOrder = [
+  'securityDomain',
+  'controlRoomStation',
+  'operations',
+  'development',
+  'toolchainDimension',
+  'general',
+];
+const toolsByCatDim = new Map<string, number>();
 for (const tool of tools) {
-  const cats = (tool.data.categoryIds ?? []).map((id) => catById.get(id)).filter(Boolean);
-  const dim   = catDomainOrder.find((d) => cats.some((c) => c!.dimension === d)) ?? 'general';
+  const cats = (tool.data.categoryIds ?? [])
+    .map((id) => catById.get(id))
+    .filter((tool) => tool !== undefined);
+  const dim =
+    catDomainOrder.find((d) => cats.some((c) => c!.dimension === d)) ??
+    'general';
   toolsByCatDim.set(dim, (toolsByCatDim.get(dim) ?? 0) + 1);
 }
 const dimLabels: Record<string, string> = {
-  securityDomain:       'Security',
-  controlRoomStation:   'Platform',
-  operations:           'Operations',
-  development:          'Development',
-  toolchainDimension:   'Toolchain',
-  general:              'General',
+  securityDomain: 'Security',
+  controlRoomStation: 'Platform',
+  operations: 'Operations',
+  development: 'Development',
+  toolchainDimension: 'Toolchain',
+  general: 'General',
 };
 const toolDistLabels = [...toolsByCatDim.keys()].map((k) => dimLabels[k] ?? k);
 const toolDistValues = [...toolsByCatDim.values()];
 
 // ── Per-experience tool mini-bar data ─────────────────────────────────────────
 const expToolBars = experiences.map((exp) => {
-  const ids    = exp.data.toolIds ?? [];
+  const ids = exp.data.toolIds ?? [];
   const labels = ids.map((id) => toolById.get(id)?.name ?? id).slice(0, 6);
   const values = ids.slice(0, 6).map(() => 1); // presence indicator
   return { labels, values };
@@ -98,26 +123,33 @@ const expToolBars = experiences.map((exp) => {
 // ── Category domain badge variant map ────────────────────────────────────────
 const domainVariant = (catId: string): string => {
   const dim = catById.get(catId)?.dimension ?? 'general';
-  return dim === 'securityDomain' ? 'security'
-    : dim === 'controlRoomStation' ? 'infra'
-    : dim === 'operations'         ? 'cloud'
-    : dim === 'development'        ? 'accent'
-    : 'neutral';
+  return dim === 'securityDomain'
+    ? 'security'
+    : dim === 'controlRoomStation'
+      ? 'infra'
+      : dim === 'operations'
+        ? 'cloud'
+        : dim === 'development'
+          ? 'accent'
+          : 'neutral';
 };
 
-const title       = 'Career Timeline';
-const description = 'Hands-on DevSecOps, cloud platform engineering, and security infrastructure across 14 years.';
+const title = 'Career Timeline';
+const description =
+  'Hands-on DevSecOps, cloud platform engineering, and security infrastructure across 14 years.';
 ---
 
 <BaseLayout {title} {description} lang={lang} useLangPrefix>
-
   <!-- ══════════════════════════════════════════════════════════════
        HERO HEADER
   ═══════════════════════════════════════════════════════════════ -->
   <header class="xp-hero" data-xp-hero>
     <div class="xp-hero__inner">
       <div class="xp-hero__eyebrow ds-eyebrow">
-        <span class="i-solar-cpu-bolt-bold-duotone align-middle mr-2" aria-hidden="true"></span>
+        <span
+          class="i-solar-cpu-bolt-bold-duotone align-middle mr-2"
+          aria-hidden="true"
+        ></span>
         Career Intelligence
       </div>
       <h1 class="xp-hero__title">Career&nbsp;Timeline</h1>
@@ -126,10 +158,26 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
       <!-- Quick-stats ribbon -->
       <div class="xp-stats" role="list">
         {[
-          { icon: 'i-ph-briefcase-duotone',    label: 'Roles',        value: totalRoles || '11+' },
-          { icon: 'i-ph-wrench-duotone',        label: 'Tools',        value: uniqueToolIds.length || '20+' },
-          { icon: 'i-ph-shield-check-duotone',  label: 'Domains',      value: uniqueCatIds.length || '8+' },
-          { icon: 'i-ph-calendar-duotone',      label: 'Yrs exp',      value: yearsExp || '14+' },
+          {
+            icon: 'i-ph-briefcase-duotone',
+            label: 'Roles',
+            value: totalRoles || '11+',
+          },
+          {
+            icon: 'i-ph-wrench-duotone',
+            label: 'Tools',
+            value: uniqueToolIds.length || '20+',
+          },
+          {
+            icon: 'i-ph-shield-check-duotone',
+            label: 'Domains',
+            value: uniqueCatIds.length || '8+',
+          },
+          {
+            icon: 'i-ph-calendar-duotone',
+            label: 'Yrs exp',
+            value: yearsExp || '14+',
+          },
         ].map(({ icon, label, value }) => (
           <div class="xp-stat" role="listitem">
             <span class={`${icon} xp-stat__icon`} aria-hidden="true"></span>
@@ -151,7 +199,10 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     <!-- Skills radar -->
     <div class="xp-dash-panel">
       <header class="xp-panel-header">
-        <span class="i-solar-shield-bold-duotone xp-panel-icon text-[var(--ds-color-security)]" aria-hidden="true"></span>
+        <span
+          class="i-solar-shield-bold-duotone xp-panel-icon text-[var(--ds-color-security)]"
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="xp-panel-title">Domain Proficiency</h2>
           <p class="xp-panel-sub ds-label">Skill level · explicit data only</p>
@@ -171,10 +222,15 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     <!-- Toolchain distribution bar -->
     <div class="xp-dash-panel">
       <header class="xp-panel-header">
-        <span class="i-solar-code-bold-duotone xp-panel-icon text-accent" aria-hidden="true"></span>
+        <span
+          class="i-solar-code-bold-duotone xp-panel-icon text-accent"
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="xp-panel-title">Toolchain Distribution</h2>
-          <p class="xp-panel-sub ds-label">{tools.length} tools · categorised</p>
+          <p class="xp-panel-sub ds-label">
+            {tools.length} tools · categorised
+          </p>
         </div>
       </header>
       {toolDistLabels.length > 0 ? (
@@ -196,130 +252,184 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
   <!-- ══════════════════════════════════════════════════════════════
        TIMELINE
   ═══════════════════════════════════════════════════════════════ -->
-  <section class="xp-timeline-section" aria-label="Work history" data-xp-section>
+  <section
+    class="xp-timeline-section"
+    aria-label="Work history"
+    data-xp-section
+  >
     <h2 class="xp-section-title">
-      <span class="i-ph-clock-countdown-duotone align-middle mr-2" aria-hidden="true"></span>
+      <span
+        class="i-ph-clock-countdown-duotone align-middle mr-2"
+        aria-hidden="true"
+      ></span>
       Work History
     </h2>
 
-    {experiences.length === 0 ? (
-      <!-- graceful empty state -->
-      <div class="xp-empty-state">
-        <span class="i-ph-file-lock-duotone xp-empty-icon" aria-hidden="true"></span>
-        <p class="xp-empty-text">Timeline entries are being authored.</p>
-        <p class="xp-empty-sub ds-label">14+ years · DevSecOps · Cloud Platform · Security Engineering</p>
-      </div>
-    ) : (
-      <ol class="xp-timeline" role="list">
-        {experiences.map((exp, i) => {
-          const isCurrent = exp.data.isCurrent ?? false;
-          const toolBadges = (exp.data.toolIds ?? [])
-            .map((id) => toolById.get(id))
-            .filter(Boolean)
-            .slice(0, 8);
-          const catBadges = (exp.data.categoryIds ?? [])
-            .filter((id) => catById.has(id))
-            .slice(0, 4);
-          const highlights = exp.data.highlights ?? [];
-          const { labels: tlabels, values: tvalues } = expToolBars[i] ?? { labels: [], values: [] };
+    {(() => {
+      if (experiences.length === 0) {
+        return (
+          <div class="xp-empty-state">
+            <span
+              class="i-ph-file-lock-duotone xp-empty-icon"
+              aria-hidden="true"
+            ></span>
+            <p class="xp-empty-text">Timeline entries are being authored.</p>
+            <p class="xp-empty-sub ds-label">
+              14+ years · DevSecOps · Cloud Platform · Security Engineering
+            </p>
+          </div>
+        );
+      }
 
-          return (
-            <li class="xp-entry" data-xp-entry style={`--entry-index:${i}`}>
-              <UiTimelineItem
-                title={exp.data.roleTitle}
-                subtitle={exp.data.clientName
-                  ? `${exp.data.companyName} · ${exp.data.clientName}`
-                  : exp.data.companyName}
-                startDate={exp.data.startDate}
-                endDate={isCurrent ? 'Present' : (exp.data.endDate ?? '—')}
-                status={isCurrent ? 'Current' : undefined}
-                icon={isCurrent ? 'ph:circle-wavy-check-duotone' : 'ph:buildings-duotone'}
-                depth="raised"
-                motion="hover-lift"
-              >
-                <!-- Summary -->
-                {exp.data.summary ? (
-                  <p class="xp-entry__summary">{exp.data.summary}</p>
-                ) : null}
+      return (
+        <ol class="xp-timeline" role="list">
+          {experiences.map((exp, i) => {
+            const isCurrent = exp.data.isCurrent ?? false;
+            const toolBadges = (exp.data.toolIds || [])
+              .map((id) => toolById.get(id))
+              .filter((tool) => tool !== undefined)
+              .slice(0, 8);
+            const catBadges = (
+              Array.isArray(exp.data.categoryIds) ? exp.data.categoryIds : []
+            )
+              .filter((id) => catById.has(id))
+              .slice(0, 4);
+            const highlights = exp.data.highlights || [];
+            const { labels: tlabels, values: tvalues } = expToolBars[i] || {
+              labels: [],
+              values: [],
+            };
 
-                <!-- Highlights -->
-                {highlights.length > 0 ? (
-                  <ul class="xp-highlights" slot="footer">
-                    {highlights.slice(0, 4).map((h) => (
-                      <li class="xp-highlight">
-                        <span class="i-ph-check-circle-duotone xp-highlight__icon" aria-hidden="true"></span>
-                        {h}
-                      </li>
+            return (
+              <li class="xp-entry" data-xp-entry style={`--entry-index:${i}`}>
+                <UiTimelineItem
+                  title={exp.data.roleTitle}
+                  subtitle={
+                    exp.data.clientName
+                      ? `${exp.data.companyName} · ${exp.data.clientName}`
+                      : exp.data.companyName
+                  }
+                  startDate={exp.data.startDate}
+                  endDate={isCurrent ? 'Present' : exp.data.endDate}
+                  status={isCurrent ? 'Current' : undefined}
+                  icon={
+                    isCurrent
+                      ? 'ph:circle-wavy-check-duotone'
+                      : 'ph:buildings-duotone'
+                  }
+                  depth="raised"
+                  motion="hover-lift"
+                >
+                  <!-- Summary -->
+                  {exp.data.summary ? (
+                    <p class="xp-entry__summary">{exp.data.summary}</p>
+                  ) : null}
+
+                  <!-- Highlights -->
+                  {highlights.length > 0 ? (
+                    <ul class="xp-highlights" slot="footer">
+                      {highlights.slice(0, 4).map((h) => (
+                        <li class="xp-highlight">
+                          <span
+                            class="i-ph-check-circle-duotone xp-highlight__icon"
+                            aria-hidden="true"
+                          ></span>
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
+                  <!-- Meta: category + tool badges -->
+                  <div class="xp-entry__meta" slot="meta">
+                    <!-- Domain badges -->
+                    {catBadges.map((id) => (
+                      <UiBadge
+                        variant={domainVariant(id) as any}
+                        size="sm"
+                        depth="flat"
+                      >
+                        {catById.get(id)?.title || id}
+                      </UiBadge>
                     ))}
-                  </ul>
-                ) : null}
-
-                <!-- Meta: category + tool badges -->
-                <div class="xp-entry__meta" slot="meta">
-                  <!-- Domain badges -->
-                  {catBadges.map((id) => (
-                    <UiBadge variant={domainVariant(id) as any} size="sm" depth="flat">
-                      {catById.get(id)?.title ?? id}
-                    </UiBadge>
-                  ))}
-                  <!-- Tool badges -->
-                  {toolBadges.map((t) => (
-                    <UiBadge variant="neutral" size="sm" depth="flat">
-                      {t!.name}
-                    </UiBadge>
-                  ))}
-                </div>
-
-                <!-- Mini tool bar chart -->
-                {tlabels.length >= 2 ? (
-                  <div class="xp-entry__chart" slot="actions">
-                    <p class="ds-label mb-1">
-                      <span class="i-ph-wrench-duotone align-middle mr-1" aria-hidden="true"></span>
-                      Stack ({tlabels.length} tools)
-                    </p>
-                    <LazyBarChart
-                      labels={tlabels}
-                      values={tvalues}
-                      title={`Tools used at ${exp.data.companyName}`}
-                      series="Used"
-                      horizontal
-                      max={1}
-                      height={tlabels.length * 26 + 16}
-                    />
+                    <!-- Tool badges -->
+                    {toolBadges.map((t) => (
+                      <UiBadge variant="neutral" size="sm" depth="flat">
+                        {t.name}
+                      </UiBadge>
+                    ))}
                   </div>
-                ) : null}
-              </UiTimelineItem>
-            </li>
-          );
-        })}
-      </ol>
-    )}
+
+                  <!-- Mini tool bar chart -->
+                  {(() => {
+                    if (tlabels.length >= 2) {
+                      return (
+                        <div class="xp-entry__chart" slot="actions">
+                          <p class="ds-label mb-1">
+                            <span
+                              class="i-ph-wrench-duotone align-middle mr-1"
+                              aria-hidden="true"
+                            ></span>
+                            Stack ({tlabels.length} tools)
+                          </p>
+                          <LazyBarChart
+                            labels={tlabels}
+                            values={tvalues}
+                            title={`Tools used at ${exp.data.companyName}`}
+                            series="Used"
+                            horizontal
+                            max={1}
+                            height={tlabels.length * 26 + 16}
+                          />
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })()}
+                </UiTimelineItem>
+              </li>
+            );
+          })}
+        </ol>
+      );
+    })()}
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════
        FULL TOOLCHAIN BAR (all tools, detailed)
   ═══════════════════════════════════════════════════════════════ -->
-  <section class="xp-full-stack" aria-label="Complete toolchain" data-xp-section>
+  <section
+    class="xp-full-stack"
+    aria-label="Complete toolchain"
+    data-xp-section
+  >
     <h2 class="xp-section-title">
-      <span class="i-solar-server-bold-duotone align-middle mr-2" aria-hidden="true"></span>
+      <span
+        class="i-solar-server-bold-duotone align-middle mr-2"
+        aria-hidden="true"
+      ></span>
       Full Stack
     </h2>
-    {tools.length > 0 ? (
-      <div class="xp-dash-panel xp-dash-panel--wide">
-        <LazyBarChart
-          labels={tools.map((t) => t.data.name)}
-          values={tools.map((t) => (t.data.categoryIds?.length ?? 1))}
-          title="All tools in portfolio"
-          series="Category coverage"
-          horizontal
-          height={Math.max(300, tools.length * 30)}
-        />
-      </div>
-    ) : (
-      <p class="xp-empty">Tool data loading…</p>
-    )}
+    {(() => {
+      if (tools.length > 0 && tools.length !== 0) {
+        return (
+          <div class="xp-dash-panel xp-dash-panel--wide">
+            <LazyBarChart
+              labels={tools.map((t) => t.data.name)}
+              values={tools.map((t) => t.data.categoryIds?.length ?? 1)}
+              title="All tools in portfolio"
+              series="Category coverage"
+              horizontal
+              height={Math.max(300, tools.length * 30)}
+            />
+          </div>
+        );
+      } else {
+        return <p class="xp-empty">Tool data loading…</p>;
+      }
+    })()}
   </section>
-
 </BaseLayout>
 
 <!-- ══════════════════════════════════════════════════════════════
@@ -345,28 +455,32 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     }
 
     // Each major section fades in
-    document.querySelectorAll<HTMLElement>('[data-xp-section]').forEach((section) => {
-      gsap.from(section, {
-        scrollTrigger: { trigger: section, start: 'top 88%', once: true },
-        y: 24,
-        opacity: 0,
-        duration: 0.65,
-        ease: 'ds.softOut',
+    document
+      .querySelectorAll<HTMLElement>('[data-xp-section]')
+      .forEach((section) => {
+        gsap.from(section, {
+          scrollTrigger: { trigger: section, start: 'top 88%', once: true },
+          y: 24,
+          opacity: 0,
+          duration: 0.65,
+          ease: 'ds.softOut',
+        });
       });
-    });
 
     // Timeline entries stagger in from the side
-    document.querySelectorAll<HTMLElement>('[data-xp-entry]').forEach((entry) => {
-      const idx = Number(entry.style.getPropertyValue('--entry-index') || 0);
-      gsap.from(entry, {
-        scrollTrigger: { trigger: entry, start: 'top 92%', once: true },
-        x: idx % 2 === 0 ? -32 : 32,
-        opacity: 0,
-        duration: 0.55,
-        delay: 0.05 * (idx % 4),
-        ease: 'power2.out',
+    document
+      .querySelectorAll<HTMLElement>('[data-xp-entry]')
+      .forEach((entry) => {
+        const idx = Number(entry.style.getPropertyValue('--entry-index') || 0);
+        gsap.from(entry, {
+          scrollTrigger: { trigger: entry, start: 'top 92%', once: true },
+          x: idx % 2 === 0 ? -32 : 32,
+          opacity: 0,
+          duration: 0.55,
+          delay: 0.05 * (idx % 4),
+          ease: 'power2.out',
+        });
       });
-    });
   }
 </script>
 
@@ -384,8 +498,14 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     opacity: 0.6;
     pointer-events: none;
   }
-  .xp-hero__inner { position: relative; z-index: 1; max-width: 860px; }
-  .xp-hero__eyebrow { margin-bottom: var(--space-2); }
+  .xp-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+  }
+  .xp-hero__eyebrow {
+    margin-bottom: var(--space-2);
+  }
   .xp-hero__title {
     font-family: var(--font-display);
     font-size: clamp(1.75rem, 4vw, 2.8rem);
@@ -432,7 +552,9 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     color: var(--color-text-strong);
     line-height: 1;
   }
-  .xp-stat__label { margin-top: 2px; }
+  .xp-stat__label {
+    margin-top: 2px;
+  }
 
   /* ── Dashboard grid ───────────────────────────────────────────── */
   .xp-dashboard {
@@ -442,7 +564,11 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     padding: var(--space-5) var(--space-6);
     border-bottom: 1px solid var(--color-border);
   }
-  @media (max-width: 700px) { .xp-dashboard { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) {
+    .xp-dashboard {
+      grid-template-columns: 1fr;
+    }
+  }
 
   /* ── Panel (shared by dashboard cards) ───────────────────────── */
   .xp-dash-panel {
@@ -452,7 +578,9 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     flex-direction: column;
     gap: var(--space-3);
   }
-  .xp-dash-panel--wide { grid-column: 1 / -1; }
+  .xp-dash-panel--wide {
+    grid-column: 1 / -1;
+  }
 
   .xp-panel-header {
     display: flex;
@@ -461,7 +589,11 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     border-bottom: 1px solid var(--color-border);
     padding-bottom: var(--space-3);
   }
-  .xp-panel-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+  .xp-panel-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
   .xp-panel-title {
     font-family: var(--font-mono);
     font-size: var(--font-size-1);
@@ -469,7 +601,9 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     color: var(--color-text-strong);
     margin: 0 0 2px;
   }
-  .xp-panel-sub { margin: 0; }
+  .xp-panel-sub {
+    margin: 0;
+  }
 
   /* ── Section wrapper ──────────────────────────────────────────── */
   .xp-timeline-section,
@@ -497,7 +631,9 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     flex-direction: column;
     gap: var(--space-4);
   }
-  .xp-entry { display: contents; }
+  .xp-entry {
+    display: contents;
+  }
 
   /* Entry inner layout overrides */
   .xp-entry__summary {
@@ -512,7 +648,9 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     gap: var(--space-1);
     margin-top: var(--space-3);
   }
-  .xp-entry__chart { margin-top: var(--space-3); }
+  .xp-entry__chart {
+    margin-top: var(--space-3);
+  }
 
   /* ── Highlights ───────────────────────────────────────────────── */
   .xp-highlights {
@@ -540,7 +678,9 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
 
   /* ── Chart sizing ─────────────────────────────────────────────── */
   /* LazyRadarChart fills its .lazy-radar div — give it a fixed height */
-  .xp-radar { height: 280px; }
+  .xp-radar {
+    height: 280px;
+  }
   /* LazyBarChart uses height prop so no override needed */
 
   /* ── Empty states ─────────────────────────────────────────────── */
@@ -570,5 +710,7 @@ const description = 'Hands-on DevSecOps, cloud platform engineering, and securit
     font-size: var(--font-size-1);
     margin: 0;
   }
-  .xp-empty-sub { margin: 0; }
+  .xp-empty-sub {
+    margin: 0;
+  }
 </style>

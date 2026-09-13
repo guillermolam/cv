@@ -42,7 +42,9 @@ metadata:
 # Portfolio Delivery Governance
 
 ## Purpose
+
 Act as the project’s governance and delivery operating system:
+
 - Decide whether work should proceed or stop.
 - Detect missing artifacts (architecture/design/spec/tasks/validation).
 - Assign ownership to the correct specialist agent.
@@ -52,7 +54,9 @@ Act as the project’s governance and delivery operating system:
 This skill must not implement features or write code. It only governs delivery.
 
 ## Scope
+
 In scope:
+
 - Request classification and readiness review
 - Artifact completeness and consistency checks
 - Dependency and prerequisite validation
@@ -61,13 +65,16 @@ In scope:
 - Escalation decisions (/plan, /spec, stop)
 
 Out of scope:
+
 - Implementing Astro/Three.js/UI code
 - Writing CV/About/portfolio copy
 - Running deployment actions (except deciding who should)
 - Editing authoritative project docs (unless explicitly asked to update specs)
 
 ## When To Use
+
 Use this skill when the user asks:
+
 - “Can we start building?”
 - “Implement this feature.”
 - “Which agent should do this?”
@@ -78,16 +85,21 @@ Use this skill when the user asks:
 - “Are we ready to merge/deploy?”
 
 Governance-related trigger phrases:
+
 - “go/no-go”, “readiness”, “governance”, “gates”, “blocked”, “stop”, “escalate”
 
 Planning-related trigger phrases:
+
 - “/plan”, “rethink architecture”, “major redesign”, “new direction”
 
 Architecture-related trigger phrases:
+
 - “architecture”, “boundaries”, “control room blueprint”, “threejs boundaries”
 
 ## When NOT To Use
+
 Do not use this skill when the user already provided:
+
 - A complete, approved spec + tasks + checklist and explicitly requests implementation by a specific owner agent.
 Do not use this skill for:
 - Writing or editing content narrative (route to portfolio-content-storytelling)
@@ -98,20 +110,26 @@ Do not use this skill for:
 - Fermyon deployment packaging (route to fermyon-static-deployment)
 
 ## Required Inputs
+
 Minimum:
+
 - The request (feature/bug/refactor/content/design/deploy/governance)
 - Target scope (page/route/component/scene/CI/deploy/doc)
 - Intended outcome and acceptance criteria (or confirm it is missing)
 
 If governance is asked to validate readiness:
+
 - Links/paths to spec, tasks, and checklist artifacts (or confirm which phase)
 - Any constraints (no SSR unless approved, content-first, performance budget, reduced motion)
 
 ## Governance Workflow
+
 Follow phases in order. Do not skip stop conditions.
 
 ### Phase 0 — Request Classification
+
 Classify into exactly one primary category:
+
 - Planning (/plan): architecture or major direction decisions
 - Specification (/spec): requirements, acceptance criteria, tasks definition
 - Implementation: code changes by an owner agent
@@ -123,7 +141,9 @@ Classify into exactly one primary category:
 If category is ambiguous, ask for clarification before proceeding.
 
 ### Phase 1 — Artifact Review
+
 Consult authoritative references (progressive disclosure):
+
 - references/spec.md: requirements and acceptance criteria
 - references/tasks.md: actionable work breakdown
 - references/checklist.md: validation and quality gates
@@ -132,53 +152,68 @@ Consult authoritative references (progressive disclosure):
 - references/control-room-blueprint.md: narrative/architecture alignment constraints
 
 Determine existence and freshness:
+
 - Exists? yes/no
 - Is it the correct phase? yes/no
 - Is it internally consistent? yes/no
 
 ### Phase 2 — Dependency Validation
+
 Verify prerequisites for the requested category:
+
 - For implementation: spec + tasks + validation strategy must exist
 - For deployment: build artifacts + deployment docs + secrets handling strategy must exist
 - For design changes: design system guidance must exist
 - For content changes: IA + content model alignment must exist
 
 Identify dependency gaps:
+
 - Missing docs, missing inputs, missing environment assumptions, missing constraints
 
 ### Phase 3 — Ownership Validation
+
 Assign exactly one primary owner agent. Secondary agents are allowed only if explicitly coordinated.
 
 Confirm:
+
 - Owner agent exists and matches domain
 - Request stays within owner boundaries
 - No ownership conflict with other agents
 
 Stop condition:
+
 - If ownership is unclear or conflicting, stop implementation and return a routing recommendation.
 
 ### Phase 4 — Execution Readiness Review
+
 Decide go/no-go based on Decision Tree and Validation Gates.
 
 Output one of:
+
 - GO: proceed with named owner agent and explicit next action
 - NO-GO: stop and produce missing artifacts + escalation recommendation
 - CONDITIONAL GO: proceed only after specific prerequisites are created/updated
 
 ### Phase 5 — Acceptance Review
+
 Confirm:
+
 - Acceptance criteria exist and are measurable
 - Validation strategy exists and is appropriate
 - Risks are understood (architecture drift, performance regressions, a11y)
 
 If acceptance criteria are missing or vague:
+
 - Escalate to /spec.
 
 ### Phase 6 — Governance Report
+
 Always produce the Output Contract fields and include severity classification for blockers.
 
 ## Decision Tree (Stop Conditions)
+
 Answer in order:
+
 1) Does architecture exist and is it aligned with the request?
 2) Does design guidance exist for the affected area?
 3) Does a specification exist for this change?
@@ -188,17 +223,20 @@ Answer in order:
 7) Are dependencies satisfied (tools, env, docs, assets)?
 
 If any answer is NO:
+
 - STOP.
 - Recommend the missing artifact(s).
 - Provide the correct escalation (/plan or /spec) or routing.
 
 Escalation triggers:
+
 - Major architecture changes → return to /plan
 - Major scope changes or unclear requirements → return to /spec
 - Agent ownership conflicts → stop implementation and resolve ownership
 - Undefined validation → stop implementation and define validation strategy
 
 ## Escalation Rules
+
 - Return to /plan when:
   - The request changes the portfolio architecture principles (content-first, motion-first, Astro-first, boundaries).
   - The request changes the Control Room narrative structure across the site.
@@ -213,7 +251,9 @@ Escalation triggers:
   - The request conflicts with authoritative references and no decision has been made.
 
 ## Ownership Matrix
+
 Single primary owner per request:
+
 - portfolio-delivery-governance: governance, orchestration decisions, stop/go, routing, report
 - immersive-storytelling: experience/journey design, reveal strategy, narrative pacing
 - motion-design-system: motion patterns, timing/easing system, interaction states, reduced-motion alternates
@@ -226,7 +266,9 @@ Single primary owner per request:
 - fermyon-static-deployment: Spin packaging, Fermyon deploy workflows, token handling guidance
 
 ## Validation Gates
+
 Readiness gates (must be explicitly confirmed):
+
 - Architecture alignment: request fits existing architecture and boundaries
 - Design alignment: request fits design guidance for affected areas
 - Ownership alignment: one owner agent, no conflicts
@@ -235,7 +277,9 @@ Readiness gates (must be explicitly confirmed):
 - Validation strategy existence: checklist/tests/QA defined
 
 ## Definition Of Done
+
 Work may proceed only when:
+
 - Architecture exists and aligns with the request
 - Specification exists and is current
 - Ownership exists (single primary owner) and boundaries are respected
@@ -244,27 +288,32 @@ Work may proceed only when:
 - Dependencies are satisfied
 
 ## Severity Classification
+
 Critical (stop immediately):
+
 - Architecture missing or architecture conflict without decision
 - Specification missing for implementation work
 - Ownership conflict or unclear ownership
 - Validation missing or undefined
 
 Major (block until resolved, but not necessarily /plan):
+
 - Dependency gaps (assets/tools/env missing)
 - Unclear or non-testable acceptance criteria
 - Incomplete tasks (non-actionable or missing sequencing)
 
 Minor (can proceed with caution or document as follow-up):
+
 - Documentation improvements
 - Workflow optimizations
 - Formatting/consistency fixes in tasks/spec
 
 ## Failure Mode Analysis (at least 15)
+
 Each failure includes symptom → root cause → corrective action.
 
 | # | Symptom | Root Cause | Corrective Action |
-|---:|---|---|---|
+| ---: | --- | --- | --- |
 | 1 | Implementation starts with no spec | Governance skipped Phase 1 | Stop; create /spec artifact; define acceptance criteria |
 | 2 | Two agents edit same area | No ownership validation | Stop; assign single owner; coordinate secondary work explicitly |
 | 3 | Architecture drift | Changes made without blueprint/boundaries review | Stop; return to /plan; update architecture docs before code |
@@ -284,7 +333,9 @@ Each failure includes symptom → root cause → corrective action.
 | 17 | Validation exists but mismatched | Wrong checklist for phase | Stop; align validation to requested scope and phase |
 
 ## Output Contract
+
 Always output:
+
 - Governance Assessment (summary of what was evaluated)
 - Readiness Status (GO / NO-GO / CONDITIONAL GO)
 - Missing Artifacts (explicit list)
@@ -294,7 +345,9 @@ Always output:
 - Escalation Recommendation (if required: /plan, /spec, or stop)
 
 ## Examples
+
 Trigger examples:
+
 - “Implement this feature.”
 - “Which agent should do this?”
 - “Can we start building?”
@@ -303,6 +356,7 @@ Trigger examples:
 - “Validate this task.”
 
 Governance routing examples:
+
 - “Add a Three.js hero with fallback” → threejs-control-room (after spec+validation confirmed)
 - “Add a new Astro route for portfolio/security” → astro-portfolio-implementation (after spec+tasks)
 - “Define motion tokens + transition patterns” → motion-design-system
@@ -311,6 +365,7 @@ Governance routing examples:
 - “Prepare Fermyon deploy workflow” → fermyon-static-deployment
 
 ## Troubleshooting
+
 - Too many blockers reported:
   - Re-check classification; ensure you’re not applying implementation gates to content-only work.
 - User insists on immediate implementation without spec:

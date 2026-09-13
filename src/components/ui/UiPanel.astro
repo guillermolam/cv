@@ -46,7 +46,9 @@ const TitleTag = titleAs;
 const hasHeaderSlot = Astro.slots.has('header');
 const hasActionsSlot = Astro.slots.has('actions');
 const hasFooterSlot = Astro.slots.has('footer');
-const hasHeaderContent = hasHeaderSlot || Boolean(eyebrow || title || description || icon || hasActionsSlot);
+const hasHeaderContent =
+  hasHeaderSlot ||
+  Boolean(eyebrow || title || description || icon || hasActionsSlot);
 ---
 
 <UiSurface
@@ -75,7 +77,14 @@ const hasHeaderContent = hasHeaderSlot || Boolean(eyebrow || title || descriptio
       )}
 
       <div data-ui-panel-actions>
-        {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+        {icon ? (
+          <UiIcon
+            name={icon}
+            label={iconLabel}
+            decorative={!iconLabel}
+            depth="flat"
+          />
+        ) : null}
         {hasActionsSlot ? <slot name="actions" /> : null}
       </div>
     </header>
@@ -85,5 +94,9 @@ const hasHeaderContent = hasHeaderSlot || Boolean(eyebrow || title || descriptio
     <slot />
   </div>
 
-  {hasFooterSlot ? <footer data-ui-panel-footer><slot name="footer" /></footer> : null}
+  {hasFooterSlot ? (
+    <footer data-ui-panel-footer>
+      <slot name="footer" />
+    </footer>
+  ) : null}
 </UiSurface>

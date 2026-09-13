@@ -9,7 +9,11 @@
  *  - No border on the canvas itself — the parent panel provides the frame.
  *  - Accent colour is inherited from --color-cta (same token as the whole site).
  */
-export type RadarRow = { label: string; score: number | null; confidence?: string };
+export type RadarRow = {
+  label: string;
+  score: number | null;
+  confidence?: string;
+};
 
 export type Props = {
   rows: readonly RadarRow[];

@@ -33,47 +33,150 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
               <span class="whoami-key-icon" aria-hidden="true">
                 {k.id === 'bio' ? (
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 12.2a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                    <path d="M5 21c1.7-4 12.3-4 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    <path
+                      d="M12 12.2a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M5 21c1.7-4 12.3-4 14 0"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
                   </svg>
                 ) : null}
                 {k.id === 'skills' ? (
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 2l1.7 5.2L19 9l-5.3 1.8L12 16l-1.7-5.2L5 9l5.3-1.8L12 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
-                    <path d="M19.5 13.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+                    <path
+                      d="M12 2l1.7 5.2L19 9l-5.3 1.8L12 16l-1.7-5.2L5 9l5.3-1.8L12 2Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M19.5 13.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linejoin="round"
+                    />
                   </svg>
                 ) : null}
                 {k.id === 'certifications' ? (
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M7.5 3.5h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.6" />
-                    <path d="M9 20l3-2 3 2v-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M9.3 9.5l1.7 1.7 3.7-3.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                      d="M7.5 3.5h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                    />
+                    <path
+                      d="M9 20l3-2 3 2v-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9.3 9.5l1.7 1.7 3.7-3.7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
                 ) : null}
                 {k.id === 'education' ? (
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M2.5 9.5L12 4.5l9.5 5-9.5 5-9.5-5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
-                    <path d="M6 12.2v4.2c2.5 1.8 9.5 1.8 12 0v-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                    <path d="M21.5 10v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path
+                      d="M2.5 9.5L12 4.5l9.5 5-9.5 5-9.5-5Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M6 12.2v4.2c2.5 1.8 9.5 1.8 12 0v-4.2"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M21.5 10v5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
                   </svg>
                 ) : null}
                 {k.id === 'languages' ? (
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z" fill="none" stroke="currentColor" stroke-width="1.6" />
-                    <path d="M3.5 12h17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                    <path d="M12 3c3.2 3.6 3.2 14.4 0 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                    <path d="M12 3c-3.2 3.6-3.2 14.4 0 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path
+                      d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                    />
+                    <path
+                      d="M3.5 12h17"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M12 3c3.2 3.6 3.2 14.4 0 18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M12 3c-3.2 3.6-3.2 14.4 0 18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
                   </svg>
                 ) : null}
                 {k.id === 'experience' ? (
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M8 7V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                    <path d="M5.5 7.5h13A2 2 0 0 1 20.5 9.5v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.6" />
-                    <path d="M9.5 12h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    <path
+                      d="M8 7V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M5.5 7.5h13A2 2 0 0 1 20.5 9.5v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                    />
+                    <path
+                      d="M9.5 12h5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
                   </svg>
                 ) : null}
               </span>
-              <span class="whoami-key-num">{k.number ?? String(index + 1).padStart(2, '0')}</span>
+              <span class="whoami-key-num">
+                {k.number ?? String(index + 1).padStart(2, '0')}
+              </span>
             </span>
             <span class="whoami-key-label">{k.label}</span>
           </span>
@@ -109,7 +212,8 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
     min-height: var(--key-h);
     padding: 0.55rem 0.6rem;
     border-radius: var(--key-radius);
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 10%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 10%);
     text-decoration: none;
     font: inherit;
     text-align: left;
@@ -117,15 +221,15 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
     color: var(--color-text-strong);
     position: relative;
     overflow: hidden;
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, var(--color-surface-2), transparent 0%) 0%,
-        color-mix(in oklab, var(--color-surface-3), transparent 0%) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface-2), transparent 0%) 0%,
+      color-mix(in oklab, var(--color-surface-3), transparent 0%) 100%
+    );
     box-shadow:
       0 12px 18px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 25%),
       inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%);
     transform: translate3d(0, var(--key-press), 0) rotateX(var(--key-tilt));
     user-select: none;
@@ -164,7 +268,8 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
       --key-tilt: 2deg;
       box-shadow:
         0 18px 30px var(--shadow-2),
-        inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+        inset 0 1px 0
+          color-mix(in oklab, var(--color-border-strong), transparent 25%),
         inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
         0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 82%);
     }
@@ -174,7 +279,8 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
     --key-press: 2px;
     box-shadow:
       0 12px 18px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 25%),
       inset 0 2px 10px color-mix(in oklab, var(--color-bg), transparent 0%);
   }
 
@@ -182,7 +288,8 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
     border-color: color-mix(in oklab, var(--color-accent), transparent 40%);
     box-shadow:
       0 18px 30px var(--shadow-2),
-      inset 0 1px 0 color-mix(in oklab, var(--color-border-strong), transparent 25%),
+      inset 0 1px 0
+        color-mix(in oklab, var(--color-border-strong), transparent 25%),
       inset 0 -3px 0 color-mix(in oklab, var(--color-bg), transparent 0%),
       0 0 0 1px color-mix(in oklab, var(--color-accent), transparent 70%);
   }
@@ -200,7 +307,11 @@ const { label = 'Profile navigation', keys } = Astro.props as Props;
         color-mix(in oklab, var(--color-success), transparent 74%),
         transparent 62%
       ),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 54%);
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.16),
+        rgba(255, 255, 255, 0) 54%
+      );
   }
 
   .whoami-key:focus-visible {

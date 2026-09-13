@@ -12,7 +12,14 @@ type Props = {
   iconLabel?: string;
   variant?: 'default' | 'module';
   depth?: 'flat' | 'raised' | 'elevated' | 'floating';
-  tone?: 'neutral' | 'accent' | 'security' | 'cloud' | 'infra' | 'automation' | 'compliance';
+  tone?:
+    | 'neutral'
+    | 'accent'
+    | 'security'
+    | 'cloud'
+    | 'infra'
+    | 'automation'
+    | 'compliance';
   motion?: 'none' | 'hover-lift';
   retro?: boolean;
   showFallbackTable?: boolean;
@@ -64,7 +71,11 @@ const hasFooterSlot = Astro.slots.has('footer');
     data-retro={retro ? 'true' : 'false'}
     aria-label={ariaLabel}
   >
-    {summary ? <p id={summaryId} data-ui-chart-summary>{summary}</p> : null}
+    {summary ? (
+      <p id={summaryId} data-ui-chart-summary>
+        {summary}
+      </p>
+    ) : null}
 
     {hasChartSlot ? (
       <div data-ui-chart-canvas-wrap>
@@ -78,7 +89,15 @@ const hasFooterSlot = Astro.slots.has('footer');
       </div>
     ) : null}
 
-    {hasActionsSlot ? <div data-ui-chart-legend><slot name="actions" /></div> : null}
-    {hasFooterSlot ? <footer><slot name="footer" /></footer> : null}
+    {hasActionsSlot ? (
+      <div data-ui-chart-legend>
+        <slot name="actions" />
+      </div>
+    ) : null}
+    {hasFooterSlot ? (
+      <footer>
+        <slot name="footer" />
+      </footer>
+    ) : null}
   </div>
 </UiPanel>

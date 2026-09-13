@@ -1,3 +1,5 @@
+# Checklist
+
 - [ ] Tokens updated as specified (new typography/focus/scrim/glass/motion helper tokens exist and are used consistently).
 - [ ] Global styles reflect Phase 2 art direction without violating the explicit avoid list (no neon HUD/glitch/heavy bloom styling).
 - [ ] Homepage hero contains an Operator ID block with Guillermo portrait and GitHub/LinkedIn links that are visible without scrolling.

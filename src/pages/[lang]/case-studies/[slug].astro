@@ -120,31 +120,29 @@ const description = caseStudy.data.excerpt;
 <BaseLayout title={title} description={description} lang={lang} useLangPrefix>
   <section class="card pad">
     <h1>{caseStudy.data.title}</h1>
-    {
-      caseStudyLang ? null : lang !== 'en' ? (
-        <p class="topology-subtitle">
-          Showing English content while {lang.toUpperCase()} content is being
-          authored.
-        </p>
-      ) : null
-    }
+    {caseStudyLang ? null : lang !== 'en' ? (
+      <p class="topology-subtitle">
+        Showing English content while {lang.toUpperCase()} content is being
+        authored.
+      </p>
+    ) : null}
     <p>{caseStudy.data.excerpt}</p>
     <div class="cta-row">
-      <a class="button" href={withBase(`/${lang}/portfolio`)}
-        >Back to portfolio</a
-      >
-      <a class="button primary" href={withBase(`/${lang}/cv`)}>Download CV</a>
+      <a class="button" href={withBase(`/${lang}/portfolio`)}>
+        Back to portfolio
+      </a>
+      <a class="button primary" href={withBase(`/${lang}/cv`)}>
+        Download CV
+      </a>
     </div>
   </section>
 
   <section class="grid">
     {tools.length > 0 ? <TaxonomyPills label="Tools" items={tools} /> : null}
     {skills.length > 0 ? <TaxonomyPills label="Skills" items={skills} /> : null}
-    {
-      categories.length > 0 ? (
-        <TaxonomyPills label="Categories" items={categories} />
-      ) : null
-    }
+    {categories.length > 0 ? (
+      <TaxonomyPills label="Categories" items={categories} />
+    ) : null}
     {tags.length > 0 ? <TaxonomyPills label="Tags" items={tags} /> : null}
   </section>
 
@@ -156,53 +154,47 @@ const description = caseStudy.data.excerpt;
   <section class="grid cols-2">
     <div class="card pad">
       <h2>Links</h2>
-      {
-        outgoingLinks.length > 0 ? (
-          <ul>
-            {outgoingLinks.map((l) => (
-              <li>
-                <a href={l.href}>{l.label}</a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="topology-subtitle">No outgoing links yet.</p>
-        )
-      }
+      {outgoingLinks.length > 0 ? (
+        <ul>
+          {outgoingLinks.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="topology-subtitle">No outgoing links yet.</p>
+      )}
     </div>
 
     <div class="card pad">
       <h2>Backlinks</h2>
-      {
-        incomingLinks.length > 0 ? (
-          <ul>
-            {incomingLinks.map((l) => (
-              <li>
-                <a href={l.href}>{l.label}</a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="topology-subtitle">No backlinks yet.</p>
-        )
-      }
+      {incomingLinks.length > 0 ? (
+        <ul>
+          {incomingLinks.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="topology-subtitle">No backlinks yet.</p>
+      )}
     </div>
   </section>
 
   <section class="card pad">
     <h2>Related</h2>
-    {
-      relatedLinks.length > 0 ? (
-        <div class="station-chips">
-          {relatedLinks.map((l) => (
-            <a class="station-chip" href={l.href}>
-              {l.label}
-            </a>
-          ))}
-        </div>
-      ) : (
-        <p class="topology-subtitle">No related entries yet.</p>
-      )
-    }
+    {relatedLinks.length > 0 ? (
+      <div class="station-chips">
+        {relatedLinks.map((l) => (
+          <a class="station-chip" href={l.href}>
+            {l.label}
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="topology-subtitle">No related entries yet.</p>
+    )}
   </section>
 </BaseLayout>

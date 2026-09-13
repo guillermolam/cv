@@ -58,7 +58,10 @@ const main = async () => {
     if (!(await exists(path.join(root, rel)))) missingFiles.push(rel);
   }
 
-  const chartCss = await fs.readFile(path.join(root, 'src/design-system/tokens/chart.css'), 'utf8');
+  const chartCss = await fs.readFile(
+    path.join(root, 'src/design-system/tokens/chart.css'),
+    'utf8',
+  );
   const cssHasShellSelectors =
     chartCss.includes('[data-ui-chart-shell]') &&
     chartCss.includes('[data-ui-chart-canvas-wrap]') &&
@@ -74,18 +77,33 @@ const main = async () => {
   }
 
   const lowLevelChartTexts = await Promise.all(
-    ['UiBarChart', 'UiLineChart', 'UiRadarChart', 'UiDoughnutChart'].map((name) =>
-      fs.readFile(path.join(root, `src/components/charts/${name}.astro`), 'utf8'),
+    ['UiBarChart', 'UiLineChart', 'UiRadarChart', 'UiDoughnutChart'].map(
+      (name) =>
+        fs.readFile(
+          path.join(root, `src/components/charts/${name}.astro`),
+          'utf8',
+        ),
     ),
   );
 
-  const canvasAndFallbackOk = lowLevelChartTexts.every((t) => t.includes('<canvas') && t.includes('data-ui-chart-table'));
-  const reducedMotionReferenced = (await fs.readFile(path.join(root, 'src/design-system/charts/chart-lifecycle.ts'), 'utf8')).includes(
-    'prefersReducedMotion',
+  const canvasAndFallbackOk = lowLevelChartTexts.every(
+    (t) => t.includes('<canvas') && t.includes('data-ui-chart-table'),
   );
+  const reducedMotionReferenced = (
+    await fs.readFile(
+      path.join(root, 'src/design-system/charts/chart-lifecycle.ts'),
+      'utf8',
+    )
+  ).includes('prefersReducedMotion');
 
-  const catalog = await fs.readFile(path.join(root, 'src/pages/design-system/index.astro'), 'utf8');
-  const catalogHasCharts = catalog.includes('Chart Foundation') && catalog.includes('<UiBarChart') && catalog.includes('<UiRadarChart');
+  const catalog = await fs.readFile(
+    path.join(root, 'src/pages/design-system/index.astro'),
+    'utf8',
+  );
+  const catalogHasCharts =
+    catalog.includes('Chart Foundation') &&
+    catalog.includes('<UiBarChart') &&
+    catalog.includes('<UiRadarChart');
 
   const ok =
     missingFiles.length === 0 &&
@@ -112,4 +130,3 @@ const main = async () => {
 };
 
 await main();
-

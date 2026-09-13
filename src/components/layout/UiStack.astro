@@ -9,8 +9,15 @@ type Props = {
   labelledBy?: string;
 };
 
-const { id, class: className, gap, align = 'stretch', justify = 'flex-start', splitAfter, labelledBy } =
-  Astro.props as Props;
+const {
+  id,
+  class: className,
+  gap,
+  align = 'stretch',
+  justify = 'flex-start',
+  splitAfter,
+  labelledBy,
+} = Astro.props as Props;
 
 const styleParts: string[] = [];
 if (gap) styleParts.push(`--ui-stack-gap:${gap}`);
@@ -26,7 +33,9 @@ const style = styleParts.length > 0 ? styleParts.join(';') : undefined;
   data-gap={gap}
   data-align={align}
   data-justify={justify}
-  data-split-after={typeof splitAfter === 'number' ? String(splitAfter) : undefined}
+  data-split-after={
+    typeof splitAfter === 'number' ? String(splitAfter) : undefined
+  }
   aria-labelledby={labelledBy}
   style={style}
 >

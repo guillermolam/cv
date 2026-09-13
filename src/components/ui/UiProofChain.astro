@@ -4,7 +4,14 @@ import UiIcon from './UiIcon.astro';
 export type ProofChainItem = {
   label: string;
   href?: string;
-  kind?: 'profile' | 'project' | 'case-study' | 'skill' | 'tool' | 'knowledge' | 'other';
+  kind?:
+    | 'profile'
+    | 'project'
+    | 'case-study'
+    | 'skill'
+    | 'tool'
+    | 'knowledge'
+    | 'other';
   icon?: string;
   current?: boolean;
 };
@@ -48,7 +55,9 @@ const {
       const isCurrent = Boolean(item.current) || isLast;
       const content = (
         <>
-          {item.icon ? <UiIcon name={item.icon} decorative depth="flat" /> : null}
+          {item.icon ? (
+            <UiIcon name={item.icon} decorative depth="flat" />
+          ) : null}
           <span>{item.label}</span>
         </>
       );

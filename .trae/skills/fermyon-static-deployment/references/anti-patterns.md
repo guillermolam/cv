@@ -43,4 +43,3 @@ This file lists deployment anti-patterns that have caused real-world failures in
 - Shipping without a rollback plan (even if not executed).
 - Not capturing the deployed URL(s), build version, commit SHA, and validation results in a release report.
 - Treating “Pages deploy green” as equivalent to “production is correct” without smoke tests.
-

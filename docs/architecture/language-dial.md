@@ -4,12 +4,14 @@ A single reusable Flipper-Zero-style directional wheel for i18n selection,
 replacing the per-language buttons of the old `AnalogLanguageSelector`.
 
 ## Files
+
 - `src/components/i18n/LanguageDial.astro` — the dial (LCD + D-pad + center OK).
 - `src/components/i18n/CountryFlag.astro` — inline SVG flags (gb/es/fr/de).
 - `src/scripts/language-dial.ts` — client behaviour.
 - Wired in `src/layouts/PageLayout.astro`.
 
 ## Behaviour
+
 - **LCD** shows the previewed language: flag + code + name. All four items are
   rendered; only the active one is shown (`data-active`), toggled by the script.
 - **Preview vs commit**: Up/Down (and Left/Right) **preview-cycle** the language
@@ -24,5 +26,6 @@ replacing the per-language buttons of the old `AnalogLanguageSelector`.
   silent when audio muted).
 
 ## Path preservation
+
 `PageLayout` builds `langLinks` from `stripLangPrefix(currentPath)` so switching
 language keeps the user on the same page.

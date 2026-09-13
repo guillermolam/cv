@@ -17,7 +17,10 @@ let ambientNode: { stop: () => void } | null = null;
 const ensureCtx = (): AudioContext | null => {
   if (typeof window === 'undefined') return null;
   if (ctx) return ctx;
-  const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const Ctor =
+    window.AudioContext ??
+    (window as unknown as { webkitAudioContext?: typeof AudioContext })
+      .webkitAudioContext;
   if (!Ctor) return null;
   ctx = new Ctor();
   return ctx;
@@ -47,7 +50,10 @@ const play = (type: SfxType) => {
   osc.type = preset.type;
   osc.frequency.setValueAtTime(preset.freq, now);
   // quick downward chirp for a mechanical feel
-  osc.frequency.exponentialRampToValueAtTime(Math.max(60, preset.freq * 0.6), now + preset.dur);
+  osc.frequency.exponentialRampToValueAtTime(
+    Math.max(60, preset.freq * 0.6),
+    now + preset.dur,
+  );
   gain.gain.setValueAtTime(0.0001, now);
   gain.gain.exponentialRampToValueAtTime(preset.gain, now + 0.005);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + preset.dur);

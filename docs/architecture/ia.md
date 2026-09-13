@@ -11,6 +11,7 @@ Primary navigation labels are defined in: [navigation-labels.md](file:///Users/g
 ## Route Hierarchy
 
 Language-scoped primary routes:
+
 - `/{lang}/` — Whoami (Control Room landing)
 - `/{lang}/toolchain` — Toolchain
 - `/{lang}/experience` — Experience
@@ -21,6 +22,7 @@ Language-scoped primary routes:
 - `/{lang}/contact` — Contact + professional channels
 
 Language-scoped secondary/utility routes (not in primary nav):
+
 - `/{lang}/cv` — Briefing Pack (CV formats + downloads)
 - `/{lang}/portfolio` — Proofs/Deployments (secondary proof browsing; may later merge into Experience views)
   - `/{lang}/portfolio/development`
@@ -31,9 +33,11 @@ Language-scoped secondary/utility routes (not in primary nav):
 - `/{lang}/content-index` — Graph diagnostics / content inventory
 
 Non-language root:
+
 - `/` — English default landing (or a light language chooser that routes to `/en/`, `/es/`, `/fr/`, `/de/`)
 
 Language support (current implementation):
+
 - Content collections validate `en|es`.
 - Route scaffolding may exist for `fr|de` as future translation work; navigation labels and content must be honest where translations are missing.
 
@@ -42,6 +46,7 @@ Language support (current implementation):
 ## Navigation Hierarchy
 
 Primary navigation (header, persistent):
+
 - Whoami
 - Toolchain
 - Experience
@@ -51,6 +56,7 @@ Primary navigation (header, persistent):
 - Language switcher
 
 Secondary navigation (contextual, not primary):
+
 - Briefing Pack (CV downloads)
 - Proofs/Deployments (portfolio index)
 - Mission Dossiers (case studies index, if present later)
@@ -58,14 +64,17 @@ Secondary navigation (contextual, not primary):
 - Model Test (dev-only)
 
 Tertiary navigation (contextual, within case studies and blog):
+
 - Breadcrumbs (Whoami → Proofs/Deployments → Category → Item)
 - “Related” modules (case studies/projects/blog) to connect proof pathways
 
 Control Room (landing) in-page navigation (supplemental, non-essential):
+
 - Station chips (link to anchors or portfolio categories)
 - Topology Table links (deep-link rows)
 
 Rules:
+
 - Navigation must remain usable without WebGL and without JavaScript.
 - Control Room navigation must duplicate (not replace) standard site navigation.
 
@@ -74,6 +83,7 @@ Rules:
 ## Recruiter Journey
 
 ### Primary recruiter questions (mapped to routes)
+
 1. Who is Guillermo and what role is he targeting?
    - Answered on `/{lang}/` (Whoami); deeper details optionally on `/{lang}/about` (Operator File)
 2. What domains is he strong in?
@@ -86,9 +96,11 @@ Rules:
    - Answered via persistent header CTA and `/{lang}/contact`
 
 ### Ideal flow (fast path)
+
 `/{lang}/` → (Briefing Pack) → (Experience) → (Flagship Mission Dossier) → (Contact)
 
 ### Alternate flow (deep technical)
+
 `/{lang}/` → Toolchain → Tutorials → Knowledge Center → Experience → Briefing Pack → Contact
 
 ---
@@ -96,29 +108,35 @@ Rules:
 ## CTA Placement
 
 Landing page (first screen, above fold):
+
 - Primary: **Download CV**
 - Secondary: **View Portfolio**
 - Proof CTA: **Flagship Case Study** (e.g., glam-hybrid-cloud)
 - External proof links: GitHub, LinkedIn (present, not visually dominant over CV/Portfolio)
 
 CV page:
+
 - CV format selector with clear “use case” labels
 - Direct download links (or “Coming soon” if a PDF is not present)
 - Secondary CTA: Contact
 
 Portfolio overview (secondary):
+
 - Project cards
 - Case study evidence links where available
 
 Case study detail:
+
 - “Back to Portfolio”
 - “Download CV”
 - “Contact”
 
 Contact:
+
 - Email / form (if present) + social links (GitHub, LinkedIn)
 
 Rules:
+
 - CV download CTA must be available from every page via header or consistent page-level placement.
 - CTAs must be text-first and accessible; avoid icon-only actions.
 
@@ -127,10 +145,12 @@ Rules:
 ## Canonical Routes and SEO Canonicals
 
 Canonical principles:
+
 - Each language route is canonical for that language.
 - `hreflang` links connect the same page across `en/es/fr/de`.
 
 Canonical mapping rules:
+
 - `/`:
   - If used as English default landing, canonical should be `/en/`
   - If used as language chooser, canonical should be `/` and it should not compete with `/en/` for indexing (implementation detail handled later)
@@ -139,6 +159,7 @@ Canonical mapping rules:
   - Alternates: other languages via `hreflang`
 
 Stable content identifiers:
+
 - Case studies: `/{lang}/case-studies/{slug}` where `{slug}` is stable across languages (translations vary by content, not by path)
 - Blog posts: `/{lang}/blog/{slug}` where `{slug}` is stable; translations optional
 
@@ -147,11 +168,13 @@ Stable content identifiers:
 ## IA Guardrails (Scope Control)
 
 Avoid:
+
 - A “dashboard-style homepage” where the first screen is widgets, charts, and panels.
 - A “cloud console clone” interaction model.
 - Navigation patterns that require canvas or pointer manipulation.
 
 Enforce:
+
 - Recruiter-first scannability.
 - Content-first semantics.
 - Progressive enhancement for any 3D.

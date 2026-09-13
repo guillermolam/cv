@@ -91,18 +91,34 @@ const ids = {
   {showIds ? (
     <div>
       <UiCluster>
-        {ids.projectId ? <UiBadge variant="neutral" size="sm" depth="flat">projectId: {ids.projectId}</UiBadge> : null}
-        {ids.caseStudyId ? <UiBadge variant="neutral" size="sm" depth="flat">caseStudyId: {ids.caseStudyId}</UiBadge> : null}
+        {ids.projectId ? (
+          <UiBadge variant="neutral" size="sm" depth="flat">
+            projectId: {ids.projectId}
+          </UiBadge>
+        ) : null}
+        {ids.caseStudyId ? (
+          <UiBadge variant="neutral" size="sm" depth="flat">
+            caseStudyId: {ids.caseStudyId}
+          </UiBadge>
+        ) : null}
       </UiCluster>
       <UiCluster>
         {(ids.skillIds ?? []).map((v) => (
-          <UiSkillBadge label={`skillId: ${v}`} variant="neutral" depth="flat" />
+          <UiSkillBadge
+            label={`skillId: ${v}`}
+            variant="neutral"
+            depth="flat"
+          />
         ))}
         {(ids.toolIds ?? []).map((v) => (
           <UiSkillBadge label={`toolId: ${v}`} variant="neutral" depth="flat" />
         ))}
         {(ids.categoryIds ?? []).map((v) => (
-          <UiSkillBadge label={`categoryId: ${v}`} variant="neutral" depth="flat" />
+          <UiSkillBadge
+            label={`categoryId: ${v}`}
+            variant="neutral"
+            depth="flat"
+          />
         ))}
         {(ids.tagIds ?? []).map((v) => (
           <UiSkillBadge label={`tagId: ${v}`} variant="neutral" depth="flat" />
@@ -112,5 +128,9 @@ const ids = {
   ) : null}
 
   <slot />
-  {Astro.slots.has('evidence') ? <div slot="footer"><slot name="evidence" /></div> : null}
+  {Astro.slots.has('evidence') ? (
+    <div slot="footer">
+      <slot name="evidence" />
+    </div>
+  ) : null}
 </UiCard>

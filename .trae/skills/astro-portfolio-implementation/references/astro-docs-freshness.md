@@ -3,7 +3,9 @@
 Astro changes quickly. Treat version-sensitive APIs as untrusted until verified.
 
 ## Verification Rules
+
 Before using unfamiliar or version-sensitive Astro APIs, integrations, routing, collections, middleware, SSR/static behavior, image APIs, or config options:
+
 1) Inspect the local project first (Astro version, existing config usage, existing patterns).
 2) Prefer official docs verification:
    - First: use an Astro docs MCP tool if available.
@@ -15,7 +17,9 @@ Before using unfamiliar or version-sensitive Astro APIs, integrations, routing, 
    - The specific behavior/option confirmed
 
 ## When to Escalate
+
 Escalate to governance/spec if verification implies:
+
 - an architecture change (SSR/adapters)
 - a new integration dependency
 - a change to IA/content model rather than implementation

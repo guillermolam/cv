@@ -10,9 +10,11 @@ export async function initSectionNav(): Promise<void> {
   if (typeof window === 'undefined' || bound) return;
   bound = true;
 
-  document.querySelectorAll<HTMLElement>('[data-section-nav] [data-nav-link]').forEach((link) => {
-    link.addEventListener('pointerenter', () => emitSfx('hover'));
-    link.addEventListener('focus', () => emitSfx('hover'));
-    link.addEventListener('click', () => emitSfx('click'));
-  });
+  document
+    .querySelectorAll<HTMLElement>('[data-section-nav] [data-nav-link]')
+    .forEach((link) => {
+      link.addEventListener('pointerenter', () => emitSfx('hover'));
+      link.addEventListener('focus', () => emitSfx('hover'));
+      link.addEventListener('click', () => emitSfx('click'));
+    });
 }

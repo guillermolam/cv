@@ -2,11 +2,12 @@
 title: "Portfolio Control Room Implementation References"
 ---
 
-# References
+## References
 
 This skill is intentionally implementation-focused and uses progressive disclosure.
 
 Authoritative guidance lives in the portfolio repository docs:
+
 - docs/architecture/control-room-blueprint.md
 - docs/architecture/threejs-boundaries.md
 - docs/design/design-system.md

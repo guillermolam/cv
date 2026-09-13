@@ -5,7 +5,6 @@ type AlpineLike = {
 
 /** Alpine.data('whoamiStats', ...) — expandable evidence rows */
 export function registerWhoamiComponents(alpine: AlpineLike) {
-
   alpine.data('whoamiStats', () => ({
     open: null as string | null,
 

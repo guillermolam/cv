@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { createRenderCore } from './renderer';
 import { disposeScene } from './dispose';
-import { deviceQuality } from './capability';
+import { deviceQuality, heroWebglAllowed } from './capability';
+
+export { heroWebglAllowed };
 
 /**
  * Hero particle topology field.

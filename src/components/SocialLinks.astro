@@ -15,12 +15,21 @@ type Props = {
   class?: string;
 };
 
-const { links = site.social, ariaLabel = 'Social links', class: className } = Astro.props;
+const {
+  links = site.social,
+  ariaLabel = 'Social links',
+  class: className,
+} = Astro.props;
 ---
 
 <nav class:list={['social-links', className]} aria-label={ariaLabel}>
   {links.map((l) => (
-    <a class="social-link" href={l.href} target="_blank" rel="noopener noreferrer">
+    <a
+      class="social-link"
+      href={l.href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {l.kind === 'github' ? (
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path

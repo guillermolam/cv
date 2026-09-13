@@ -16,4 +16,3 @@ projectIds: [control-room-portfolio]
 caseStudyIds: [control-room-portfolio-content-graph]
 visibility: public
 ---
-

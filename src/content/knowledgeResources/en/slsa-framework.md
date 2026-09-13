@@ -14,4 +14,3 @@ skillIds: [software-supply-chain-security, devsecops]
 projectIds: [control-room-portfolio]
 visibility: public
 ---
-

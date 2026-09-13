@@ -15,21 +15,19 @@ const { skills } = Astro.props as Props;
   eyebrow="Toolchain"
   icon="code-window"
 >
-  {
-    skills.length > 0 ? (
-      <UiCluster gap="0.5rem" align="start">
-        {skills.map((skill) => (
-          <UiBadge variant="neutral" size="sm" depth="flat" motion="hover-lift">
-            {skill}
-          </UiBadge>
-        ))}
-      </UiCluster>
-    ) : (
-      <p class="experience-skills__empty">
-        No tools or categories are modeled for this role yet.
-      </p>
-    )
-  }
+  {skills.length > 0 ? (
+    <UiCluster gap="0.5rem" align="start">
+      {skills.map((skill) => (
+        <UiBadge variant="neutral" size="sm" depth="flat" motion="hover-lift">
+          {skill}
+        </UiBadge>
+      ))}
+    </UiCluster>
+  ) : (
+    <p class="experience-skills__empty">
+      No tools or categories are modeled for this role yet.
+    </p>
+  )}
 </ExperiencePanel>
 
 <style>

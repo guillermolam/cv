@@ -3,11 +3,13 @@
 This reference defines production validation checks for a Spin-hosted static site on Fermyon Cloud.
 
 Use the repo’s deployment inventory to decide which artifact you are validating:
+
 - [project-deployment-inventory.md](project-deployment-inventory.md)
 
 ## Smoke tests
 
 Minimum smoke tests (must pass):
+
 - `GET /` returns 200
 - `GET /<primary-css-or-js>` returns 200 and is not HTML
 - `GET /favicon.*` returns 200 (if used)
@@ -17,6 +19,7 @@ Minimum smoke tests (must pass):
 ### Repository-aware smoke tests (guillermolam/cv)
 
 If deploying the **root Astro** build (`dist/` is multi-page):
+
 - Validate that these routes exist as real static pages (direct request + refresh):
   - `/about/`
   - `/cv/`
@@ -27,6 +30,7 @@ If deploying the **root Astro** build (`dist/` is multi-page):
   - `/_astro/<file>.css` returns 200 and `content-type` is not HTML
 
 If deploying the **Vite subproject** build (`guillermo-lam-cv/dist`):
+
 - Treat deep-link refresh behavior as a first-class risk. The repo contains:
   - [vercel.json](file:///Users/guillermolammartin/Git/guillermolam/cv/vercel.json) (`destination: /index.html`)
 - Do not assume Spin/Fermyon provides SPA fallback without docs evidence. Validate by direct request + refresh of at least one non-root path.
@@ -52,14 +56,17 @@ Static hosting routing must be validated explicitly.
 ### Spin-derived route validation structure (tests evidence)
 
 Spin’s integration tests validate:
+
 - a “happy path” route
 - a wildcard route
 - an expected 404
 
 Reference excerpt:
-- https://github.com/spinframework/spin/blob/main/tests/integration.rs (search for `fn http_smoke_test`)
+
+- <https://github.com/spinframework/spin/blob/main/tests/integration.rs> (search for `fn http_smoke_test`)
 
 Adapt this structure to static hosting by validating:
+
 - one expected page path returns 200
 - one expected asset path returns 200
 - one obviously-invalid path returns 404 (or the repo’s explicitly documented fallback behavior)

@@ -15,11 +15,21 @@ highlights:
   - Designed and deployed enterprise platforms on Kubernetes OpenShift, managing SELinux hardening, persistent volumes, and kernel tuning for container workloads
   - Implemented API platform for Santander Bank US using IBM API Connect, MuleSoft/Anypoint Studio, integrating SQL and MongoDB backends
   - Built and maintained CI/CD pipelines with Docker, GitLab, Jenkins, Sonatype Nexus, and SonarQube
-  - "Configured full observability stack — ELK (Elasticsearch, Logstash, Kibana), Kafka, Grafana, Prometheus, and Alertmanager"
+  - 'Configured full observability stack — ELK (Elasticsearch, Logstash, Kibana), Kafka, Grafana, Prometheus, and Alertmanager'
   - Managed TLS certificate lifecycle, cipher suite enforcement, and secure communication standards across all services
   - Delivered backend systems in Java and Kotlin (Maven, Gradle) with Node.js/Webpack for frontend tooling
 categoryIds: [platform-engineering, devsecops, gitops-delivery]
-toolIds: [kubernetes, jenkins, gitlab-ci, grafana, prometheus, terraform, helm, sonarqube]
+toolIds:
+  [
+    kubernetes,
+    jenkins,
+    gitlab-ci,
+    grafana,
+    prometheus,
+    terraform,
+    helm,
+    sonarqube,
+  ]
 skillIds: [devsecops, kubernetes-platform-engineering]
 security:
   domainIds: [devsecops]

@@ -10,6 +10,8 @@ export default defineConfig({
   site: 'https://guillermolam.github.io',
   base: '/cv',
   output: 'static',
+  // Preserve Astro 6 whitespace semantics in existing prose and inline components.
+  compressHTML: true,
   integrations: [
     mdx(),
     UnoCSS(),
@@ -23,6 +25,9 @@ export default defineConfig({
   vite: {
     build: {
       chunkSizeWarningLimit: 1600,
+      // The page's 3D modules are viewport-gated and loaded on demand.
+      // Preloading their graph creates unused-preload warnings in WebKit.
+      modulePreload: false,
     },
     // Pre-bundle the heavy libraries that are loaded via dynamic import()
     // (WebGL hero, lazy charts, motion). Without this, adding new deps triggers

@@ -182,4 +182,3 @@ If Spin is logged out, `spin deploy` prints a prompt to run `spin login`, and ex
 ```
 
 **Portfolio Applicability:** use as a reminder that deploy auth mechanisms change; consult current CLI docs before recommending commands
-

@@ -1,3 +1,5 @@
+# Checklist
+
 - [ ] Spec includes Phase 1 scope and explicit non-goals.
 - [ ] Typography strategy is locked (system-first stacks + weights + scale).
 - [ ] Layout grid and breakpoints are locked (max width, gutters, sm/md/lg/xl).

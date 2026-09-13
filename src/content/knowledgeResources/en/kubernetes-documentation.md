@@ -14,4 +14,3 @@ toolIds: [kubernetes]
 skillIds: [kubernetes-platform-engineering, devsecops]
 visibility: public
 ---
-

@@ -14,14 +14,26 @@ control-room palette and remain contrast-safe.
   --ds-chart-series-3: var(--color-success);
   --ds-chart-series-4: var(--color-warning);
 
-  --ds-chart-tooltip-bg: color-mix(in oklab, var(--color-surface-2), transparent 10%);
+  --ds-chart-tooltip-bg: color-mix(
+    in oklab,
+    var(--color-surface-2),
+    transparent 10%
+  );
   --ds-chart-tooltip-border: var(--color-border-strong);
   --ds-chart-legend-text: var(--color-text);
 
   --ds-chart-shell-bg: var(--ds-retro-shell-bg);
   --ds-chart-shell-border: var(--ds-retro-shell-border);
-  --ds-chart-bay-bg: color-mix(in oklab, var(--ds-retro-crt-glass), transparent 25%);
-  --ds-chart-bay-border: color-mix(in oklab, var(--ds-chart-shell-border), transparent 20%);
+  --ds-chart-bay-bg: color-mix(
+    in oklab,
+    var(--ds-retro-crt-glass),
+    transparent 25%
+  );
+  --ds-chart-bay-border: color-mix(
+    in oklab,
+    var(--ds-chart-shell-border),
+    transparent 20%
+  );
   --ds-chart-scanline-opacity: var(--ds-retro-crt-scanline);
 }
 
@@ -42,7 +54,11 @@ control-room palette and remain contrast-safe.
       rgba(255, 255, 255, 0) 2px,
       rgba(255, 255, 255, 0) 5px
     ),
-    radial-gradient(circle at 30% 15%, color-mix(in oklab, var(--ds-chart-bay-bg), transparent 15%), transparent 55%),
+    radial-gradient(
+      circle at 30% 15%,
+      color-mix(in oklab, var(--ds-chart-bay-bg), transparent 15%),
+      transparent 55%
+    ),
     var(--ds-chart-bay-bg);
   box-shadow: var(--ds-panel-bevel-highlight), var(--ds-panel-inset-shadow);
 }
@@ -72,14 +88,19 @@ control-room palette and remain contrast-safe.
 [data-ui-chart-table] th,
 [data-ui-chart-table] td {
   padding: 0.55rem 0.65rem;
-  border-bottom: 1px solid color-mix(in oklab, var(--ds-chart-shell-border), transparent 35%);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--ds-chart-shell-border), transparent 35%);
   text-align: left;
 }
 
 [data-ui-chart-table] th {
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: color-mix(in oklab, var(--ds-color-text-muted), var(--ds-color-text) 10%);
+  color: color-mix(
+    in oklab,
+    var(--ds-color-text-muted),
+    var(--ds-color-text) 10%
+  );
 }
 
 [data-ui-chart-legend] {
@@ -99,7 +120,11 @@ control-room palette and remain contrast-safe.
 @media (prefers-reduced-motion: reduce) {
   [data-ui-chart-canvas-wrap] {
     background:
-      radial-gradient(circle at 30% 15%, color-mix(in oklab, var(--ds-chart-bay-bg), transparent 15%), transparent 55%),
+      radial-gradient(
+        circle at 30% 15%,
+        color-mix(in oklab, var(--ds-chart-bay-bg), transparent 15%),
+        transparent 55%
+      ),
       var(--ds-chart-bay-bg);
   }
 }

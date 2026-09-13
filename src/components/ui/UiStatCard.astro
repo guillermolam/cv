@@ -4,7 +4,8 @@ import UiSurface from './UiSurface.astro';
 import UiBadge from './UiBadge.astro';
 
 type StatDepth = 'flat' | 'raised' | 'elevated' | 'floating';
-type StatVariant = 'neutral' | 'accent' | 'security' | 'cloud' | 'danger' | 'info';
+type StatVariant =
+  'neutral' | 'accent' | 'security' | 'cloud' | 'danger' | 'info';
 
 type Props = {
   id?: string;
@@ -18,7 +19,8 @@ type Props = {
   icon?: string;
   iconLabel?: string;
   trend?: 'up' | 'down' | 'flat';
-  status?: 'Available' | 'Coming soon' | 'In progress' | 'Verified' | 'Draft' | string;
+  status?:
+    'Available' | 'Coming soon' | 'In progress' | 'Verified' | 'Draft' | string;
   sourceLabel?: string;
   sourceHref?: string;
   motion?: 'none' | 'hover-lift';
@@ -68,7 +70,14 @@ const sourceText = sourceLabel ?? 'Source';
   }}
 >
   <div data-ui-stat-header>
-    {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+    {icon ? (
+      <UiIcon
+        name={icon}
+        label={iconLabel}
+        decorative={!iconLabel}
+        depth="flat"
+      />
+    ) : null}
     <div data-ui-stat-label>{label}</div>
   </div>
 
@@ -79,7 +88,11 @@ const sourceText = sourceLabel ?? 'Source';
 
   {status ? (
     <div>
-      <UiBadge variant={variant === 'neutral' ? 'neutral' : variant} size="sm" depth="flat">
+      <UiBadge
+        variant={variant === 'neutral' ? 'neutral' : variant}
+        size="sm"
+        depth="flat"
+      >
         {status}
       </UiBadge>
     </div>
@@ -87,7 +100,12 @@ const sourceText = sourceLabel ?? 'Source';
 
   {trend ? (
     <div>
-      <UiBadge variant="neutral" size="sm" depth="flat" ariaLabel={`Trend: ${trend}`}>
+      <UiBadge
+        variant="neutral"
+        size="sm"
+        depth="flat"
+        ariaLabel={`Trend: ${trend}`}
+      >
         Trend: {trend}
       </UiBadge>
     </div>

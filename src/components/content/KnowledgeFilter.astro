@@ -12,8 +12,16 @@ export type Props = {
   totalCount: number;
 };
 
-const { targetSelector, typeOptions, levelOptions, statusOptions, tagOptions, toolOptions, categoryOptions, totalCount } =
-  Astro.props as Props;
+const {
+  targetSelector,
+  typeOptions,
+  levelOptions,
+  statusOptions,
+  tagOptions,
+  toolOptions,
+  categoryOptions,
+  totalCount,
+} = Astro.props as Props;
 
 const uid = `knowledge-filter-${Math.random().toString(16).slice(2)}`;
 const idType = `${uid}-type`;
@@ -24,7 +32,11 @@ const idTool = `${uid}-tool`;
 const idCategory = `${uid}-category`;
 ---
 
-<section class="card pad filter-shell" data-knowledge-filter data-target={targetSelector}>
+<section
+  class="card pad filter-shell"
+  data-knowledge-filter
+  data-target={targetSelector}
+>
   <form class="filter-form">
     <fieldset class="filter-fieldset">
       <legend class="filter-legend">Filter</legend>
@@ -156,4 +168,3 @@ const idCategory = `${uid}-category`;
     display: block;
   }
 </style>
-

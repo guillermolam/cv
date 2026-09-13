@@ -13,7 +13,9 @@ metadata:
 # Motion Design System
 
 ## Activation Scope
+
 Use this skill for:
+
 - Timing and easing system definition (tiers and usage rules)
 - Microinteractions (hover/focus/press/selection feedback)
 - Transitions (route/section/state changes)
@@ -23,16 +25,19 @@ Use this skill for:
 - Motion audits for cohesion and “premium” feel
 
 Do not use this skill for:
+
 - Writing content copy or portfolio narrative positioning
 - Implementing Astro components or Three.js scenes (route to implementation owners)
 - Performance profiling deep dives (route to immersive-performance-governance)
 
 ## Required Inputs
+
 - Target surface (homepage, nav, rail, station chips, portfolio pages, 3D overlays)
 - Interaction states and user goals (what needs to be communicated)
 - Constraints (reduced motion, mobile, non-WebGL fallback)
 
 ## Workflow
+
 1) Inventory motion surfaces (UI + overlays + scene-adjacent).
 2) Define motion tokens:
    - durations by tier
@@ -50,16 +55,18 @@ Do not use this skill for:
 6) Produce acceptance criteria and handoff to implementers.
 
 ## Validation Gates
+
 - Cohesion: patterns share timing/easing vocabulary
 - Intent: each motion communicates something (not decoration)
 - Accessibility: reduced motion is meaningful and preserves usability
 - Recruiter UX: motion does not add friction to CV/contact path
 
 ## Output Contract
+
 Every execution must produce:
+
 - Motion token table (timing tiers + easing)
 - Pattern catalog (what/when/why)
 - Reduced-motion map (pattern → alternate)
 - Implementation notes (CSS vars, primitives, boundaries)
 - Risks and follow-up actions
-

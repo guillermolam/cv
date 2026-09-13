@@ -21,7 +21,11 @@ const alphaVar =
       : 'var(--fx-scanline-alpha)';
 ---
 
-<span class:list={['fx-scanlines', className]} aria-hidden="true" data-fx-scanlines></span>
+<span
+  class:list={['fx-scanlines', className]}
+  aria-hidden="true"
+  data-fx-scanlines
+></span>
 
 <style define:vars={{ scanAlpha: alphaVar }}>
   .fx-scanlines {

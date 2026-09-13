@@ -209,8 +209,7 @@ const buildOne = (root: HTMLElement) => {
       .map((place) => ({
         ...place,
         coordinates: projection([place.longitude, place.latitude]) as
-          | [number, number]
-          | null,
+          [number, number] | null,
         visible: isVisible(projection, place.longitude, place.latitude),
       }))
       .filter((place) => place.coordinates && place.visible);

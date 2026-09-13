@@ -21,9 +21,37 @@ highlights:
   - Built full observability stack with Prometheus, Grafana, ELK, Splunk, Jaeger, and Zipkin; conducted SLO definition workshops
   - Led Angular 7+ and React 16 frontend development for internal policy admin dashboards
   - Mentored developers and tech leads in design patterns, platform thinking, and event-driven architecture
-categoryIds: [platform-engineering, cloud-security, devsecops, gitops-delivery, development]
-toolIds: [kubernetes, argocd, helm, kustomize, terraform, pulumi, aws, jenkins, gitlab-ci, grafana, prometheus, sonarqube, istio]
-skillIds: [devsecops, cloud-security, kubernetes-platform-engineering, interactive-frontend-architecture]
+categoryIds:
+  [
+    platform-engineering,
+    cloud-security,
+    devsecops,
+    gitops-delivery,
+    development,
+  ]
+toolIds:
+  [
+    kubernetes,
+    argocd,
+    helm,
+    kustomize,
+    terraform,
+    pulumi,
+    aws,
+    jenkins,
+    gitlab-ci,
+    grafana,
+    prometheus,
+    sonarqube,
+    istio,
+  ]
+skillIds:
+  [
+    devsecops,
+    cloud-security,
+    kubernetes-platform-engineering,
+    interactive-frontend-architecture,
+  ]
 security:
   domainIds: [cloud-security, devsecops]
 visibility: public

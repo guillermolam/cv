@@ -74,19 +74,40 @@ const isLink = typeof href === 'string' && href.length > 0;
 
   <header>
     <div data-ui-card-eyebrow>
-      {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+      {icon ? (
+        <UiIcon
+          name={icon}
+          label={iconLabel}
+          decorative={!iconLabel}
+          depth="flat"
+        />
+      ) : null}
       {dateLabel ? (
         <span>{dateLabel}</span>
       ) : (
         <span>
-          {startDate ? (startDateTime ? <time datetime={startDateTime}>{startDate}</time> : <span>{startDate}</span>) : null}
+          {startDate ? (
+            startDateTime ? (
+              <time datetime={startDateTime}>{startDate}</time>
+            ) : (
+              <span>{startDate}</span>
+            )
+          ) : null}
           {startDate || endDate ? <span aria-hidden="true"> — </span> : null}
-          {endDate ? (endDateTime ? <time datetime={endDateTime}>{endDate}</time> : <span>{endDate}</span>) : null}
+          {endDate ? (
+            endDateTime ? (
+              <time datetime={endDateTime}>{endDate}</time>
+            ) : (
+              <span>{endDate}</span>
+            )
+          ) : null}
         </span>
       )}
     </div>
 
-    <h3 data-ui-card-title>{isLink ? <a href={href}>{title}</a> : <span>{title}</span>}</h3>
+    <h3 data-ui-card-title>
+      {isLink ? <a href={href}>{title}</a> : <span>{title}</span>}
+    </h3>
     {subtitle ? <p data-ui-card-description>{subtitle}</p> : null}
   </header>
 
@@ -100,8 +121,20 @@ const isLink = typeof href === 'string' && href.length > 0;
 
   {description ? <p>{description}</p> : null}
 
-  {Astro.slots.has('meta') ? <div data-ui-card-meta><slot name="meta" /></div> : null}
-  {Astro.slots.has('actions') ? <div data-ui-card-actions><slot name="actions" /></div> : null}
-  {Astro.slots.has('footer') ? <footer data-ui-card-footer><slot name="footer" /></footer> : null}
+  {Astro.slots.has('meta') ? (
+    <div data-ui-card-meta>
+      <slot name="meta" />
+    </div>
+  ) : null}
+  {Astro.slots.has('actions') ? (
+    <div data-ui-card-actions>
+      <slot name="actions" />
+    </div>
+  ) : null}
+  {Astro.slots.has('footer') ? (
+    <footer data-ui-card-footer>
+      <slot name="footer" />
+    </footer>
+  ) : null}
   <slot />
 </UiSurface>

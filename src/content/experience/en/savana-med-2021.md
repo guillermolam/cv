@@ -19,7 +19,8 @@ highlights:
   - Managed Amazon EMR, RDS, and Neptune for ETL workflows and graph-based clinical data relationships supporting ML training
   - Integrated Prometheus, Grafana, and CloudWatch for model reliability monitoring and HIPAA-aligned data privacy controls
 categoryIds: [cloud-security, platform-engineering, ai-security]
-toolIds: [aws, terraform, kubernetes, prometheus, grafana, jenkins, trivy, sonarqube]
+toolIds:
+  [aws, terraform, kubernetes, prometheus, grafana, jenkins, trivy, sonarqube]
 skillIds: [cloud-security, devsecops]
 security:
   domainIds: [cloud-security, ai-security]

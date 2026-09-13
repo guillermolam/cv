@@ -1,5 +1,8 @@
 ---
-import type { ExperienceLogo, ExperienceCardViewModel } from '../../lib/content/experience-cards';
+import type {
+  ExperienceLogo,
+  ExperienceCardViewModel,
+} from '../../lib/content/experience-cards';
 
 type Props = {
   logo: ExperienceLogo;
@@ -8,7 +11,8 @@ type Props = {
   importanceScore: number;
 };
 
-const { logo, companyName, importanceTier, importanceScore } = Astro.props as Props;
+const { logo, companyName, importanceTier, importanceScore } =
+  Astro.props as Props;
 const fallbackLabel = companyName
   .split(/\s+/)
   .map((part) => part[0] ?? '')
@@ -23,30 +27,35 @@ const fallbackLabel = companyName
   style={`--experience-logo-score:${importanceScore};`}
 >
   <div class="experience-logo__body">
-    {
-      logo.src ? (
-        <img
-          src={logo.src}
-          alt={logo.alt}
-          loading="lazy"
-          decoding="async"
-          class:list={[
-            'experience-logo__image',
-            logo.hasVectorAsset && 'experience-logo__image--vector',
-          ]}
-        />
-      ) : (
-        <span class="experience-logo__fallback" aria-label={`${companyName} mark`}>
-          {fallbackLabel}
-        </span>
-      )
-    }
+    {logo.src ? (
+      <img
+        src={logo.src}
+        alt={logo.alt}
+        loading="lazy"
+        decoding="async"
+        class:list={[
+          'experience-logo__image',
+          logo.hasVectorAsset && 'experience-logo__image--vector',
+        ]}
+      />
+    ) : (
+      <span
+        class="experience-logo__fallback"
+        aria-label={`${companyName} mark`}
+      >
+        {fallbackLabel}
+      </span>
+    )}
   </div>
 </div>
 
 <style>
   .experience-logo {
-    --experience-logo-size: clamp(4.5rem, calc(4rem + (var(--experience-logo-score) * 0.5rem)), 7rem);
+    --experience-logo-size: clamp(
+      4.5rem,
+      calc(4rem + (var(--experience-logo-score) * 0.5rem)),
+      7rem
+    );
     display: grid;
     place-items: center;
     width: var(--experience-logo-size);
@@ -70,13 +79,13 @@ const fallbackLabel = companyName
     height: 100%;
     padding: 1rem;
     border-radius: 18px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 28%);
-    background:
-      linear-gradient(
-        145deg,
-        color-mix(in oklab, var(--color-surface-3), transparent 10%),
-        color-mix(in oklab, var(--color-surface-2), transparent 18%)
-      );
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 28%);
+    background: linear-gradient(
+      145deg,
+      color-mix(in oklab, var(--color-surface-3), transparent 10%),
+      color-mix(in oklab, var(--color-surface-2), transparent 18%)
+    );
     box-shadow:
       inset 0 1px 0 color-mix(in oklab, white, transparent 88%),
       0 12px 28px rgb(0 0 0 / 0.28);
@@ -98,13 +107,12 @@ const fallbackLabel = companyName
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background:
-      linear-gradient(
-        135deg,
-        color-mix(in oklab, white, transparent 92%) 0%,
-        transparent 42%,
-        color-mix(in oklab, var(--color-accent), transparent 90%) 100%
-      );
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, white, transparent 92%) 0%,
+      transparent 42%,
+      color-mix(in oklab, var(--color-accent), transparent 90%) 100%
+    );
     pointer-events: none;
   }
 

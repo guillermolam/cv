@@ -20,9 +20,30 @@ highlights:
   - Secured pipelines through Semgrep, Snyk, and trunk.io for static analysis, vulnerability scanning, and compliance gates in GitLab CI
   - Introduced AWS Lambda functions in Python and Rust for serverless extensibility
   - Applied SBOM generation (Syft, CycloneDX) and image signing (Cosign, Sigstore) with container scanning via Trivy and Grype
-categoryIds: [devsecops, kubernetes-platform, gitops-delivery, supply-chain-security]
-toolIds: [kubernetes, argocd, helm, kustomize, terraform, pulumi, aws, github-actions, gitlab-ci, datadog, trivy, grype, syft, cosign, semgrep, snyk, teleport]
-skillIds: [devsecops, kubernetes-platform-engineering, software-supply-chain-security]
+categoryIds:
+  [devsecops, kubernetes-platform, gitops-delivery, supply-chain-security]
+toolIds:
+  [
+    kubernetes,
+    argocd,
+    helm,
+    kustomize,
+    terraform,
+    pulumi,
+    aws,
+    github-actions,
+    gitlab-ci,
+    datadog,
+    trivy,
+    grype,
+    syft,
+    cosign,
+    semgrep,
+    snyk,
+    teleport,
+  ]
+skillIds:
+  [devsecops, kubernetes-platform-engineering, software-supply-chain-security]
 security:
   domainIds: [devsecops, supply-chain-security]
 visibility: public

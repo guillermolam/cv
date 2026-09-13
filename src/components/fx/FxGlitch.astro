@@ -16,10 +16,17 @@ export type Props = {
   text?: string;
 };
 
-const { trigger = 'manual', intensity = 'normal', class: className, text } = Astro.props as Props;
+const {
+  trigger = 'manual',
+  intensity = 'normal',
+  class: className,
+  text,
+} = Astro.props as Props;
 
 const offsetVar =
-  intensity === 'strong' ? 'var(--fx-glitch-offset-strong)' : 'var(--fx-glitch-offset)';
+  intensity === 'strong'
+    ? 'var(--fx-glitch-offset-strong)'
+    : 'var(--fx-glitch-offset)';
 ---
 
 <span

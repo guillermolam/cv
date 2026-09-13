@@ -9,7 +9,9 @@ export default async function initTexturedButtons(): Promise<void> {
   initialized = true;
 
   const reducedMotion = getReducedMotion();
-  const wrappers = Array.from(document.querySelectorAll<HTMLElement>('[data-tbtn-wrap]'));
+  const wrappers = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-tbtn-wrap]'),
+  );
 
   const setTipOpen = (wrap: HTMLElement, open: boolean) => {
     if (open) wrap.dataset.tipOpen = 'true';

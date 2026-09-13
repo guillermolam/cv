@@ -31,7 +31,8 @@ consistent depth without turning the UI into a pile of floating rectangles.
   --ds-keycap-press-distance: 2px;
   --ds-keycap-hover-lift: 1px;
 
-  --ds-panel-inset-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-color-border), transparent 35%),
+  --ds-panel-inset-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--ds-color-border), transparent 35%),
     inset 0 16px 24px rgba(0, 0, 0, 0.35);
   --ds-panel-bevel-highlight: inset 0 1px 0 var(--ds-retro-shell-highlight);
 }

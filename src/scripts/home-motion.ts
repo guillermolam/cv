@@ -9,13 +9,15 @@ const readMsToken = (value: string): number => {
 
 const prefersReducedMotion = (): boolean => {
   if (typeof window === 'undefined') return true;
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
+  return (
+    window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+  );
 };
 
 const onceVisible = (
   elements: Element[],
   onEnter: (entered: Element[]) => void,
-  options?: IntersectionObserverInit
+  options?: IntersectionObserverInit,
 ) => {
   const pending = new Set(elements);
   const observer = new IntersectionObserver((entries) => {
@@ -42,9 +44,14 @@ export default async function initHomeMotion(): Promise<void> {
   const styles = window.getComputedStyle(root);
 
   const motionFastMs = readMsToken(styles.getPropertyValue('--motion-fast'));
-  const motionStandardMs = readMsToken(styles.getPropertyValue('--motion-standard'));
-  const motionEmphasisMs = readMsToken(styles.getPropertyValue('--motion-emphasis'));
-  const motionStaggerMs = readMsToken(styles.getPropertyValue('--motion-stagger')) || 80;
+  const motionStandardMs = readMsToken(
+    styles.getPropertyValue('--motion-standard'),
+  );
+  const motionEmphasisMs = readMsToken(
+    styles.getPropertyValue('--motion-emphasis'),
+  );
+  const motionStaggerMs =
+    readMsToken(styles.getPropertyValue('--motion-stagger')) || 80;
 
   const { default: gsap } = await import('gsap');
   const easeStandard = 'power2.out';
@@ -94,13 +101,15 @@ export default async function initHomeMotion(): Promise<void> {
           duration: motionEmphasisMs / 1000,
           ease: easeStandard,
         },
-        hasHero ? '-=0.12' : 0
+        hasHero ? '-=0.12' : 0,
       );
     }
   }
 
   const hoverLift = (selector: string, y = -1) => {
-    const targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
+    const targets = Array.from(
+      document.querySelectorAll<HTMLElement>(selector),
+    );
     for (const el of targets) {
       const toY = gsap.quickTo(el, 'y', {
         duration: motionFastMs / 1000,
@@ -121,7 +130,9 @@ export default async function initHomeMotion(): Promise<void> {
   hoverLift('.social-link', -1);
   hoverLift('.station-overlay-action', -1);
 
-  const tableRows = Array.from(document.querySelectorAll<HTMLElement>('.topology-table tbody tr'));
+  const tableRows = Array.from(
+    document.querySelectorAll<HTMLElement>('.topology-table tbody tr'),
+  );
   if (tableRows.length > 0) {
     gsap.from(tableRows, {
       autoAlpha: 0,
@@ -132,7 +143,9 @@ export default async function initHomeMotion(): Promise<void> {
     });
   }
 
-  const stationCards = Array.from(document.querySelectorAll<HTMLElement>('.station'));
+  const stationCards = Array.from(
+    document.querySelectorAll<HTMLElement>('.station'),
+  );
   if (stationCards.length > 0) {
     gsap.set(stationCards, { autoAlpha: 1 });
     onceVisible(
@@ -146,7 +159,7 @@ export default async function initHomeMotion(): Promise<void> {
           stagger: 0.06,
         });
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.2 }
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.2 },
     );
   }
 }

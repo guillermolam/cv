@@ -10,7 +10,10 @@ type Props = {
 const { entries } = Astro.props as Props;
 ---
 
-<section class="experience-timeline" aria-labelledby="experience-timeline-title">
+<section
+  class="experience-timeline"
+  aria-labelledby="experience-timeline-title"
+>
   <div class="experience-timeline__header">
     <div>
       <p class="experience-timeline__eyebrow">Career map</p>
@@ -22,25 +25,23 @@ const { entries } = Astro.props as Props;
   </div>
 
   <ol class="experience-timeline__list">
-    {
-      entries.map((entry, index) => (
-        <li
-          class="experience-timeline__item"
-          data-tier={entry.importanceTier}
-          style={`--experience-node-order:${index};`}
-        >
-          <a href={`#${entry.anchorId}`} class="experience-timeline__link">
-            <span class="experience-timeline__dot" aria-hidden="true"></span>
-            <span class="experience-timeline__glyph" aria-hidden="true">
-              <UiIcon name="graph-link" size={18} decorative />
-            </span>
-            <span class="experience-timeline__date">{entry.dateRangeLabel}</span>
-            <strong>{entry.companyName}</strong>
-            <span>{entry.roleTitle}</span>
-          </a>
-        </li>
-      ))
-    }
+    {entries.map((entry, index) => (
+      <li
+        class="experience-timeline__item"
+        data-tier={entry.importanceTier}
+        style={`--experience-node-order:${index};`}
+      >
+        <a href={`#${entry.anchorId}`} class="experience-timeline__link">
+          <span class="experience-timeline__dot" aria-hidden="true"></span>
+          <span class="experience-timeline__glyph" aria-hidden="true">
+            <UiIcon name="graph-link" size={18} decorative />
+          </span>
+          <span class="experience-timeline__date">{entry.dateRangeLabel}</span>
+          <strong>{entry.companyName}</strong>
+          <span>{entry.roleTitle}</span>
+        </a>
+      </li>
+    ))}
   </ol>
 </section>
 
@@ -51,13 +52,13 @@ const { entries } = Astro.props as Props;
     gap: 0.9rem;
     padding: 1rem;
     border-radius: 24px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 30%);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, white, transparent 96%) 0%,
-        color-mix(in oklab, var(--color-surface-3), transparent 10%) 100%
-      );
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 30%);
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, white, transparent 96%) 0%,
+      color-mix(in oklab, var(--color-surface-3), transparent 10%) 100%
+    );
     overflow: hidden;
     box-shadow:
       0 24px 64px rgb(2 6 23 / 0.14),
@@ -70,12 +71,11 @@ const { entries } = Astro.props as Props;
     position: absolute;
     inset: auto 1.2rem 2.45rem;
     height: 2px;
-    background:
-      linear-gradient(
-        90deg,
-        color-mix(in oklab, var(--color-accent), transparent 20%),
-        color-mix(in oklab, var(--color-accent), transparent 82%)
-      );
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-accent), transparent 20%),
+      color-mix(in oklab, var(--color-accent), transparent 82%)
+    );
     pointer-events: none;
   }
 
@@ -125,13 +125,13 @@ const { entries } = Astro.props as Props;
     min-height: 100%;
     padding: 0.95rem 0.95rem 0.95rem 1rem;
     border-radius: 18px;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 34%);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, white, transparent 96%) 0%,
-        color-mix(in oklab, var(--color-surface-3), transparent 14%) 100%
-      );
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 34%);
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, white, transparent 96%) 0%,
+      color-mix(in oklab, var(--color-surface-3), transparent 14%) 100%
+    );
     text-decoration: none;
     color: inherit;
     box-shadow:
@@ -145,7 +145,8 @@ const { entries } = Astro.props as Props;
     height: 1.75rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid color-mix(in oklab, var(--color-border-strong), transparent 28%);
+    border: 1px solid
+      color-mix(in oklab, var(--color-border-strong), transparent 28%);
     border-radius: 999px;
     background: color-mix(in oklab, var(--color-accent), transparent 92%);
     margin-bottom: 0.25rem;
@@ -160,7 +161,8 @@ const { entries } = Astro.props as Props;
     border-radius: 999px;
     border: 2px solid color-mix(in oklab, var(--color-accent), transparent 18%);
     background: color-mix(in oklab, var(--color-surface-1), transparent 4%);
-    box-shadow: 0 0 0 0.28rem color-mix(in oklab, var(--color-accent), transparent 90%);
+    box-shadow: 0 0 0 0.28rem
+      color-mix(in oklab, var(--color-accent), transparent 90%);
   }
 
   .experience-timeline__date {
@@ -170,12 +172,16 @@ const { entries } = Astro.props as Props;
     text-transform: uppercase;
   }
 
-  .experience-timeline__item[data-tier='flagship'] .experience-timeline__link strong {
+  .experience-timeline__item[data-tier='flagship']
+    .experience-timeline__link
+    strong {
     font-size: clamp(1.05rem, 0.4vw + 1rem, 1.26rem);
     line-height: 1.1;
   }
 
-  .experience-timeline__item[data-tier='priority'] .experience-timeline__link strong {
+  .experience-timeline__item[data-tier='priority']
+    .experience-timeline__link
+    strong {
     font-size: clamp(1rem, 0.32vw + 0.96rem, 1.18rem);
     line-height: 1.1;
   }

@@ -3,6 +3,7 @@
 Principle: preserve smooth interaction over visual complexity.
 
 ## Capability Signals
+
 - reduced motion preference
 - viewport size (mobile vs desktop)
 - device memory / low-end heuristic (when available)
@@ -10,6 +11,7 @@ Principle: preserve smooth interaction over visual complexity.
 - page visibility (hidden/offscreen)
 
 ## Degradation Defaults
+
 - Reduced motion:
   - disable continuous loops
   - replace long transitions with instant or short crossfades
@@ -21,4 +23,3 @@ Principle: preserve smooth interaction over visual complexity.
 - Background/hidden:
   - pause RAF
   - stop expensive timers
-

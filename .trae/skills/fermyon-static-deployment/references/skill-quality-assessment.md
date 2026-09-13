@@ -14,6 +14,7 @@ Scoring rubric: 0–10 per category. Scores are based on evidence of repo-awaren
 - Anti-Hallucination Design: 8/10
 
 Key limitations:
+
 - Assumed a single artifact (`dist/`) and missed the active GitHub Pages pipeline building `./guillermo-lam-cv`.
 - Lacked a “repo → Spin patterns” mapping, so recommendations could drift into generic advice.
 
@@ -29,6 +30,7 @@ Key limitations:
 - Anti-Hallucination Design: 9/10
 
 What improved:
+
 - Introduced a repo-derived source of truth:
   - [project-deployment-inventory.md](project-deployment-inventory.md)
   - [project-pattern-mapping.md](project-pattern-mapping.md)
@@ -40,6 +42,6 @@ What improved:
 - Added repository-derived evals to enforce behavior tied to actual files and workflows.
 
 Remaining risks:
+
 - Spin/Fermyon deployment commands are intentionally not pinned here; docs freshness gate remains mandatory.
 - SPA rewrite/fallback behavior for the Vite subproject remains platform-dependent and must be confirmed against current Spin/Fermyon docs before recommending configuration.
-

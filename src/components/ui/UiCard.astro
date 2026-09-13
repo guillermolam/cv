@@ -88,11 +88,18 @@ const hasFooterSlot = Astro.slots.has('footer');
     </div>
   ) : null}
 
-  {(eyebrow || title || description || icon) ? (
+  {eyebrow || title || description || icon ? (
     <header data-ui-card-header>
       {eyebrow ? (
         <div data-ui-card-eyebrow>
-          {icon ? <UiIcon name={icon} label={iconLabel} decorative={!iconLabel} depth="flat" /> : null}
+          {icon ? (
+            <UiIcon
+              name={icon}
+              label={iconLabel}
+              decorative={!iconLabel}
+              depth="flat"
+            />
+          ) : null}
           <span>{eyebrow}</span>
         </div>
       ) : null}
@@ -111,7 +118,19 @@ const hasFooterSlot = Astro.slots.has('footer');
     <slot />
   </div>
 
-  {hasMetaSlot ? <div data-ui-card-meta><slot name="meta" /></div> : null}
-  {hasActionsSlot ? <div data-ui-card-actions><slot name="actions" /></div> : null}
-  {hasFooterSlot ? <footer data-ui-card-footer><slot name="footer" /></footer> : null}
+  {hasMetaSlot ? (
+    <div data-ui-card-meta>
+      <slot name="meta" />
+    </div>
+  ) : null}
+  {hasActionsSlot ? (
+    <div data-ui-card-actions>
+      <slot name="actions" />
+    </div>
+  ) : null}
+  {hasFooterSlot ? (
+    <footer data-ui-card-footer>
+      <slot name="footer" />
+    </footer>
+  ) : null}
 </UiSurface>

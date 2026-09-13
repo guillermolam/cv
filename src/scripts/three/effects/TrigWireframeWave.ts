@@ -32,11 +32,12 @@ export class TrigWireframeWave implements SceneEffect {
     for (let i = 0; i < positions.count; i++) {
       const x = positions.getX(i);
       const z = positions.getZ(i);
-      
+
       // Trigonometric waves
-      const y = Math.sin(x * 0.8 + time) * Math.cos(z * 0.6 + time * 0.5) * 0.5 +
-                Math.sin(z * 0.3 + time * 1.2) * 0.3;
-      
+      const y =
+        Math.sin(x * 0.8 + time) * Math.cos(z * 0.6 + time * 0.5) * 0.5 +
+        Math.sin(z * 0.3 + time * 1.2) * 0.3;
+
       positions.setY(i, y);
     }
     positions.needsUpdate = true;

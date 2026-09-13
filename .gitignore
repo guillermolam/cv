@@ -58,3 +58,8 @@ test-results/
 
 # Optional: exclude local user config (customize as needed)
 *.local
+*.local.json
+.tmp
+.tmp-*/
+.vercel/
+bin/

@@ -1,7 +1,7 @@
 ---
 alwaysApply: true
 ---
-## Source of Truth
+# Source of Truth
 
 Before implementing any feature consult:
 

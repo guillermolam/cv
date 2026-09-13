@@ -1,4 +1,9 @@
-import type { NeuralGraphData, NeuronNode, AxonNode, DendriteNode } from '../lib/neural-types';
+import type {
+  NeuralGraphData,
+  NeuronNode,
+  AxonNode,
+  DendriteNode,
+} from '../lib/neural-types';
 import type { HoveredNode } from '../design-system/three/neural-network';
 
 type AlpineLike = {
@@ -37,7 +42,7 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
 
     panelOpen: false,
     activeNeuron: null as NeuronNode | null,
-    activeAxon:   null as AxonNode | null,
+    activeAxon: null as AxonNode | null,
 
     /** ApexCharts instance — destroyed and recreated on each panel switch */
     _chart: null as unknown,
@@ -61,38 +66,46 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
           this.tooltip.visible = false;
           return;
         }
-        const canvas = root.querySelector<HTMLCanvasElement>('[data-neural-canvas]');
-        const rect   = canvas?.getBoundingClientRect();
-        const px     = (this as any)._px ?? 0;
-        const py     = (this as any)._py ?? 0;
+        const canvas = root.querySelector<HTMLCanvasElement>(
+          '[data-neural-canvas]',
+        );
+        const rect = canvas?.getBoundingClientRect();
+        const px = (this as any)._px ?? 0;
+        const py = (this as any)._py ?? 0;
         this.tooltip = {
           visible: true,
           x: rect ? px - rect.left + 16 : px + 16,
-          y: rect ? py - rect.top  + 16 : py + 16,
+          y: rect ? py - rect.top + 16 : py + 16,
           node,
         };
       });
 
       // Click → open panel or open link
       root.addEventListener('neural:click', (e: Event) => {
-        const ev   = e as CustomEvent<{ node: HoveredNode }>;
+        const ev = e as CustomEvent<{ node: HoveredNode }>;
         const node = ev.detail.node;
         if (!node) return;
-        if (node.kind === 'neuron')   this.openNeuron(node.data);
-        if (node.kind === 'axon')     this.selectAxon(node.data);
+        if (node.kind === 'neuron') this.openNeuron(node.data);
+        if (node.kind === 'axon') this.selectAxon(node.data);
         if (node.kind === 'dendrite' && node.data.website) {
           window.open(node.data.website, '_blank', 'noopener,noreferrer');
         }
       });
 
       // Three.js error (no WebGL)
-      root.addEventListener('neural:error', () => { this.error = true; });
+      root.addEventListener('neural:error', () => {
+        this.error = true;
+      });
 
       // Track raw pointer position for tooltip placement
-      root.addEventListener('pointermove', (e: PointerEvent) => {
-        (this as any)._px = e.clientX;
-        (this as any)._py = e.clientY;
-      }, { passive: true });
+      root.addEventListener(
+        'pointermove',
+        (e: PointerEvent) => {
+          (this as any)._px = e.clientX;
+          (this as any)._py = e.clientY;
+        },
+        { passive: true },
+      );
 
       // ESC key resets view
       window.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -117,7 +130,7 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
     // ── Panel actions ────────────────────────────────────────────────────────
     async openNeuron(this: any, neuron: NeuronNode) {
       this.activeNeuron = neuron;
-      this.activeAxon   = null;
+      this.activeAxon = null;
       this._focusNeuron(neuron.id);
 
       this.panelOpen = true;
@@ -142,9 +155,9 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
     closePanel(this: any) {
       this._animatePanelOut();
       setTimeout(() => {
-        this.panelOpen   = false;
+        this.panelOpen = false;
         this.activeNeuron = null;
-        this.activeAxon   = null;
+        this.activeAxon = null;
         this._destroyChart();
       }, 320);
     },
@@ -163,7 +176,9 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
       // Lazy import — pre-bundled by integrations/apexcharts/index.ts
       const { default: ApexCharts } = await import('apexcharts');
 
-      const axons = (this.graph.axons as AxonNode[]).filter((a) => a.neuronId === neuron.id);
+      const axons = (this.graph.axons as AxonNode[]).filter(
+        (a) => a.neuronId === neuron.id,
+      );
 
       const seriesData = axons.map((axon) => {
         const dendrites = (this.graph!.dendrites as DendriteNode[]).filter(
@@ -207,7 +222,11 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
           },
         },
         plotOptions: {
-          treemap: { distributed: false, enableShades: true, shadeIntensity: 0.4 },
+          treemap: {
+            distributed: false,
+            enableShades: true,
+            shadeIntensity: 0.4,
+          },
         },
         tooltip: {
           theme: 'dark' as const,
@@ -231,15 +250,17 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
       const dendrites = (this.graph.dendrites as DendriteNode[]).filter(
         (d) => d.axonId === axon.id,
       );
-      const neuron    = (this.graph.neurons as NeuronNode[]).find(
+      const neuron = (this.graph.neurons as NeuronNode[]).find(
         (n) => n.id === axon.neuronId,
       );
 
       const options = {
-        series: [{
-          name: 'Experience refs',
-          data: dendrites.map((d) => d.usageCount),
-        }],
+        series: [
+          {
+            name: 'Experience refs',
+            data: dendrites.map((d) => d.usageCount),
+          },
+        ],
         chart: {
           type: 'bar' as const,
           height: 260,
@@ -252,10 +273,18 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
         xaxis: {
           categories: dendrites.map((d) => d.label),
           labels: {
-            style: { fontFamily: 'var(--font-mono, monospace)', fontSize: '10px' },
+            style: {
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '10px',
+            },
           },
         },
-        yaxis: { title: { text: 'Roles', style: { fontFamily: 'var(--font-mono, monospace)' } } },
+        yaxis: {
+          title: {
+            text: 'Roles',
+            style: { fontFamily: 'var(--font-mono, monospace)' },
+          },
+        },
         plotOptions: { bar: { borderRadius: 3, horizontal: false } },
         tooltip: {
           theme: 'dark' as const,
@@ -284,7 +313,7 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
         gsap.fromTo(
           panel,
           { x: '100%', opacity: 0 },
-          { x: '0%',   opacity: 1, duration: 0.38, ease: 'power2.out' },
+          { x: '0%', opacity: 1, duration: 0.38, ease: 'power2.out' },
         );
       }
     },
@@ -293,7 +322,12 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
       const { gsap } = await import('../lib/gsap-plugins');
       const panel = document.getElementById('neural-apex-panel');
       if (panel) {
-        gsap.to(panel, { x: '100%', opacity: 0, duration: 0.28, ease: 'power2.in' });
+        gsap.to(panel, {
+          x: '100%',
+          opacity: 0,
+          duration: 0.28,
+          ease: 'power2.in',
+        });
       }
     },
 
@@ -303,8 +337,8 @@ export function registerNeuralPanelComponent(alpine: AlpineLike) {
       try {
         const n = parseInt(hex.replace('#', ''), 16);
         const r = Math.round(((n >> 16) & 0xff) * (1 - amount));
-        const g = Math.round(((n >>  8) & 0xff) * (1 - amount));
-        const b = Math.round( (n        & 0xff) * (1 - amount));
+        const g = Math.round(((n >> 8) & 0xff) * (1 - amount));
+        const b = Math.round((n & 0xff) * (1 - amount));
         return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
       } catch {
         return hex;

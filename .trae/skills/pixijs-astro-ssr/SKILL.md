@@ -8,6 +8,7 @@ description: "PixiJS + Astro integration playbook. Invoke when adding PixiJS can
 ## When to Invoke
 
 Use this skill when the user:
+
 - Wants to add PixiJS (canvas/WebGL/WebGPU) to an Astro site.
 - Hits SSR issues (`window is not defined`, hydration mismatch, canvas conflicts).
 - Needs PixiJS v8 initialization, ApplicationOptions tuning, or plugin patterns.
@@ -23,7 +24,7 @@ Use this skill when the user:
 
 ## Minimal Working Example (CDN, Browser-Only)
 
-Source: https://github.com/pixijs/pixijs/wiki/Getting-Started
+Source: <https://github.com/pixijs/pixijs/wiki/Getting-Started>
 
 Note: `pixijs.download` CDN is not recommended for production use.
 
@@ -49,7 +50,7 @@ Note: `pixijs.download` CDN is not recommended for production use.
 
 ## PixiJS v8 Application Initialization (Async init)
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md>
 
 ```ts
 import { Application } from 'pixi.js';
@@ -144,7 +145,7 @@ const { label = 'Decorative animation' } = Astro.props;
 
 ## Creating Custom Application Plugins
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md>
 
 ```ts
 import { ExtensionType, extensions } from 'pixi.js';
@@ -179,7 +180,7 @@ declare global {
 
 ## ApplicationOptions (Practical Defaults)
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md>
 
 - For UI/ambient scenes: `powerPreference: 'low-power'`, `backgroundAlpha: 0`, `autoDensity: true`, `resolution: devicePixelRatio`.
 - For crisp pixels: prefer integer scaling; avoid extreme DPR on mobile.
@@ -189,7 +190,7 @@ Source: https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md
 
 ### Pre-upload textures to GPU
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/rendering/__docs__/textures.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/rendering/__docs__/textures.md>
 
 ```ts
 await renderer.prepare.upload(sprite);
@@ -197,13 +198,13 @@ await renderer.prepare.upload(sprite);
 
 ### Cache complex containers
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/scene/__docs__/container/cache-as-texture.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/scene/__docs__/container/cache-as-texture.md>
 
 Use `cacheAsTexture()` to reduce draw calls when contents are static.
 
 ### ParticleContainer boundsArea (v8)
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md>
 
 ```ts
 import { ParticleContainer, Rectangle } from 'pixi.js';
@@ -215,7 +216,7 @@ const container = new ParticleContainer({
 
 ## v8 Migration Notes to Remember
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md>
 
 - `Application` initialization is async (`await app.init(...)`) to support WebGPU.
 - `container.getBounds()` returns a `Bounds` object; use its rectangle when you need `Rectangle`:
@@ -223,7 +224,7 @@ Source: https://github.com/pixijs/pixijs/blob/dev/src/__docs__/migrations/v8.md
 
 ## Deprecation Notes (Options Renames)
 
-Source: https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md
+Source: <https://github.com/pixijs/pixijs/blob/dev/src/app/__docs__/app.md>
 
 - `textureGCActive` is deprecated → use `gcActive`
 - `textureGCCheckCountMax` is deprecated → use `gcFrequency`
@@ -266,7 +267,7 @@ npm run dev
 
 ## Basic PixiJS App Setup (Bunny Grid + Container Rotation)
 
-Source: https://pixijs.com/8.x/guides/getting-started/quick-start
+Source: <https://pixijs.com/8.x/guides/getting-started/quick-start>
 
 ```ts
 import { Application, Assets, Container, Sprite } from 'pixi.js';
@@ -302,7 +303,7 @@ import { Application, Assets, Container, Sprite } from 'pixi.js';
 
 ## Ticker Notes
 
-Source: https://pixijs.com/8.x/guides/components/ticker
+Source: <https://pixijs.com/8.x/guides/components/ticker>
 
 - Auto-start when first listener is added:
 
@@ -319,7 +320,7 @@ ticker.stop();
 
 ## Assets: Background Loading Bundles
 
-Source: https://pixijs.com/8.x/guides/components/assets/background-loader
+Source: <https://pixijs.com/8.x/guides/components/assets/background-loader>
 
 ```ts
 const manifest = {
@@ -342,7 +343,7 @@ const resources = await Assets.loadBundle('home-screen');
 
 ## Extensions: Self-Install Reminder
 
-Source: https://pixijs.com/8.x/guides/migrations/v7
+Source: <https://pixijs.com/8.x/guides/migrations/v7>
 
 Many extensions now self-install via import side-effects. Example:
 
@@ -352,7 +353,7 @@ import 'pixi.js/accessibility';
 
 ## Custom Adapter (Non-Standard Environments)
 
-Source: https://pixijs.com/8.x/guides/concepts/environments
+Source: <https://pixijs.com/8.x/guides/concepts/environments>
 
 This is relevant when running PixiJS in headless/Node-like environments. In a typical Astro website you usually do not need this; keep PixiJS browser-only instead of adapting SSR.
 
@@ -384,13 +385,13 @@ DOMAdapter.set(CustomAdapter);
 
 ## RenderLayers (UI Above Scene)
 
-Source: https://pixijs.com/8.x/guides/concepts/render-layers
+Source: <https://pixijs.com/8.x/guides/concepts/render-layers>
 
 Use RenderLayers to keep UI rendering above a scene (especially when using filters). Prefer this over zIndex hacks when the scene is complex.
 
 ## Mixing PixiJS + Three.js (Shared Context)
 
-Source: https://pixijs.com/8.x/guides/third-party/mixing-three-and-pixi
+Source: <https://pixijs.com/8.x/guides/third-party/mixing-three-and-pixi>
 
 Use only when you explicitly need a shared WebGL context. For typical portfolio UX, prefer keeping PixiJS and Three.js isolated (separate canvases) to avoid state conflicts and hard-to-debug performance regressions.
 
@@ -398,7 +399,7 @@ If sharing context, always reset render state between renders (as the example do
 
 ## Graphics: Pixel-Perfect Lines (v8)
 
-Source: https://pixijs.com/8.x/guides/components/scene-objects/graphics/graphics-pixel-line
+Source: <https://pixijs.com/8.x/guides/components/scene-objects/graphics/graphics-pixel-line>
 
 ```ts
 import { Application, Container, Graphics, Text } from 'pixi.js';

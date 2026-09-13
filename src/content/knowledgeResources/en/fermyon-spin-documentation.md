@@ -15,4 +15,3 @@ skillIds: [static-site-architecture]
 projectIds: [control-room-portfolio]
 visibility: public
 ---
-

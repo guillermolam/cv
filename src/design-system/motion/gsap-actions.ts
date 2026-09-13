@@ -20,7 +20,9 @@ export type ActionOptions = {
 
 const readCssVar = (cssVar: string) => {
   if (typeof window === 'undefined') return '';
-  const value = getComputedStyle(document.documentElement).getPropertyValue(cssVar);
+  const value = getComputedStyle(document.documentElement).getPropertyValue(
+    cssVar,
+  );
   return value.trim();
 };
 
@@ -66,7 +68,8 @@ export const createScopedTimeline = (
   if (!root || typeof window === 'undefined') return { cleanup: () => {} };
 
   const strategy = options?.strategy;
-  if (!shouldAnimate({ kind: 'transform', strategy })) return { cleanup: () => {} };
+  if (!shouldAnimate({ kind: 'transform', strategy }))
+    return { cleanup: () => {} };
 
   let timeline: gsap.core.Timeline | undefined;
   const ctx = gsap.context(() => {
@@ -84,17 +87,18 @@ export const createScopedTimeline = (
     cleanup: () => {
       try {
         timeline?.kill();
-      } catch {
-      }
+      } catch {}
       try {
         ctx.revert();
-      } catch {
-      }
+      } catch {}
     },
   };
 };
 
-const animateTo = (target: gsap.TweenTarget, vars: gsap.TweenVars): Killable | undefined => {
+const animateTo = (
+  target: gsap.TweenTarget,
+  vars: gsap.TweenVars,
+): Killable | undefined => {
   if (typeof window === 'undefined') return undefined;
   const tween = gsap.to(target, vars);
   return tween;
@@ -110,13 +114,19 @@ const animateFromTo = (
   return tween;
 };
 
-export const animateHoverIn = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateHoverIn = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
   if (!shouldAnimate({ kind: 'transform', strategy })) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 160),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 160,
+    ),
     ease: gsapEase.softOut,
     y: -2,
     scale: 1.01,
@@ -124,13 +134,19 @@ export const animateHoverIn = (target: Element | null | undefined, options?: Act
   });
 };
 
-export const animateHoverOut = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateHoverOut = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
   if (!shouldAnimate({ kind: 'transform', strategy })) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 160),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 160,
+    ),
     ease: gsapEase.softOut,
     y: 0,
     scale: 1,
@@ -138,57 +154,84 @@ export const animateHoverOut = (target: Element | null | undefined, options?: Ac
   });
 };
 
-export const animatePress = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animatePress = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
   if (!shouldAnimate({ kind: 'transform', strategy })) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 120),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 120,
+    ),
     ease: gsapEase.pressIn,
     y: 1,
     scale: 0.99,
   });
 };
 
-export const animateRelease = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateRelease = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
   if (!shouldAnimate({ kind: 'transform', strategy })) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 160),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 160,
+    ),
     ease: gsapEase.springOut,
     y: 0,
     scale: 1,
   });
 };
 
-export const animateFocus = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateFocus = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
   if (!shouldAnimate({ kind: 'opacity', strategy })) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 140),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 140,
+    ),
     ease: gsapEase.softOut,
     opacity: 1,
   });
 };
 
-export const animateBlur = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateBlur = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
   if (!shouldAnimate({ kind: 'opacity', strategy })) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 140),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 140,
+    ),
     ease: gsapEase.softOut,
     opacity: 1,
   });
 };
 
-export const animateReveal = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateReveal = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
 
@@ -196,7 +239,10 @@ export const animateReveal = (target: Element | null | undefined, options?: Acti
   const canOpacity = shouldAnimate({ kind: 'opacity', strategy });
   if (!canTransform && !canOpacity) return undefined;
 
-  const durationSeconds = getDurationSeconds('--ds-duration-normal', options?.durationMs ?? 220);
+  const durationSeconds = getDurationSeconds(
+    '--ds-duration-normal',
+    options?.durationMs ?? 220,
+  );
 
   return animateFromTo(
     target,
@@ -205,15 +251,18 @@ export const animateReveal = (target: Element | null | undefined, options?: Acti
       ...(canTransform ? { y: 10 } : {}),
     },
     {
-    duration: durationSeconds,
-    ease: gsapEase.cinematicReveal,
+      duration: durationSeconds,
+      ease: gsapEase.cinematicReveal,
       ...(canOpacity ? { opacity: 1 } : {}),
       ...(canTransform ? { y: 0 } : {}),
     },
   );
 };
 
-export const animateExit = (target: Element | null | undefined, options?: ActionOptions) => {
+export const animateExit = (
+  target: Element | null | undefined,
+  options?: ActionOptions,
+) => {
   if (!target) return undefined;
   const strategy = options?.strategy;
 
@@ -222,7 +271,10 @@ export const animateExit = (target: Element | null | undefined, options?: Action
   if (!canTransform && !canOpacity) return undefined;
 
   return animateTo(target, {
-    duration: getDurationSeconds('--ds-duration-fast', options?.durationMs ?? 160),
+    duration: getDurationSeconds(
+      '--ds-duration-fast',
+      options?.durationMs ?? 160,
+    ),
     ease: gsapEase.softOut,
     ...(canOpacity ? { opacity: 0 } : {}),
     ...(canTransform ? { y: -8 } : {}),

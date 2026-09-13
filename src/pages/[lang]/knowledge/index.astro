@@ -156,17 +156,9 @@ const agentTypeOptions = uniq(agentResources.map((r) => r.data.type))
   .map((id) => ({ id, label: TYPE_LABELS[id] ?? id }))
   .sort((a, b) => a.label.localeCompare(b.label));
 
-const allTypeOptions = uniq(resourcesFallback.map((r) => r.data.type))
-  .map((id) => ({ id, label: TYPE_LABELS[id] ?? id }))
-  .sort((a, b) => a.label.localeCompare(b.label));
-
 type ResourceLevel = 'intro' | 'intermediate' | 'advanced' | 'reference';
 type ResourceStatus =
-  | 'planned'
-  | 'reading'
-  | 'completed'
-  | 'reference'
-  | 'archived';
+  'planned' | 'reading' | 'completed' | 'reference' | 'archived';
 
 const levelOptions = uniq(
   resourcesFallback
@@ -330,55 +322,52 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
       <div class="kc-hero__eyebrow ds-eyebrow">
         <span
           class="i-solar-notebook-bold-duotone align-middle mr-2"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         Knowledge Intelligence
       </div>
       <h1 class="kc-hero__title">Knowledge&nbsp;Center</h1>
       <p class="kc-hero__sub">{description}</p>
 
-      {
-        resources.length === 0 && lang !== 'en' ? (
-          <p class="kc-fallback-note ds-label">
-            Showing English resources while {lang.toUpperCase()} content is
-            being authored.
-          </p>
-        ) : null
-      }
+      {resources.length === 0 && lang !== 'en' ? (
+        <p class="kc-fallback-note ds-label">
+          Showing English resources while {lang.toUpperCase()} content is being
+          authored.
+        </p>
+      ) : null}
 
       <!-- Stats ribbon -->
       <div class="kc-stats" role="list">
-        {
-          (
-            [
-              {
-                icon: 'i-ph-books-duotone',
-                label: 'Total',
-                value: totalResources || '1k+',
-              },
-              {
-                icon: 'i-ph-user-duotone',
-                label: 'Human',
-                value: humanResources.length || '—',
-              },
-              {
-                icon: 'i-ph-robot-duotone',
-                label: 'Agent',
-                value: agentResources.length || '—',
-              },
-              {
-                icon: 'i-ph-check-circle-duotone',
-                label: 'Completed',
-                value: completedCount || '—',
-              },
-            ] as const
-          ).map(({ icon, label, value }) => (
-            <div class="kc-stat" role="listitem">
-              <span class={`${icon} kc-stat__icon`} aria-hidden="true" />
-              <span class="kc-stat__value">{value}</span>
-              <span class="kc-stat__label ds-label">{label}</span>
-            </div>
-          ))
-        }
+        {(
+          [
+            {
+              icon: 'i-ph-books-duotone',
+              label: 'Total',
+              value: totalResources || '1k+',
+            },
+            {
+              icon: 'i-ph-user-duotone',
+              label: 'Human',
+              value: humanResources.length || '—',
+            },
+            {
+              icon: 'i-ph-robot-duotone',
+              label: 'Agent',
+              value: agentResources.length || '—',
+            },
+            {
+              icon: 'i-ph-check-circle-duotone',
+              label: 'Completed',
+              value: completedCount || '—',
+            },
+          ] as const
+        ).map(({ icon, label, value }) => (
+          <div class="kc-stat" role="listitem">
+            <span class={`${icon} kc-stat__icon`} aria-hidden="true" />
+            <span class="kc-stat__value">{value}</span>
+            <span class="kc-stat__label ds-label">{label}</span>
+          </div>
+        ))}
       </div>
 
       <!-- View toggle -->
@@ -415,7 +404,8 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
       <header class="kc-panel-header">
         <span
           class="i-ph-user-duotone kc-panel-icon text-[var(--color-cta)]"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="kc-panel-title">Human Resources</h2>
           <p class="kc-panel-sub ds-label">
@@ -423,21 +413,19 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
           </p>
         </div>
       </header>
-      {
-        humanChartLabels.length > 0 ? (
-          <LazyBarChart
-            labels={humanChartLabels}
-            values={humanChartValues}
-            title="Human resource types"
-            series="Resources"
-            horizontal
-            height={Math.max(120, humanChartLabels.length * 34 + 24)}
-            class="kc-chart"
-          />
-        ) : (
-          <p class="kc-empty">No human resources yet.</p>
-        )
-      }
+      {humanChartLabels.length > 0 ? (
+        <LazyBarChart
+          labels={humanChartLabels}
+          values={humanChartValues}
+          title="Human resource types"
+          series="Resources"
+          horizontal
+          height={Math.max(120, humanChartLabels.length * 34 + 24)}
+          class="kc-chart"
+        />
+      ) : (
+        <p class="kc-empty">No human resources yet.</p>
+      )}
     </div>
 
     <!-- Agent resources breakdown -->
@@ -445,7 +433,8 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
       <header class="kc-panel-header">
         <span
           class="i-ph-robot-duotone kc-panel-icon text-[var(--ds-color-security)]"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="kc-panel-title">Agent Resources</h2>
           <p class="kc-panel-sub ds-label">
@@ -453,21 +442,19 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
           </p>
         </div>
       </header>
-      {
-        agentChartLabels.length > 0 ? (
-          <LazyBarChart
-            labels={agentChartLabels}
-            values={agentChartValues}
-            title="Agent resource types"
-            series="Resources"
-            horizontal
-            height={Math.max(120, agentChartLabels.length * 34 + 24)}
-            class="kc-chart"
-          />
-        ) : (
-          <p class="kc-empty">No agent resources yet.</p>
-        )
-      }
+      {agentChartLabels.length > 0 ? (
+        <LazyBarChart
+          labels={agentChartLabels}
+          values={agentChartValues}
+          title="Agent resource types"
+          series="Resources"
+          horizontal
+          height={Math.max(120, agentChartLabels.length * 34 + 24)}
+          class="kc-chart"
+        />
+      ) : (
+        <p class="kc-empty">No agent resources yet.</p>
+      )}
     </div>
 
     <!-- Reading progress -->
@@ -475,7 +462,8 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
       <header class="kc-panel-header">
         <span
           class="i-solar-book-2-bold-duotone kc-panel-icon text-accent"
-          aria-hidden="true"></span>
+          aria-hidden="true"
+        ></span>
         <div>
           <h2 class="kc-panel-title">Reading Progress</h2>
           <p class="kc-panel-sub ds-label">
@@ -508,7 +496,9 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
     <form class="kc-filter-form">
       <fieldset class="kc-filter-fieldset">
         <legend class="kc-filter-legend">
-          <span class="i-ph-funnel-duotone align-middle mr-1" aria-hidden="true"
+          <span
+            class="i-ph-funnel-duotone align-middle mr-1"
+            aria-hidden="true"
           ></span>
           Filter
         </legend>
@@ -531,18 +521,14 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
             <select id="kc-f-type" data-filter-type>
               <option value="">All types</option>
               <optgroup label="Human" data-kc-optgroup="human">
-                {
-                  humanTypeOptions.map((o) => (
-                    <option value={o.id}>{o.label}</option>
-                  ))
-                }
+                {humanTypeOptions.map((o) => (
+                  <option value={o.id}>{o.label}</option>
+                ))}
               </optgroup>
               <optgroup label="Agent" data-kc-optgroup="agent">
-                {
-                  agentTypeOptions.map((o) => (
-                    <option value={o.id}>{o.label}</option>
-                  ))
-                }
+                {agentTypeOptions.map((o) => (
+                  <option value={o.id}>{o.label}</option>
+                ))}
               </optgroup>
             </select>
           </div>
@@ -551,11 +537,9 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
             <label for="kc-f-status">Status</label>
             <select id="kc-f-status" data-filter-status>
               <option value="">All statuses</option>
-              {
-                statusOptions.map((o) => (
-                  <option value={o.id}>{o.label}</option>
-                ))
-              }
+              {statusOptions.map((o) => (
+                <option value={o.id}>{o.label}</option>
+              ))}
             </select>
           </div>
 
@@ -563,51 +547,47 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
             <label for="kc-f-level">Level</label>
             <select id="kc-f-level" data-filter-level>
               <option value="">All levels</option>
-              {levelOptions.map((o) => <option value={o.id}>{o.label}</option>)}
+              {levelOptions.map((o) => (
+                <option value={o.id}>{o.label}</option>
+              ))}
             </select>
           </div>
 
-          {
-            categoryOptions.length > 0 && (
-              <div class="kc-filter-control">
-                <label for="kc-f-category">Domain</label>
-                <select id="kc-f-category" data-filter-category>
-                  <option value="">All domains</option>
-                  {categoryOptions.map((o) => (
-                    <option value={o.id}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-            )
-          }
+          {categoryOptions.length > 0 && (
+            <div class="kc-filter-control">
+              <label for="kc-f-category">Domain</label>
+              <select id="kc-f-category" data-filter-category>
+                <option value="">All domains</option>
+                {categoryOptions.map((o) => (
+                  <option value={o.id}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
-          {
-            toolOptions.length > 0 && (
-              <div class="kc-filter-control">
-                <label for="kc-f-tool">Tool</label>
-                <select id="kc-f-tool" data-filter-tool>
-                  <option value="">All tools</option>
-                  {toolOptions.map((o) => (
-                    <option value={o.id}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-            )
-          }
+          {toolOptions.length > 0 && (
+            <div class="kc-filter-control">
+              <label for="kc-f-tool">Tool</label>
+              <select id="kc-f-tool" data-filter-tool>
+                <option value="">All tools</option>
+                {toolOptions.map((o) => (
+                  <option value={o.id}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
-          {
-            tagOptions.length > 0 && (
-              <div class="kc-filter-control">
-                <label for="kc-f-tag">Tag</label>
-                <select id="kc-f-tag" data-filter-tag>
-                  <option value="">All tags</option>
-                  {tagOptions.map((o) => (
-                    <option value={o.id}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-            )
-          }
+          {tagOptions.length > 0 && (
+            <div class="kc-filter-control">
+              <label for="kc-f-tag">Tag</label>
+              <select id="kc-f-tag" data-filter-tag>
+                <option value="">All tags</option>
+                {tagOptions.map((o) => (
+                  <option value={o.id}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
         <div class="kc-filter-actions">
@@ -618,7 +598,8 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
             <span class="kc-search-wrap">
               <span
                 class="i-ph-magnifying-glass-duotone kc-search-icon"
-                aria-hidden="true"></span>
+                aria-hidden="true"
+              ></span>
               <input
                 id="kc-search"
                 type="search"
@@ -628,8 +609,9 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
                 spellcheck="false"
               />
             </span>
-            <button class="button" type="button" data-filter-reset>Reset</button
-            >
+            <button class="button" type="button" data-filter-reset>
+              Reset
+            </button>
           </div>
         </div>
       </fieldset>
@@ -669,84 +651,79 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
         data-audience-section="human"
       >
         <h2 class="kc-audience-title">
-          <span class="i-ph-user-duotone kc-audience-icon" aria-hidden="true"
+          <span
+            class="i-ph-user-duotone kc-audience-icon"
+            aria-hidden="true"
           ></span>
           Human Resources
           <span class="kc-audience-count ds-label">({humanSorted.length})</span>
         </h2>
         <div class="kc-cards">
-          {
-            humanSorted.map((resource) => {
-              const href = `/${lang}/knowledge/${resource.data.resourceId}`;
-              const {
-                tags,
-                categories,
-                tools,
-                skills,
-                projects,
-                caseStudies,
-                blogLinks,
-                meta,
-              } = buildCardMeta(resource);
-              return (
-                <div
-                  data-knowledge-item
-                  data-audience="human"
-                  data-type={resource.data.type}
-                  data-level={resource.data.level ?? ''}
-                  data-status={resource.data.status ?? ''}
-                  data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
-                  data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
-                  data-category-ids={(resource.data.categoryIds ?? []).join(
-                    ' ',
-                  )}
+          {humanSorted.map((resource) => {
+            const href = `/${lang}/knowledge/${resource.data.resourceId}`;
+            const {
+              tags,
+              categories,
+              tools,
+              skills,
+              projects,
+              caseStudies,
+              blogLinks,
+              meta,
+            } = buildCardMeta(resource);
+            return (
+              <div
+                data-knowledge-item
+                data-audience="human"
+                data-type={resource.data.type}
+                data-level={resource.data.level ?? ''}
+                data-status={resource.data.status ?? ''}
+                data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
+                data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
+                data-category-ids={(resource.data.categoryIds ?? []).join(' ')}
+              >
+                <ContentCard
+                  title={resource.data.title}
+                  href={href}
+                  summary={resource.data.summary}
+                  meta={meta}
                 >
-                  <ContentCard
-                    title={resource.data.title}
-                    href={href}
-                    summary={resource.data.summary}
-                    meta={meta}
-                  >
-                    {resource.data.url ? (
-                      <p>
-                        <a
-                          href={resource.data.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Open resource ↗
-                        </a>
-                      </p>
-                    ) : null}
-                    {tools.length > 0 ? (
-                      <TaxonomyPills label="Tools" items={tools} />
-                    ) : null}
-                    {skills.length > 0 ? (
-                      <TaxonomyPills label="Skills" items={skills} />
-                    ) : null}
-                    {categories.length > 0 ? (
-                      <TaxonomyPills label="Domains" items={categories} />
-                    ) : null}
-                    {tags.length > 0 ? (
-                      <TaxonomyPills label="Tags" items={tags} />
-                    ) : null}
-                    {projects.length > 0 ? (
-                      <TaxonomyPills
-                        label="Related projects"
-                        items={projects}
-                      />
-                    ) : null}
-                    {caseStudies.length > 0 ? (
-                      <TaxonomyPills label="Case studies" items={caseStudies} />
-                    ) : null}
-                    {blogLinks.length > 0 ? (
-                      <TaxonomyPills label="Blog posts" items={blogLinks} />
-                    ) : null}
-                  </ContentCard>
-                </div>
-              );
-            })
-          }
+                  {resource.data.url ? (
+                    <p>
+                      <a
+                        href={resource.data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Open resource ↗
+                      </a>
+                    </p>
+                  ) : null}
+                  {tools.length > 0 ? (
+                    <TaxonomyPills label="Tools" items={tools} />
+                  ) : null}
+                  {skills.length > 0 ? (
+                    <TaxonomyPills label="Skills" items={skills} />
+                  ) : null}
+                  {categories.length > 0 ? (
+                    <TaxonomyPills label="Domains" items={categories} />
+                  ) : null}
+                  {tags.length > 0 ? (
+                    <TaxonomyPills label="Tags" items={tags} />
+                  ) : null}
+                  {projects.length > 0 ? (
+                    <TaxonomyPills label="Related projects" items={projects} />
+                  ) : null}
+                  {caseStudies.length > 0 ? (
+                    <TaxonomyPills label="Case studies" items={caseStudies} />
+                  ) : null}
+                  {blogLinks.length > 0 ? (
+                    <TaxonomyPills label="Blog posts" items={blogLinks} />
+                  ) : null}
+                </ContentCard>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -757,87 +734,83 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
         data-audience-section="agent"
       >
         <h2 class="kc-audience-title">
-          <span class="i-ph-robot-duotone kc-audience-icon" aria-hidden="true"
+          <span
+            class="i-ph-robot-duotone kc-audience-icon"
+            aria-hidden="true"
           ></span>
           Agent Resources
           <span class="kc-audience-count ds-label">({agentSorted.length})</span>
         </h2>
         <div class="kc-cards">
-          {
-            agentSorted.map((resource) => {
-              const href = `/${lang}/knowledge/${resource.data.resourceId}`;
-              const {
-                tags,
-                categories,
-                tools,
-                skills,
-                projects,
-                caseStudies,
-                blogLinks,
-                meta,
-              } = buildCardMeta(resource);
-              return (
-                <div
-                  data-knowledge-item
-                  data-audience="agent"
-                  data-type={resource.data.type}
-                  data-level={resource.data.level ?? ''}
-                  data-status={resource.data.status ?? ''}
-                  data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
-                  data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
-                  data-category-ids={(resource.data.categoryIds ?? []).join(
-                    ' ',
-                  )}
+          {agentSorted.map((resource) => {
+            const href = `/${lang}/knowledge/${resource.data.resourceId}`;
+            const {
+              tags,
+              categories,
+              tools,
+              skills,
+              projects,
+              caseStudies,
+              blogLinks,
+              meta,
+            } = buildCardMeta(resource);
+            return (
+              <div
+                data-knowledge-item
+                data-audience="agent"
+                data-type={resource.data.type}
+                data-level={resource.data.level ?? ''}
+                data-status={resource.data.status ?? ''}
+                data-tag-ids={(resource.data.tagIds ?? []).join(' ')}
+                data-tool-ids={(resource.data.toolIds ?? []).join(' ')}
+                data-category-ids={(resource.data.categoryIds ?? []).join(' ')}
+              >
+                <ContentCard
+                  title={resource.data.title}
+                  href={href}
+                  summary={resource.data.summary}
+                  meta={meta}
                 >
-                  <ContentCard
-                    title={resource.data.title}
-                    href={href}
-                    summary={resource.data.summary}
-                    meta={meta}
-                  >
-                    {resource.data.url ? (
-                      <p>
-                        <a
-                          href={resource.data.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Open resource ↗
-                        </a>
-                      </p>
-                    ) : null}
-                    {tools.length > 0 ? (
-                      <TaxonomyPills label="Tools" items={tools} />
-                    ) : null}
-                    {skills.length > 0 ? (
-                      <TaxonomyPills label="Skills" items={skills} />
-                    ) : null}
-                    {categories.length > 0 ? (
-                      <TaxonomyPills label="Domains" items={categories} />
-                    ) : null}
-                    {tags.length > 0 ? (
-                      <TaxonomyPills label="Tags" items={tags} />
-                    ) : null}
-                    {projects.length > 0 ? (
-                      <TaxonomyPills
-                        label="Related projects"
-                        items={projects}
-                      />
-                    ) : null}
-                    {caseStudies.length > 0 ? (
-                      <TaxonomyPills label="Case studies" items={caseStudies} />
-                    ) : null}
-                    {blogLinks.length > 0 ? (
-                      <TaxonomyPills label="Blog posts" items={blogLinks} />
-                    ) : null}
-                  </ContentCard>
-                </div>
-              );
-            })
-          }
+                  {resource.data.url ? (
+                    <p>
+                      <a
+                        href={resource.data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Open resource ↗
+                      </a>
+                    </p>
+                  ) : null}
+                  {tools.length > 0 ? (
+                    <TaxonomyPills label="Tools" items={tools} />
+                  ) : null}
+                  {skills.length > 0 ? (
+                    <TaxonomyPills label="Skills" items={skills} />
+                  ) : null}
+                  {categories.length > 0 ? (
+                    <TaxonomyPills label="Domains" items={categories} />
+                  ) : null}
+                  {tags.length > 0 ? (
+                    <TaxonomyPills label="Tags" items={tags} />
+                  ) : null}
+                  {projects.length > 0 ? (
+                    <TaxonomyPills label="Related projects" items={projects} />
+                  ) : null}
+                  {caseStudies.length > 0 ? (
+                    <TaxonomyPills label="Case studies" items={caseStudies} />
+                  ) : null}
+                  {blogLinks.length > 0 ? (
+                    <TaxonomyPills label="Blog posts" items={blogLinks} />
+                  ) : null}
+                </ContentCard>
+              </div>
+            );
+          })}
         </div>
       </div>
-    </div><!-- /#kc-items -->
+    </div>
+    <!-- /#kc-items -->
 
     <!-- Pagination bottom -->
     <div class="kc-pagination kc-pagination--bottom">
@@ -866,45 +839,47 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
       <canvas
         id="kc-graph-canvas"
         class="kc-graph-canvas"
-        aria-label="Knowledge resource relationship graph"></canvas>
+        aria-label="Knowledge resource relationship graph"
+      ></canvas>
       <div class="kc-graph-tooltip" data-kc-tooltip hidden></div>
       <div class="kc-graph-legend" aria-label="Graph legend">
-        {
-          (
-            [
-              { label: 'Article', color: '#29b6f6' },
-              { label: 'Course', color: '#66bb6a' },
-              { label: 'Docs', color: '#5c6bc0' },
-              { label: 'Video', color: '#ef5350' },
-              { label: 'Repo', color: '#8d6e63' },
-              { label: 'MCP', color: '#ce93d8' },
-              { label: 'Skill', color: '#b39ddb' },
-              { label: 'Tool', color: '#ff8a65' },
-              { label: 'Platform', color: '#ffd54f' },
-            ] as const
-          ).map(({ label, color }) => (
-            <span class="kc-legend-item">
-              <span class="kc-legend-dot" style={`background:${color}`} />
-              {label}
-            </span>
-          ))
-        }
+        {(
+          [
+            { label: 'Article', color: '#29b6f6' },
+            { label: 'Course', color: '#66bb6a' },
+            { label: 'Docs', color: '#5c6bc0' },
+            { label: 'Video', color: '#ef5350' },
+            { label: 'Repo', color: '#8d6e63' },
+            { label: 'MCP', color: '#ce93d8' },
+            { label: 'Skill', color: '#b39ddb' },
+            { label: 'Tool', color: '#ff8a65' },
+            { label: 'Platform', color: '#ffd54f' },
+          ] as const
+        ).map(({ label, color }) => (
+          <span class="kc-legend-item">
+            <span class="kc-legend-dot" style={`background:${color}`} />
+            {label}
+          </span>
+        ))}
       </div>
     </div>
     <p class="kc-graph-hint ds-label">
-      <span class="i-ph-info-duotone align-middle mr-1" aria-hidden="true"
+      <span
+        class="i-ph-info-duotone align-middle mr-1"
+        aria-hidden="true"
       ></span>
-      Nodes linked by shared domain category. Drag to rotate · scroll to zoom · click
-      to open resource.
+      Nodes linked by shared domain category. Drag to rotate · scroll to zoom ·
+      click to open resource.
     </p>
   </section>
 
   <!-- Graph data — parsed by client script -->
   <script
+    is:inline
     type="application/json"
     id="kc-graph-nodes"
     set:html={graphNodesJson}
-  />
+  ></script>
 </BaseLayout>
 
 <!-- ══════════════════════════════════════════════════════
@@ -969,9 +944,6 @@ const buildCardMeta = (resource: CollectionEntry<'knowledgeResources'>) => {
   // ── Filter + search integration ─────────────────────────────────────────────
   initKnowledgeFilters();
 
-  const filterRoot = document.querySelector<HTMLElement>(
-    '[data-knowledge-filter]',
-  );
   const searchInput =
     document.querySelector<HTMLInputElement>('[data-kc-search]');
   const allItems = Array.from(

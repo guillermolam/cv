@@ -20,10 +20,24 @@ type Props = {
   ariaLabel?: string;
 };
 
-const { id, class: className, tabs, variant = 'default', depth = 'flat', ariaLabel = 'Tabs' } = Astro.props as Props;
+const {
+  id,
+  class: className,
+  tabs,
+  variant = 'default',
+  depth = 'flat',
+  ariaLabel = 'Tabs',
+} = Astro.props as Props;
 ---
 
-<nav id={id} class={className} data-ui-tabs data-variant={variant} data-depth={depth} aria-label={ariaLabel}>
+<nav
+  id={id}
+  class={className}
+  data-ui-tabs
+  data-variant={variant}
+  data-depth={depth}
+  aria-label={ariaLabel}
+>
   {tabs.map((tab) => (
     <UiButton
       href={tab.href}
